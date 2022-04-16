@@ -135,7 +135,7 @@ main.cv div.cv-section {
     justify-content: left;
     align-items: flex-start;
     align-content: flex-start;
-    row-gap: 10px;
+    row-gap: 5px;
 }
 
 main.cv div.cv-section h2 {
@@ -162,6 +162,7 @@ main.cv div.cv-section div.cv-experience {
     align-content: flex-start;
     row-gap: 10px;
     padding-top: 10px;
+    padding-bottom: 10px;
 }
 
 main.cv p.cv-experience-date-range {
