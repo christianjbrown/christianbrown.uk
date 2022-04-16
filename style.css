@@ -32,7 +32,6 @@
     font-style: italic;
 }
 
-
 html {
     font-size: 10.85pt;
     color: #7F7F7F;
@@ -85,7 +84,6 @@ main.cv div.cv-header div.cv-header-avatar img {
 
 main.cv div.cv-header div.cv-header-data {
     float: left;
-    /*width: 600px;*/
     flex-grow: 1;
 }
 
@@ -126,6 +124,10 @@ main.cv div.cv-header div.cv-header-data p.cv-header-data-links img.cv-header-da
     height: 18px;
 }
 
+main.cv div.cv-section {
+    padding-bottom: 10px;
+}
+
 main.cv div.cv-section h2 {
     color: #75923C;
     font-size: 18pt;
@@ -141,8 +143,6 @@ main.cv div.cv-section div.cv-experience {
     border-top: 1px solid #CECECE;
 }
 
-
-
 main.cv p.cv-experience-date-range {
     font-style: italic;
 }
@@ -153,15 +153,14 @@ main.cv p.cv-experience-location strong {
 
 
 main.cv div.cv-section div.cv-experience div.cv-experience-details {
-    display: flex;
-    height: 70px;
-    margin-bottom: 10px;
+    display: block;
+    height: 80px;
+    padding-top: 10px;
 }
 
 main.cv div.cv-section div.cv-experience div.cv-experience-details div.cv-experience-metadata h3 {
     color: #404040;
     font-size: 13pt;
-    padding-top: 10px;
     font-weight: bold;
 }
 
