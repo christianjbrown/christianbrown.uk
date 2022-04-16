@@ -42,9 +42,9 @@ body {
 }
 
 main.cv {
-    width: auto;
+    padding-top: 40px;
+    padding-bottom: 100px;
     max-width: 796px;
-    padding: 0 15px;
 }
 
 main.cv p {
@@ -58,13 +58,16 @@ main.cv p.lead {
 
 main.cv div.cv-header {
     display: flex;
-    margin-top: 40px;
-    margin-bottom: 20px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    align-content: flex-start;
+    column-gap: 20px;
 }
 
 main.cv div.cv-header div.cv-header-avatar {
-    float: left;
-    width: 140px;
+
 }
 
 main.cv div.cv-header div.cv-header-avatar div.cv-header-avatar-border {
@@ -83,7 +86,6 @@ main.cv div.cv-header div.cv-header-avatar img {
 }
 
 main.cv div.cv-header div.cv-header-data {
-    float: left;
     flex-grow: 1;
 }
 
@@ -92,7 +94,6 @@ main.cv div.cv-header div.cv-header-data h1 {
     font-family: Georgia, "Times New Roman", Times, serif;
     font-size: 38pt;
     text-transform: lowercase;
-    margin-bottom: 1px;
 }
 
 main.cv div.cv-header div.cv-header-data h1 span.alternate {
@@ -101,7 +102,6 @@ main.cv div.cv-header div.cv-header-data h1 span.alternate {
 
 main.cv div.cv-header div.cv-header-data p {
     margin-bottom: 4px;
-    line-height: normal;
 }
 
 main.cv div.cv-header div.cv-header-data p.cv-header-data-links {
@@ -125,7 +125,7 @@ main.cv div.cv-header div.cv-header-data p.cv-header-data-links img.cv-header-da
 }
 
 main.cv div.cv-section {
-    padding-bottom: 10px;
+    /*padding-bottom: 10px;*/
 }
 
 main.cv div.cv-section h2 {
@@ -136,11 +136,20 @@ main.cv div.cv-section h2 {
 }
 
 main.cv {
-    margin-bottom: 100px;
+    padding-bottom: 100px;
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
 }
 
 main.cv div.cv-section div.cv-experience {
     border-top: 1px solid #CECECE;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: left;
+    align-items: flex-start;
+    align-content: flex-start;
 }
 
 main.cv p.cv-experience-date-range {
@@ -153,21 +162,21 @@ main.cv p.cv-experience-location strong {
 
 
 main.cv div.cv-section div.cv-experience div.cv-experience-details {
-    display: block;
-    height: 80px;
-    padding-top: 10px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    align-content: flex-start;
 }
 
-main.cv div.cv-section div.cv-experience div.cv-experience-details div.cv-experience-metadata h3 {
-    color: #404040;
-    font-size: 13pt;
-    font-weight: bold;
+main.cv div.cv-section div.cv-experience div.cv-experience-description {
+    /*padding-top: 10px;*/
 }
 
 main.cv div.cv-section div.cv-experience div.cv-experience-details div.cv-experience-logo {
-    float: left;
-    width: 75px;
-    height: 100%;
+    width: 80px;
+    height: 80px;
     display : flex;
     align-items : center;
     justify-content: center;
@@ -184,10 +193,15 @@ main.cv div.cv-section div.cv-experience div.cv-experience-details div.cv-experi
 }
 
 main.cv div.cv-section div.cv-experience div.cv-experience-details div.cv-experience-metadata {
-    float: left;
+    flex-grow: 1;
+}
+
+main.cv div.cv-section div.cv-experience div.cv-experience-details div.cv-experience-metadata h3 {
+    color: #404040;
+    font-size: 13pt;
+    font-weight: bold;
 }
 
 main.cv div.cv-section div.cv-experience div.cv-experience-details div.cv-experience-metadata * {
     margin-bottom: 0;
 }
-
