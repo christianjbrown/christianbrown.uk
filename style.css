@@ -194,6 +194,7 @@ main.cv div.cv-section div.cv-experience div.cv-experience-details div.cv-experi
 
 main.cv div.cv-section div.cv-experience div.cv-experience-details div.cv-experience-metadata {
     flex-grow: 1;
+    min-width: 430px;
 }
 
 main.cv div.cv-section div.cv-experience div.cv-experience-details div.cv-experience-metadata h3 {
