@@ -76,14 +76,14 @@ main.cv div.cv-header div.cv-header-avatar {
 
 main.cv div.cv-header div.cv-header-avatar div.cv-header-avatar-border {
     clip-path: circle();
-    width: 124px;
-    height: 124px;
+    width: 104px;
+    height: 104px;
     background-color: #75923C;
 }
 
 main.cv div.cv-header div.cv-header-avatar img {
     clip-path: circle();
-    width: 120px;
+    width: 100px;
     position: relative;
     left: 2px;
     top: 2px;
