@@ -1,0 +1,184 @@
+
+@font-face {
+    font-family: 'WebProductSans';
+    src: url('/assets/fonts/product-sans.woff2') format('woff2'),
+    url('/assets/fonts/product-sans.woff') format('woff'),
+    url('/assets/fonts/product-sans.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'WebProductSans';
+    src: url('/assets/fonts/product-sans-bold.woff2') format('woff2'),
+    url('/assets/fonts/product-sans-bold.woff') format('woff'),
+    url('/assets/fonts/product-sans-bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'WebProductSans';
+    src: url('/assets/fonts/product-sans-italic.woff2') format('woff2'),
+    url('/assets/fonts/product-sans-italic.woff') format('woff'),
+    url('/assets/fonts/product-sans-italic.ttf') format('truetype');
+    font-weight: normal;
+    font-style: italic;
+}
+@font-face {
+    font-family: 'WebProductSans';
+    src: url('/assets/fonts/product-sans-bold-italic.woff2') format('woff2'),
+    url('/assets/fonts/product-sans-bold-italic.woff') format('woff'),
+    url('/assets/fonts/product-sans-bold-italic.ttf') format('truetype');
+    font-weight: bold;
+    font-style: italic;
+}
+
+
+@font-face {
+    font-family: 'WebGeorgia';
+    src: url('/assets/fonts/georgia.woff2') format('woff2'),
+    url('/assets/fonts/georgia.woff') format('woff'),
+    url('/assets/fonts/georgia.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'WebGeorgia';
+    src: url('/assets/fonts/georgia-bold.woff2') format('woff2'),
+    url('/assets/fonts/georgia-bold.woff') format('woff'),
+    url('/assets/fonts/georgia-bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'WebGeorgia';
+    src: url('/assets/fonts/georgia-italic.woff2') format('woff2'),
+    url('/assets/fonts/georgia-italic.woff') format('woff'),
+    url('/assets/fonts/georgia-italic.ttf') format('truetype');
+    font-weight: normal;
+    font-style: italic;
+}
+@font-face {
+    font-family: 'WebGeorgia';
+    src: url('/assets/fonts/georgia-bold-italic.woff2') format('woff2'),
+    url('/assets/fonts/georgia-bold-italic.woff') format('woff'),
+    url('/assets/fonts/georgia-bold-italic.ttf') format('truetype');
+    font-weight: bold;
+    font-style: italic;
+}
+
+html {
+    font-size: 10.85pt;
+    color: #7F7F7F;
+}
+
+body {
+    font-family: 'WebProductSans';
+}
+
+p,h1,h2,h3 {
+    margin-bottom: 0;
+}
+
+h1 a,h1 a:hover {
+    color: inherit;
+}
+
+p a {
+    color: #75923C;
+    font-weight: bold;
+}
+
+a:hover {
+    color: #595959;
+    text-decoration: none;
+}
+
+a:hover h1 {
+    text-decoration: none;
+}
+
+div.container {
+    padding-top: 40px;
+    padding-bottom: 100px;
+    max-width: 796px;
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+    margin: auto;
+}
+
+div.container p {
+    color: #595959;
+    line-height: normal;
+}
+
+div.container p.lead {
+    font-size: 12.5pt;
+}
+
+div.container div.header {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    align-content: flex-start;
+    column-gap: 20px;
+}
+
+div.container div.header div.header-avatar {
+
+}
+
+div.container div.header div.header-avatar div.header-avatar-border {
+    clip-path: circle();
+    width: 104px;
+    height: 104px;
+    background-color: #75923C;
+}
+
+div.container div.header div.header-avatar img {
+    clip-path: circle();
+    width: 100px;
+    position: relative;
+    left: 2px;
+    top: 2px;
+}
+
+div.container div.header div.header-data {
+    min-height: 132px;
+    flex-grow: 1;
+}
+
+div.container div.header div.header-data h1 {
+    color: #75923C;
+    font-family: 'WebGeorgia';
+    font-size: 38pt;
+    text-transform: lowercase;
+}
+
+div.container div.header div.header-data h1 span.alternate {
+    color: #7F7F7F;
+}
+
+div.container div.header div.header-data p {
+    margin-bottom: 4px;
+}
+
+div.container div.header div.header-data p.header-data-links {
+    width: 100%;
+    text-align: right;
+}
+
+div.container div.header div.header-data p.header-data-links img.header-data-links-icon {
+    vertical-align: middle;
+    height: 18px;
+}
+
+div.container div.header div.header-data p.header-data-links a {
+    color: #595959;
+}
+
+div.container div.header div.header-data p.header-data-links a:hover {
+    color: #75923C;
+}
