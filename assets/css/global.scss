@@ -12,19 +12,23 @@ html {
         h1 a,h1 a:hover {
             color: inherit;
         }
-        p a {
+        a {
             color: $colour-accent;
-            font-weight: bold;
+        }
+        p {
+            a {
+                font-weight: bold;
+            }
         }
         a:hover {
             color: $colour-grayscale-3;
             text-decoration: none;
-        }
-        a:hover h1 {
-            text-decoration: none;
+            h1 {
+                text-decoration: none;
+            }
         }
         h2 {
-            color: $colour-grayscale-4;
+            color: $colour-grayscale-3;
         }
         div.container {
             p {
@@ -34,7 +38,7 @@ html {
                 color: $colour-grayscale-3;
                 line-height: normal;
             }
-            div.header {
+            header {
                 div.header-avatar {
                     div.header-avatar-border {
                         img {
@@ -63,12 +67,13 @@ html {
                     p {
                         margin-bottom: 4px;
                     }
-                    p.header-data-links {
+                    nav {
                         a {
                             img.header-data-links-icon {
                                 vertical-align: middle;
                                 height: 18px;
                             }
+                            font-weight: bold;
                             color: $colour-grayscale-3;
                         }
                         a:hover {
@@ -99,5 +104,4 @@ html {
         font-family: $font-sans-serif;
     }
     font-size: 10.85pt;
-    color: $colour-grayscale-2;
 }
