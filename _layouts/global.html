@@ -2,9 +2,8 @@
     <html lang="en">
     <head>
         <meta charset="utf-8">
-        <title>Christian Brown - Engineering Manager - London</title>
+        <title>{{ page.title }}</title>
         <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicon/apple-touch-icon.png">
-        <link rel="canonical" href="https://christianbrown.uk/">
         <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicon/favicon-16x16.png">
         <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon/favicon-32x32.png">
         <link rel="manifest" href="/site.webmanifest">
@@ -14,37 +13,40 @@
         {% for stylesheet in layout.stylesheets %}
         <link rel="stylesheet" href="{{ stylesheet }}">
         {% endfor %}
-        <meta name="author" content="Christian Brown">
-        <meta name="description" content="I'm a people manager and solutions architect with a background in world-class content management systems and online video workflows, backed by a decade and a half of experience with well-known, high-traffic, enterprise-level web properties created and maintained by globally distributed teams. I’m a strong proponent of high-quality, reusable, and maintainable solutions using SOLID design principles, unit&nbsp;testing, and continuous&nbsp;integration.">
-        <meta name="msapplication-TileColor" content="#da532c">
+        {% for stylesheet in page.stylesheets %}
+        <link rel="stylesheet" href="{{ stylesheet }}">
+        {% endfor %}
+        <meta name="author" content="{{ site.site_author }}">
+        <meta name="description" content="{{ page.description }}">
+        <meta name="msapplication-TileColor" content="#ffffff">
         <meta name="theme-color" content="#ffffff">
         <meta name="twitter:card" content="summary">
-        <meta name="twitter:description" content="I'm a people manager and solutions architect with a background in world-class content management systems and online video workflows, backed by a decade and a half of experience with well-known, high-traffic, enterprise-level web properties created and maintained by globally distributed teams. I’m a strong proponent of high-quality, reusable, and maintainable solutions using SOLID design principles, unit&nbsp;testing, and continuous&nbsp;integration.">
-        <meta name="twitter:image" content="https://christianbrown.uk/assets/images/favicon/android-chrome-512x512.png">
-        <meta name="twitter:image:alt" content="Christian Brown avatar">
-        <meta name="twitter:title" content="Christian Brown - Engineering Manager - London">
+        <meta name="twitter:description" content="{{ page.description }}">
+        <meta name="twitter:image" content="{{ site.site_base_url }}/assets/images/favicon/android-chrome-512x512.png">
+        <meta name="twitter:image:alt" content="{{ site.site_image_name }}">
+        <meta name="twitter:title" content="{{ page.title }}">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <meta property="og:description" content="I'm a people manager and solutions architect with a background in world-class content management systems and online video workflows, backed by a decade and a half of experience with well-known, high-traffic, enterprise-level web properties created and maintained by globally distributed teams. I’m a strong proponent of high-quality, reusable, and maintainable solutions using SOLID design principles, unit&nbsp;testing, and continuous&nbsp;integration.">
-        <meta property="og:image" content="https://christianbrown.uk/assets/images/favicon/android-chrome-512x512.png">
-        <meta property="og:locale" content="en_GB">
-        <meta property="og:site_name" content="Christian Brown">
-        <meta property="og:title" content="Christian Brown - Engineering Manager - London">
+        <meta property="og:description" content="{{ page.description }}">
+        <meta property="og:image" content="{{ site.site_base_url }}/assets/images/favicon/android-chrome-512x512.png">
+        <meta property="og:locale" content="{{ site.site_locale }}">
+        <meta property="og:site_name" content="{{ site.site_name }}">
+        <meta property="og:title" content="{{ page.title }}">
         <meta property="og:type" content="website">
-        <meta property="og:url" content="https://christianbrown.uk/">
+        <meta property="og:url" content="{{ site.site_base_url }}/">
     </head>
     <body>
         <div class="container">
             <div class="header">
                 <div class="header-avatar">
                     <div class="header-avatar-border">
-                        <img src="/assets/images/avatar.svg" alt="Christian Brown's avatar">
+                        <a href="/"><img src="/assets/images/avatar.svg" alt="{{ site.site_image_name }}"></a>
                     </div>
                 </div>
                 <div class="header-data">
                     <h1 class="mt-2"><a href="/">Christian&nbsp;<span class="alternate">Brown</span></a></h1>
                     <p><strong>Engineering Manager</strong></p>
                     <p>London, UK</p>
-                    {% if layout.show_menu %}
+                    {% if page.show_menu %}
                     <p class="header-data-links"><a href="/assets/docs/christian-brown-cv.pdf"><img src="/assets/images/icons/icon-download.svg" alt="Download icon" class="header-data-links-icon"> Download</a>&nbsp;&nbsp;&nbsp;<a href="https://www.linkedin.com/in/christianjbrown/" target="_blank"><img src="/assets/images/icons/icon-linkedin.svg" alt="LinkedIn icon" class="header-data-links-icon"> Contact me</a></p>
                     {% endif %}
                 </div>
