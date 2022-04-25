@@ -6,23 +6,28 @@
 
 div.container {
     main {
+        p.lead {
+            font-size: 12.6pt;
+            padding-bottom: 5px;
+        }
         div.cv-section {
             h2 {
                 color: $colour-accent;
                 font-size: 18pt;
                 font-family: $font-serif;
                 text-transform: lowercase;
+                margin-bottom: 0;
             }
             div.cv-experience {
                 div.cv-experience-details {
                     div.cv-experience-logo {
                         img {
-                            .logo-wide {
-                                max-width: 60px;
-                                max-height: 50px;
-                            }
                             max-width: 50px;
                             max-height: 30px;
+                        }
+                        img.logo-wide {
+                            max-width: 60px;
+                            max-height: 50px;
                         }
                         width: 60px;
                         height: 60px;
@@ -52,6 +57,11 @@ div.container {
                     align-items: center;
                     align-content: flex-start;
                     column-gap: 10px;
+                }
+                div.cv-experience-description {
+                    p {
+                        margin-bottom: 0;
+                    }
                 }
                 border-top: 1px solid $colour-grayscale-1;
                 display: flex;
