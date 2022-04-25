@@ -36,7 +36,7 @@
     </head>
     <body>
         <div class="container">
-            <div class="header">
+            <header>
                 <div class="header-avatar">
                     <div class="header-avatar-border">
                         <a href="/"><img src="/assets/images/avatar.svg" alt="{{ site.site_image_name }}"></a>
@@ -44,13 +44,18 @@
                 </div>
                 <div class="header-data">
                     <h1 class="mt-2"><a href="/">Christian&nbsp;<span class="alternate">Brown</span></a></h1>
-                    <p><strong>Engineering Manager</strong></p>
-                    <p>London, UK</p>
+                    <p><strong>{{ site.header_job_title }}</strong></p>
+                    <p>{{ site.header_location }}</p>
                     {% if page.show_menu %}
-                    <p class="header-data-links"><a href="/assets/docs/christian-brown-cv.pdf"><img src="/assets/images/icons/icon-download.svg" alt="Download icon" class="header-data-links-icon"> Download</a>&nbsp;&nbsp;&nbsp;<a href="https://www.linkedin.com/in/christianjbrown/" target="_blank"><img src="/assets/images/icons/icon-linkedin.svg" alt="LinkedIn icon" class="header-data-links-icon"> Contact me</a></p>
+                    <nav>
+                        {% for nav in site.menu %}
+                        {% if site.menu.first != nav %}&nbsp;&nbsp;&nbsp;{% endif %}
+                        <a href="{{ nav.link }}"><img src="/assets/images/icons/icon-{{ nav.icon }}.svg" alt="{{ nav.icon_alt }}" class="header-data-links-icon"> {{ nav.text }}</a>
+                        {% endfor %}
+                    </nav>
                     {% endif %}
                 </div>
-            </div>
+            </header>
             {{ content }}
         </div>
     </body>
