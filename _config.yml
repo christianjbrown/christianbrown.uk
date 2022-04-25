@@ -1,6 +1,12 @@
+
+site_locale: 'en_GB'
+site_base_url: 'https://christianbrown.uk'
+site_name: 'Christian Brown'
+site_author: 'Christian Brown'
+site_image_name: "Christian Brown's avatar"
+
 collections:
   - 'previous_roles'
   - 'current_role'
   - 'education'
   - 'volunteering'
-
