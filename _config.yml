@@ -10,6 +10,13 @@ header_lastname: 'Brown'
 header_job_title: 'Engineering Manager'
 header_location: 'London, UK'
 
+defaults:
+  -
+    scope:
+      path: ""
+    values:
+      layout: "global"
+
 menu:
   -
     icon: 'download'
