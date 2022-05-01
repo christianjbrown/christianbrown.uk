@@ -1,6 +1,8 @@
+---
+---
 {
-    "name": "Christian Brown",
-    "short_name": "Christian Brown",
+    "name": "{{ site.site_name }}",
+    "short_name": "{{ site.site_name }}",
     "icons": [
         {
             "src": "/assets/images/favicon/android-chrome-192x192.png",
