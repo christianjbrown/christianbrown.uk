@@ -33,6 +33,11 @@
         <meta property="og:title" content="{{ page.title }}">
         <meta property="og:type" content="website">
         <meta property="og:url" content="{{ site.site_base_url }}/">
+        {% if page.schema %}
+        <script type="application/ld+json">
+            {{ page.schema | jsonify }}
+        </script>
+        {% endif %}
     </head>
     <body>
         <div class="container">
