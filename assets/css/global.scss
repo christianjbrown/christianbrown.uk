@@ -6,6 +6,9 @@
 
 html {
     body {
+        * {
+            color: $colour-grayscale-3;
+        }
         h1 a,h1 a:hover {
             color: inherit;
         }
@@ -17,7 +20,6 @@ html {
                 font-weight: bold;
             }
             line-height: normal;
-            color: $colour-grayscale-3;
         }
         a:hover {
             color: $colour-grayscale-3;
@@ -58,6 +60,10 @@ html {
                         text-transform: lowercase;
                     }
                     p {
+                        * {
+                            color: $colour-grayscale-4;
+                        }
+                        color: $colour-grayscale-4;
                         margin-bottom: 4px;
                     }
                     nav {
