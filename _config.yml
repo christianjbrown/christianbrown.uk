@@ -1,6 +1,7 @@
 
+url: 'https://christianbrown.uk'
+
 site_locale: 'en_GB'
-site_base_url: 'https://christianbrown.uk'
 site_name: 'Christian Brown'
 site_author: 'Christian Brown'
 site_image_name: "Christian Brown's avatar"
@@ -9,13 +10,6 @@ header_firstname: 'Christian'
 header_lastname: 'Brown'
 header_job_title: 'Engineering Manager'
 header_location: 'London, UK'
-
-defaults:
-  -
-    scope:
-      path: ""
-    values:
-      layout: "global"
 
 menu:
   -
@@ -34,3 +28,10 @@ collections:
   - 'current_role'
   - 'education'
   - 'volunteering'
+
+defaults:
+  -
+    scope:
+      path: ""
+    values:
+      layout: "global"
