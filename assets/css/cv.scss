@@ -29,6 +29,16 @@ div.container {
                             max-width: 60px;
                             max-height: 50px;
                         }
+                        @media (max-width: 800px) {
+                            img {
+                                max-width: 75px;
+                                max-height: 45px;
+                            }
+                            img.logo-wide {
+                                max-width: 90px;
+                                max-height: 67px;
+                            }
+                        }
                         width: 60px;
                         height: 60px;
                         display : flex;
