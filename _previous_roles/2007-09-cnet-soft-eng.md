@@ -1,8 +1,8 @@
 ---
-title: "Software Engineer"
+title: "Software Engineer / Web Developer"
 name: "CNET Networks"
 location: "London, UK"
 date_range: "Sep 2007 – Jan 2012 (4yrs, 4mths)"
 logo: "/assets/images/cv/logos/logo-cnet.svg"
 ---
-I was part of an international team developing and supporting CNET's non-US brands in the UK, Australia, Asia, Germany and France - including localised CNET and ZDNet brands. As a central team, we developed a framework used by local engineers in those countries, handling common scalability problems such as routing, caching and CDN integration. I also provided technical support for GameSpot, TV.com and TechRepublic. I delivered training in the Paris office to French and German teams; and presented our achievements at our off-site in Singapore.
+I was part of an international team supporting localised versions of CNET and ZDNet in the UK, Australia, Asia, Germany and France. We developed a Zend-based framework used by engineers in those regions to handle scalability problems such as routing, caching and CDN integration. I also provided support for GameSpot, TV.com and TechRepublic. I delivered training in the Paris office to French and German teams; and presented our achievements at our off-site in Singapore.
