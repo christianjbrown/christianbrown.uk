@@ -7,11 +7,14 @@
 div.container {
     main {
         table#temperatures {
+            width: 500px;
             tr {
                 td {
+                    font-size: 13pt;
                     padding: 10px;
                     vertical-align: text-top;
                     span {
+                        font-size: 11pt;
                         display: block;
                         color: $colour-grayscale-2;
                     }
