@@ -1,0 +1,37 @@
+---
+layout: "global"
+title: "Christian Brown's smart home'"
+description: "Test page for trying out different smart home APIs"
+stylesheets:
+    - "/assets/css/smart-home.css"
+show_menu: false
+---
+<h2>Smart home</h2>
+
+<h3>Current temperatures</h3>
+
+<table id="temperatures">
+    <tr>
+        <td>Loading..</td>
+    </tr>
+</table>
+
+<script>
+    fetch('https://europe-west2-christianbrown.cloudfunctions.net/get-temperatures')
+        .then(response => response.json())
+        .then(
+            function (data) {
+                const table = document.querySelector('#temperatures');
+                table.querySelectorAll('tr').forEach(
+                    function (node) {
+                        node.remove();
+                    }
+                )
+                for (const key in data) {
+                    const newRow = table.insertRow();
+                    newRow.insertCell().append(key);
+                    newRow.insertCell().append(data[key]+'°c');
+                }
+            }
+        );
+</script>
