@@ -10,10 +10,19 @@ div.container {
             tr {
                 td {
                     padding: 10px;
+                    vertical-align: text-top;
+                    span {
+                        display: block;
+                        color: $colour-grayscale-2;
+                    }
                 }
                 td:nth-child(2) {
+                    font-weight: bold;
                     text-align: right;
                 }
+            }
+            tr:not(:first-child) {
+                border-top: 1px solid $colour-accent;
             }
         }
     }

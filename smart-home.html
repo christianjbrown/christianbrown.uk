@@ -46,9 +46,12 @@ show_menu: false
                 data.forEach(
                     function (dataPoint) {
                         const newRow = table.insertRow();
-                        newRow.insertCell().append(dataPoint['name']);
+                        const nameCell = newRow.insertCell();
+                        nameCell.append(dataPoint['name']);
+                        const nameCellSpan = document.createElement('span');
+                        nameCellSpan.append(timeDifference(dataPoint['timestamp']));
+                        nameCell.append(nameCellSpan);
                         newRow.insertCell().append(dataPoint['temp']+'°c');
-                        newRow.insertCell().append('as of '+timeDifference(dataPoint['timestamp']));
                     }
                 );
             }
