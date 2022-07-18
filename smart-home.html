@@ -17,9 +17,7 @@ show_menu: false
 </table>
 
 <script>
-    fetch('https://europe-west2-christianbrown.cloudfunctions.net/get-temperatures',
-            { 'credentials': 'include' }
-        )
+    fetch('https://europe-west2-christianbrown.cloudfunctions.net/get-temperatures')
         .then(response => response.json())
         .then(
             function (data) {
