@@ -17,6 +17,22 @@ show_menu: false
 </table>
 
 <script>
+    function timeDifference(timestamp) {
+        const msPerMinute = 60;
+        const msPerHour = msPerMinute * 60;
+        const msPerDay = msPerHour * 24;
+        const elapsed = Math.floor(Date.now()/1000) - timestamp;
+        if (elapsed < 60) {
+            return Math.floor(elapsed) + ' sec(s) ago';
+        } else if (elapsed < 3600) {
+            return Math.floor(elapsed/msPerMinute) + ' min(s) ago';
+        } else if (elapsed < 216000) {
+            return Math.floor(elapsed/msPerHour ) + ' hr(s) ago';
+        } else {
+            return Math.floor(elapsed/msPerDay) + ' day(s) ago';
+        }
+    }
+
     fetch('https://europe-west2-christianbrown.cloudfunctions.net/get-temperatures')
         .then(response => response.json())
         .then(
@@ -32,6 +48,7 @@ show_menu: false
                         const newRow = table.insertRow();
                         newRow.insertCell().append(dataPoint['name']);
                         newRow.insertCell().append(dataPoint['temp']+'°c');
+                        newRow.insertCell().append('as of '+timeDifference(dataPoint['timestamp']));
                     }
                 );
             }
