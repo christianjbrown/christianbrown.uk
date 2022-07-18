@@ -26,12 +26,14 @@ show_menu: false
                     function (node) {
                         node.remove();
                     }
-                )
-                for (const key in data) {
-                    const newRow = table.insertRow();
-                    newRow.insertCell().append(key);
-                    newRow.insertCell().append(data[key]+'°c');
-                }
+                );
+                data.forEach(
+                    function (dataPoint) {
+                        const newRow = table.insertRow();
+                        newRow.insertCell().append(dataPoint['name']);
+                        newRow.insertCell().append(dataPoint['temp']+'°c');
+                    }
+                );
             }
         );
 </script>
