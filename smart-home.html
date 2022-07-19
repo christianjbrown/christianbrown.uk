@@ -34,6 +34,10 @@ show_menu: false
         }
     }
 
+    function freedomUnits(c) {
+        return (c * 1.8) + 32;
+    }
+
     fetch('https://europe-west2-christianbrown.cloudfunctions.net/get-temperatures')
         .then(response => response.json())
         .then(
@@ -47,12 +51,18 @@ show_menu: false
                 data.forEach(
                     function (dataPoint) {
                         const newRow = table.insertRow();
+
                         const nameCell = newRow.insertCell();
                         nameCell.append(dataPoint['name']);
                         const nameCellSpan = document.createElement('span');
                         nameCellSpan.append(timeDifference(dataPoint['timestamp']));
                         nameCell.append(nameCellSpan);
-                        newRow.insertCell().append(dataPoint['temp']+'°c');
+
+                        const tempCell = newRow.insertCell();
+                        tempCell.append(dataPoint['temp'].toFixed(1)+'°c');
+                        const tempCellSpan = document.createElement('span');
+                        tempCellSpan.append(freedomUnits(dataPoint['temp']).toFixed(1)+'°f');
+                        tempCell.append(tempCellSpan);
                     }
                 );
             }
