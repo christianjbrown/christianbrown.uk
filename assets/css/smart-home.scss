@@ -14,13 +14,17 @@ div.container {
                     padding: 10px;
                     vertical-align: text-top;
                     span {
-                        font-size: 11pt;
                         display: block;
+                    }
+                    span.muted {
+                        font-size: 11pt;
                         color: $colour-grayscale-2;
+                    }
+                    span.temp {
+                        font-weight: bold;
                     }
                 }
                 td:nth-child(2) {
-                    font-weight: bold;
                     text-align: right;
                 }
             }
