@@ -54,15 +54,23 @@ show_menu: false
 
                         const nameCell = newRow.insertCell();
                         nameCell.append(dataPoint['name']);
-                        const nameCellSpan = document.createElement('span');
-                        nameCellSpan.append(timeDifference(dataPoint['timestamp']));
-                        nameCell.append(nameCellSpan);
+
+                        const nameCellSpan1 = document.createElement('span');
+                        nameCellSpan1.setAttribute('class', 'muted');
+                        nameCellSpan1.append(timeDifference(dataPoint['timestamp']));
+                        nameCell.append(nameCellSpan1);
 
                         const tempCell = newRow.insertCell();
-                        tempCell.append(dataPoint['temp'].toFixed(1)+'°c');
-                        const tempCellSpan = document.createElement('span');
-                        tempCellSpan.append(freedomUnits(dataPoint['temp']).toFixed(1)+'°f');
-                        tempCell.append(tempCellSpan);
+
+                        const tempCellSpan1 = document.createElement('span');
+                        tempCellSpan1.setAttribute('class', 'temp');
+                        tempCellSpan1.append(dataPoint['temp'].toFixed(1)+'°c');
+                        tempCell.append(tempCellSpan1);
+
+                        const tempCellSpan2 = document.createElement('span');
+                        tempCellSpan2.setAttribute('class', 'muted');
+                        tempCellSpan2.append(freedomUnits(dataPoint['temp']).toFixed(1)+'°f');
+                        tempCell.append(tempCellSpan2);
                     }
                 );
             }
