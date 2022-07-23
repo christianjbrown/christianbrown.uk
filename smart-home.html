@@ -9,9 +9,17 @@ show_menu: false
 <h2>Smart home</h2>
 
 <p>Time in London: <span id="time">[Unknown]</span></p>
-<h3>Current temperatures</h3>
+<h3>Current weather forecast</h3>
 
-<table id="temperatures">
+<table id="met-weather" class="smart-home-table">
+    <tr>
+        <td>[Loading..]</td>
+    </tr>
+</table>
+
+<h3>Current inside temperatures</h3>
+
+<table id="smart-home-temperature-table" class="smart-home-table">
     <tr>
         <td>[Loading..]</td>
     </tr>
@@ -19,10 +27,11 @@ show_menu: false
 
 <script>
 
-    const temperatureTable = document.querySelector('#temperatures');
+    const metWeatherTable = document.querySelector('#met-weather');
+    const smartHomeTemperatureTable = document.querySelector('#smart-home-temperature-table');
 
-    function clearTable() {
-        temperatureTable.querySelectorAll('tr').forEach(
+    function clearTable(table) {
+        table.querySelectorAll('tr').forEach(
             function (node) {
                 node.remove();
             }
@@ -49,42 +58,90 @@ show_menu: false
         return (c * 1.8) + 32;
     }
 
-    function addTempRow(name, timestamp, temp) {
-        const newRow = temperatureTable.insertRow();
+    function addTableRow(table, name, value, valueMuted, nameMuted = null) {
+
+        const newRow = table.insertRow();
 
         const nameCell = newRow.insertCell();
         nameCell.append(name);
 
-        const nameCellSpan1 = document.createElement('span');
-        nameCellSpan1.setAttribute('class', 'muted');
-        nameCellSpan1.append(timeDifference(timestamp));
-        nameCell.append(nameCellSpan1);
+        if (nameMuted) {
+            const nameCellSpanMuted = document.createElement('span');
+            nameCellSpanMuted.setAttribute('class', 'muted');
+            nameCellSpanMuted.append(nameMuted);
+            nameCell.append(nameCellSpanMuted);
+        }
 
-        const tempCell = newRow.insertCell();
+        const valueCell = newRow.insertCell();
 
-        const tempCellSpan1 = document.createElement('span');
-        tempCellSpan1.setAttribute('class', 'temp');
-        tempCellSpan1.append(temp.toFixed(1)+'°c');
-        tempCell.append(tempCellSpan1);
+        const valueCellSpanMain = document.createElement('span');
+        valueCellSpanMain.setAttribute('class', 'value');
+        valueCellSpanMain.append(value);
+        valueCell.append(valueCellSpanMain);
 
-        const tempCellSpan2 = document.createElement('span');
-        tempCellSpan2.setAttribute('class', 'muted');
-        tempCellSpan2.append(freedomUnits(temp).toFixed(1)+'°f');
-        tempCell.append(tempCellSpan2);
+        if (valueMuted) {
+            const valueCellSpanMuted = document.createElement('span');
+            valueCellSpanMuted.setAttribute('class', 'muted');
+            valueCellSpanMuted.append(valueMuted);
+            valueCell.append(valueCellSpanMuted);
+        }
     }
 
-
-    function update() {
-        fetch('https://cb-api.global.ssl.fastly.net/get-smart-home-temps')
+    function updateMetWeather() {
+        fetch('https://christianbrown.global.ssl.fastly.net/get-met-office-temps')
             .then(response => response.json())
             .then(
                 function (data) {
-                    clearTable();
+                    if (data instanceof Object && data['data'] instanceof Object) {
+                        clearTable(metWeatherTable);
+                        Object.entries(data['data']).forEach(
+                            function (entry) {
+                                const [key, value] = entry;
+                                console.log(key, value);
+
+                            }
+                        );
+                        if (typeof data['data']['temp'] === 'number') {
+                            addTableRow(metWeatherTable, 'Temperature', data['data']['temp'].toFixed(1)+'°c', freedomUnits(data['data']['temp']).toFixed(1)+'°f');
+                        }
+                        if (typeof data['data']['temp_feels_like'] === 'number' && data['data']['temp'] !== data['data']['temp_feels_like']) {
+                            addTableRow(metWeatherTable, 'Temperature feels like', data['data']['temp_feels_like'].toFixed(1)+'°c', freedomUnits(data['data']['temp_feels_like']).toFixed(1)+'°f');
+                        }
+                        if (typeof data['data']['humidity'] === 'number') {
+                            addTableRow(metWeatherTable, 'Humidity', data['data']['humidity']+'%');
+                        }
+                        if (typeof data['data']['precipitation'] === 'number') {
+                            addTableRow(metWeatherTable, 'Precipitation', data['data']['precipitation']+'% chance');
+                        }
+                    }
+                }
+            )
+            .catch(
+                function (err) {
+                    console.error(err);
+
+                    clearTable(metWeatherTable);
+
+                    smartHomeTemperatureTable.insertRow().insertCell().append('[Error "'+err.message+'", try again later.]');
+                }
+            );
+
+        const londonTime = (new Intl.DateTimeFormat('en', {'timezone': 'Europe/London', 'timeStyle': 'short'})).format(new Date());
+        const time = document.querySelector('#time');
+        time.replaceChildren(londonTime);
+    }
+
+    function updateSmartHomeTemperatures() {
+        fetch('https://christianbrown.global.ssl.fastly.net/get-smart-home-temps')
+            .then(response => response.json())
+            .then(
+                function (data) {
+                    clearTable(smartHomeTemperatureTable);
                     if (data instanceof Object && data['devices'] instanceof Array) {
                         data['devices'].forEach(
                             function (dataPoint) {
                                 if (typeof dataPoint['name'] == 'string' && typeof dataPoint['timestamp'] == 'number' && typeof dataPoint['temp'] == 'number') {
-                                    addTempRow(dataPoint['name'], dataPoint['timestamp'], dataPoint['temp']);
+                                    addTableRow(smartHomeTemperatureTable, dataPoint['name'], dataPoint['temp'].toFixed(1)+'°c', freedomUnits(dataPoint['temp']).toFixed(1)+'°f', timeDifference(dataPoint['timestamp']));
                                 } else {
                                     console.log(dataPoint);
                                     throw new Error('Unexpected data');
@@ -99,9 +156,9 @@ show_menu: false
                     console.error(err);
 
                     // clearInterval(timerId); -- commenting out for now, we'll try again every minute.
-                    clearTable();
+                    clearTable(smartHomeTemperatureTable);
 
-                    temperatureTable.insertRow().insertCell().append('[Error "'+err.message+'", try again later.]');
+                    smartHomeTemperatureTable.insertRow().insertCell().append('[Error "'+err.message+'", try again later.]');
                 }
             );
 
@@ -110,7 +167,9 @@ show_menu: false
         time.replaceChildren(londonTime);
     }
 
-    window.addEventListener('load', update);
-    const timerId = setInterval(update, 60 * 1000);
+    window.addEventListener('load', updateSmartHomeTemperatures);
+    window.addEventListener('load', updateMetWeather);
+
+    const timerId = setInterval(updateSmartHomeTemperatures, 60 * 1000);
 
 </script>
