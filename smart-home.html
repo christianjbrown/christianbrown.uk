@@ -13,11 +13,22 @@ show_menu: false
 
 <table id="temperatures">
     <tr>
-        <td>Loading..</td>
+        <td>[Loading..]</td>
     </tr>
 </table>
 
 <script>
+
+    const temperatureTable = document.querySelector('#temperatures');
+
+    function clearTable() {
+        temperatureTable.querySelectorAll('tr').forEach(
+            function (node) {
+                node.remove();
+            }
+        );
+    }
+
     function timeDifference(timestamp) {
         const msPerMinute = 60;
         const msPerHour = msPerMinute * 60;
@@ -38,48 +49,68 @@ show_menu: false
         return (c * 1.8) + 32;
     }
 
-    fetch('https://cb-api.global.ssl.fastly.net/get-smart-home-temps')
-        .then(response => response.json())
-        .then(
-            function (data) {
-                const table = document.querySelector('#temperatures');
-                table.querySelectorAll('tr').forEach(
-                    function (node) {
-                        node.remove();
+    function addTempRow(name, timestamp, temp) {
+        const newRow = temperatureTable.insertRow();
+
+        const nameCell = newRow.insertCell();
+        nameCell.append(name);
+
+        const nameCellSpan1 = document.createElement('span');
+        nameCellSpan1.setAttribute('class', 'muted');
+        nameCellSpan1.append(timeDifference(timestamp));
+        nameCell.append(nameCellSpan1);
+
+        const tempCell = newRow.insertCell();
+
+        const tempCellSpan1 = document.createElement('span');
+        tempCellSpan1.setAttribute('class', 'temp');
+        tempCellSpan1.append(temp.toFixed(1)+'°c');
+        tempCell.append(tempCellSpan1);
+
+        const tempCellSpan2 = document.createElement('span');
+        tempCellSpan2.setAttribute('class', 'muted');
+        tempCellSpan2.append(freedomUnits(temp).toFixed(1)+'°f');
+        tempCell.append(tempCellSpan2);
+    }
+
+
+    function update() {
+        fetch('https://cb-api.global.ssl.fastly.net/get-smart-home-temps')
+            .then(response => response.json())
+            .then(
+                function (data) {
+                    clearTable();
+                    if (data instanceof Object && data['devices'] instanceof Array) {
+                        data['devices'].forEach(
+                            function (dataPoint) {
+                                if (typeof dataPoint['name'] == 'string' && typeof dataPoint['timestamp'] == 'number' && typeof dataPoint['temp'] == 'number') {
+                                    addTempRow(dataPoint['name'], dataPoint['timestamp'], dataPoint['temp']);
+                                } else {
+                                    console.log(dataPoint);
+                                    throw new Error('Unexpected data');
+                                }
+                            }
+                        );
                     }
-                );
-                if (data instanceof Object && data['devices'] instanceof Array) {
-                    data['devices'].forEach(
-                        function (dataPoint) {
-                            const newRow = table.insertRow();
-
-                            const nameCell = newRow.insertCell();
-                            nameCell.append(dataPoint['name']);
-
-                            const nameCellSpan1 = document.createElement('span');
-                            nameCellSpan1.setAttribute('class', 'muted');
-                            nameCellSpan1.append(timeDifference(dataPoint['timestamp']));
-                            nameCell.append(nameCellSpan1);
-
-                            const tempCell = newRow.insertCell();
-
-                            const tempCellSpan1 = document.createElement('span');
-                            tempCellSpan1.setAttribute('class', 'temp');
-                            tempCellSpan1.append(dataPoint['temp'].toFixed(1)+'°c');
-                            tempCell.append(tempCellSpan1);
-
-                            const tempCellSpan2 = document.createElement('span');
-                            tempCellSpan2.setAttribute('class', 'muted');
-                            tempCellSpan2.append(freedomUnits(dataPoint['temp']).toFixed(1)+'°f');
-                            tempCell.append(tempCellSpan2);
-                        }
-                    );
                 }
-            }
-        );
+            )
+            .catch(
+                function (err) {
+                    console.error(err);
 
-    const londonTime = (new Intl.DateTimeFormat('en', {'timezone': 'Europe/London', 'timeStyle': 'short'})).format(new Date());
-    const time = document.querySelector('#time');
-    time.replaceChildren(londonTime);
+                    // clearInterval(timerId); -- commenting out for now, we'll try again every minute.
+                    clearTable();
+
+                    temperatureTable.insertRow().insertCell().append('[Error "'+err.message+'", try again later.]');
+                }
+            );
+
+        const londonTime = (new Intl.DateTimeFormat('en', {'timezone': 'Europe/London', 'timeStyle': 'short'})).format(new Date());
+        const time = document.querySelector('#time');
+        time.replaceChildren(londonTime);
+    }
+
+    window.addEventListener('load', update);
+    const timerId = setInterval(update, 60 * 1000);
 
 </script>
