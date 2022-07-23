@@ -38,7 +38,7 @@ show_menu: false
         return (c * 1.8) + 32;
     }
 
-    fetch('https://cb-api.global.ssl.fastly.net/smart-home-get-temps')
+    fetch('https://cb-api.global.ssl.fastly.net/get-smart-home-temps')
         .then(response => response.json())
         .then(
             function (data) {
