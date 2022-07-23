@@ -155,7 +155,7 @@ show_menu: false
                 function (err) {
                     console.error(err);
 
-                    // clearInterval(timerId); -- commenting out for now, we'll try again every minute.
+                    // clearInterval(smartHomeTemperaturesTimerId); -- commenting out for now, we'll try again every minute.
                     clearTable(smartHomeTemperatureTable);
 
                     smartHomeTemperatureTable.insertRow().insertCell().append('[Error "'+err.message+'", try again later.]');
@@ -170,6 +170,7 @@ show_menu: false
     window.addEventListener('load', updateSmartHomeTemperatures);
     window.addEventListener('load', updateMetWeather);
 
-    const timerId = setInterval(updateSmartHomeTemperatures, 60 * 1000);
+    const smartHomeTemperaturesTimerId = setInterval(updateSmartHomeTemperatures, 60 * 1000);
+    const metWeatherTimerId = setInterval(updateMetWeather, 5 * 60 * 1000);
 
 </script>
