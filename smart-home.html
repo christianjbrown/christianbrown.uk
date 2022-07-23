@@ -38,7 +38,7 @@ show_menu: false
         return (c * 1.8) + 32;
     }
 
-    fetch('https://europe-west2-christianbrown.cloudfunctions.net/get-temperatures')
+    fetch('https://europe-west2-christianbrown.cloudfunctions.net/smart-home-get-temps')
         .then(response => response.json())
         .then(
             function (data) {
