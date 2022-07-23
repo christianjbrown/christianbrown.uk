@@ -48,7 +48,7 @@ show_menu: false
                         node.remove();
                     }
                 );
-                if (Array.isArray(data['devices'])) {
+                if (data instanceof Object && data['devices'] instanceof Array) {
                     data['devices'].forEach(
                         function (dataPoint) {
                             const newRow = table.insertRow();
