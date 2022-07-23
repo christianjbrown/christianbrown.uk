@@ -111,7 +111,7 @@ show_menu: false
                             addTableRow(metWeatherTable, 'Humidity', data['data']['humidity']+'%');
                         }
                         if (typeof data['data']['precipitation'] === 'number') {
-                            addTableRow(metWeatherTable, 'Precipitation', data['data']['precipitation']+'% chance');
+                            addTableRow(metWeatherTable, 'Chance of precipitation', data['data']['precipitation']+'%');
                         }
                     }
                 }
