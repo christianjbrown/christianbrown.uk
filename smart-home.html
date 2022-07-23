@@ -48,31 +48,33 @@ show_menu: false
                         node.remove();
                     }
                 );
-                data.forEach(
-                    function (dataPoint) {
-                        const newRow = table.insertRow();
+                if (Array.isArray(data['devices'])) {
+                    data['devices'].forEach(
+                        function (dataPoint) {
+                            const newRow = table.insertRow();
 
-                        const nameCell = newRow.insertCell();
-                        nameCell.append(dataPoint['name']);
+                            const nameCell = newRow.insertCell();
+                            nameCell.append(dataPoint['name']);
 
-                        const nameCellSpan1 = document.createElement('span');
-                        nameCellSpan1.setAttribute('class', 'muted');
-                        nameCellSpan1.append(timeDifference(dataPoint['timestamp']));
-                        nameCell.append(nameCellSpan1);
+                            const nameCellSpan1 = document.createElement('span');
+                            nameCellSpan1.setAttribute('class', 'muted');
+                            nameCellSpan1.append(timeDifference(dataPoint['timestamp']));
+                            nameCell.append(nameCellSpan1);
 
-                        const tempCell = newRow.insertCell();
+                            const tempCell = newRow.insertCell();
 
-                        const tempCellSpan1 = document.createElement('span');
-                        tempCellSpan1.setAttribute('class', 'temp');
-                        tempCellSpan1.append(dataPoint['temp'].toFixed(1)+'°c');
-                        tempCell.append(tempCellSpan1);
+                            const tempCellSpan1 = document.createElement('span');
+                            tempCellSpan1.setAttribute('class', 'temp');
+                            tempCellSpan1.append(dataPoint['temp'].toFixed(1)+'°c');
+                            tempCell.append(tempCellSpan1);
 
-                        const tempCellSpan2 = document.createElement('span');
-                        tempCellSpan2.setAttribute('class', 'muted');
-                        tempCellSpan2.append(freedomUnits(dataPoint['temp']).toFixed(1)+'°f');
-                        tempCell.append(tempCellSpan2);
-                    }
-                );
+                            const tempCellSpan2 = document.createElement('span');
+                            tempCellSpan2.setAttribute('class', 'muted');
+                            tempCellSpan2.append(freedomUnits(dataPoint['temp']).toFixed(1)+'°f');
+                            tempCell.append(tempCellSpan2);
+                        }
+                    );
+                }
             }
         );
 
