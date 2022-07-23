@@ -6,7 +6,13 @@
 
 div.container {
     main {
-        table#temperatures {
+        p {
+            font-size: 1.1em;
+            span#time {
+                font-weight: bold;
+            }
+        }
+        table.smart-home-table {
             width: 350px;
             tr {
                 td {
@@ -20,7 +26,7 @@ div.container {
                         font-size: 11pt;
                         color: $colour-grayscale-2;
                     }
-                    span.temp {
+                    span.value {
                         font-weight: bold;
                     }
                 }
