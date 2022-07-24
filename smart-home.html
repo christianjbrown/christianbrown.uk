@@ -117,16 +117,10 @@ show_menu: false
             .catch(
                 function (err) {
                     console.error(err);
-
                     clearTable(metWeatherTable);
-
                     metWeatherTable.insertRow().insertCell().append('[Error "'+err.message+'", try again later.]');
                 }
             );
-
-        const londonTime = (new Intl.DateTimeFormat('en', {'timezone': 'Europe/London', 'timeStyle': 'short'})).format(new Date());
-        const time = document.querySelector('#time');
-        time.replaceChildren(londonTime);
     }
 
     function updateSmartHomeTemperatures() {
@@ -152,23 +146,42 @@ show_menu: false
             .catch(
                 function (err) {
                     console.error(err);
-
-                    // clearInterval(smartHomeTemperaturesTimerId); -- commenting out for now, we'll try again every minute.
                     clearTable(smartHomeTemperatureTable);
-
                     smartHomeTemperatureTable.insertRow().insertCell().append('[Error "'+err.message+'", try again later.]');
                 }
             );
 
-        const londonTime = (new Intl.DateTimeFormat('en', {'timezone': 'Europe/London', 'timeStyle': 'short'})).format(new Date());
+    }
+
+    function updateTime() {
+        const now = new Date();
+        const londonTimeFormatOptions1 = {
+            'timeZone': 'Europe/London',
+            'hourCycle': 'h23',
+            'hour': '2-digit',
+            'minute': '2-digit'
+        };
+        const londonTimeFormat1 = new Intl.DateTimeFormat('en-GB', londonTimeFormatOptions1);
+        const londonTime1 = londonTimeFormat1.format(now);
+
+        const londonTimeFormatOptions2 = {
+            'timeZone': 'Europe/London',
+            'timeStyle': 'short',
+            'hour12': true,
+        };
+        const londonTimeFormat2 = new Intl.DateTimeFormat('en-GB', londonTimeFormatOptions2);
+        const londonTime2 = londonTimeFormat2.format(now);
+
+        const text = londonTime1 + ' (' + londonTime2 + ')';
+
         const time = document.querySelector('#time');
-        time.replaceChildren(londonTime);
+        time.replaceChildren(text);
     }
 
     window.addEventListener('load', updateSmartHomeTemperatures);
     window.addEventListener('load', updateMetWeather);
-
-    const smartHomeTemperaturesTimerId = setInterval(updateSmartHomeTemperatures, 60 * 1000);
-    const metWeatherTimerId = setInterval(updateMetWeather, 5 * 60 * 1000);
-
+    window.addEventListener('load', updateTime);
+    setInterval(updateSmartHomeTemperatures, 60 * 1000);
+    setInterval(updateMetWeather, 5 * 60 * 1000);
+    setInterval(updateTime, 60 * 1000);
 </script>
