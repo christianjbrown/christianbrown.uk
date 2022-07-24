@@ -11,7 +11,7 @@ show_menu: false
 <p>Time in London: <span id="time">[Unknown]</span></p>
 <h3>Current weather forecast</h3>
 
-<table id="met-weather" class="smart-home-table">
+<table id="met-weather-table" class="smart-home-table">
     <tr>
         <td>[Loading..]</td>
     </tr>
@@ -27,7 +27,7 @@ show_menu: false
 
 <script>
 
-    const metWeatherTable = document.querySelector('#met-weather');
+    const metWeatherTable = document.querySelector('#met-weather-table');
     const smartHomeTemperatureTable = document.querySelector('#smart-home-temperature-table');
 
     function clearTable(table) {
@@ -97,8 +97,6 @@ show_menu: false
                         Object.entries(data['data']).forEach(
                             function (entry) {
                                 const [key, value] = entry;
-                                console.log(key, value);
-
                             }
                         );
                         if (typeof data['data']['temp'] === 'number') {
@@ -122,7 +120,7 @@ show_menu: false
 
                     clearTable(metWeatherTable);
 
-                    smartHomeTemperatureTable.insertRow().insertCell().append('[Error "'+err.message+'", try again later.]');
+                    metWeatherTable.insertRow().insertCell().append('[Error "'+err.message+'", try again later.]');
                 }
             );
 
