@@ -26,6 +26,8 @@ show_menu: false
 </table>
 
 <script>
+    const MET_WEATHER_API_URL = 'https://christianbrown.global.ssl.fastly.net/get-met-office-temps';
+    const SMART_HOME_API_URL = 'https://christianbrown.global.ssl.fastly.net/get-smart-home-temps';
 
     const metWeatherTable = document.querySelector('#met-weather-table');
     const smartHomeTemperatureTable = document.querySelector('#smart-home-temperature-table');
@@ -58,52 +60,65 @@ show_menu: false
         return (c * 1.8) + 32;
     }
 
-    function addTableRow(table, name, value, valueMuted, nameMuted = null) {
+    function addOutsideTempTableRow(name, degreesC, timestamp = null, stale = false, important = false) {
+        addTempTableRow(metWeatherTable, name, degreesC, timestamp, stale, important);
+    }
 
-        const newRow = table.insertRow();
+    function addInsideTempTableRow(name, degreesC, timestamp = null, stale = false, important = false) {
+        addTempTableRow(smartHomeTemperatureTable, name, degreesC, timestamp, stale, important);
+    }
 
-        const nameCell = newRow.insertCell();
-        nameCell.append(name);
+    function addTempTableRow(table, name, degreesC, timestamp, stale = false, important = false) {
+        addTableRow(table, name, degreesC.toFixed(1)+'°c', freedomUnits(degreesC).toFixed(1)+'°f', timestamp ? timeDifference(timestamp) : null, stale, important);
+    }
 
-        if (nameMuted) {
-            const nameCellSpanMuted = document.createElement('span');
-            nameCellSpanMuted.setAttribute('class', 'muted');
-            nameCellSpanMuted.append(nameMuted);
-            nameCell.append(nameCellSpanMuted);
+
+    function addTableRow(table, primaryKey, primaryValue, secondaryValue, secondaryKey = null, muted = null, importantPrimary = false) {
+        const row = table.insertRow();
+
+        const columnLeft = row.insertCell();
+        columnLeft.append(getTableCellSpan(primaryKey, 'primary', muted, importantPrimary));
+        if (secondaryKey) {
+            columnLeft.append(getTableCellSpan(secondaryKey, 'secondary', muted));
         }
 
-        const valueCell = newRow.insertCell();
-
-        const valueCellSpanMain = document.createElement('span');
-        valueCellSpanMain.setAttribute('class', 'value');
-        valueCellSpanMain.append(value);
-        valueCell.append(valueCellSpanMain);
-
-        if (valueMuted) {
-            const valueCellSpanMuted = document.createElement('span');
-            valueCellSpanMuted.setAttribute('class', 'muted');
-            valueCellSpanMuted.append(valueMuted);
-            valueCell.append(valueCellSpanMuted);
+        const columnRight = row.insertCell();
+        columnRight.append(getTableCellSpan(primaryValue, 'primary', muted, importantPrimary));
+        if (secondaryValue) {
+            columnRight.append(getTableCellSpan(secondaryValue, 'secondary', muted));
         }
     }
 
+    function getTableCellSpan(text, cssClass, muted, important) {
+        const span = document.createElement('span');
+        if (important) {
+            cssClass += ' important';
+        } else if (muted) {
+            cssClass += ' muted';
+        }
+        span.setAttribute('class', cssClass);
+        span.append(text);
+
+        return span;
+    }
+
     function updateMetWeather() {
-        fetch('https://christianbrown.global.ssl.fastly.net/get-met-office-temps')
+        fetch(MET_WEATHER_API_URL)
             .then(response => response.json())
             .then(
                 function (data) {
                     if (data instanceof Object && data['data'] instanceof Object) {
                         clearTable(metWeatherTable);
-                        Object.entries(data['data']).forEach(
-                            function (entry) {
-                                const [key, value] = entry;
-                            }
-                        );
+                        // Object.entries(data['data']).forEach(
+                        //     function (entry) {
+                        //         const [key, value] = entry;
+                        //     }
+                        // );
                         if (typeof data['data']['temp'] === 'number') {
-                            addTableRow(metWeatherTable, 'Temperature', data['data']['temp'].toFixed(1)+'°c', freedomUnits(data['data']['temp']).toFixed(1)+'°f');
+                            addOutsideTempTableRow('Temperature', data['data']['temp'], null, false, true);
                         }
                         if (typeof data['data']['temp_feels_like'] === 'number' && data['data']['temp'] !== data['data']['temp_feels_like']) {
-                            addTableRow(metWeatherTable, 'Temperature feels like', data['data']['temp_feels_like'].toFixed(1)+'°c', freedomUnits(data['data']['temp_feels_like']).toFixed(1)+'°f');
+                            addOutsideTempTableRow('Temperature feels like', data['data']['temp_feels_like']);
                         }
                         if (typeof data['data']['humidity'] === 'number') {
                             addTableRow(metWeatherTable, 'Humidity', data['data']['humidity']+'%');
@@ -118,24 +133,26 @@ show_menu: false
                 function (err) {
                     console.error(err);
                     clearTable(metWeatherTable);
-                    metWeatherTable.insertRow().insertCell().append('[Error "'+err.message+'", try again later.]');
+                    metWeatherTable.insertRow().insertCell().append('Error "'+err.message+'", try again later.');
                 }
             );
     }
 
     function updateSmartHomeTemperatures() {
-        fetch('https://christianbrown.global.ssl.fastly.net/get-smart-home-temps')
+        fetch(SMART_HOME_API_URL)
             .then(response => response.json())
             .then(
                 function (data) {
                     clearTable(smartHomeTemperatureTable);
                     if (data instanceof Object && data['devices'] instanceof Array) {
+                        if (typeof data['averageTempDegrees'] === 'number' && typeof data['averageTempTimestamp'] === 'number') {
+                            addInsideTempTableRow('Average', data['averageTempDegrees'], data['averageTempTimestamp'], false, true);
+                        }
                         data['devices'].forEach(
                             function (dataPoint) {
-                                if (typeof dataPoint['name'] == 'string' && typeof dataPoint['timestamp'] == 'number' && typeof dataPoint['temp'] == 'number') {
-                                    addTableRow(smartHomeTemperatureTable, dataPoint['name'], dataPoint['temp'].toFixed(1)+'°c', freedomUnits(dataPoint['temp']).toFixed(1)+'°f', timeDifference(dataPoint['timestamp']));
+                                if (typeof dataPoint['name'] == 'string' && typeof dataPoint['timestamp'] == 'number' && typeof dataPoint['temp'] == 'number' && typeof dataPoint['stale'] == 'boolean') {
+                                    addInsideTempTableRow(dataPoint['name'], dataPoint['temp'], dataPoint['timestamp'], dataPoint['stale']);
                                 } else {
-                                    console.log(dataPoint);
                                     throw new Error('Unexpected data');
                                 }
                             }
@@ -147,7 +164,7 @@ show_menu: false
                 function (err) {
                     console.error(err);
                     clearTable(smartHomeTemperatureTable);
-                    smartHomeTemperatureTable.insertRow().insertCell().append('[Error "'+err.message+'", try again later.]');
+                    smartHomeTemperatureTable.insertRow().insertCell().append('Error "'+err.message+'", try again later.');
                 }
             );
 

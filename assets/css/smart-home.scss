@@ -16,18 +16,26 @@ div.container {
             width: 350px;
             tr {
                 td {
-                    font-size: 13pt;
                     padding: 10px;
                     vertical-align: text-top;
                     span {
                         display: block;
                     }
-                    span.muted {
+                    span.primary {
+                        font-size: 13pt;
+                        &.important {
+                            font-weight: bold;
+                        }
+                        &.muted {
+                            color: $colour-grayscale-1;
+                        }
+                    }
+                    span.secondary {
                         font-size: 11pt;
                         color: $colour-grayscale-2;
-                    }
-                    span.value {
-                        font-weight: bold;
+                        &.muted {
+                            color: $colour-grayscale-1;
+                        }
                     }
                 }
                 td:nth-child(2) {
