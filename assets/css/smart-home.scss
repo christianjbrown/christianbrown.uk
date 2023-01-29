@@ -37,6 +37,9 @@ div.container {
                             color: $colour-grayscale-1;
                         }
                     }
+                    span.error {
+                        color: red;
+                    }
                 }
                 td:nth-child(2) {
                     text-align: right;
