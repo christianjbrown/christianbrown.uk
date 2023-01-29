@@ -9,13 +9,11 @@
         <link rel="manifest" href="/site.webmanifest">
         <link rel="mask-icon" href="/assets/images/favicon/safari-pinned-tab.svg" color="#5bbad5">
         <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
-        <link rel="stylesheet" href="/assets/css/global.css">
-        {% for stylesheet in layout.stylesheets %}
-        <link rel="stylesheet" href="{{ stylesheet }}">
-        {% endfor %}
-        {% for stylesheet in page.stylesheets %}
-        <link rel="stylesheet" href="{{ stylesheet }}">
-        {% endfor %}
+        <link rel="stylesheet" href="/assets/css/global.css">{% if layout.stylesheets %}{% for stylesheet in layout.stylesheets %}
+        <link rel="stylesheet" href="{{ stylesheet }}">{% endfor %}{% endif %}{% if page.stylesheets %}{% for stylesheet in page.stylesheets %}
+        <link rel="stylesheet" href="{{ stylesheet }}">{% endfor %}{% endif %}{% if layout.javascripts %}{% for javascript in layout.javascripts %}
+        <script type="module" src="{{ javascript }}"></script>{% endfor %}{% endif %}{% if page.javascripts %}{% for javascript in page.javascripts %}
+        <script type="module" src="{{ javascript }}"></script>{% endfor %}{% endif %}
         <meta name="author" content="{{ site.site_author }}">
         <meta name="description" content="{{ page.description }}">
         <meta name="msapplication-TileColor" content="#ffffff">
@@ -32,8 +30,7 @@
         <meta property="og:site_name" content="{{ site.site_name }}">
         <meta property="og:title" content="{{ page.title }}">
         <meta property="og:type" content="website">
-        <meta property="og:url" content="{{ site.url }}{{ page.url }}">
-        {% if page.schema %}
+        <meta property="og:url" content="{{ site.url }}{{ page.url }}">{% if page.schema %}
         <script type="application/ld+json">
             {{ page.schema | jsonify }}
         </script>
@@ -50,8 +47,7 @@
                 <div class="header-data">
                     <h1 class="mt-2"><a href="/">{{ site.header_firstname }}&nbsp;<span class="alternate">{{ site.header_lastname }}</span></a></h1>
                     <p><strong>{{ site.header_job_title }}</strong></p>
-                    <p>{{ site.header_location }}</p>
-                    {% if page.show_menu %}
+                    <p>{{ site.header_location }}</p>{% if page.show_menu %}
                     <nav>
                         {% for nav in site.menu %}
                         {% if site.menu.first != nav %}&nbsp;&nbsp;&nbsp;{% endif %}
