@@ -9,21 +9,23 @@ function updateTime() {
     timeSpan.textContent = (new Time()).formatHour();
 }
 
-window.onload = function() {
-    const metWeatherFetchWrapper = new WeatherFetchWrapper();
-    const smartHomeFetchWrapper = new SmartHomeFetchWrapper();
+window.addEventListener('load',
+    function() {
+        const metWeatherFetchWrapper = new WeatherFetchWrapper();
+        const smartHomeFetchWrapper = new SmartHomeFetchWrapper();
 
-    metWeatherFetchWrapper.update();
-    smartHomeFetchWrapper.update();
-    updateTime();
+        metWeatherFetchWrapper.update();
+        smartHomeFetchWrapper.update();
+        updateTime();
 
-    setInterval(
-        function() {
-            updateTime();
-            smartHomeFetchWrapper.update();
-        },
-        60 * 1000
-    );
+        setInterval(
+            function() {
+                updateTime();
+                smartHomeFetchWrapper.update();
+            },
+            60 * 1000
+        );
 
-    setInterval(metWeatherFetchWrapper.update,5 * 60 * 1000);
-}
+        setInterval(metWeatherFetchWrapper.update,5 * 60 * 1000);
+    }
+);
