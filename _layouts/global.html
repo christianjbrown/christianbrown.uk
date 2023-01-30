@@ -1,3 +1,12 @@
+<!--
+                                                                                                                        _
+ _|_ |_   _   _  _    _. ._ _   ._   _ _|_  _|_ |_   _    _| ._ _  o  _|  _      _ /    ._ _   |  _   _  |  o ._   _   _|_ _  ._
+  |_ | | (/_ _> (/_  (_| | (/_  | | (_) |_   |_ | | (/_  (_| | (_) | (_| _>  \/ (_) |_| | (/_  | (_) (_) |< | | | (_|   | (_) |
+                                                                             /                                     _|
+
+but maybe you've looking for an engineering manager? you've come to right place!
+
+-->
 <!doctype html>
     <html lang="en">
     <head>
@@ -11,7 +20,8 @@
         <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
         <link rel="stylesheet" href="/assets/css/global.css">{% if layout.stylesheets %}{% for stylesheet in layout.stylesheets %}
         <link rel="stylesheet" href="{{ stylesheet }}">{% endfor %}{% endif %}{% if page.stylesheets %}{% for stylesheet in page.stylesheets %}
-        <link rel="stylesheet" href="{{ stylesheet }}">{% endfor %}{% endif %}{% if layout.javascripts %}{% for javascript in layout.javascripts %}
+        <link rel="stylesheet" href="{{ stylesheet }}">{% endfor %}{% endif %}
+        <script type="module" src="/assets/js/global.js"></script>{% if layout.javascripts %}{% for javascript in layout.javascripts %}
         <script type="module" src="{{ javascript }}"></script>{% endfor %}{% endif %}{% if page.javascripts %}{% for javascript in page.javascripts %}
         <script type="module" src="{{ javascript }}"></script>{% endfor %}{% endif %}
         <meta name="author" content="{{ site.site_author }}">
