@@ -5,7 +5,7 @@ import WeatherTable from './weather-table.js';
 
 const URL_PROD = 'https://christianbrown.global.ssl.fastly.net/get-met-office-temps';
 const URL_DEV = 'http://localhost:8080/';
-const SELECTOR = '#met-weather-table';
+const SELECTOR = '#weather-table';
 
 export default class WeatherFetchWrapper extends FetchWrapper {
     /**

@@ -12,6 +12,15 @@ div.container {
                 font-weight: bold;
             }
         }
+        div#data {
+            div {
+                margin-bottom: 10px;
+            }
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            column-gap: 30px;
+        }
         table.smart-home-table {
             width: 350px;
             tr {
