@@ -21,6 +21,11 @@ div.container {
             flex-wrap: wrap;
             column-gap: 30px;
         }
+        img#how-it-works {
+            width: 90%;
+            display: block;
+            margin: 0 auto;
+        }
         table.smart-home-table {
             width: 350px;
             tr {
