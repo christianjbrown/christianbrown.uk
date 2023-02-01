@@ -5,7 +5,7 @@ import SmartHomeTable from './smart-home-table.js';
 
 const URL_PROD = 'https://christianbrown.global.ssl.fastly.net/get-smart-home-temps';
 const URL_DEV = 'http://localhost:8080/';
-const SELECTOR = '#smart-home-temperature-table';
+const SELECTOR = '#home-temperature-table';
 
 export default class SmartHomeFetchWrapper extends FetchWrapper {
     /**
