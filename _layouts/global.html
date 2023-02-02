@@ -41,6 +41,13 @@ but maybe you're looking for an engineering manager? you've come to right place!
         <meta property="og:title" content="{{ page.title }}">
         <meta property="og:type" content="website">
         <meta property="og:url" content="{{ site.url }}{{ page.url }}">{% if page.schema %}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-9Z9L9Z6QHQ"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-9Z9L9Z6QHQ');
+        </script>
         <script type="application/ld+json">
             {{ page.schema | jsonify }}
         </script>{% endif %}
