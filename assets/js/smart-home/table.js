@@ -37,7 +37,7 @@ export default class Table {
         const tempObj = new Temperature(degreesC);
         let timeDiff = null;
         if (timestamp) {
-            const timeObj = new Time(timestamp);
+            const timeObj = new Time(timestamp * 1000);
             timeDiff = timeObj.formatTimeAgo();
         }
         this.addTableRow(name, tempObj.formatC(), tempObj.formatF(), timeDiff, stale, important);
