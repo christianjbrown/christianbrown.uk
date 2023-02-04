@@ -29,7 +29,7 @@ export default class Time {
      * @returns {String}
      */
     formatTimeAgo() {
-        const elapsed = Math.floor(Date.now()/MS_PER_SEC) - this.#timestamp;
+        const elapsed = (Date.now() - this.#timestamp)/MS_PER_SEC;
         let str;
         if (elapsed < MS_PER_MINUTE) {
             str = Math.floor(elapsed) + ' sec(s) ago';
