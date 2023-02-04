@@ -1,5 +1,10 @@
 import Time from './time.js';
 
+test('Time', () => {
+    const timeObj = new Time();
+    expect(timeObj).toBeInstanceOf(Time);
+});
+
 test('Time.formatHour', () => {
     const timeObj = new Time(Date.parse('2023-01-01 20:40:30'));
     const actual = timeObj.formatHour();
