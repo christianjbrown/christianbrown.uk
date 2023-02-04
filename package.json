@@ -4,12 +4,19 @@
     "@babel/preset-env": "^7.20.2",
     "babel-jest": "^29.4.1",
     "babel-plugin-add-module-exports": "^1.0.4",
-    "jest": "^29.4.1"
+    "jest": "^29.4.1",
+    "jest-environment-jsdom": "^29.4.1",
+    "jsdom": "^21.1.0"
   },
   "jest": {
+    "testEnvironment": "jsdom",
     "collectCoverage": true,
-    "collectCoverageFrom": ["assets/**/*.js"],
-    "coverageReporters": ["text"]
+    "collectCoverageFrom": [
+      "assets/**/*.js"
+    ],
+    "coverageReporters": [
+      "text"
+    ]
   },
   "scripts": {
     "test": "jest --coverage"
