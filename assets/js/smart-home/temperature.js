@@ -41,6 +41,6 @@ export default class Temperature {
      * @returns {Number}
      */
     #concertToF() {
-        return (this.#degreesC * 1.8) + 32;
+        return (this.#degreesC*1.8)+32;
     };
 }

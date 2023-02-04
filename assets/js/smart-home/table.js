@@ -4,20 +4,20 @@ import Temperature from './temperature.js';
 import Time from './time.js';
 
 export default class Table {
-    #selector;
+    #table;
 
     /**
-     * @param {Element} selector
+     * @param {HTMLTableElement} table
      */
-    constructor(selector) {
-        this.#selector = selector;
+    constructor(table) {
+        this.#table = table;
     }
 
     /**
      * Clears the table rows.
      */
     clearContents() {
-        this.#selector.querySelectorAll('tr').forEach(
+        this.#table.querySelectorAll('tr').forEach(
             function (node) {
                 node.remove();
             }
@@ -53,8 +53,8 @@ export default class Table {
      * @param {Boolean} muted
      * @param {Boolean} importantPrimary
      */
-    addTableRow(primaryKey, primaryValue, secondaryValue= null, secondaryKey = null, muted = null, importantPrimary = false) {
-        const row = this.#selector.insertRow();
+    addTableRow(primaryKey, primaryValue, secondaryValue = null, secondaryKey = null, muted = false, importantPrimary = false) {
+        const row = this.#table.insertRow();
 
         const columnLeft = row.insertCell();
         columnLeft.append(Table.#getTableCellSpan(primaryKey, 'primary', muted, importantPrimary));
@@ -110,7 +110,7 @@ export default class Table {
         this.clearContents();
         const errorSpan = document.createElement('span');
         errorSpan.setAttribute('class', 'error');
-        errorSpan.append('Error: '+' '+error.message+'. Try again later.');
-        this.#selector.insertRow().insertCell().append(errorSpan);
+        errorSpan.append('Error: '+error.message+'. Try again later.');
+        this.#table.insertRow().insertCell().append(errorSpan);
     }
 }
