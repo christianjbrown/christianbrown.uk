@@ -19,15 +19,24 @@ export default class UpdatingKeyValuePairTable {
 
     /**
      * Fetches an update from the URL and parses the response.
+     *
+     * @return {Promise}
      */
     async update() {
-        try {
-            const data = await this.#dataFetcher.fetch();
-            this.#clearContents();
-            this._renderUpdate(data);
-        } catch (err) {
-            this.#renderError(err);
-        }
+        const that = this;
+
+        return this.#dataFetcher.fetch()
+            .then(
+                (data) => {
+                    that.#clearContents();
+                    that._renderUpdate(data);
+                }
+            )
+            .catch(
+                (err) => {
+                    that.#renderError(err);
+                }
+            );
     }
 
     /**
@@ -35,7 +44,7 @@ export default class UpdatingKeyValuePairTable {
      */
     #clearContents() {
         this.#domTable.querySelectorAll('tr').forEach(
-            function (node) {
+            (node) => {
                 node.remove();
             }
         );
