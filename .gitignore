@@ -2,6 +2,6 @@
 .jekyll-cache
 .jekyll-metadata
 .sass-cache
-_site
+_site/
+coverage/
 node_modules/
-vendor
