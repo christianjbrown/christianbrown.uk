@@ -9,7 +9,7 @@ beforeEach(() => {
     fetch.resetMocks();
 });
 
-test ('updatingKeyValuePairTable.update success', async () => {
+test ('UpdatingKeyValuePairTable.update success', async () => {
         const tableDomObj = document.createElement('table');
         // this tests that the table gets cleared later
         tableDomObj.insertRow().insertCell().append('test-cell');
@@ -37,6 +37,14 @@ test ('updatingKeyValuePairTable.update success', async () => {
         fetch.mockResponseOnce(JSON.stringify(response));
         await updatingKeyValuePairTable.update();
         expect(tableDomObj.innerHTML).toBe('<tbody><tr><td><span class="primary">test-name-1</span><span class="secondary">3 hr(s) ago</span></td><td><span class="primary">41.6°c</span><span class="secondary">106.9°f</span></td></tr><tr><td><span class="primary muted">test-name-2</span><span class="secondary muted">2 day(s) ago</span></td><td><span class="primary muted">42.7°c</span><span class="secondary muted">108.9°f</span></td></tr><tr><td><span class="primary important">test-name-3</span><span class="secondary">6 hr(s) ago</span></td><td><span class="primary important">43.8°c</span><span class="secondary">110.8°f</span></td></tr><tr><td><span class="primary">test-name-4</span></td><td><span class="primary">44.8°c</span><span class="secondary">112.6°f</span></td></tr><tr><td><span class="primary">test-primary-key-1</span><span class="secondary">test-secondary-key-1</span></td><td><span class="primary">test-primary-value-1</span><span class="secondary">test-secondary-value-1</span></td></tr><tr><td><span class="primary muted">test-primary-key-2</span><span class="secondary muted">test-secondary-key-2</span></td><td><span class="primary muted">test-primary-value-2</span><span class="secondary muted">test-secondary-value-2</span></td></tr><tr><td><span class="primary important">test-primary-key-3</span><span class="secondary">test-secondary-key-3</span></td><td><span class="primary important">test-primary-value-3</span><span class="secondary">test-secondary-value-3</span></td></tr><tr><td><span class="primary">test-primary-key-4</span></td><td><span class="primary">test-primary-value-4</span></td></tr></tbody>');
+    }
+);
+
+
+test ('UpdatingKeyValuePairTable._renderUpdate', async () => {
+        const tableDomObj = document.createElement('table');
+        const updatingKeyValuePairTable = new UpdatingKeyValuePairTable(tableDomObj, 'test-url');
+        updatingKeyValuePairTable._renderUpdate([])
     }
 );
 
