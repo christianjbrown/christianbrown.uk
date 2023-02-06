@@ -6,16 +6,27 @@
     "babel-plugin-add-module-exports": "^1.0.4",
     "jest": "^29.4.1",
     "jest-environment-jsdom": "^29.4.1",
+    "jest-fetch-mock": "^3.0.3",
     "jsdom": "^21.1.0"
   },
   "jest": {
+    "bail":  true,
     "testEnvironment": "jsdom",
     "collectCoverage": true,
     "collectCoverageFrom": [
       "assets/**/*.js"
     ],
     "coverageReporters": [
-      "text"
+      "text",
+      "html"
+    ],
+    "coveragePathIgnorePatterns": [
+      "node_modules/",
+      "_site/"
+    ],
+    "testPathIgnorePatterns": [
+      "node_modules/",
+      "_site/"
     ]
   },
   "scripts": {

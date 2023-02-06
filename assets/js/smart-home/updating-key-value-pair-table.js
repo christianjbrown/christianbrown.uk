@@ -1,23 +1,40 @@
 'use strict';
 
+import DataFetcher from './data-fetcher.js';
 import Temperature from './temperature.js';
 import Time from './time.js';
 
-export default class Table {
-    #table;
+export default class UpdatingKeyValuePairTable {
+    #domTable;
+    #dataFetcher;
 
     /**
-     * @param {HTMLTableElement} table
+     * @param {HTMLTableElement} domTable
+     * @param {String}           url
      */
-    constructor(table) {
-        this.#table = table;
+    constructor(domTable, url) {
+        this.#domTable = domTable;
+        this.#dataFetcher = new DataFetcher(url, this._getContract());
+    }
+
+    /**
+     * Fetches an update from the URL and parses the response.
+     */
+    async update() {
+        try {
+            const data = await this.#dataFetcher.fetch();
+            this.#clearContents();
+            this._renderUpdate(data);
+        } catch (err) {
+            this.#renderError(err);
+        }
     }
 
     /**
      * Clears the table rows.
      */
-    clearContents() {
-        this.#table.querySelectorAll('tr').forEach(
+    #clearContents() {
+        this.#domTable.querySelectorAll('tr').forEach(
             function (node) {
                 node.remove();
             }
@@ -33,14 +50,14 @@ export default class Table {
      * @param {Boolean} stale
      * @param {Boolean} important
      */
-    addTempTableRow(name, degreesC, timestamp = null, stale = false, important = false) {
+    _addTempTableRow(name, degreesC, timestamp = null, stale = false, important = false) {
         const tempObj = new Temperature(degreesC);
         let timeDiff = null;
         if (timestamp) {
             const timeObj = new Time(timestamp * 1000);
             timeDiff = timeObj.formatTimeAgo();
         }
-        this.addTableRow(name, tempObj.formatC(), tempObj.formatF(), timeDiff, stale, important);
+        this._addTableRow(name, tempObj.formatC(), tempObj.formatF(), timeDiff, stale, important);
     }
 
     /**
@@ -53,19 +70,19 @@ export default class Table {
      * @param {Boolean} muted
      * @param {Boolean} importantPrimary
      */
-    addTableRow(primaryKey, primaryValue, secondaryValue = null, secondaryKey = null, muted = false, importantPrimary = false) {
-        const row = this.#table.insertRow();
+    _addTableRow(primaryKey, primaryValue, secondaryValue = null, secondaryKey = null, muted = false, importantPrimary = false) {
+        const row = this.#domTable.insertRow();
 
         const columnLeft = row.insertCell();
-        columnLeft.append(Table.#getTableCellSpan(primaryKey, 'primary', muted, importantPrimary));
+        columnLeft.append(UpdatingKeyValuePairTable.#getTableCellSpan(primaryKey, 'primary', muted, importantPrimary));
         if (secondaryKey) {
-            columnLeft.append(Table.#getTableCellSpan(secondaryKey, 'secondary', muted));
+            columnLeft.append(UpdatingKeyValuePairTable.#getTableCellSpan(secondaryKey, 'secondary', muted, false));
         }
 
         const columnRight = row.insertCell();
-        columnRight.append(Table.#getTableCellSpan(primaryValue, 'primary', muted, importantPrimary));
+        columnRight.append(UpdatingKeyValuePairTable.#getTableCellSpan(primaryValue, 'primary', muted, importantPrimary));
         if (secondaryValue) {
-            columnRight.append(Table.#getTableCellSpan(secondaryValue, 'secondary', muted));
+            columnRight.append(UpdatingKeyValuePairTable.#getTableCellSpan(secondaryValue, 'secondary', muted, false));
         }
     }
 
@@ -74,7 +91,7 @@ export default class Table {
      *
      * @param {Object} data
      */
-    renderUpdate(data) {
+    _renderUpdate(data) {
 
     }
 
@@ -88,7 +105,7 @@ export default class Table {
      *
      * @returns {HTMLSpanElement}
      */
-    static #getTableCellSpan(text, cssClass, muted = false, important = false) {
+    static #getTableCellSpan(text, cssClass, muted, important) {
         const span = document.createElement('span');
         if (important) {
             cssClass += ' important';
@@ -106,11 +123,18 @@ export default class Table {
      *
      * @param {Error} error
      */
-    addError(error) {
-        this.clearContents();
+    #renderError(error) {
+        this.#clearContents();
         const errorSpan = document.createElement('span');
         errorSpan.setAttribute('class', 'error');
         errorSpan.append('Error: '+error.message+'. Try again later.');
-        this.#table.insertRow().insertCell().append(errorSpan);
+        this.#domTable.insertRow().insertCell().append(errorSpan);
+    }
+
+    /**
+     * @returns {Object}
+     */
+    _getContract() {
+        return [];
     }
 }
