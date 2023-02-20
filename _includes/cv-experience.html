@@ -1,12 +1,12 @@
 <div class="cv-experience">
                         <div class="cv-experience-details">
                             <div class="cv-experience-logo">
-                                <img src="{{ experience.logo }}" alt="{{ experience.name }} logo"{% if experience.logo_is_wide %} class="logo-wide"{% endif %}>
+                                {% if experience.link %}<a href="{{ experience.link }}" target="_blank">{% endif %}<img src="{{ experience.logo }}" alt="{{ experience.name }} logo"{% if experience.logo_is_wide %} class="logo-wide"{% endif %}>{% if experience.link %}</a>{% endif %}
                             </div>
                             <div class="cv-experience-metadata">
                                 <h3>{{ experience.title }}</h3>{% if experience.name_location_markdown_override %}
                                 {{ experience.name_location_markdown_override | markdownify | trim }}{% if experience.date_range %}                                <p class="cv-experience-date-range">{{ experience.date_range }}</p>{% endif %}{% else %}
-                                <p class="cv-experience-location"><strong>{{ experience.name }}</strong>{% if experience.location %} in <strong>{{ experience.location }}</strong>{% endif %}</p>
+                                <p class="cv-experience-location"><strong>{% if experience.link %}<a href="{{ experience.link }}" target="_blank">{% endif %}{{ experience.name }}{% if experience.link %}</a>{% endif %}</strong>{% if experience.location %} in <strong>{{ experience.location }}</strong>{% endif %}</p>
                                 {% if experience.date_range %}<p class="cv-experience-date-range">{{ experience.date_range }}</p>{% endif %}{% if experience.extra_markdown %}
                                 {% endif %}{% endif %}{% if experience.extra_markdown %}{{ experience.extra_markdown | markdownify }}                            </div>{% else %}
                             </div>{% endif %}
