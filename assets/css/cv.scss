@@ -20,7 +20,7 @@ div.container {
             }
             div.cv-experience {
                 div.cv-experience-details {
-                    div.cv-experience-logo {
+                    div.cv-experience-logo, div.cv-experience-logo a {
                         img {
                             max-width: 50px;
                             max-height: 30px;
@@ -71,6 +71,13 @@ div.container {
                 div.cv-experience-description {
                     * {
                         margin-bottom: 0.5em;
+                    }
+                    a {
+                        font-weight: normal;
+                        color: $colour-grayscale-3;
+                        &:hover {
+                            color: $colour-accent;
+                        }
                     }
                 }
                 width: 100%;
