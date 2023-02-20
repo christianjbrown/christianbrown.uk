@@ -68,6 +68,11 @@ div.container {
                     align-content: flex-start;
                     column-gap: 10px;
                 }
+                div.cv-experience-description {
+                    * {
+                        margin-bottom: 0.5em;
+                    }
+                }
                 width: 100%;
                 border-top: 1px solid $colour-grayscale-1;
                 display: flex;
