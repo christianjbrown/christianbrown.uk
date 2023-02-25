@@ -10,95 +10,294 @@ div.container {
             font-size: 12pt;
             padding-bottom: 5px;
         }
+        div#cv {
+            div#cv-main {
+                flex-basis: 855px;
+            }
+            div#cv-side {
+                flex-basis: 285px;
+                flex-grow: 1;
+            }
+            align-content: flex-start;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+        }
         div.cv-section {
             h2 {
                 color: $colour-accent;
                 font-size: 18pt;
                 font-family: $font-serif;
                 text-transform: lowercase;
-                margin-bottom: 0;
-            }
-            div.cv-experience {
-                div.cv-experience-details {
-                    div.cv-experience-logo, div.cv-experience-logo a {
-                        img {
-                            max-width: 50px;
-                            max-height: 30px;
-                        }
-                        img.logo-wide {
-                            max-width: 60px;
-                            max-height: 50px;
-                        }
-                        @media (max-width: 449px) {
-                            img {
-                                max-width: 75px;
-                                max-height: 45px;
-                            }
-                            img.logo-wide {
-                                max-width: 90px;
-                                max-height: 67px;
-                            }
-                        }
-                        width: 60px;
-                        height: 60px;
-                        display : flex;
-                        align-items : center;
-                        justify-content: center;
-                    }
-                    div.cv-experience-metadata {
-                        * {
-                            color: $colour-grayscale-4;
-                            margin-bottom: 0;
-                        }
-                        h3 {
-                            font-size: 13pt;
-                            font-weight: bold;
-                        }
-                        p.cv-experience-date-range {
-                            font-style: italic;
-                        }
-                        flex-grow: 1;
-                        min-width: 350px;
-                    }
-                    display: flex;
-                    flex-direction: row;
-                    flex-wrap: wrap;
-                    justify-content: center;
-                    align-items: center;
-                    align-content: flex-start;
-                    column-gap: 10px;
-                }
-                div.cv-experience-description {
-                    * {
-                        margin-bottom: 0.5em;
-                    }
-                    a {
-                        font-weight: normal;
-                        color: $colour-grayscale-3;
-                        &:hover {
-                            color: $colour-accent;
-                        }
-                    }
-                }
+                margin-bottom: 0.5em;
+                padding-bottom: 0.2em;
+                border-bottom: 1px solid $colour-grayscale-1;
                 width: 100%;
-                border-top: 1px solid $colour-grayscale-1;
-                display: flex;
-                flex-direction: column;
-                flex-wrap: wrap;
-                justify-content: left;
-                align-items: flex-start;
-                align-content: flex-start;
-                row-gap: 10px;
-                padding-top: 10px;
-                padding-bottom: 10px;
             }
+            align-content: flex-start;
+            align-items: flex-start;
             display: flex;
             flex-direction: column;
             flex-wrap: wrap;
             justify-content: left;
-            align-items: flex-start;
+            padding: 0 1em 1em;
+        }
+        div#cv-chart-area {
+            #cv-chart {
+                margin: 0 auto;
+                max-width: 17em;
+            }
+            width: 100%;
+            padding-bottom: 1em;
+        }
+        div.cv-side-projects {
+            div.cv-side-project {
+                div.cv-side-project-logo {
+                    img {
+                        width: 1.6em;
+                    }
+                    min-width: 2.5em;
+                    text-align: center;
+                }
+                div.cv-side-project-details {
+                    h3 {
+                        a {
+                            color: $colour-grayscale-4;
+                        }
+                        color: $colour-grayscale-4;
+                        font-size: 1.1em;
+                        font-weight: bold;
+                        margin-bottom: 0.1em;
+                        padding: 0;
+                    }
+                }
+                align-content: flex-start;
+                align-items: flex-start;
+                column-gap: 0.2em;
+                display: flex;
+                flex-direction: row;
+                flex-wrap: nowrap;
+                width: 100%;
+            }
             align-content: flex-start;
-            row-gap: 5px;
+            align-items: flex-start;
+            display: flex;
+            flex-direction: column;
+            flex-wrap: wrap;
+            justify-content: left;
+            padding-bottom: 0.5em;
+            row-gap: 0.2em;
+        }
+        div.cv-verticals {
+            div.cv-vertical {
+                img {
+                    max-height: 2.5em;
+                    margin-bottom: 0.4em;
+                }
+                span {
+                    display: block;
+                    font-size: 10pt;
+                    line-height: 1.2;
+                }
+                display: block;
+                width: 5.5em;
+                text-align: center;
+            }
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            column-gap: 0.5em;
+            row-gap: 1em;
+            justify-content: center;
+            align-content: center;
+            align-items: flex-start;
+        }
+        div.cv-techs {
+            div.cv-tech {
+                img {
+                    max-height: 3em;
+                    max-width: 4em;
+                    margin-bottom: 0.4em;
+                }
+                span, span a {
+                    color: $colour-grayscale-4;
+                    display: block;
+                    font-size: 10pt;
+                    line-height: 1.2;
+                }
+                display: block;
+                min-width: 3.7em;
+                text-align: center;
+            }
+            align-content: flex-end;
+            align-items: flex-end;
+            column-gap: 1em;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 1em;
+            row-gap: 1.6em;
+            width: 100%;
+        }
+        div.cv-experience {
+            div.cv-experience-details {
+                div.cv-experience-logo, div.cv-experience-logo a {
+                    img {
+                        max-width: 50px;
+                        max-height: 30px;
+                    }
+                    img.logo-wide {
+                        max-width: 60px;
+                        max-height: 50px;
+                    }
+                    @media (max-width: 449px) {
+                        img {
+                            max-width: 75px;
+                            max-height: 45px;
+                        }
+                        img.logo-wide {
+                            max-width: 90px;
+                            max-height: 67px;
+                        }
+                    }
+                    width: 60px;
+                    height: 60px;
+                    display : flex;
+                    align-items : center;
+                    justify-content: center;
+                }
+                div.cv-experience-metadata {
+                    * {
+                        color: $colour-grayscale-4;
+                        margin-bottom: 0;
+                    }
+                    h3 {
+                        font-size: 1.1em;
+                        font-weight: bold;
+                    }
+                    p.cv-experience-date-range {
+                        font-style: italic;
+                    }
+                    flex-grow: 1;
+                    min-width: 22em;
+                }
+                display: flex;
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+                align-items: center;
+                align-content: flex-start;
+                column-gap: 0.8em;
+            }
+            div.cv-experience-description {
+                * {
+                    margin-bottom: 0.5em;
+                    line-height: 1.3;
+                }
+                a {
+                    font-weight: normal;
+                    color: $colour-grayscale-3;
+                    &:hover {
+                        color: $colour-accent;
+                    }
+                }
+            }
+            &div:not(:first-child) {
+                padding-top: 1em;
+            }
+            &:not(:last-child) {
+                border-bottom: 1px solid $colour-grayscale-1;
+                padding-bottom: 1em;
+            }
+            align-content: flex-start;
+            align-items: flex-start;
+            display: flex;
+            flex-direction: column;
+            flex-wrap: wrap;
+            justify-content: left;
+
+            row-gap: 0.5em;
+            width: 100%;
+        }
+        div.cv-experience-side {
+            div.cv-experience-details {
+                div.cv-experience-logo, div.cv-experience-logo a {
+                    img {
+                        max-width: 2.5em;
+                        max-height: 2.5em;
+                    }
+                    width: 3em;
+                    display: flex;
+                    justify-content: center;
+                }
+                div.cv-experience-title {
+                    * {
+                        color: $colour-grayscale-4;
+                        margin-bottom: 0;
+                    }
+                    h3 {
+                        padding-top: 0;
+                        font-size: 1.1em;
+                        font-weight: bold;
+                    }
+                }
+                display: flex;
+                flex-direction: row;
+                flex-wrap: nowrap;
+                align-items: flex-start;
+                align-content: flex-start;
+                column-gap: 0.2em;
+            }
+            div.cv-experience-organisation {
+                * {
+                    color: $colour-grayscale-4;
+                    font-weight: normal;
+                    line-height: 1;
+                    margin-bottom: 0;
+                }
+            }
+            div.cv-experience-location {
+                * {
+                    color: $colour-grayscale-2;
+                    font-weight: normal;
+                    line-height: 1;
+                    margin-bottom: 0;
+                }
+            }
+            div.cv-experience-date-range {
+                * {
+                    font-style: italic;
+                    font-size: 0.9em;
+                    line-height: 1;
+                    margin-bottom: 0;
+                }
+            }
+            div.cv-experience-description {
+                * {
+                    margin-bottom: 0.5em;
+                    line-height: 1.3;
+                }
+                a {
+                    font-weight: normal;
+                    color: $colour-grayscale-3;
+                    &:hover {
+                        color: $colour-accent;
+                    }
+                }
+            }
+            &:not(:last-child) {
+                border-bottom: 1px solid $colour-grayscale-1;
+            }
+            align-content: flex-start;
+            align-items: flex-start;
+            display: flex;
+            flex-direction: column;
+            flex-wrap: wrap;
+            justify-content: left;
+            row-gap: 0.5em;
+            width: 100%;
         }
     }
 }

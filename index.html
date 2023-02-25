@@ -4,6 +4,10 @@ title: "Christian Brown - Engineering Manager - London"
 description: "I'm a people manager and solutions architect with a background in world-class content management systems and online video workflows, backed by a decade and a half of experience with well-known, high-traffic, enterprise-level web properties created and maintained by globally distributed teams. I’m a strong proponent of high-quality, reusable, and maintainable solutions using SOLID design principles, unit testing, and continuous integration."
 stylesheets:
     - "/assets/css/cv.css"
+javascripts:
+    - "/assets/js/cv/index.js"
+    - "https://cdn.jsdelivr.net/npm/chart.js@4.2.1/dist/chart.umd.min.js"
+    - "https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"
 show_menu: true
 schema:
     "@context": "https://schema.org/"
@@ -20,19 +24,53 @@ schema:
         addressCountry: "GB"
 ---
 <p class="lead">{{ page.description }}</p>{% if site.current_role %}
-                <div class="cv-section">
-                    <h2>Current role</h2>{% for experience in site.current_role reversed %}
-                    {% include cv-experience.html %}{% endfor %}
-                </div>{% endif %}{% if site.previous_roles %}
-                <div class="cv-section">
-                    <h2>Previous roles</h2>{% for experience in site.previous_roles reversed %}
-                    {% include cv-experience.html %}{% endfor %}
-                </div>{% endif %}{% if site.education %}
-                <div class="cv-section">
-                    <h2>Education</h2>{% for experience in site.education reversed %}
-                    {% include cv-experience.html %}{% endfor %}
-                </div>{% endif %}{% if site.volunteering %}
-                <div class="cv-section">
-                    <h2>Volunteering</h2>{% for experience in site.volunteering reversed %}
-                    {% include cv-experience.html %}{% endfor %}
-                </div>{% endif %}
+                <div class="row" id="cv">
+                    <div id="cv-main">
+                        <div class="cv-section">
+                            <h2>Current role</h2>{% for experience in site.current_role reversed %}
+                            {% include cv-experience.html %}{% endfor %}
+                        </div>{% endif %}{% if site.previous_roles %}
+                        <div class="cv-section">
+                            <h2>Previous roles</h2>{% for experience in site.previous_roles reversed %}
+                            {% include cv-experience.html %}{% endfor %}
+                        </div>{% endif %}{% if site.education %}
+                    </div>
+                    <div id="cv-side">
+                        <div class="cv-section">
+                            <h2>My day</h2>
+                            <p>The 'hats I wear' each day varies, but in my current role, on average, it's a bit like this:</p>
+                            <div id="cv-chart-area">
+                                <canvas id="cv-chart"></canvas>
+                            </div>
+                            <p>I'm also known for making developer tooling and creating beautiful high-quality documentation.</p>
+                        </div>
+                        <div class="cv-section">
+                            <h2>Specialty Verticals</h2>
+                            <p>I have subject-matter expertise in:</p>
+                            <div class="cv-verticals">{% for vertical in site.cv-verticals %}
+                                {% include cv-vertical.html %}{% endfor %}
+                            </div>
+                        </div>
+                        <div class="cv-section">
+                            <h2>Tech</h2>
+                            <p>Some of the tech, frameworks and platforms I have recent industry experience with include:</p>
+                            <div class="cv-techs">{% for tech in site.cv-tech %}
+                                {% include cv-tech.html %}{% endfor %}
+                            </div>
+                        </div>
+                        <div class="cv-section">
+                            <h2>Education</h2>{% for experience in site.education reversed %}
+                            {% include cv-experience-side.html %}{% endfor %}
+                        </div>{% endif %}{% if site.volunteering %}
+                        <div class="cv-section">
+                            <h2>Volunteering</h2>{% for experience in site.volunteering reversed %}
+                            {% include cv-experience-side.html %}{% endfor %}
+                        </div>{% endif %}{% if site.side_projects %}
+                        <div class="cv-section">
+                            <h2>Side projects</h2>
+                            <div class="cv-side-projects">{% for side_project in site.side_projects %}
+                            {% include cv-side-project.html %}{% endfor %}
+                            </div>
+                        </div>{% endif %}
+                    </div>
+                </div>

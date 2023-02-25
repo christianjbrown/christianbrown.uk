@@ -12,11 +12,11 @@ header_job_title: 'Engineering Manager'
 header_location: 'London, UK'
 
 menu:
-  -
-    icon: 'download'
-    text: 'Download'
-    link: '/assets/docs/christian-brown-cv.pdf'
-    icon_alt: 'Download icon'
+#  -
+#    icon: 'download'
+#    text: 'Download'
+#    link: '/assets/docs/christian-brown-cv.pdf'
+#    icon_alt: 'Download icon'
   -
     icon: 'linkedin'
     text: 'Contact me'
@@ -28,3 +28,64 @@ collections:
   - 'current_role'
   - 'education'
   - 'volunteering'
+  - 'side_projects'
+
+cv-verticals:
+  -
+    name: 'Video on Demand (VOD)'
+    icon: 'vod.svg'
+  -
+    name: 'eCommerce'
+    icon: 'ecommerce.svg'
+  -
+    name: 'Content Management Systems (CMS)'
+    icon: 'cms.svg'
+
+cv-tech:
+  -
+    name: 'JavaScript'
+    icon: 'javascript.svg'
+  -
+    name: 'TypeScript'
+    icon: 'typescript.svg'
+    link: 'https://www.typescriptlang.org/'
+  -
+    name: 'Node.js'
+    icon: 'node-js.svg'
+    link: 'https://nodejs.org/'
+  -
+    name: 'PHP'
+    icon: 'php.svg'
+    link: 'https://www.php.net/'
+  -
+    name: 'Symfony'
+    icon: 'symfony.svg'
+    link: 'https://symfony.com/'
+  -
+    name: 'Go'
+    icon: 'golang.svg'
+    link: 'https://go.dev/'
+  -
+    name: 'Elemental'
+    icon: 'aws-elemental.svg'
+    link: 'https://www.elemental.com/'
+  -
+    name: 'Bitmovin'
+    icon: 'bitmovin.svg'
+    link: 'https://www.bitmovin.com/'
+  -
+    name: 'Mux'
+    icon: 'mux.svg'
+    link: 'https://www.mux.com/'
+  -
+    name: 'Fastly'
+    icon: 'fastly.svg'
+    link: 'https://www.fastly.com/'
+  -
+    name: 'GCP'
+    icon: 'gcp.svg'
+    link: 'https://cloud.google.com/'
+  -
+    name: 'AWS'
+    icon: 'aws.svg'
+    link: 'https://aws.amazon.com/'
