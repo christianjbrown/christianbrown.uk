@@ -4,7 +4,7 @@ name: "ViacomCBS / CBS Interactive"
 location: "London, UK"
 date_range: "Apr 2016 - Nov 2020 (4yrs, 7mths)"
 logo_is_wide: true
-logo: "/assets/images/cv/logos/logo-viacomcbs.svg"
+logo: "viacomcbs.svg"
 link: "https://www.viacomcbs.com/"
 ---
 I was a team leader with direct reports, reporting to the VP of Engineering, part of a larger central CMS team of 13 engineers spread across the US, with support from product, PM, QA and DevOps. We maintained the CMS, REST APIs, and tech stack that powered web properties [ViacomCBS](https://www.viacomcbs.com/) operated internationally, including [CBS News](https://www.cbsnews.com/) (inc. [60 Minutes](https://www.cbsnews.com/60-minutes/)), [CBS Sports](https://www.cbssports.com/), [24/7 Sports](https://247sports.com/), [MaxPreps](https://www.maxpreps.com/), [SportsLine](https://www.sportsline.com/), [CNET](https://www.cnet.com/), [ZDNet](https://www.zdnet.com/), [TechRepublic](https://www.techrepublic.com/), [Download.com](https://www.download.com/), [TV Guide](https://www.tvguide.com/), and many more. My team were the subject-matter experts on all video-on-demand (VOD) content - interfacing with internal and third-party vendors for transcoding, storage, metadata management, captioning/transcription, ingestion, publishing, and distribution (e.g., [YouTube](https://www.youtube.com/)). Achievements include saving US$500,000pa from video playback costs, bypassing a third-party video platform, and avoiding the pay per play.
