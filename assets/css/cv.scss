@@ -204,12 +204,10 @@ div.container {
                     }
                 }
             }
-            &div:not(:first-child) {
-                padding-top: 1em;
-            }
             &:not(:last-child) {
                 border-bottom: 1px solid $colour-grayscale-1;
                 padding-bottom: 1em;
+                margin-bottom: 1em;
             }
             align-content: flex-start;
             align-items: flex-start;
@@ -217,7 +215,6 @@ div.container {
             flex-direction: column;
             flex-wrap: wrap;
             justify-content: left;
-
             row-gap: 0.5em;
             width: 100%;
         }
