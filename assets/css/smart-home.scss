@@ -7,10 +7,14 @@
 div.container {
     main {
         p {
-            font-size: 1.1em;
             span#clock {
                 font-weight: bold;
             }
+            &.question {
+                font-weight: bold;
+                font-style: italic;
+            }
+            font-size: 1.1em;
         }
         div#data {
             div {
