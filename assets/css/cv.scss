@@ -146,18 +146,23 @@ div.container {
                 div.cv-experience-logo, div.cv-experience-logo a {
                     img {
                         max-width: 60px;
-                        max-height: 40px;
+                        max-height: 30px;
                     }
                     @media (max-width: 449px) {
                         img {
+
                             max-width: 120px;
                             max-height: 40px;
                         }
                     }
-                    width: 60px;
-                    height: 60px;
-                    display : flex;
-                    align-items : center;
+                    @media (max-width: 449px) {
+                        max-width: 120px;
+                        max-height: 40px;
+                    }
+                    min-height: 60px;
+                    width: 70px;
+                    display: flex;
+                    align-items: center;
                     justify-content: center;
                 }
                 div.cv-experience-metadata {
