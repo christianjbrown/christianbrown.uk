@@ -3,7 +3,6 @@ title: "Lead Software Engineer"
 name: "ViacomCBS / CBS Interactive"
 location: "London, UK"
 date_range: "Apr 2016 - Nov 2020 (4yrs, 7mths)"
-logo_is_wide: true
 logo: "viacomcbs.svg"
 link: "https://www.viacomcbs.com/"
 ---

@@ -3,7 +3,6 @@ title: "Software Engineer / Web Developer"
 name: "CNET Networks"
 location: "London, UK"
 date_range: "Sep 2007 – Jan 2012 (4yrs, 4mths)"
-logo_is_wide: true
 logo: "cnet.svg"
 link: "https://www.cnet.com/"
 ---
