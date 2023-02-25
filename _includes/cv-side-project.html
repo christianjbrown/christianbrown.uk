@@ -1,0 +1,8 @@
+    <div class="cv-side-project">
+                                    <div class="cv-side-project-logo">
+                                        {% if side_project.link %}<a href="{{ side_project.link }}" target="_blank"{% if side_project.link_nofollow %} rel="nofollow"{% endif %}>{% endif %}<img src="/assets/images/cv/side-projects/{{ side_project.icon }}" alt="{{ side_project.name }} logo">{% if side_project.link %}</a>{% endif %}
+                                    </div>
+                                    <div class="cv-side-project-details">
+                                        <h3>{% if side_project.link %}<a href="{{ side_project.link }}" target="_blank"{% if side_project.link_nofollow %} rel="nofollow"{% endif %}>{% endif %}{{ side_project.name }}{% if side_project.link %}</a>{% endif %}</h3>
+                                        {{ side_project.content }}                                  </div>
+                                </div>

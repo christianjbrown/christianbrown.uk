@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="601px" height="194px" viewBox="0 0 601 194" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>mux</title>
+    <defs>
+        <path d="M5.925,6 C-1.975,14 -1.975,27 5.925,35 L155.925,186.6 C159.925,190.6 165.025,192.6 170.225,192.6 C175.425,192.6 180.625,190.6 184.525,186.6 C188.525,182.6 190.425,177.4 190.425,172.1 C190.425,166.8 188.425,161.6 184.525,157.6 L34.525,6 C30.525,2 25.425,2.84217094e-14 20.225,2.84217094e-14 C15.125,2.84217094e-14 9.925,2.1 5.925,6" id="path-1"></path>
+        <linearGradient x1="-214.839346%" y1="50.0471838%" x2="102.156815%" y2="50.0471838%" id="linearGradient-3">
+            <stop stop-color="#F58350" offset="0%"></stop>
+            <stop stop-color="#F47B64" offset="17.47%"></stop>
+            <stop stop-color="#F16D87" offset="52.48%"></stop>
+            <stop stop-color="#F0659C" offset="81.25%"></stop>
+            <stop stop-color="#EF62A4" offset="100%"></stop>
+        </linearGradient>
+        <path d="M155.925,6 L5.925,157.6 C-1.975,165.6 -1.975,178.6 5.925,186.6 C9.825,190.5 14.825,192.5 19.925,192.6 L20.625,192.6 C25.725,192.5 30.725,190.5 34.625,186.6 L184.625,35 C188.625,31 190.525,25.8 190.525,20.5 C190.525,15.2 188.525,10 184.625,6 C180.625,2 175.425,2.84217094e-14 170.325,2.84217094e-14 C165.225,2.84217094e-14 159.825,2.1 155.925,6" id="path-4"></path>
+        <linearGradient x1="-212.385437%" y1="50.0227547%" x2="101.781875%" y2="50.0227547%" id="linearGradient-6">
+            <stop stop-color="#F05123" offset="0%"></stop>
+            <stop stop-color="#F04D2F" offset="17.57%"></stop>
+            <stop stop-color="#EF4150" offset="49.62%"></stop>
+            <stop stop-color="#ED2E85" offset="92.25%"></stop>
+            <stop stop-color="#ED2A8F" offset="100%"></stop>
+        </linearGradient>
+        <path d="M66.9,21.3 L66.9,104.6 C66.9,130.6 46,151.7 20.3,151.7 C9.1,151.7 -2.84217094e-14,160.9 -2.84217094e-14,172.2 C-2.84217094e-14,183.5 9.1,192.7 20.3,192.7 C68.4,192.7 107.5,153.3 107.5,104.6 L107.5,21.3 C107.5,9.6 98.8,0 87.2,0 C75.5,0 66.9,9.6 66.9,21.3" id="path-7"></path>
+        <linearGradient x1="301.963032%" y1="50.0262174%" x2="-262.394256%" y2="50.0262174%" id="linearGradient-9">
+            <stop stop-color="#F58350" offset="0%"></stop>
+            <stop stop-color="#F47B64" offset="17.47%"></stop>
+            <stop stop-color="#F16D87" offset="52.48%"></stop>
+            <stop stop-color="#F0659C" offset="81.25%"></stop>
+            <stop stop-color="#EF62A4" offset="100%"></stop>
+        </linearGradient>
+        <path d="M-3.55271368e-15,21.3 L-3.55271368e-15,171.4 C-3.55271368e-15,183.1 8.7,192.6 20.3,192.6 C31.9,192.6 40.6,183.1 40.6,171.4 L40.6,21.3 C40.6,9.6 31.9,0 20.3,0 C8.7,0 -3.55271368e-15,9.6 -3.55271368e-15,21.3" id="path-10"></path>
+        <linearGradient x1="-385.352443%" y1="50.0262174%" x2="1111.23948%" y2="50.0262174%" id="linearGradient-12">
+            <stop stop-color="#F58350" offset="0%"></stop>
+            <stop stop-color="#F47B64" offset="17.47%"></stop>
+            <stop stop-color="#F16D87" offset="52.48%"></stop>
+            <stop stop-color="#F0659C" offset="81.25%"></stop>
+            <stop stop-color="#EF62A4" offset="100%"></stop>
+        </linearGradient>
+        <path d="M0,20.5 C0,31.8 9.1,41 20.3,41 C31.5,41 40.6,31.8 40.6,20.5 C40.6,9.2 31.5,0 20.3,0 C9,0 0,9.2 0,20.5" id="path-13"></path>
+        <linearGradient x1="-859.353288%" y1="50.0515293%" x2="632.254801%" y2="50.0515293%" id="linearGradient-15">
+            <stop stop-color="#F05123" offset="0%"></stop>
+            <stop stop-color="#F04D2F" offset="17.57%"></stop>
+            <stop stop-color="#EF4150" offset="49.62%"></stop>
+            <stop stop-color="#ED2E85" offset="92.25%"></stop>
+            <stop stop-color="#ED2A8F" offset="100%"></stop>
+        </linearGradient>
+        <path d="M0,172.6 C0.6,183.8 9,192.6 20.2,192.6 C31.8,192.6 40.5,183.1 40.5,171.4 L40.5,70 L5.9,35 C2.2,31.3 0.3,26.5 0,21.7 L0,172.6 Z M9.5,3.2 C12.7,1.2 16.3,0.1 20,0.1 C16.1,0.1 12.5,1.2 9.5,3.2 M31,3.1 C28,1.2 24.5,0.1 20.6,2.84217094e-14 C24.2,0.1 27.8,1.1 31,3.1" id="path-16"></path>
+        <linearGradient x1="-14.9820728%" y1="50.0262174%" x2="1481.60985%" y2="50.0262174%" id="linearGradient-18">
+            <stop stop-color="#F05123" offset="0%"></stop>
+            <stop stop-color="#F04D2F" offset="17.57%"></stop>
+            <stop stop-color="#EF4150" offset="49.62%"></stop>
+            <stop stop-color="#ED2E85" offset="92.25%"></stop>
+            <stop stop-color="#ED2A8F" offset="100%"></stop>
+        </linearGradient>
+        <path d="M-3.55271368e-15,20.5 C-3.55271368e-15,31.8 9.1,41 20.3,41 C31.5,41 40.6,31.8 40.6,20.5 C40.6,9.2 31.5,0 20.3,0 C9.1,0 -3.55271368e-15,9.2 -3.55271368e-15,20.5" id="path-19"></path>
+        <linearGradient x1="-385.352443%" y1="49.9175789%" x2="1111.23948%" y2="49.9175789%" id="linearGradient-21">
+            <stop stop-color="#F05123" offset="0%"></stop>
+            <stop stop-color="#F04D2F" offset="17.57%"></stop>
+            <stop stop-color="#EF4150" offset="49.62%"></stop>
+            <stop stop-color="#ED2E85" offset="92.25%"></stop>
+            <stop stop-color="#ED2A8F" offset="100%"></stop>
+        </linearGradient>
+        <path d="M5.9,2.9 C2.2,6.6 0.3,11.4 0,16.2 L0,16.9 C0.4,9.8 4,3.6 9.5,5.68434189e-14 C8.2,0.9 7,1.8 5.9,2.9 M40.5,18.2 L40.5,66.9 L80.9,107.7 C84.9,111.7 90,113.7 95.2,113.7 C100.4,113.7 105.6,111.7 109.5,107.7 C117.4,99.7 117.4,86.7 109.5,78.7 L34.5,2.9 C33.4,1.8 32.2,0.8 30.9,2.84217094e-14 C36.7,3.8 40.5,10.5 40.5,18.2" id="path-22"></path>
+        <linearGradient x1="0.0373358638%" y1="50.0249723%" x2="513.076138%" y2="50.0249723%" id="linearGradient-24">
+            <stop stop-color="#F58350" offset="0%"></stop>
+            <stop stop-color="#F47B64" offset="17.47%"></stop>
+            <stop stop-color="#F16D87" offset="52.48%"></stop>
+            <stop stop-color="#F0659C" offset="81.25%"></stop>
+            <stop stop-color="#EF62A4" offset="100%"></stop>
+        </linearGradient>
+        <path d="M20,0 C16.4,0.1 12.7,1.1 9.5,3.1 C4,6.6 0.4,12.8 0,20 L0,21.7 C0.3,26.5 2.2,31.3 5.9,35 L40.5,70 L40.5,21.3 C40.5,13.6 36.8,6.9 30.9,3.1 C27.7,1.1 24.1,0.1 20.5,0 L20,0 Z" id="path-25"></path>
+        <rect id="path-27" x="0" y="0" width="41.2" height="70.5"></rect>
+        <path d="M80.925,6 L5.925,81.8 C-1.975,89.8 -1.975,102.8 5.925,110.8 C13.825,118.8 26.625,118.8 34.625,110.8 L109.625,35 C117.525,27 117.525,14 109.625,6 C105.625,2 100.525,0 95.325,0 C90.025,0 84.825,2.1 80.925,6" id="path-29"></path>
+        <linearGradient x1="-62.7698452%" y1="50.0483924%" x2="442.758337%" y2="50.0483924%" id="linearGradient-31">
+            <stop stop-color="#F05123" offset="0%"></stop>
+            <stop stop-color="#F04D2F" offset="17.57%"></stop>
+            <stop stop-color="#EF4150" offset="49.62%"></stop>
+            <stop stop-color="#ED2E85" offset="92.25%"></stop>
+            <stop stop-color="#ED2A8F" offset="100%"></stop>
+        </linearGradient>
+        <path d="M-2.84217094e-14,21.3 L-2.84217094e-14,104.6 C-2.84217094e-14,153.3 39,192.7 87.2,192.7 C98.4,192.7 107.5,183.5 107.5,172.2 C107.5,160.9 98.4,151.7 87.2,151.7 C61.5,151.7 40.6,130.6 40.6,104.6 L40.6,21.3 C40.6,9.6 31.9,0 20.3,0 C8.6,0 -2.84217094e-14,9.6 -2.84217094e-14,21.3" id="path-32"></path>
+        <linearGradient x1="-203.880577%" y1="50.0262174%" x2="360.476711%" y2="50.0262174%" id="linearGradient-34">
+            <stop stop-color="#F05123" offset="0%"></stop>
+            <stop stop-color="#F04D2F" offset="17.57%"></stop>
+            <stop stop-color="#EF4150" offset="49.62%"></stop>
+            <stop stop-color="#ED2E85" offset="92.25%"></stop>
+            <stop stop-color="#ED2A8F" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="mux" transform="translate(0.800000, 0.400000)">
+            <g id="Clipped" transform="translate(409.475000, 0.000000)">
+                <mask id="mask-2" fill="white">
+                    <use xlink:href="#path-1"></use>
+                </mask>
+                <g id="SVGID_1_"></g>
+                <rect id="Rectangle" fill="url(#linearGradient-3)" fill-rule="nonzero" mask="url(#mask-2)" x="-1.975" y="2.84217094e-14" width="192.5" height="192.6"></rect>
+            </g>
+            <g id="Clipped" transform="translate(409.575000, 0.000000)">
+                <mask id="mask-5" fill="white">
+                    <use xlink:href="#path-4"></use>
+                </mask>
+                <g id="SVGID_4_"></g>
+                <rect id="Rectangle" fill="url(#linearGradient-6)" fill-rule="nonzero" mask="url(#mask-5)" x="-2.075" y="2.84217094e-14" width="192.5" height="192.6"></rect>
+            </g>
+            <g id="Clipped" transform="translate(279.800000, 0.000000)">
+                <mask id="mask-8" fill="white">
+                    <use xlink:href="#path-7"></use>
+                </mask>
+                <g id="SVGID_7_"></g>
+                <rect id="Rectangle" fill="url(#linearGradient-9)" fill-rule="nonzero" mask="url(#mask-8)" x="-2.84217094e-14" y="2.84217094e-14" width="107.4" height="192.6"></rect>
+            </g>
+            <g id="Clipped" transform="translate(150.000000, 0.000000)">
+                <mask id="mask-11" fill="white">
+                    <use xlink:href="#path-10"></use>
+                </mask>
+                <g id="SVGID_10_"></g>
+                <rect id="Rectangle" fill="url(#linearGradient-12)" fill-rule="nonzero" mask="url(#mask-11)" x="-3.55271368e-15" y="2.84217094e-14" width="40.5" height="192.6"></rect>
+            </g>
+            <g id="Clipped" transform="translate(346.700000, 0.000000)">
+                <mask id="mask-14" fill="white">
+                    <use xlink:href="#path-13"></use>
+                </mask>
+                <g id="SVGID_13_"></g>
+                <rect id="Rectangle" fill="url(#linearGradient-15)" fill-rule="nonzero" mask="url(#mask-14)" x="0" y="0" width="40.5" height="41"></rect>
+            </g>
+            <g id="Clipped">
+                <mask id="mask-17" fill="white">
+                    <use xlink:href="#path-16"></use>
+                </mask>
+                <g id="SVGID_16_"></g>
+                <rect id="Rectangle" fill="url(#linearGradient-18)" fill-rule="nonzero" mask="url(#mask-17)" x="0" y="2.84217094e-14" width="40.5" height="192.6"></rect>
+            </g>
+            <g id="Clipped" transform="translate(150.000000, 151.700000)">
+                <mask id="mask-20" fill="white">
+                    <use xlink:href="#path-19"></use>
+                </mask>
+                <g id="SVGID_19_"></g>
+                <rect id="Rectangle" fill="url(#linearGradient-21)" fill-rule="nonzero" mask="url(#mask-20)" x="-3.55271368e-15" y="0" width="40.5" height="41"></rect>
+            </g>
+            <g id="Clipped" transform="translate(0.100000, 3.100000)">
+                <mask id="mask-23" fill="white">
+                    <use xlink:href="#path-22"></use>
+                </mask>
+                <g id="SVGID_22_"></g>
+                <rect id="Rectangle" fill="url(#linearGradient-24)" fill-rule="nonzero" mask="url(#mask-23)" x="-0.1" y="5.68434189e-14" width="117.5" height="113.7"></rect>
+            </g>
+            <g id="Clipped" transform="translate(0.000000, 0.000000)">
+                <mask id="mask-26" fill="white">
+                    <use xlink:href="#path-25"></use>
+                </mask>
+                <g id="SVGID_25_"></g>
+                <g mask="url(#mask-26)">
+                    <g transform="translate(-0.300000, -0.300000)">
+                        <mask id="mask-28" fill="white">
+                            <use xlink:href="#path-27"></use>
+                        </mask>
+                        <g id="SVGID_27_" stroke="none" fill="none"></g>
+                        <g id="Group" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" mask="url(#mask-28)">
+                            <g transform="translate(0.035700, 0.048900)" id="Bitmap">
+                                <image x="0" y="2.84217094e-14" width="41.2176" height="70.5348" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAVCAYAAAByrA+0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAADKADAAQAAAABAAAAFQAAAAB+/A+uAAABDElEQVQ4Ee1TQU7EMAwcO4UV4me8iD/xEF6BlgsPgAuUbGNmUhxVuay4k8qyM5qx29q2eHyIt5czTgh43eDbN4o5Kh8dd4eH9xhR4IjoFzPrPnhXLC/yfAYiwvGk6IgpHoKskIQ5QeJDkMA1PwRzxrliJhqCmaAEMyaRE+3irCBSkltrmXj4UWEgV4L/Phx/UP7aI6b4732IS8O2BdQj2aU2jvXC5tnwGuTdiJHGZmsMOP9cIpi6S1HsXjHpsD7+DYuR4LQikXPjnMJCo8A5NdGTSMBcrLp83N7jnbZyhtwqSy+oNyd8WkEpv5unFSW5f3I8P8X6yp3mHqNyj9cVuDsx/gIV+8uTir7Xjh8CgJymiBlt3QAAAABJRU5ErkJggg=="></image>
+                            </g>
+                        </g>
+                    </g>
+                </g>
+            </g>
+            <g id="Clipped" transform="translate(75.075000, 0.000000)">
+                <mask id="mask-30" fill="white">
+                    <use xlink:href="#path-29"></use>
+                </mask>
+                <g id="SVGID_29_"></g>
+                <rect id="Rectangle" fill="url(#linearGradient-31)" fill-rule="nonzero" mask="url(#mask-30)" x="-2.075" y="2.84217094e-14" width="119.5" height="118.8"></rect>
+            </g>
+            <g id="Clipped" transform="translate(212.900000, 0.000000)">
+                <mask id="mask-33" fill="white">
+                    <use xlink:href="#path-32"></use>
+                </mask>
+                <g id="SVGID_32_"></g>
+                <rect id="Rectangle" fill="url(#linearGradient-34)" fill-rule="nonzero" mask="url(#mask-33)" x="-2.84217094e-14" y="2.84217094e-14" width="107.4" height="192.6"></rect>
+            </g>
+        </g>
+    </g>
+</svg>
