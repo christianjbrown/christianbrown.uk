@@ -1,0 +1,21 @@
+<div class="cv-experience-side">
+                            <div class="cv-experience-details">{% if experience.logo %}
+                                <div class="cv-experience-logo">
+                                    {% if experience.link %}<a href="{{ experience.link }}" target="_blank">{% endif %}<img src="/assets/images/cv/experience/{{ experience.logo }}" alt="{{ experience.organisation }} logo">{% if experience.link %}</a>{% endif %}
+                                </div>{% endif %}{% if experience.title %}
+                                <div class="cv-experience-title">
+                                    <h3>{{ experience.title }}</h3>
+                                </div>
+                            </div>{% endif %}{% if experience.organisation %}
+                            <div class="cv-experience-organisation">
+                                <p>{% if experience.link %}<a href="{{ experience.link }}" target="_blank">{% endif %}{{ experience.organisation }}{% if experience.link %}</a>{% endif %}</p>
+                            </div>{% endif %}{% if experience.location %}
+                            <div class="cv-experience-location">
+                                <p>{{ experience.location }}</p>
+                            </div>{% endif %}{% if experience.date_range %}
+                            <div class="cv-experience-date-range">
+                                <p>{{ experience.date_range }}</p>
+                            </div>{% endif %}{% assign experience_content_length = experience.content.size %}{% if experience_content_length > 1 %}
+                            <div class="cv-experience-description">
+                                {{ experience.content }}                            </div>{% endif %}
+                        </div>
