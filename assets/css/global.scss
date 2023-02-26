@@ -14,8 +14,12 @@
 
 html {
     body {
+        color-scheme: light;
         @media print {
             a {
+                &#cv-menu-download {
+                    display: none;
+                }
                 text-decoration: none !important;
             }
             color: $colour-grayscale-2;
@@ -33,7 +37,8 @@ html {
             a {
                 font-weight: bold;
             }
-            line-height: normal;
+            line-height: 1.1;
+            font-size: 1.035em;
         }
         a:hover {
             color: $colour-grayscale-3;
@@ -57,15 +62,20 @@ html {
                     div.header-avatar-border {
                         img {
                             clip-path: circle();
-                            width: 100px;
+                            width: 7em;
                             position: relative;
-                            left: 2px;
-                            top: 2px;
+                            left: 0.15em;
+                            top: 0.15em;
                         }
                         clip-path: circle();
-                        width: 104px;
-                        height: 104px;
+                        width: 7.3em;
+                        height: 7.3em;
                         background-color: $colour-accent;
+                    }
+                    @media print {
+                        div.header-avatar-border {
+                            background-color: $colour-accent !important;
+                        }
                     }
                 }
                 div.header-data {
@@ -117,12 +127,16 @@ html {
                 align-content: flex-start;
                 column-gap: 20px;
             }
-            padding-top: 40px;
-            padding-bottom: 100px;
+            padding-top: 3em;
+            padding-bottom: 10em;
             display: flex;
             flex-direction: column;
             row-gap: 10px;
             margin: auto;
+            @media print {
+                padding-top: 0;
+                padding-bottom: 0;
+            }
         }
         font-family: $font-sans-serif;
     }
