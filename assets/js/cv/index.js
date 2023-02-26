@@ -1,8 +1,6 @@
 
 'use strict';
 
-// const { Chart } = await import('../plugins/chart/chart.js');
-
 window.addEventListener('load',
     () => {
         Chart.register(ChartDataLabels)
