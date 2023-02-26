@@ -47,14 +47,14 @@ schema:
                         <div class="cv-section">
                             <h2>Specialty Verticals</h2>
                             <p>I have subject-matter expertise in:</p>
-                            <div class="cv-verticals">{% for vertical in site.cv-verticals %}
+                            <div id="cv-verticals">{% for vertical in site.cv-verticals %}
                                 {% include cv-vertical.html %}{% endfor %}
                             </div>
                         </div>
                         <div class="cv-section">
                             <h2>Tech</h2>
                             <p>Some of the tech, frameworks and platforms I have recent industry experience with include:</p>
-                            <div class="cv-techs">{% for tech in site.cv-tech %}
+                            <div id="cv-techs">{% for tech in site.cv-tech %}
                                 {% include cv-tech.html %}{% endfor %}
                             </div>
                         </div>
@@ -68,7 +68,7 @@ schema:
                         </div>{% endif %}{% if site.side_projects %}
                         <div class="cv-section">
                             <h2>Side projects</h2>
-                            <div class="cv-side-projects">{% for side_project in site.side_projects %}
+                            <div id="cv-side-projects">{% for side_project in site.side_projects %}
                             {% include cv-side-project.html %}{% endfor %}
                             </div>
                         </div>{% endif %}
