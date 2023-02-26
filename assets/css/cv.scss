@@ -4,16 +4,21 @@
 @import 'vars';
 @import 'fonts';
 
+@page {
+    size: A4 portrait;
+    margin: 1cm 1cm 1.5cm 1cm;
+}
+
 div.container {
     main {
         p.lead {
-            font-size: 1.2em;
+            font-size: 1.3em;
             padding-bottom: 0.2em;
         }
         div#cv {
             div#cv-main {
                 flex: 3;
-                min-width: 32em;
+                //min-width: 32em;
             }
             div#cv-side {
                 flex: 1;
@@ -46,6 +51,7 @@ div.container {
             flex-wrap: wrap;
             justify-content: left;
             padding: 0 1em 1em;
+            width: 100%;
         }
         div#cv-chart-area {
             @media print {
@@ -187,7 +193,7 @@ div.container {
                     p.cv-experience-date-range {
                         font-style: italic;
                     }
-                    min-width: 30em;
+                    min-width: 31em;
                 }
                 column-gap: 0.6em;
                 display: flex;

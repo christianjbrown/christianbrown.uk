@@ -64,9 +64,9 @@ but maybe you're looking for an engineering manager? you've come to right place!
                 <div class="header-data">
                     <h1 class="mt-2"><a href="/">{{ site.header_firstname }}&nbsp;<span class="alternate">{{ site.header_lastname }}</span></a></h1>
                     <p><strong>{{ site.header_job_title }}</strong></p>
-                    <p>{{ site.header_location }}</p>{% if page.show_menu %}
+                    <p>{{ site.header_location }}</p>{% if page.show_cv_menu %}
                     <nav>{% for nav in site.menu %}
-                        {% if site.menu.first != nav %}&nbsp;&nbsp;&nbsp;{% endif %}<a href="{{ nav.link }}"><img src="/assets/images/icons/icon-{{ nav.icon }}.svg" alt="{{ nav.icon_alt }}" class="header-data-links-icon"> {{ nav.text }}</a>{% endfor %}
+                        {% if site.menu.first != nav %}&nbsp;&nbsp;&nbsp;{% endif %}<a href="{{ nav.link }}" id="cv-menu-{{ nav.icon }}"><img src="/assets/images/icons/icon-{{ nav.icon }}.svg" alt="{{ nav.icon_alt }}" class="header-data-links-icon"> {{ nav.text }}</a>{% endfor %}
                     </nav>{% endif %}
                 </div>
             </header>
