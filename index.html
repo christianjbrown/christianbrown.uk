@@ -30,7 +30,7 @@ schema:
                             <h2>Current role</h2>{% for experience in site.current_role reversed %}
                             {% include cv-experience.html %}{% endfor %}
                         </div>{% endif %}{% if site.previous_roles %}
-                        <div class="cv-section">
+                        <div class="cv-section" id="cv-previous-roles">
                             <h2>Previous roles</h2>{% for experience in site.previous_roles reversed %}
                             {% include cv-experience.html %}{% endfor %}
                         </div>{% endif %}{% if site.education %}

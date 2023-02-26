@@ -7,16 +7,16 @@
 div.container {
     main {
         p.lead {
-            font-size: 12pt;
-            padding-bottom: 5px;
+            font-size: 1.2em;
+            padding-bottom: 0.2em;
         }
         div#cv {
             div#cv-main {
-                flex-basis: 855px;
+                flex: 3;
+                min-width: 32em;
             }
             div#cv-side {
-                flex-basis: 285px;
-                flex-grow: 1;
+                flex: 1;
             }
             align-content: flex-start;
             display: flex;
@@ -24,14 +24,19 @@ div.container {
             flex-wrap: wrap;
         }
         div.cv-section {
+            @media print {
+                &:not(#cv-previous-roles) {
+                    break-inside: avoid;
+                }
+            }
             h2 {
+                border-bottom: 1px solid $colour-grayscale-1;
                 color: $colour-accent;
-                font-size: 18pt;
                 font-family: $font-serif;
-                text-transform: lowercase;
+                font-size: 1.7em;
                 margin-bottom: 0.5em;
                 padding-bottom: 0.2em;
-                border-bottom: 1px solid $colour-grayscale-1;
+                text-transform: lowercase;
                 width: 100%;
             }
             align-content: flex-start;
@@ -43,6 +48,9 @@ div.container {
             padding: 0 1em 1em;
         }
         div#cv-chart-area {
+            @media print {
+                break-inside: avoid;
+            }
             #cv-chart {
                 margin: 0 auto;
                 max-width: 17em;
@@ -51,6 +59,9 @@ div.container {
             padding-bottom: 1em;
         }
         div.cv-side-projects {
+            @media print {
+                break-inside: avoid;
+            }
             div.cv-side-project {
                 div.cv-side-project-logo {
                     img {
@@ -89,6 +100,9 @@ div.container {
             row-gap: 0.2em;
         }
         div.cv-verticals {
+            @media print {
+                break-inside: avoid;
+            }
             div.cv-vertical {
                 img {
                     max-height: 2.5em;
@@ -106,7 +120,7 @@ div.container {
             width: 100%;
             display: flex;
             flex-direction: row;
-            flex-wrap: wrap;
+            flex-wrap: nowrap;
             column-gap: 0.5em;
             row-gap: 1em;
             justify-content: center;
@@ -114,6 +128,9 @@ div.container {
             align-items: flex-start;
         }
         div.cv-techs {
+            @media print {
+                break-inside: avoid;
+            }
             div.cv-tech {
                 img {
                     max-height: 3em;
@@ -142,27 +159,18 @@ div.container {
             width: 100%;
         }
         div.cv-experience {
+            @media print {
+                break-inside: avoid;
+            }
             div.cv-experience-details {
                 div.cv-experience-logo, div.cv-experience-logo a {
                     img {
-                        max-width: 60px;
-                        max-height: 30px;
+                        max-height: 2.2em;
+                        max-width: 4.2em;
                     }
-                    @media (max-width: 449px) {
-                        img {
-
-                            max-width: 120px;
-                            max-height: 40px;
-                        }
-                    }
-                    @media (max-width: 449px) {
-                        max-width: 120px;
-                        max-height: 40px;
-                    }
-                    min-height: 60px;
-                    width: 70px;
-                    display: flex;
+                    width: 4.2em;
                     align-items: center;
+                    display: flex;
                     justify-content: center;
                 }
                 div.cv-experience-metadata {
@@ -173,20 +181,19 @@ div.container {
                     h3 {
                         font-size: 1.1em;
                         font-weight: bold;
+                        line-height: 1;
+                        padding-top: 0;
                     }
                     p.cv-experience-date-range {
                         font-style: italic;
                     }
-                    flex-grow: 1;
-                    min-width: 22em;
+                    min-width: 30em;
                 }
+                column-gap: 0.6em;
                 display: flex;
                 flex-direction: row;
                 flex-wrap: wrap;
-                justify-content: center;
-                align-items: center;
-                align-content: flex-start;
-                column-gap: 0.8em;
+                row-gap: 1em;
             }
             div.cv-experience-description {
                 * {
@@ -216,6 +223,9 @@ div.container {
             width: 100%;
         }
         div.cv-experience-side {
+            @media print {
+                break-inside: avoid;
+            }
             div.cv-experience-details {
                 div.cv-experience-logo, div.cv-experience-logo a {
                     img {

@@ -4,8 +4,22 @@
 @import 'vars';
 @import 'fonts';
 
+::-webkit-scrollbar {
+    background: $colour-grayscale-3;
+}
+::-webkit-scrollbar-thumb {
+    background: $colour-accent;
+    -webkit-border-radius: 1em;
+}
+
 html {
     body {
+        @media print {
+            a {
+                text-decoration: none !important;
+            }
+            color: $colour-grayscale-2;
+        }
         * {
             color: $colour-grayscale-3;
         }
@@ -24,9 +38,6 @@ html {
         a:hover {
             color: $colour-grayscale-3;
             text-decoration: none;
-            h1 {
-                text-decoration: none;
-            }
         }
         h2 {
             color: $colour-grayscale-3;
@@ -39,6 +50,9 @@ html {
         }
         div.container {
             header {
+                @media print {
+                    break-inside: avoid;
+                }
                 div.header-avatar {
                     div.header-avatar-border {
                         img {
@@ -58,6 +72,11 @@ html {
                     h1 {
                         span.alternate {
                             color: $colour-grayscale-2;
+                        }
+                        @media print {
+                            span.alternate {
+                                color: $colour-grayscale-1 !important;
+                            }
                         }
                         margin-bottom: 0;
                         color: $colour-accent;
