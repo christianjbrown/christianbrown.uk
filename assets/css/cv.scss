@@ -17,7 +17,7 @@ div.container {
         }
         div#cv {
             div#cv-main {
-                flex: 3;
+                flex: 6;
             }
             div#cv-side {
                 flex: 1;
@@ -194,6 +194,7 @@ div.container {
                         font-style: italic;
                     }
                     min-width: 31em;
+                    flex-basis: max-content;
                 }
                 column-gap: 0.6em;
                 display: flex;
