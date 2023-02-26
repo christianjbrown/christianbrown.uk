@@ -18,7 +18,6 @@ div.container {
         div#cv {
             div#cv-main {
                 flex: 3;
-                //min-width: 32em;
             }
             div#cv-side {
                 flex: 1;
@@ -64,7 +63,7 @@ div.container {
             width: 100%;
             padding-bottom: 1em;
         }
-        div.cv-side-projects {
+        div#cv-side-projects {
             @media print {
                 break-inside: avoid;
             }
@@ -105,7 +104,7 @@ div.container {
             padding-bottom: 0.5em;
             row-gap: 0.2em;
         }
-        div.cv-verticals {
+        div#cv-verticals {
             @media print {
                 break-inside: avoid;
             }
@@ -114,7 +113,8 @@ div.container {
                     max-height: 2.5em;
                     margin-bottom: 0.4em;
                 }
-                span {
+                span, span a {
+                    color: $colour-grayscale-4;
                     display: block;
                     font-size: 10pt;
                     line-height: 1.2;
@@ -133,7 +133,7 @@ div.container {
             align-content: center;
             align-items: flex-start;
         }
-        div.cv-techs {
+        div#cv-techs {
             @media print {
                 break-inside: avoid;
             }
