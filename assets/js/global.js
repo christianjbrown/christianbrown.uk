@@ -1,12 +1,15 @@
 'use strict';
 
+const DROIDS = `
+                                                                                                                        _
+_|_ |_   _   _  _    _. ._ _   ._   _ _|_  _|_ |_   _    _| ._ _  o  _|  _      _     /._ _   |  _   _  |  o ._   _   _|_ _  ._
+ |_ | | (/_ _> (/_  (_| | (/_  | | (_) |_   |_ | | (/_  (_| | (_) | (_| _>  \\/ (_) |_| | (/_  | (_) (_) |< | | | (_|   | (_) |
+                                                                            /                                     _|
+`;
+
 window.addEventListener('load',
     () => {
-        console.info('\u001b[1;32m                                                                                                                        _');
-        console.info('\u001b[1;32m _|_ |_   _   _  _    _. ._ _   ._   _ _|_  _|_ |_   _    _| ._ _  o  _|  _      _ /    ._ _   |  _   _  |  o ._   _   _|_ _  ._');
-        console.info('\u001b[1;32m  |_ | | (/_ _> (/_  (_| | (/_  | | (_) |_   |_ | | (/_  (_| | (_) | (_| _>  \\/ (_) |_| | (/_  | (_) (_) |< | | | (_|   | (_) |');
-        console.info('\u001b[1;32m                                                                             /                                     _|');
-        console.info('');
-        console.info('\u001b[1;35mbut maybe you\'re looking for an engineering manager? you\'ve come to right place!');
+        console.log('%c'+DROIDS, 'color: purple; font-weight: bold;');
+        console.log('%c but maybe you\'re looking for an engineering manager? you\'ve come to right place!', 'color: #75923C; font-weight: bold;');
     }
 );
