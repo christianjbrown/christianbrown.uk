@@ -1,4 +1,4 @@
 <div class="cv-vertical">
-                                    <img src="/assets/images/cv/verticals/{{ vertical.icon }}" alt="{{ vertical.name }} icon">
-                                    <span>{{ vertical.name }}</span>
+                                    {% if vertical.link %}<a href="{{ vertical.link }}" target="_blank">{% endif %}<img src="/assets/images/cv/verticals/{{ vertical.icon }}" alt="{{ vertical.name }} icon">{% if vertical.link %}</a>{% endif %}
+                                    <span>{% if vertical.link %}<a href="{{ vertical.link }}" target="_blank">{% endif %}{{ vertical.name }}{% if vertical.link %}</a>{% endif %}</span>
                                 </div>
