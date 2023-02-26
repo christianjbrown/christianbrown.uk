@@ -12,11 +12,11 @@ header_job_title: 'Engineering Manager'
 header_location: 'London, UK'
 
 menu:
-#  -
-#    icon: 'download'
-#    text: 'Download'
-#    link: '/assets/docs/christian-brown-cv.pdf'
-#    icon_alt: 'Download icon'
+  -
+    icon: 'download'
+    text: 'Download'
+    link: '/assets/docs/christian-brown-cv.pdf'
+    icon_alt: 'Download icon'
   -
     icon: 'linkedin'
     text: 'Contact me'
