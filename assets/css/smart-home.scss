@@ -18,26 +18,26 @@ div.container {
                     tr {
                         td {
                             span {
+                                &.primary {
+                                    &.important {
+                                        font-weight: bold;
+                                    }
+                                    &.muted {
+                                        color: $colour-grayscale-1;
+                                    }
+                                    font-size: 1.2em;
+                                }
+                                &.secondary {
+                                    &.muted {
+                                        color: $colour-grayscale-1;
+                                    }
+                                    font-size: 1em;
+                                    color: $colour-grayscale-2;
+                                }
+                                &.error {
+                                    color: red;
+                                }
                                 display: block;
-                            }
-                            span.primary {
-                                &.important {
-                                    font-weight: bold;
-                                }
-                                &.muted {
-                                    color: $colour-grayscale-1;
-                                }
-                                font-size: 1.2em;
-                            }
-                            span.secondary {
-                                &.muted {
-                                    color: $colour-grayscale-1;
-                                }
-                                font-size: 1em;
-                                color: $colour-grayscale-2;
-                            }
-                            span.error {
-                                color: red;
                             }
                             padding: 1em;
                             vertical-align: text-top;
@@ -49,8 +49,9 @@ div.container {
                     tr:not(:first-child) {
                         border-top: 1px solid $colour-accent;
                     }
-                    width: 30em;
+                    width: 100%;
                 }
+                flex: 1;
                 margin-bottom: 1em;
             }
             align-items: flex-start;
@@ -71,7 +72,6 @@ div.container {
                 width: 100%;
             }
             margin: auto;
-            width: 80%;
         }
     }
 }
