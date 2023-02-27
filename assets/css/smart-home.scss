@@ -10,62 +10,68 @@ div.container {
             span#clock {
                 font-weight: bold;
             }
-            &.question {
-                font-weight: bold;
-                font-style: italic;
-            }
             font-size: 1.1em;
         }
-        div#data {
+        div.smart-home-data {
             div {
-                margin-bottom: 10px;
+                table {
+                    tr {
+                        td {
+                            span {
+                                display: block;
+                            }
+                            span.primary {
+                                &.important {
+                                    font-weight: bold;
+                                }
+                                &.muted {
+                                    color: $colour-grayscale-1;
+                                }
+                                font-size: 1.2em;
+                            }
+                            span.secondary {
+                                &.muted {
+                                    color: $colour-grayscale-1;
+                                }
+                                font-size: 1em;
+                                color: $colour-grayscale-2;
+                            }
+                            span.error {
+                                color: red;
+                            }
+                            padding: 1em;
+                            vertical-align: text-top;
+                        }
+                        td:last-child {
+                            text-align: right;
+                        }
+                    }
+                    tr:not(:first-child) {
+                        border-top: 1px solid $colour-accent;
+                    }
+                    width: 30em;
+                }
+                margin-bottom: 1em;
             }
+            align-items: flex-start;
+            column-gap: 3em;
             display: flex;
             flex-direction: row;
             flex-wrap: wrap;
-            column-gap: 30px;
+            justify-content: center;
         }
-        img#how-it-works {
-            width: 90%;
-            display: block;
-            margin: 0 auto;
-        }
-        table.smart-home-table {
-            width: 350px;
-            tr {
-                td {
-                    padding: 10px;
-                    vertical-align: text-top;
-                    span {
-                        display: block;
-                    }
-                    span.primary {
-                        font-size: 13pt;
-                        &.important {
-                            font-weight: bold;
-                        }
-                        &.muted {
-                            color: $colour-grayscale-1;
-                        }
-                    }
-                    span.secondary {
-                        font-size: 11pt;
-                        color: $colour-grayscale-2;
-                        &.muted {
-                            color: $colour-grayscale-1;
-                        }
-                    }
-                    span.error {
-                        color: red;
-                    }
-                }
-                td:nth-child(2) {
-                    text-align: right;
-                }
+        div.faq {
+            p.question {
+                font-weight: bold;
+                font-style: italic;
             }
-            tr:not(:first-child) {
-                border-top: 1px solid $colour-accent;
+            img.how-it-works {
+                display: block;
+                margin: 0 auto;
+                width: 100%;
             }
+            margin: auto;
+            width: 80%;
         }
     }
 }
