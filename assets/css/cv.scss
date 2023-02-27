@@ -123,15 +123,15 @@ div.container {
                 width: 5.5em;
                 text-align: center;
             }
-            width: 100%;
+            align-content: center;
+            align-items: flex-start;
+            column-gap: 0.5em;
             display: flex;
             flex-direction: row;
             flex-wrap: nowrap;
-            column-gap: 0.5em;
-            row-gap: 1em;
             justify-content: center;
-            align-content: center;
-            align-items: flex-start;
+            row-gap: 1em;
+            width: 100%;
         }
         div#cv-techs {
             @media print {
@@ -193,13 +193,12 @@ div.container {
                     p.cv-experience-date-range {
                         font-style: italic;
                     }
-                    min-width: 31em;
                     flex-basis: max-content;
                 }
                 column-gap: 0.6em;
                 display: flex;
                 flex-direction: row;
-                flex-wrap: wrap;
+                flex-wrap: nowrap;
                 row-gap: 1em;
             }
             div.cv-experience-description {
@@ -254,12 +253,12 @@ div.container {
                         font-weight: bold;
                     }
                 }
+                align-content: flex-start;
+                align-items: flex-start;
+                column-gap: 0.2em;
                 display: flex;
                 flex-direction: row;
                 flex-wrap: nowrap;
-                align-items: flex-start;
-                align-content: flex-start;
-                column-gap: 0.2em;
             }
             div.cv-experience-organisation {
                 * {
