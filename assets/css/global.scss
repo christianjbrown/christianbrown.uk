@@ -51,16 +51,8 @@ html {
                 div.header-avatar {
                     div.header-avatar-border {
                         img {
-                            clip-path: circle();
-                            width: 7em;
-                            position: relative;
-                            left: 0.15em;
-                            top: 0.15em;
+                            width: 7.3em;
                         }
-                        clip-path: circle();
-                        width: 7.3em;
-                        height: 7.3em;
-                        background-color: $colour-accent;
                     }
                     @media print {
                         div.header-avatar-border {
