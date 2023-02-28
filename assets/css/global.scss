@@ -14,20 +14,10 @@
 
 html {
     body {
-        color-scheme: light;
-        @media print {
-            a {
-                &#cv-menu-download {
-                    display: none;
-                }
-                text-decoration: none !important;
-            }
-            color: $colour-grayscale-2;
-        }
         * {
             color: $colour-grayscale-3;
         }
-        h1 a,h1 a:hover {
+        h1 a, h1 a:hover {
             color: inherit;
         }
         a {
@@ -138,6 +128,66 @@ html {
                 padding-bottom: 0;
             }
         }
+        div#cookies {
+            div {
+                p, p a {
+                    a {
+                        text-decoration: underline;
+                    }
+                    font-weight: normal;
+                    color: white;
+                }
+                button {
+                    &#cookies-accept {
+                        background-color: $colour-accent;
+                        border: 1px solid white;
+                        font-weight: bold;
+                        color: white;
+                    }
+                    &#cookies-decline {
+                        background-color: $colour-grayscale-2;
+                        border: 1px solid black;
+                        color: black;
+                    }
+                    cursor: pointer;
+                    width: 7em;
+                    padding: 0.5em;
+                    margin: 1em;
+                }
+            }
+            align-items: center;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: none;
+            flex-flow: column;
+            height: 10em;
+            justify-content: center;
+            left:         calc(50% - 10em);
+            left:    -moz-calc(50% - 10em);
+            left: -webkit-calc(50% - 10em);
+            margin: auto;
+            padding: 1em;
+            position: fixed;
+            top:         calc(30% - 5em);
+            top:    -moz-calc(30% - 5em);
+            top: -webkit-calc(30% - 5em);
+            width: 20em;
+            z-index: 100;
+        }
+        @media print {
+            div.container {
+                a {
+                    text-decoration: none;
+                }
+            }
+            div#cookies {
+                display: none;
+            }
+            #cv-menu-download {
+                display: none;
+            }
+            color: $colour-grayscale-2;
+        }
+        color-scheme: light;
         font-family: $font-sans-serif;
     }
     font-size: 10.85pt;

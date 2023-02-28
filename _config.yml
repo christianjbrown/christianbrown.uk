@@ -69,6 +69,18 @@ cv-tech:
     icon: 'golang.svg'
     link: 'https://go.dev/'
   -
+    name: 'PostgreSQL'
+    icon: 'postgresql.svg'
+    link: 'https://www.postgresql.org/'
+  -
+    name: 'MySQL'
+    icon: 'mysql.svg'
+    link: 'https://www.mysql.com/'
+  -
+    name: 'Redis'
+    icon: 'redis.svg'
+    link: 'https://redis.com/'
+  -
     name: 'Elemental'
     icon: 'aws-elemental.svg'
     link: 'https://www.elemental.com/'
