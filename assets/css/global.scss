@@ -148,6 +148,7 @@ html {
                 }
             }
             align-items: center;
+            border: 1px solid white;
             background-color: rgba(0, 0, 0, 0.7);
             display: none;
             flex-flow: column;
@@ -162,7 +163,7 @@ html {
             top:         calc(30% - 5em);
             top:    -moz-calc(30% - 5em);
             top: -webkit-calc(30% - 5em);
-            width: 20em;
+            width: 21em;
             z-index: 100;
         }
         @media print {
