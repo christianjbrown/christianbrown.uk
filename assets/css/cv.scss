@@ -199,6 +199,7 @@ div.container {
                 display: flex;
                 flex-direction: row;
                 flex-wrap: nowrap;
+                min-width: 25em;
                 row-gap: 1em;
             }
             div.cv-experience-description {
