@@ -60,7 +60,7 @@ export default class Cookie
      * @param {Object}      opts
      */
     static set(name, value, days = 365, opts = []) {
-        if (days) {
+        if (days !== null) {
             opts['max-age'] = days * 60 * 60 * 24;
         }
         opts = Object.entries(opts).reduce(
@@ -74,6 +74,6 @@ export default class Cookie
      * @param {Array}  opts
      */
     static delete(name, opts) {
-        this.set(name, '', {'max-age': -1, ...opts});
+        this.set(name, '', -1, opts);
     }
 }
