@@ -54,12 +54,15 @@ export default class Cookie
     }
 
     /**
-     * @param {string} name
-     * @param {string} value
-     * @param {Object} opts
+     * @param {string}      name
+     * @param {string}      value
+     * @param {Object}      opts
+     * @param {number|null} days
      */
-    static set(name, value, opts = []) {
-        // opts['max-age'] = days * 60 * 60 * 24;
+    static set(name, value, opts = [], days = 365) {
+        if (days) {
+            opts['max-age'] = days * 60 * 60 * 24;
+        }
         opts = Object.entries(opts).reduce(
             (accumulatedStr, [k, v]) => `${accumulatedStr}; ${k}=${v}`, ''
         )
