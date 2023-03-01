@@ -20,6 +20,7 @@ document.getElementById('cookies-accept').addEventListener('click',
 document.getElementById('cookies-decline').addEventListener('click',
     () => {
         cookiesDialog.style.display = 'none';
+        Cookie.deleteAll();
         Cookie.setConsent(false);
     }
 );

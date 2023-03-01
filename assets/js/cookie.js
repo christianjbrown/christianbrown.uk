@@ -39,9 +39,19 @@ export default class Cookie
      * @returns {boolean}
      */
     static setConsent(accept) {
-        Cookie.set(CONSENT_KEY, accept ? '1' : '0');
+        this.set(CONSENT_KEY, accept ? '1' : '0');
     }
 
+    /**
+     * deleteAll.
+     */
+    static deleteAll() {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            let key = cookies[i].split('=').at(0);
+            this.delete(key);
+        }
+    }
 
     /**
      * @param {string} name
@@ -54,26 +64,26 @@ export default class Cookie
     }
 
     /**
-     * @param {string}      name
+     * @param {string}      key
      * @param {string}      value
      * @param {number|null} days
      * @param {Object}      opts
      */
-    static set(name, value, days = 365, opts = []) {
+    static set(key, value, days = 365, opts = {}) {
         if (days !== null) {
             opts['max-age'] = days * 60 * 60 * 24;
         }
-        opts = Object.entries(opts).reduce(
+        const optsStr = Object.entries(opts).reduce(
             (accumulatedStr, [k, v]) => `${accumulatedStr}; ${k}=${v}`, ''
         )
-        document.cookie = name+'='+encodeURIComponent(value)+opts
+        document.cookie = key+'='+encodeURIComponent(value)+optsStr;
     }
 
     /**
-     * @param {string} name
-     * @param {Array}  opts
+     * @param {string} key
+     * @param {Object} opts
      */
-    static delete(name, opts) {
-        this.set(name, '', -1, opts);
+    static delete(key, opts = {}) {
+        this.set(key, '', -1, opts);
     }
 }
