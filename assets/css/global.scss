@@ -121,19 +121,36 @@ html {
             }
         }
         div#cookies {
-            div {
-                p, p a {
+            div.cookies-speech-bubble {
+                img.cookies-speech-bubble-head {
+                    width: 5em;
+                    overflow:visible;
+                    z-index: 99;
+                }
+                div.cookies-speech-bubble-contents {
                     a {
                         text-decoration: underline;
+                        font-weight: normal;
                     }
-                    font-weight: normal;
-                    color: white;
+                    padding: 1em;
+                    border-radius: 0.5em;
+                    background-color: white;
+                    border: 1px solid black;
+                    color: black;
+                    width: 12em;
+                    z-index: 98;
                 }
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                align-items: center;
+                column-gap: 0;
+            }
+            div.cookies-options {
                 button {
                     &#cookies-accept {
                         background-color: $colour-accent;
                         border: 1px solid white;
-                        font-weight: bold;
                         color: white;
                     }
                     &#cookies-decline {
@@ -142,18 +159,23 @@ html {
                         color: black;
                     }
                     cursor: pointer;
-                    width: 7em;
+                    width: 9em;
                     padding: 0.5em;
-                    margin: 1em;
                 }
+                display: flex;
+                flex-direction: row;
+                column-gap: 1em;
+                align-items: center;
+                justify-content: center;
             }
             align-items: center;
             border: 1px solid white;
             background-color: rgba(0, 0, 0, 0.7);
             display: none;
+            row-gap: 1em;
             flex-flow: column;
-            height: 10em;
-            justify-content: center;
+            height: 12em;
+            justify-content: flex-end;
             left:         calc(50% - 10em);
             left:    -moz-calc(50% - 10em);
             left: -webkit-calc(50% - 10em);
@@ -163,8 +185,9 @@ html {
             top:         calc(30% - 5em);
             top:    -moz-calc(30% - 5em);
             top: -webkit-calc(30% - 5em);
-            width: 21em;
+            width: 26em;
             z-index: 100;
+            border-radius: 0.5em;
         }
         @media print {
             div.container {
