@@ -29,9 +29,23 @@ window.addEventListener('load',
         console.log('%c'+DROIDS, 'color: purple; font-weight: bold;');
         console.log('%c but maybe you\'re looking for an engineering manager? you\'ve come to right place!', 'color: #75923C; font-weight: bold;');
 
-        if (Cookie.needsConsent()) {
+        const params = new Proxy(
+            new URLSearchParams(window.location.search),
+            {
+                /**
+                 * @param {URLSearchParams} searchParams
+                 * @param {string}          prop
+                 *
+                 * @returns {string}
+                 */
+                get: (searchParams, prop) => searchParams.get(prop)
+            }
+        );
+        let wantsToSeeCookieMonster = params.showCookieConsent === '1';
+
+        if (Cookie.needsConsent() || wantsToSeeCookieMonster) {
             const consent = Cookie.getConsent();
-            if (consent === null) {
+            if (consent === null || wantsToSeeCookieMonster) {
                 cookiesDialog.style.display = 'flex';
             } else if (consent === true) {
                 setOptionalCookies();
