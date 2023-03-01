@@ -56,10 +56,10 @@ export default class Cookie
     /**
      * @param {string}      name
      * @param {string}      value
-     * @param {Object}      opts
      * @param {number|null} days
+     * @param {Object}      opts
      */
-    static set(name, value, opts = [], days = 365) {
+    static set(name, value, days = 365, opts = []) {
         if (days) {
             opts['max-age'] = days * 60 * 60 * 24;
         }
