@@ -101,20 +101,20 @@ html {
                     min-height: 132px;
                     flex-grow: 1;
                 }
+                align-content: flex-start;
+                align-items: center;
+                column-gap: 20px;
                 display: flex;
                 flex-direction: row;
                 flex-wrap: wrap;
                 justify-content: center;
-                align-items: center;
-                align-content: flex-start;
-                column-gap: 20px;
             }
-            padding-top: 3em;
-            padding-bottom: 10em;
             display: flex;
             flex-direction: column;
-            row-gap: 10px;
             margin: auto;
+            padding-bottom: 10em;
+            padding-top: 3em;
+            row-gap: 10px;
             @media print {
                 padding-top: 0;
                 padding-bottom: 0;
@@ -132,19 +132,19 @@ html {
                         text-decoration: underline;
                         font-weight: normal;
                     }
-                    padding: 1em;
-                    border-radius: 0.5em;
                     background-color: white;
+                    border-radius: 0.5em;
                     border: 1px solid black;
                     color: black;
+                    padding: 1em;
                     width: 12em;
                     z-index: 98;
                 }
+                align-items: center;
+                column-gap: 0;
                 display: flex;
                 flex-direction: row;
                 justify-content: center;
-                align-items: center;
-                column-gap: 0;
             }
             div.cookies-options {
                 button {
@@ -162,17 +162,17 @@ html {
                     width: 9em;
                     padding: 0.5em;
                 }
+                align-items: center;
+                column-gap: 1em;
                 display: flex;
                 flex-direction: row;
-                column-gap: 1em;
-                align-items: center;
                 justify-content: center;
             }
             align-items: center;
-            border: 1px solid white;
             background-color: rgba(0, 0, 0, 0.7);
+            border-radius: 0.5em;
+            border: 1px solid white;
             display: none;
-            row-gap: 1em;
             flex-flow: column;
             height: 12em;
             justify-content: flex-end;
@@ -182,12 +182,12 @@ html {
             margin: auto;
             padding: 1em;
             position: fixed;
+            row-gap: 1em;
             top:         calc(30% - 6em);
             top:    -moz-calc(30% - 6em);
             top: -webkit-calc(30% - 6em);
             width: 26em;
             z-index: 100;
-            border-radius: 0.5em;
         }
         @media print {
             div.container {
