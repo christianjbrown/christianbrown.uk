@@ -192,7 +192,7 @@ html {
         @media print {
             div.container {
                 a {
-                    text-decoration: none;
+                    text-decoration: none !important;
                 }
             }
             div#cookies {
