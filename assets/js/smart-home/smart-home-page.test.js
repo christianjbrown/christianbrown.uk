@@ -73,7 +73,7 @@ test('SmartHomePage.runAll', () => {
 
     smartHomePage.runAll().then(
         () => {
-            expect(clockDom.innerHTML).toBe('19:18 (7:18 pm)');
+            expect(clockDom.innerHTML).toBe('19:18 (7:18 pm)');
             expect(homeTempTableDom.innerHTML).toBe(HOME_TEMP_HTML);
             expect(weatherTableDom.innerHTML).toBe(WEATHER_HTML);
         }
