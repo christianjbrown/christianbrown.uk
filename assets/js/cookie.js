@@ -1,10 +1,13 @@
 'use strict';
 
-const CONSENT_KEY = 'cookie-consent';
-
-const COUNTRIES_REQUIRING_CONSENT = [ 'AT', 'BE', 'BG', 'CY', 'CZ', 'DE', 'DK', 'EE', 'EL', 'ES', 'EU', 'FI', 'FR', 'GB', 'GR', 'HR', 'HU', 'IE', 'IT', 'LT', 'LU', 'LV', 'MT', 'NL', 'PL', 'PT', 'RO', 'SE', 'SI', 'SK'];
-
 import Country from './country.js';
+import {
+    CONSENT_KEY,
+    CONSENT_OPT_KEY_MAX_AGE,
+    CONSENT_VALUE_ACCEPT,
+    CONSENT_VALUE_DECLINE,
+    COUNTRIES_REQUIRING_CONSENT
+} from './cookie.const.js';
 
 export default class Cookie
 {
@@ -24,9 +27,9 @@ export default class Cookie
     static getConsent() {
         const cookie = Cookie.get(CONSENT_KEY);
         let value = null;
-        if (cookie === '1') {
+        if (cookie === CONSENT_VALUE_ACCEPT) {
             value = true
-        } else if (cookie === '0') {
+        } else if (cookie === CONSENT_VALUE_DECLINE) {
             value = false;
         }
 
@@ -39,7 +42,7 @@ export default class Cookie
      * @returns {boolean}
      */
     static setConsent(accept) {
-        this.set(CONSENT_KEY, accept ? '1' : '0');
+        this.set(CONSENT_KEY, accept ? CONSENT_VALUE_ACCEPT : CONSENT_VALUE_DECLINE);
     }
 
     /**
@@ -71,7 +74,7 @@ export default class Cookie
      */
     static set(key, value, days = 365, opts = {}) {
         if (days !== null) {
-            opts['max-age'] = days * 60 * 60 * 24;
+            opts[CONSENT_OPT_KEY_MAX_AGE] = days * 60 * 60 * 24;
         }
         const optsStr = Object.entries(opts).reduce(
             (accumulatedStr, [k, v]) => `${accumulatedStr}; ${k}=${v}`, ''

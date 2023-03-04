@@ -21,13 +21,15 @@
       "html"
     ],
     "coveragePathIgnorePatterns": [
+      ".*/index.js",
       "_site/",
       "assets/js/plugins",
       "node_modules/"
     ],
     "testPathIgnorePatterns": [
-      "node_modules/",
-      "_site/"
+      "_site/",
+      "assets/js/plugins",
+      "node_modules/"
     ]
   },
   "scripts": {
