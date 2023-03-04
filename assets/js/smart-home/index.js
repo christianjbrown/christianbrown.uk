@@ -1,10 +1,7 @@
 'use strict';
 
 import SmartHomePage from './smart-home-page.js';
-
-const CLOCK_SPAN_SELECTOR = '#clock';
-const WEATHER_TABLE_SELECTOR = '#weather-table';
-const HOME_TEMP_TABLE_SELECTOR = '#home-temperature-table';
+import { CLOCK_SPAN_SELECTOR, HOME_TEMP_TABLE_SELECTOR, WEATHER_TABLE_SELECTOR} from './index.const.js';
 
 window.addEventListener('load',
     () => {

@@ -1,25 +1,31 @@
 'use strict';
 
 import Cookie from './cookie.js';
+import {
+    COOKIES_ACCEPT_BUTTON_ID,
+    COOKIES_DECLINE_BUTTON_ID,
+    COOKIES_DIV_ID,
+    DEV_CONSOLE_LINE_1,
+    DEV_CONSOLE_LINE_1_STYLE,
+    DEV_CONSOLE_LINE_2,
+    DEV_CONSOLE_LINE_2_STYLE,
+    GOOGLE_ANALYTICS_ID
+} from './global.const.js';
 
-const DROIDS = `
-                                                                                                                        _
-_|_ |_   _   _  _    _. ._ _   ._   _ _|_  _|_ |_   _    _| ._ _  o  _|  _      _     /._ _   |  _   _  |  o ._   _   _|_ _  ._
- |_ | | (/_ _> (/_  (_| | (/_  | | (_) |_   |_ | | (/_  (_| | (_) | (_| _>  \\/ (_) |_| | (/_  | (_) (_) |< | | | (_|   | (_) |
-                                                                            /                                     _|
-`;
+const cookiesDivDom = document.getElementById(COOKIES_DIV_ID);
+const cookiesAcceptButtonDom = document.getElementById(COOKIES_ACCEPT_BUTTON_ID);
+const cookiesDeclineButtonDom = document.getElementById(COOKIES_DECLINE_BUTTON_ID);
 
-const cookiesDialog = document.getElementById('cookies');
-document.getElementById('cookies-accept').addEventListener('click',
+cookiesAcceptButtonDom.addEventListener('click',
     () => {
-        cookiesDialog.style.display = 'none';
+        cookiesDivDom.style.display = 'none';
         Cookie.setConsent(true);
         setOptionalCookies();
     }
 );
-document.getElementById('cookies-decline').addEventListener('click',
+cookiesDeclineButtonDom.addEventListener('click',
     () => {
-        cookiesDialog.style.display = 'none';
+        cookiesDivDom.style.display = 'none';
         Cookie.deleteAll();
         Cookie.setConsent(false);
     }
@@ -27,8 +33,8 @@ document.getElementById('cookies-decline').addEventListener('click',
 
 window.addEventListener('load',
     () => {
-        console.log('%c'+DROIDS, 'color: purple; font-weight: bold;');
-        console.log('%c but maybe you\'re looking for an engineering manager? you\'ve come to right place!', 'color: #75923C; font-weight: bold;');
+        console.log('%c'+DEV_CONSOLE_LINE_1, DEV_CONSOLE_LINE_1_STYLE);
+        console.log('%c'+DEV_CONSOLE_LINE_2, DEV_CONSOLE_LINE_2_STYLE);
 
         const params = new Proxy(
             new URLSearchParams(window.location.search),
@@ -47,7 +53,7 @@ window.addEventListener('load',
         if (Cookie.needsConsent() || wantsToSeeCookieMonster) {
             const consent = Cookie.getConsent();
             if (consent === null || wantsToSeeCookieMonster) {
-                cookiesDialog.style.display = 'flex';
+                cookiesDivDom.style.display = 'flex';
             } else if (consent === true) {
                 setOptionalCookies();
             }
@@ -65,5 +71,5 @@ function setGoogleAnalyticsCookies() {
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-    gtag('config', 'G-9Z9L9Z6QHQ');
+    gtag('config', GOOGLE_ANALYTICS_ID);
 }
