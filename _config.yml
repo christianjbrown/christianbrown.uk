@@ -85,9 +85,21 @@ cv-tech:
     icon: 'aws-elemental.svg'
     link: 'https://www.elemental.com/'
   -
+    name: 'MPX/CVP'
+    icon: 'comcast.svg'
+    link: 'https://console.theplatform.com/'
+  -
     name: 'Bitmovin'
     icon: 'bitmovin.svg'
     link: 'https://www.bitmovin.com/'
+  -
+    name: 'JW Player'
+    icon: 'jwplayer.svg'
+    link: 'https://jwplayer.com/'
+  -
+    name: 'video.js'
+    icon: 'videojs.svg'
+    link: 'https://videojs.com/'
   -
     name: 'Mux'
     icon: 'mux.svg'

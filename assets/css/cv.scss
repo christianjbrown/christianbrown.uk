@@ -139,9 +139,9 @@ div.container {
             }
             div.cv-tech {
                 img {
-                    max-height: 3em;
-                    max-width: 4em;
-                    margin-bottom: 0.4em;
+                    max-height: 2.5em;
+                    max-width: 3em;
+                    margin-bottom: 0.3em;
                 }
                 span, span a {
                     color: $colour-grayscale-4;
@@ -161,7 +161,7 @@ div.container {
             flex-wrap: wrap;
             justify-content: center;
             margin-bottom: 1em;
-            row-gap: 1.6em;
+            row-gap: 1em;
             width: 100%;
         }
         div.cv-experience {
