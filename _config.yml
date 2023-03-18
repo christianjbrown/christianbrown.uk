@@ -36,7 +36,7 @@ cv-verticals:
     icon: 'vod.svg'
     link: 'https://en.wikipedia.org/wiki/Video_on_demand'
   -
-    name: 'eCommerce'
+    name: 'E-Commerce'
     icon: 'ecommerce.svg'
     link: 'https://en.wikipedia.org/wiki/E-commerce'
   -
