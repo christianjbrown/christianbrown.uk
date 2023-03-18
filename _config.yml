@@ -97,7 +97,7 @@ cv-tech:
     icon: 'jwplayer.svg'
     link: 'https://jwplayer.com/'
   -
-    name: 'video.js'
+    name: 'Video.js'
     icon: 'videojs.svg'
     link: 'https://videojs.com/'
   -
