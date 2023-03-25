@@ -3,6 +3,7 @@
 
 @import 'vars';
 @import 'fonts';
+@import 'loader';
 
 div.container {
     main {
@@ -35,7 +36,7 @@ div.container {
                                     color: $colour-grayscale-2;
                                 }
                                 &.error {
-                                    color: red;
+                                    color: $colour-error;
                                 }
                                 display: block;
                             }
@@ -45,7 +46,7 @@ div.container {
                         td:last-child {
                             text-align: right;
                         }
-                        td.loading {
+                        td.data-loader {
                             text-align: center;
                         }
                     }
