@@ -45,6 +45,9 @@ div.container {
                         td:last-child {
                             text-align: right;
                         }
+                        td.loading {
+                            text-align: center;
+                        }
                     }
                     tr:not(:first-child) {
                         border-top: 1px solid $colour-accent;
