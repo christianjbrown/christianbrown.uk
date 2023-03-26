@@ -1,0 +1,23 @@
+{
+  "bail": true,
+  "testEnvironment": "jsdom",
+  "collectCoverage": true,
+  "collectCoverageFrom": [
+    "assets/**/*.js"
+  ],
+  "coverageReporters": [
+    "text",
+    "html"
+  ],
+  "coveragePathIgnorePatterns": [
+    ".*/index.js",
+    "_site/",
+    "assets/js/plugins",
+    "node_modules/"
+  ],
+  "testPathIgnorePatterns": [
+    "_site/",
+    "assets/js/plugins",
+    "node_modules/"
+  ]
+}
