@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 import { CLOCK_SPAN_ID, HOME_TEMP_TABLE_ID, WEATHER_TABLE_ID} from './index.const.js';
 
