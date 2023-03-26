@@ -44,20 +44,22 @@ schema:
                             </div>
                             <p>I'm also known for making developer tooling and creating beautiful high-quality documentation.</p>
                         </div>
+                        {%- if site.data.cv-verticals %}
                         <div class="cv-section">
                             <h2>Specialty Verticals</h2>
                             <p>I have subject-matter expertise in:</p>
-                            <div id="cv-verticals">{% for vertical in site.cv-verticals %}
+                            <div id="cv-verticals">{% for vertical in site.data.cv-verticals %}
                                 {% include cv-vertical.html %}{% endfor %}
                             </div>
-                        </div>
+                        </div>{% endif -%}
+                        {%- if site.data.cv-tech %}
                         <div class="cv-section">
                             <h2>Tech</h2>
                             <p>Some of the tech, frameworks and platforms I have recent industry experience with include:</p>
-                            <div id="cv-techs">{% for tech in site.cv-tech %}
+                            <div id="cv-techs">{% for tech in site.data.cv-tech %}
                                 {% include cv-tech.html %}{% endfor %}
                             </div>
-                        </div>
+                        </div>{% endif %}
                         <div class="cv-section">
                             <h2>Education</h2>{% for experience in site.education reversed %}
                             {% include cv-experience-side.html %}{% endfor %}
