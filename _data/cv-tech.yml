@@ -1,0 +1,71 @@
+-
+    name: 'JavaScript'
+    icon: 'javascript.svg'
+-
+    name: 'TypeScript'
+    icon: 'typescript.svg'
+    link: 'https://www.typescriptlang.org/'
+-
+    name: 'Node.js'
+    icon: 'node-js.svg'
+    link: 'https://nodejs.org/'
+-
+    name: 'PHP'
+    icon: 'php.svg'
+    link: 'https://www.php.net/'
+-
+    name: 'Symfony'
+    icon: 'symfony.svg'
+    link: 'https://symfony.com/'
+-
+    name: 'Go'
+    icon: 'golang.svg'
+    link: 'https://go.dev/'
+-
+    name: 'PostgreSQL'
+    icon: 'postgresql.svg'
+    link: 'https://www.postgresql.org/'
+-
+    name: 'MySQL'
+    icon: 'mysql.svg'
+    link: 'https://www.mysql.com/'
+-
+    name: 'Redis'
+    icon: 'redis.svg'
+    link: 'https://redis.com/'
+-
+    name: 'Elemental'
+    icon: 'aws-elemental.svg'
+    link: 'https://www.elemental.com/'
+-
+    name: 'MPX/CVP'
+    icon: 'comcast.svg'
+    link: 'https://console.theplatform.com/'
+-
+    name: 'Bitmovin'
+    icon: 'bitmovin.svg'
+    link: 'https://www.bitmovin.com/'
+-
+    name: 'JW Player'
+    icon: 'jwplayer.svg'
+    link: 'https://jwplayer.com/'
+-
+    name: 'Video.js'
+    icon: 'videojs.svg'
+    link: 'https://videojs.com/'
+-
+    name: 'Mux'
+    icon: 'mux.svg'
+    link: 'https://www.mux.com/'
+-
+    name: 'Fastly'
+    icon: 'fastly.svg'
+    link: 'https://www.fastly.com/'
+-
+    name: 'GCP'
+    icon: 'gcp.svg'
+    link: 'https://cloud.google.com/'
+-
+    name: 'AWS'
+    icon: 'aws.svg'
+    link: 'https://aws.amazon.com/'

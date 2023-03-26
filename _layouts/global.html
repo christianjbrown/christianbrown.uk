@@ -1,3 +1,11 @@
+---
+global:
+    stylesheets:
+        - "/assets/css/bootstrap.min.css"
+        - "/assets/css/global.css"
+    javascripts:
+        - "/assets/js/global.js"
+---
 <!--
                                                                                                                         _
 _|_ |_   _   _  _    _. ._ _   ._   _ _|_  _|_ |_   _    _| ._ _  o  _|  _      _     /._ _   |  _   _  |  o ._   _   _|_ _  ._
@@ -16,19 +24,34 @@ but maybe you're looking for an engineering manager? you've come to right place!
         <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicon/favicon-16x16.png">
         <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon/favicon-32x32.png">
         <link rel="manifest" href="/site.webmanifest">
-        <link rel="mask-icon" href="/assets/images/favicon/safari-pinned-tab.svg" color="#5bbad5">
-        <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
-        <link rel="stylesheet" href="/assets/css/global.css">{% if layout.stylesheets %}{% for stylesheet in layout.stylesheets %}
-        <link rel="stylesheet" href="{{ stylesheet }}">{% endfor %}{% endif %}{% if page.stylesheets %}{% for stylesheet in page.stylesheets %}
-        <link rel="stylesheet" href="{{ stylesheet }}">{% endfor %}{% endif %}
-        <script type="module" src="/assets/js/global.js"></script>{% if layout.javascripts %}{% for javascript in layout.javascripts %}
-        <script type="module" src="{{ javascript }}"></script>{% endfor %}{% endif %}{% if page.javascripts %}{% for javascript in page.javascripts %}
-        <script type="module" src="{{ javascript }}"></script>{% endfor %}{% endif %}
+        <link rel="mask-icon" href="/assets/images/favicon/safari-pinned-tab.svg" color="{{ site.header_safari_tab_mask_color }}">
+        {%- if layout.global.stylesheets -%}{%- for stylesheet in layout.global.stylesheets %}
+        <link rel="stylesheet" href="{{ stylesheet }}">
+        {%- endfor -%}{%- endif %}
+        {%- if layout.stylesheets -%}{%- for stylesheet in layout.stylesheets %}
+        <link rel="stylesheet" href="{{ stylesheet }}">
+        {%- endfor -%}{%- endif %}
+        {%- if page.stylesheets -%}{%- for stylesheet in page.stylesheets %}
+        <link rel="stylesheet" href="{{ stylesheet }}">
+        {%- endfor -%}{%- endif %}
+        {%- if layout.global.javascripts -%}{%- for javascript in layout.global.javascripts %}
+        <script type="module" src="{{ javascript }}"></script>
+        {%- endfor -%}{%- endif %}
+        {%- if layout.javascripts -%}{%- for javascript in layout.javascripts %}
+        <script type="module" src="{{ javascript }}"></script>
+        {%- endfor -%}{%- endif %}
+        {%- if page.javascripts -%}{%- for javascript in page.javascripts %}
+        <script type="module" src="{{ javascript }}"></script>
+        {%- endfor -%}{%- endif %}
+        {%- if site.google_analytics %}
+        <script async type="module" src="https://www.googletagmanager.com/gtag/js?id={{ site.google_analytics }}"></script>
+        {%- endif %}
         <meta name="author" content="{{ site.site_author }}">
         <meta name="description" content="{{ page.description }}">
-        <meta name="msapplication-TileColor" content="#ffffff">{% if page.noindex %}
-        <meta name="robots" content="noindex">{% endif %}
-        <meta name="theme-color" content="#ffffff">
+        <meta name="msapplication-TileColor" content="{{ site.header_msapplication_tile_color }}">
+        {%- if page.noindex %}
+        <meta name="robots" content="noindex">{%- endif %}
+        <meta name="theme-color" content="{{ site.header_theme_color }}">
         <meta name="twitter:card" content="summary">
         <meta name="twitter:description" content="{{ page.description }}">
         <meta name="twitter:image" content="{{ site.url }}/assets/images/favicon/android-chrome-512x512.png">
@@ -42,40 +65,16 @@ but maybe you're looking for an engineering manager? you've come to right place!
         <meta property="og:title" content="{{ page.title }}">
         <meta property="og:type" content="website">
         <meta property="og:url" content="{{ site.url }}{{ page.url }}">
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-9Z9L9Z6QHQ"></script>{% if page.schema %}
+        {%- if page.schema %}
         <script type="application/ld+json">
             {{ page.schema | jsonify }}
-        </script>{% endif %}
+        </script>{%- endif %}
     </head>
     <body>
         <div class="container">
-            <!--noindex-->
-            <div id="cookies" class="robots-nocontent" data-nosnippet="true">
-                <div class="cookies-speech-bubble">
-                    <img class="cookies-speech-bubble-head" src="/assets/images/cookie-monster-says.svg" alt="Cookie Monster asking a question">
-                    <div class="cookies-speech-bubble-contents">
-                        This site uses <a href="https://support.google.com/analytics/answer/11397207" target="_blank">Google Analytics</a> cookies. Will you enjoy these cookies with me?
-                    </div>
-                </div>
-                <div class="cookies-options">
-                    <button id="cookies-decline">🚫 No thanks</button><button id="cookies-accept" tabindex="0">🍪 Yes! nomnom</button>
-                </div>
-            </div>
-            <!--/noindex-->
+            {% include global-cookie.html %}
             <header>
-                <div class="header-avatar">
-                    <div class="header-avatar-border">
-                        <a href="/"><img src="/assets/images/avatar.svg" alt="{{ site.site_image_name }}"></a>
-                    </div>
-                </div>
-                <div class="header-data">
-                    <h1 class="mt-2"><a href="/">{{ site.header_firstname }}&nbsp;<span class="alternate">{{ site.header_lastname }}</span></a></h1>
-                    <p><strong>{{ site.header_job_title }}</strong></p>
-                    <p>{{ site.header_location }}</p>{% if page.show_cv_menu %}
-                    <nav>{% for nav in site.menu %}
-                        {% if site.menu.first != nav %}&nbsp;&nbsp;&nbsp;{% endif %}<a href="{{ nav.link }}" id="cv-menu-{{ nav.icon }}"><img src="/assets/images/icons/icon-{{ nav.icon }}.svg" alt="{{ nav.icon_alt }}" class="header-data-links-icon"> {{ nav.text }}</a>{% endfor %}
-                    </nav>{% endif %}
-                </div>
+                {% include global-header.html %}
             </header>
             <main>
                 {{ content }}
