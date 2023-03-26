@@ -1,6 +1,7 @@
 'use strict';
 
-import { COUNTRIES , TIMEZONES} from './country.const.js';
+import countries from '../data/countries.json' assert {type: 'json'};
+import timezones from '../data/timezones.json' assert {type: 'json'};
 
 export default class Country
 {
@@ -10,8 +11,8 @@ export default class Country
     static getCountryCodesFromTimezone() {
         const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
         let countryCodes = [];
-        if (timezone && TIMEZONES[timezone]) {
-            countryCodes = TIMEZONES[timezone].c;
+        if (timezone && timezones[timezone]) {
+            countryCodes = timezones[timezone].c;
         }
 
         return countryCodes;
@@ -24,8 +25,8 @@ export default class Country
      */
     static getNameFromCountryCode(code) {
         let value = null;
-        if (typeof COUNTRIES[code] == 'string') {
-            value = COUNTRIES[code];
+        if (typeof countries[code] == 'string') {
+            value = countries[code];
         }
 
         return value;
