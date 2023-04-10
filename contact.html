@@ -24,7 +24,6 @@ noindex: true
                             <textarea id="contact-form-body" name="Message" required="required" class="form-control" rows="10" placeholder="" tabindex="0"></textarea>
                         </div>
                         <input type="hidden" name="g-recaptcha-response" value="" id="g-recaptcha-response">
-                        <script src="https://www.google.com/recaptcha/enterprise.js?render=6LfSt3UlAAAAAKxzcWCO4n6OeNKqcsvOtanmEejz"></script>
                         <script>
                             grecaptcha.enterprise.ready(() => {
                                 grecaptcha.enterprise.execute('6LfSt3UlAAAAAKxzcWCO4n6OeNKqcsvOtanmEejz', {action: 'email'}).then((token) => {
@@ -32,6 +31,8 @@ noindex: true
                                 });
                             });
                         </script>
-                        <button type="submit" class="btn btn-primary">Send</button>
+                        <div class="form-group row">
+                            <button type="submit" class="btn btn-primary">Send</button>
+                        </div>
                     </form>
                 </div>
