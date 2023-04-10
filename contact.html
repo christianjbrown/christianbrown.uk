@@ -2,8 +2,6 @@
 layout: "global"
 title: "Christian Brown - Engineering Manager - London - Contact me"
 description: "Contact Christian Brown, Engineering Manager in London"
-javascripts:
-    - "https://www.google.com/recaptcha/enterprise.js?render=6LfSt3UlAAAAAKxzcWCO4n6OeNKqcsvOtanmEejz"
 stylesheets:
     - "/assets/css/contact.css"
 noindex: true
@@ -24,6 +22,7 @@ noindex: true
                             <textarea id="contact-form-body" name="Message" required="required" class="form-control" rows="10" placeholder="" tabindex="0"></textarea>
                         </div>
                         <input type="hidden" name="g-recaptcha-response" value="" id="g-recaptcha-response">
+                        <script src="https://www.google.com/recaptcha/enterprise.js?render=6LfSt3UlAAAAAKxzcWCO4n6OeNKqcsvOtanmEejz"></script>
                         <script>
                             grecaptcha.enterprise.ready(() => {
                                 grecaptcha.enterprise.execute('6LfSt3UlAAAAAKxzcWCO4n6OeNKqcsvOtanmEejz', {action: 'email'}).then((token) => {
