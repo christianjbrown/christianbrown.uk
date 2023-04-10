@@ -2,6 +2,8 @@
 layout: "global"
 title: "Christian Brown - Engineering Manager - London - Information for recruiters"
 description: "Information for recruiters"
+javascripts:
+    - "https://www.google.com/recaptcha/enterprise.js?render=6LfSt3UlAAAAAKxzcWCO4n6OeNKqcsvOtanmEejz"
 stylesheets:
     - "/assets/css/recruiters.css"
 noindex: true
@@ -51,28 +53,28 @@ noindex: true
                     <form method="POST" action="https://forms.un-static.com/forms/f0d44531233d6f8cdaabb58a761c5bf43b87917a">
                         <div class="form-group row required">
                             <label for="contact-form-name" class="form-label">Your name:</label>
-                            <input id="contact-form-name" type="text" name="name" required="required" class="form-control" placeholder="" tabindex="0" autofocus="autofocus">
+                            <input id="contact-form-name" type="text" name="Name" required="required" class="form-control" placeholder="" tabindex="0" autofocus="autofocus">
                         </div>
                         <div class="form-group row required">
                             <label for="contact-form-email" class="form-label">Your email address:</label>
-                            <input id="contact-form-email" type="email" name="email" required="required" class="form-control" placeholder="" tabindex="0">
+                            <input id="contact-form-email" type="email" name="Email" required="required" class="form-control" placeholder="" tabindex="0">
                         </div>
                         <div class="form-group row required">
                             <label for="contact-form-job-title" class="form-label">Job title:</label>
-                            <input id="contact-form-job-title" type="text" name="job-title" required="required" class="form-control" placeholder="" minlength="4" tabindex="0">
+                            <input id="contact-form-job-title" type="text" name="Job title" required="required" class="form-control" placeholder="" minlength="4" tabindex="0">
                         </div>
                         <div class="form-group row required">
                             <label for="contact-form-company" class="form-label">Company name that you're hiring for:</label>
-                            <input id="contact-form-company" type="text" name="company" required="required" class="form-control" placeholder="" minlength="4" tabindex="0">
+                            <input id="contact-form-company" type="text" name="Company name" required="required" class="form-control" placeholder="" minlength="4" tabindex="0">
                             <small class="form-text text-muted">If you're unable to provide the company name, I won't be interested.</small>
                         </div>
                         <div class="form-group row required">
                             <label for="contact-form-company-website" class="form-label">Company hiring for's website:</label>
-                            <input id="contact-form-company-website" type="url" name="company-website" required="required" class="form-control" placeholder="" value="https://" tabindex="0">
+                            <input id="contact-form-company-website" type="url" name="Company website" required="required" class="form-control" placeholder="" value="https://" tabindex="0">
                         </div>
                         <div class="form-group row">
                             <label for="contact-form-job-spec" class="form-label">Job spec URL:</label>
-                            <input id="contact-form-job-spec" type="url" name="company-job-spec" class="form-control" placeholder="" value="https://" tabindex="0">
+                            <input id="contact-form-job-spec" type="url" name="Job spec" class="form-control" placeholder="" value="https://" tabindex="0">
                         </div>
                         <div class="form-group row required">
                             <label for="contact-form-compensation" class="form-label">Total maximum compensation per annum:</label>
@@ -80,15 +82,23 @@ noindex: true
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">&pound;</span>
                                 </div>
-                                <input id="contact-form-compensation" type="number" name="compensation" required="required" class="form-control" placeholder="" tabindex="0">
+                                <input id="contact-form-compensation" type="number" name="Compensation" required="required" class="form-control" placeholder="" tabindex="0">
                             </div>
                             <small class="form-text text-muted">including salary, bonus, stock (subject to experience)</small>
                         </div>
                         <div class="form-group row required">
                             <label for="contact-form-interview" class="form-label">Interview process:</label>
-                            <textarea id="contact-form-interview" type="url" name="company-interview" required="required" class="form-control" placeholder="" rows="6" tabindex="0"></textarea>
+                            <textarea id="contact-form-interview" type="url" name="Interview process" required="required" class="form-control" placeholder="" rows="6" tabindex="0"></textarea>
                             <small class="form-text text-muted">What are the interview steps?</small>
                         </div>
+                        <input type="hidden" name="g-recaptcha-response" value="" id="g-recaptcha-response">
+                        <script>
+                            grecaptcha.enterprise.ready(() => {
+                                grecaptcha.enterprise.execute('6LfSt3UlAAAAAKxzcWCO4n6OeNKqcsvOtanmEejz', {action: 'send-email'}).then((token) => {
+                                    document.getElementById('g-recaptcha-response').value = token;
+                                });
+                            });
+                        </script>
                         <div class="form-group row">
                             <button type="submit" class="btn btn-primary">Send</button>
                         </div>
