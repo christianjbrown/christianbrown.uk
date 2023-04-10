@@ -321,5 +321,10 @@ div.container {
             row-gap: 0.5em;
             width: 100%;
         }
+        p.database-consent {
+            @media print {
+                display: none;
+            }
+        }
     }
 }
