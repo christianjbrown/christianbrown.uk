@@ -1,0 +1,49 @@
+---
+layout: "global"
+title: "Christian Brown - Engineering Manager - London - Video jobs"
+description: "Video jobs"
+stylesheets:
+    - "/assets/css/video-jobs.css"
+---
+<h2>Video jobs</h2>
+<p>Looking for an engineering role in video? maybe this page will help.</p>
+<!--<h3>Filters</h3>-->
+<!--<div class="job-filters">-->
+<!--    <form>-->
+<!--        <div class="form-group row">-->
+<!--            <label for="job-country" class="col-sm-2 col-form-label">Country:</label>-->
+<!--            <div class="col-sm-10">-->
+<!--                <select class="form-control" id="job-country">-->
+<!--                    <option>All countries</option>-->
+<!--                    <option>Australia</option>-->
+<!--                    <option>United Kingdom</option>-->
+<!--                    <option>United States of America</option>-->
+<!--                </select>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </form>-->
+<!--</div>-->
+<h3>Results</h3>
+<p>There are {{ site.video_jobs | size }} matching job(s):</p>
+<div class="jobs">
+    {% for job in site.video_jobs %}
+    <div class="job">
+        <div class="job-logo">
+            <a href="{{ job.company_url }}" target="_blank">
+                <img src="/assets/images/companies/{{ job.company }}.svg" alt="{{ job.company }} logo">
+            </a>
+        </div>
+        <div class="job-details">
+            <h4>{{ job.job_title }}</h4>
+            <p>at <a href="{{ job.company_url }}" target="_blank">{{ job.company }}</a> in {{ job.country }}</p>
+            {{ job.content }}
+            <p class="small muted">Last updated: {{ job.date }}</p>
+<!--            <pre>{{ job | inspect }}</pre>-->
+        </div>
+        <div class="job-cta">
+            <button class="btn btn-primary">View</button>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+<p class="modal-footer">If I helped you find a job,&nbsp;<a href="/contact">please let me know</a>!</p>
