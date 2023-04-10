@@ -94,7 +94,7 @@ noindex: true
                         <input type="hidden" name="g-recaptcha-response" value="" id="g-recaptcha-response">
                         <script>
                             grecaptcha.enterprise.ready(() => {
-                                grecaptcha.enterprise.execute('6LfSt3UlAAAAAKxzcWCO4n6OeNKqcsvOtanmEejz', {action: 'send-email'}).then((token) => {
+                                grecaptcha.enterprise.execute('6LfSt3UlAAAAAKxzcWCO4n6OeNKqcsvOtanmEejz', {action: 'email'}).then((token) => {
                                     document.getElementById('g-recaptcha-response').value = token;
                                 });
                             });
