@@ -5,6 +5,7 @@
 @import 'fonts';
 
 $primary: $colour-accent;
+$danger: $colour-error;
 @import 'bootstrap/bootstrap';
 
 ::-webkit-scrollbar {
