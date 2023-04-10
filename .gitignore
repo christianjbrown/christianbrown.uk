@@ -6,3 +6,4 @@
 _site/
 coverage/
 node_modules/
+vendor/
