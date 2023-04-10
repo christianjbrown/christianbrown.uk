@@ -2,8 +2,6 @@
 layout: "global"
 title: "Christian Brown - Engineering Manager - London - Information for recruiters"
 description: "Information for recruiters"
-javascripts:
-    - "https://www.google.com/recaptcha/enterprise.js?render=6LfSt3UlAAAAAKxzcWCO4n6OeNKqcsvOtanmEejz"
 stylesheets:
     - "/assets/css/recruiters.css"
 noindex: true
@@ -92,6 +90,7 @@ noindex: true
                             <small class="form-text text-muted">What are the interview steps?</small>
                         </div>
                         <input type="hidden" name="g-recaptcha-response" value="" id="g-recaptcha-response">
+                        <script src="https://www.google.com/recaptcha/enterprise.js?render=6LfSt3UlAAAAAKxzcWCO4n6OeNKqcsvOtanmEejz"></script>
                         <script>
                             grecaptcha.enterprise.ready(() => {
                                 grecaptcha.enterprise.execute('6LfSt3UlAAAAAKxzcWCO4n6OeNKqcsvOtanmEejz', {action: 'email'}).then((token) => {
