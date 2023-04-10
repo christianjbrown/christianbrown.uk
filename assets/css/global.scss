@@ -18,6 +18,10 @@ $danger: $colour-error;
 
 html {
     body {
+        .required .form-label:after {
+            content: ' *';
+            color: $colour-error;
+        }
         * {
             color: $colour-grayscale-3;
         }
