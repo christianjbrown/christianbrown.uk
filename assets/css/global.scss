@@ -4,6 +4,9 @@
 @import 'vars';
 @import 'fonts';
 
+$primary: $colour-accent;
+@import 'bootstrap/bootstrap';
+
 ::-webkit-scrollbar {
     background: $colour-grayscale-3;
 }
