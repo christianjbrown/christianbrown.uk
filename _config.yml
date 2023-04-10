@@ -18,6 +18,11 @@ header_theme_color: '#ffffff'
 header_msapplication_tile_color: '#ffffff'
 
 menu:
+#  -
+#    icon: 'print'
+#    text: 'Print'
+#    link: 'javascript:window.print();'
+#    icon_alt: 'Printer icon'
   -
     icon: 'download'
     text: 'Download'
@@ -25,7 +30,7 @@ menu:
     icon_alt: 'Download icon'
   -
     icon: 'linkedin'
-    text: 'Contact me'
+    text: 'LinkedIn'
     link: 'https://www.linkedin.com/in/christianjbrown/'
     icon_alt: 'LinkedIn icon'
 
