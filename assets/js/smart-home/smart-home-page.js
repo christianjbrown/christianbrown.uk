@@ -4,8 +4,8 @@ import Time from './time.js';
 import WeatherTable from './weather-table.js';
 import HomeTemperatureTable from './home-temperature-table.js';
 
-const WEATHER_API_URL_PROD = 'https://cdn.christianbrown.uk/get-met-office-temps';
-const HOME_TEMP_API_URL_PROD = 'https://cdn.christianbrown.uk/get-smart-home-temps';
+const WEATHER_API_URL_PROD = 'https://christianbrown.global.ssl.fastly.net/get-met-office-temps';
+const HOME_TEMP_API_URL_PROD = 'https://christianbrown.global.ssl.fastly.net/get-smart-home-temps';
 
 const MS_ONE_MIN = 60 * 1000;
 const MS_FIVE_MINS = 5 * MS_ONE_MIN;
