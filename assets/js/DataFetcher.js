@@ -1,6 +1,6 @@
 'use strict';
 
-import JsonPayloadContractValidator from './json-payload-contract-validator.js';
+import JsonPayloadContractValidator from './JsonPayloadContractValidator.js';
 
 const JSON_CONTRACT = {
     'data': {
@@ -21,7 +21,7 @@ export default class DataFetcher {
      * @param {String} url
      * @param {Object} dataContract
      */
-    constructor(url, dataContract) {
+    constructor(url, dataContract = {}) {
         this.#url = url;
         this.#dataContract = dataContract;
     }

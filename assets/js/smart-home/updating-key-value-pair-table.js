@@ -1,6 +1,6 @@
 'use strict';
 
-import DataFetcher from './data-fetcher.js';
+import DataFetcher from '../DataFetcher.js';
 import Temperature from './temperature.js';
 import Time from './time.js';
 
