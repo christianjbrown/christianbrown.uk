@@ -5,9 +5,9 @@ description: "I'm a people manager and solutions architect with a background in 
 stylesheets:
     - "/assets/css/cv.css"
 javascripts:
-    - "/assets/js/cv/index.js"
-    - "https://cdn.jsdelivr.net/npm/chart.js@4.2.1/dist/chart.umd.min.js"
-    - "https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"
+    #- "/assets/js/cv/index.js"
+    #- "https://cdn.jsdelivr.net/npm/chart.js@4.2.1/dist/chart.umd.min.js"
+    #- "https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"
 menu:
     #  -
     #    icon: 'print'
@@ -41,7 +41,7 @@ schema:
 <p class="lead">{{ page.description }}</p>{% if site.current_role %}
                 <div class="row" id="cv">
                     <div id="cv-main">
-                        <div class="cv-section">
+                        <div class="cv-section" id="cv-current-role">
                             <h2>Current role</h2>{% for experience in site.current_role reversed %}
                             {% include cv-experience.html %}{% endfor %}
                         </div>{% endif %}{% if site.previous_roles %}
@@ -51,14 +51,14 @@ schema:
                         </div>{% endif %}{% if site.education %}
                     </div>
                     <div id="cv-side">
-                        <div class="cv-section">
-                            <h2>My day</h2>
-                            <p>The “hats I wear” each day varies, but in my current role, on average, it's a bit like this:</p>
-                            <div id="cv-chart-area">
-                                <canvas id="cv-chart"></canvas>
-                            </div>
-                            <p>I'm also known for making developer tooling and creating beautiful high-quality documentation.</p>
-                        </div>
+<!--                        <div class="cv-section">-->
+<!--                            <h2>My day</h2>-->
+<!--                            <p>The “hats I wear” each day varies, but in my current role, on average, it's a bit like this:</p>-->
+<!--                            <div id="cv-chart-area">-->
+<!--                                <canvas id="cv-chart"></canvas>-->
+<!--                            </div>-->
+<!--                            <p>I'm also known for making developer tooling and creating beautiful high-quality documentation.</p>-->
+<!--                        </div>-->
                         {%- if site.data.cv-verticals %}
                         <div class="cv-section">
                             <h2>Specialty Verticals</h2>
@@ -78,16 +78,17 @@ schema:
                         <div class="cv-section">
                             <h2>Education</h2>{% for experience in site.education reversed %}
                             {% include cv-experience-side.html %}{% endfor %}
-                        </div>{% endif %}{% if site.volunteering %}
-                        <div class="cv-section">
-                            <h2>Volunteering</h2>{% for experience in site.volunteering reversed %}
-                            {% include cv-experience-side.html %}{% endfor %}
                         </div>{% endif %}{% if site.side_projects %}
                         <div class="cv-section">
                             <h2>Side projects</h2>
                             <div id="cv-side-projects">{% for side_project in site.side_projects %}
-                            {% include cv-side-project.html %}{% endfor %}
+                                {% if side_project.hide != true %}{% include cv-side-project.html %}
+                                {% endif %}{% endfor %}
                             </div>
+                        </div>{% endif %}{% if site.volunteering %}
+                        <div class="cv-section">
+                            <h2>Volunteering</h2>{% for experience in site.volunteering reversed %}
+                            {% include cv-experience-side.html %}{% endfor %}
                         </div>{% endif %}
                     </div>
                 </div>
