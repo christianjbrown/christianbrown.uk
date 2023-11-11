@@ -1,26 +1,26 @@
 
-url: 'https://christianbrown.uk'
+url: "https://christianbrown.uk"
 
-site_locale: 'en_GB'
-site_name: 'Christian Brown'
-site_author: 'Christian Brown'
+site_locale: "en_GB"
+site_name: "Christian Brown"
+site_author: "Christian Brown"
 site_image_name: "Christian Brown's avatar"
 
-header_firstname: 'Christian'
-header_lastname: 'Brown'
-header_job_title: 'Engineering Manager'
-header_location: 'London, UK'
+header_firstname: "Christian"
+header_lastname: "Brown"
+header_job_title: "Engineering Manager"
+header_location: "London, UK"
 
-google_analytics: 'G-9Z9L9Z6QHQ'
+google_analytics_id: "G-9Z9L9Z6QHQ"
 
-header_safari_tab_mask_color: '#5bbad5'
-header_theme_color: '#ffffff'
-header_msapplication_tile_color: '#ffffff'
+header_safari_tab_mask_color: "#5bbad5"
+header_theme_color: "#ffffff"
+header_msapplication_tile_color: "#ffffff"
 
 collections:
-  - 'previous_roles'
-  - 'current_role'
-  - 'education'
-  - 'volunteering'
-  - 'side_projects'
-  - 'video_jobs'
+  - "previous_roles"
+  - "current_role"
+  - "education"
+  - "volunteering"
+  - "side_projects"
+  - "video_jobs"
