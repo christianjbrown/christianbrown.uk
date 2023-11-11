@@ -92,6 +92,9 @@ html {
                         margin-bottom: 4px;
                     }
                     nav {
+                        @media print {
+                            display: none;
+                        }
                         a {
                             img.header-data-links-icon {
                                 vertical-align: middle;
