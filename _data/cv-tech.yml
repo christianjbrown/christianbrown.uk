@@ -1,15 +1,4 @@
 -
-    name: 'JavaScript'
-    icon: 'javascript.svg'
--
-    name: 'TypeScript'
-    icon: 'typescript.svg'
-    link: 'https://www.typescriptlang.org/'
--
-    name: 'Node.js'
-    icon: 'node-js.svg'
-    link: 'https://nodejs.org/'
--
     name: 'PHP'
     icon: 'php.svg'
     link: 'https://www.php.net/'
@@ -21,6 +10,17 @@
     name: 'Go'
     icon: 'golang.svg'
     link: 'https://go.dev/'
+-
+    name: 'JavaScript'
+    icon: 'javascript.svg'
+-
+    name: 'TypeScript'
+    icon: 'typescript.svg'
+    link: 'https://www.typescriptlang.org/'
+-
+    name: 'Node.js'
+    icon: 'node-js.svg'
+    link: 'https://nodejs.org/'
 -
     name: 'PostgreSQL'
     icon: 'postgresql.svg'

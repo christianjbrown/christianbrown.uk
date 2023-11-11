@@ -9,11 +9,11 @@ $danger: $colour-error;
 @import 'bootstrap/bootstrap';
 
 ::-webkit-scrollbar {
-    background: $colour-grayscale-3;
+    //background: $colour-grayscale-3;
 }
 ::-webkit-scrollbar-thumb {
-    background: $colour-accent;
-    -webkit-border-radius: 1em;
+    //background: $colour-accent;
+    //-webkit-border-radius: 1em;
 }
 
 html {
