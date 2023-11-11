@@ -60,7 +60,7 @@ schema:
 <!--                            <p>I'm also known for making developer tooling and creating beautiful high-quality documentation.</p>-->
 <!--                        </div>-->
                         {%- if site.data.cv-verticals %}
-                        <div class="cv-section">
+                        <div class="cv-section cv-section-verticals">
                             <h2>Specialty Verticals</h2>
                             <p>I have subject-matter expertise in:</p>
                             <div id="cv-verticals">{% for vertical in site.data.cv-verticals %}
@@ -68,28 +68,30 @@ schema:
                             </div>
                         </div>{% endif -%}
                         {%- if site.data.cv-tech %}
-                        <div class="cv-section">
+                        <div class="cv-section cv-section-tech">
                             <h2>Tech</h2>
                             <p>Some of the tech, frameworks and platforms I have recent industry experience with include:</p>
                             <div id="cv-techs">{% for tech in site.data.cv-tech %}
                                 {% include cv-tech.html %}{% endfor %}
                             </div>
-                        </div>{% endif %}
-                        <div class="cv-section">
-                            <h2>Education</h2>{% for experience in site.education reversed %}
-                            {% include cv-experience-side.html %}{% endfor %}
                         </div>{% endif %}{% if site.side_projects %}
-                        <div class="cv-section">
+                        <div class="cv-section cv-section-side-projects">
                             <h2>Side projects</h2>
                             <div id="cv-side-projects">{% for side_project in site.side_projects %}
                                 {% if side_project.hide != true %}{% include cv-side-project.html %}
                                 {% endif %}{% endfor %}
                             </div>
-                        </div>{% endif %}{% if site.volunteering %}
-                        <div class="cv-section">
+                        </div>{% endif %}
+                        <div class="cv-section cv-section-education">
+                            <h2>Education</h2>{% for experience in site.education reversed %}
+                            {% include cv-experience-side.html %}{% endfor %}
+                        </div>{% endif %}
+                        {% if site.volunteering %}
+                        <div class="cv-section cv-section-volunteering">
                             <h2>Volunteering</h2>{% for experience in site.volunteering reversed %}
                             {% include cv-experience-side.html %}{% endfor %}
                         </div>{% endif %}
                     </div>
                 </div>
-                <p class="database-consent modal-footer">I do not consent to being added to any database or mailing list.</p>
+                <p class="modal-footer footer-database-consent">I do not consent to being added to any database or mailing list.</p>
+                <p class="modal-footer footer-print">This CV is available online at {{ site.url }}</p>
