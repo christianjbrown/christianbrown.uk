@@ -358,12 +358,10 @@ div.container {
             row-gap: 0.5em;
             width: 100%;
         }
-        p.footer-database-consent {
-            @media print {
-                display: none;
-            }
-        }
         p.footer-print {
+            width: 100%;
+            display: block;
+            text-align: center;
             @media screen {
                 display: none;
             }
