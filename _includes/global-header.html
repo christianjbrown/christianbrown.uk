@@ -8,6 +8,6 @@
                     <p><strong>{{ site.header_job_title }}</strong></p>
                     <p>{{ site.header_location }}</p>{%- if page.menu %}
                     <nav>{% for nav in page.menu %}
-                        {% if page.menu.first != nav -%}&nbsp;&nbsp;&nbsp;{%- endif -%}<a href="{{ nav.link }}" id="cv-menu-{{ nav.icon }}"><img src="/assets/images/icons/icon-{{ nav.icon }}.svg" alt="{{ nav.icon_alt }}" class="header-data-links-icon"> {{ nav.text }}</a>{% endfor %}
+                        {% if page.menu.first != nav -%}&nbsp;&nbsp;&nbsp;{%- endif -%}<a href="{{ nav.link }}"{% assign firstchar = nav.link | slice: 0 %}{% if firstchar != '/' %} target="_blank"{% endif %} id="cv-menu-{{ nav.icon }}"><img src="/assets/images/icons/icon-{{ nav.icon }}.svg" alt="{{ nav.icon_alt }}" class="header-data-links-icon"> {{ nav.text }}</a>{% endfor %}
                     </nav>{% endif %}
                 </div>
