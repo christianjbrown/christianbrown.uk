@@ -20,6 +20,11 @@ export default class Country {
         return value;
     }
 
+    /**
+     * @private
+     *
+     * @returns {Promise<*>}
+     */
     async #getTimezones() {
         if (!this.#timezones) {
             const { default: timezones } = await import('../data/timezones.json', { assert: { type: 'json' } })

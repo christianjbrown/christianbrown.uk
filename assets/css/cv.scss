@@ -17,16 +17,48 @@ div.container {
             line-height: 1.3;
         }
         div#cv {
-            div#cv-main {
-                flex: 6;
+            @media screen {
+                div#cv-main {
+                    flex: 3;
+                    min-width: 40em;
+                }
+                div#cv-side {
+                    flex: 1;
+                }
+                align-content: flex-start;
+                display: flex;
+                flex-direction: row;
+                flex-wrap: wrap;
             }
-            div#cv-side {
-                flex: 1;
+            @media print {
+                div#cv-side {
+                    .cv-section-education {
+                        width: 100%;
+                        order: 1;
+                    }
+                    .cv-section-volunteering {
+                        width: 100%;
+                        order: 2;
+                    }
+                    .cv-section-verticals {
+                        order: 3;
+                    }
+                    .cv-section-side-projects {
+                        order: 4;
+                    }
+                    .cv-section-tech {
+                        order: 5;
+                    }
+                    .cv-section-side-projects,
+                    .cv-section-verticals,
+                    .cv-section-tech {
+                        max-width: 50%;
+                    }
+                    display: flex;
+                    flex-direction: row;
+                    flex-wrap: wrap;
+                }
             }
-            align-content: flex-start;
-            display: flex;
-            flex-direction: row;
-            flex-wrap: wrap;
         }
         div.cv-section {
             @media print {
@@ -72,7 +104,9 @@ div.container {
                 div.cv-side-project-logo {
                     img {
                         width: 1.6em;
-                        filter: grayscale(100%) brightness(70%) contrast(2);
+                        &:not(:hover) {
+                            filter: grayscale(100%) brightness(70%) contrast(2);
+                        }
                     }
                     min-width: 2.5em;
                     text-align: center;
@@ -144,7 +178,9 @@ div.container {
                     max-height: 2.3em;
                     max-width: 2.8em;
                     margin-bottom: 0.3em;
-                    filter: grayscale(100%) brightness(70%) contrast(2);
+                    &:not(:hover) {
+                        filter: grayscale(100%) brightness(70%) contrast(2);
+                    }
                 }
                 span, span a {
                     color: $colour-grayscale-4;
@@ -156,8 +192,8 @@ div.container {
                 min-width: 4.5em;
                 text-align: center;
             }
-            align-content: flex-end;
-            align-items: flex-end;
+            align-content: space-evenly;
+            align-items: stretch;
             column-gap: 1em;
             display: flex;
             flex-direction: row;
@@ -168,7 +204,9 @@ div.container {
             width: 100%;
         }
         div#cv-previous-roles.cv-section img {
-            filter: grayscale(100%) brightness(70%) contrast(2);
+            &:not(:hover) {
+                filter: grayscale(100%) brightness(70%) contrast(2);
+            }
         }
         div.cv-experience {
             @media print {
@@ -249,7 +287,9 @@ div.container {
                     img {
                         max-width: 2.5em;
                         max-height: 2.5em;
-                        filter: grayscale(100%) brightness(70%) contrast(2);
+                        &:not(:hover) {
+                            filter: grayscale(100%) brightness(70%) contrast(2);
+                        }
                     }
                     width: 3em;
                     display: flex;
@@ -298,10 +338,6 @@ div.container {
                 }
             }
             div.cv-experience-description {
-                * {
-                    margin-bottom: 0.5em;
-                    line-height: 1.3;
-                }
                 a {
                     font-weight: normal;
                     color: $colour-grayscale-3;
@@ -322,8 +358,13 @@ div.container {
             row-gap: 0.5em;
             width: 100%;
         }
-        p.database-consent {
+        p.footer-database-consent {
             @media print {
+                display: none;
+            }
+        }
+        p.footer-print {
+            @media screen {
                 display: none;
             }
         }
