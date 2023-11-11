@@ -192,8 +192,7 @@ div.container {
                 min-width: 4.5em;
                 text-align: center;
             }
-            align-content: space-evenly;
-            align-items: stretch;
+            align-items: flex-end;
             column-gap: 1em;
             display: flex;
             flex-direction: row;
