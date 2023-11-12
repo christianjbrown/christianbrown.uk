@@ -1,6 +1,6 @@
 'use strict';
 
-import WeatherTable from './weather-table.js';
+import MetWeatherTable from './MetWeatherTable.js';
 import FetchMock from 'jest-fetch-mock';
 
 FetchMock.enableMocks();
@@ -71,14 +71,14 @@ test.each([
         },
         '<tbody><tr><td><span class="error">Error: Data at path "data.precipitation" is required. Try again later.</span></td></tr></tbody>',
     ],
-])('WeatherTable.update',
+])('MetWeatherTable.update',
     /**
      * @param {Object} data
      * @param {String} expected
      */
     async (data, expected) => {
         const tableDomObj = document.createElement('table');
-        const weatherTable = new WeatherTable(tableDomObj, 'test-url');
+        const weatherTable = new MetWeatherTable(tableDomObj, 'test-url');
 
         fetch.mockResponseOnce(JSON.stringify(data));
         await weatherTable.update();

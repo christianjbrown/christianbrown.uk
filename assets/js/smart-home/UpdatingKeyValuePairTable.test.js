@@ -1,6 +1,6 @@
 'use strict';
 
-import UpdatingKeyValuePairTable from './updating-key-value-pair-table.js';
+import UpdatingKeyValuePairTable from './UpdatingKeyValuePairTable.js';
 import FetchMock from 'jest-fetch-mock';
 
 FetchMock.enableMocks();

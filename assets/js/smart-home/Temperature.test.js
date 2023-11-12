@@ -1,6 +1,6 @@
 'use strict';
 
-import Temperature from './temperature.js';
+import Temperature from './Temperature.js';
 
 test('Time.formatC', () => {
     const temperatureObj = new Temperature(42.786);

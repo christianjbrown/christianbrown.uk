@@ -1,6 +1,6 @@
 'use strict';
 
-import UpdatingKeyValuePairTable from './updating-key-value-pair-table.js';
+import UpdatingKeyValuePairTable from './UpdatingKeyValuePairTable.js';
 
 const JSON_CONTRACT = {
     'temp': {'type': 'number', 'keyRequired': true, 'cannotBeEmpty': true},
@@ -9,7 +9,7 @@ const JSON_CONTRACT = {
     'precipitation': {'type': 'number', 'keyRequired': true, 'cannotBeEmpty': true},
 };
 
-export default class WeatherTable extends UpdatingKeyValuePairTable {
+export default class MetWeatherTable extends UpdatingKeyValuePairTable {
     /**
      * @param {Object} data
      */
