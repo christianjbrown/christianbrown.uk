@@ -12,4 +12,4 @@ link: "https://www.ebay.com/"
 
 * Under my leadership, we have transitioned from a project-based to a product-centric, ownership-driven model, leading to a more than 50% reduction in production issues and customer-reported defects. I empower engineers to prioritise long-term architecture and maintainability over short term results.
 
-* My role encompasses six-month planning, project management, stakeholder engagement, staff development, performance calibration, and overseeing hiring and career advancement.
+* My responsibilities include six-month planning, project management, stakeholder engagement, staff development, performance calibration, and overseeing hiring and career advancement.
