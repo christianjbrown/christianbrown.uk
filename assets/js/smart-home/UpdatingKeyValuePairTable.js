@@ -1,8 +1,8 @@
 'use strict';
 
 import DataFetcher from '../DataFetcher.js';
-import Temperature from './temperature.js';
-import Time from './time.js';
+import Temperature from './Temperature.js';
+import Time from './Time.js';
 
 export default class UpdatingKeyValuePairTable {
     #domTable;

@@ -1,6 +1,6 @@
 'use strict';
 
-import HomeTemperatureTable from './home-temperature-table.js';
+import SmartHomeTemperatureTable from './SmartHomeTemperatureTable.js';
 import FetchMock from 'jest-fetch-mock';
 
 FetchMock.enableMocks();
@@ -103,14 +103,14 @@ test.each([
         },
         '<tbody><tr><td><span class="error">Error: Data at path "data.devices[].temp" is required. Try again later.</span></td></tr></tbody>',
     ],
-])('HomeTemperatureTable.update',
+])('SmartHomeTemperatureTable.update',
     /**
      * @param {Object} data
      * @param {String} expected
      */
     async (data, expected) => {
         const tableDomObj = document.createElement('table');
-        const homeTemperatureTable = new HomeTemperatureTable(tableDomObj, 'test-url');
+        const homeTemperatureTable = new SmartHomeTemperatureTable(tableDomObj, 'test-url');
 
         fetch.mockResponseOnce(JSON.stringify(data));
         await homeTemperatureTable.update();
