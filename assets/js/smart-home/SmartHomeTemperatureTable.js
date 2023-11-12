@@ -1,6 +1,6 @@
 'use strict';
 
-import UpdatingKeyValuePairTable from './updating-key-value-pair-table.js';
+import UpdatingKeyValuePairTable from './UpdatingKeyValuePairTable.js';
 
 const JSON_CONTRACT = {
     'averageTempDegrees': {'type': 'number', 'keyRequired': true, 'cannotBeEmpty': true},
@@ -18,7 +18,7 @@ const JSON_CONTRACT = {
     },
 };
 
-export default class HomeTemperatureTable extends UpdatingKeyValuePairTable {
+export default class SmartHomeTemperatureTable extends UpdatingKeyValuePairTable {
 
     /**
      * @param {Object} data

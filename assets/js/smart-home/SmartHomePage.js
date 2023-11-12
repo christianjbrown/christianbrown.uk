@@ -1,8 +1,8 @@
 'use strict';
 
-import Time from './time.js';
-import WeatherTable from './weather-table.js';
-import HomeTemperatureTable from './home-temperature-table.js';
+import Time from './Time.js';
+import MetWeatherTable from './MetWeatherTable.js';
+import SmartHomeTemperatureTable from './SmartHomeTemperatureTable.js';
 
 const WEATHER_API_URL_PROD = 'https://cdn.christianbrown.uk/get-met-office-temps';
 const HOME_TEMP_API_URL_PROD = 'https://cdn.christianbrown.uk/get-smart-home-temps';
@@ -24,10 +24,10 @@ export default class SmartHomePage {
         this.#clockDom = SmartHomePage.#find(clockDomSelector);
 
         const weatherTableDom =  SmartHomePage.#find(weatherTableDomSelector);
-        this.#weatherTableObj = new WeatherTable(weatherTableDom,WEATHER_API_URL_PROD);
+        this.#weatherTableObj = new MetWeatherTable(weatherTableDom,WEATHER_API_URL_PROD);
 
         const homeTemperatureTableDom =  SmartHomePage.#find(homeTemperatureTableDomSelector);
-        this.#homeTemperatureTableObj = new HomeTemperatureTable(homeTemperatureTableDom, HOME_TEMP_API_URL_PROD);
+        this.#homeTemperatureTableObj = new SmartHomeTemperatureTable(homeTemperatureTableDom, HOME_TEMP_API_URL_PROD);
     }
 
     /**

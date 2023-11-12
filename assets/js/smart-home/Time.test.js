@@ -1,6 +1,6 @@
 'use strict';
 
-import Time from './time.js';
+import Time from './Time.js';
 
 test('Time', () => {
     const timeObj = new Time();
@@ -10,7 +10,7 @@ test('Time', () => {
 test('Time.formatHour', () => {
     const timeObj = new Time(Date.parse('2023-01-01 20:40:30'));
     const actual = timeObj.formatHour();
-    expect(actual).toBe('20:40 (8:40 pm)');
+    expect(actual).toBe('20:40 (8:40 pm)');
 });
 
 test.each(
