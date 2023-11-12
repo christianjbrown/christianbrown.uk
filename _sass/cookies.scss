@@ -1,0 +1,70 @@
+
+@import 'vars';
+
+html {
+    body {
+        div#cookies {
+            @media print {
+                display: none !important;
+            }
+            div.cookies-text {
+                a {
+                    text-decoration: underline;
+                    font-weight: normal;
+                }
+
+                background-color: white;
+                border-radius: 0.5em;
+                border: 1px solid black;
+                color: black;
+                padding: 1em;
+                width: 15em;
+            }
+            div.cookies-options {
+                button {
+                    &#cookies-accept {
+                        background-color: $colour-accent;
+                        border: 1px solid white;
+                        color: white;
+                    }
+
+                    &#cookies-decline {
+                        background-color: $colour-grayscale-2;
+                        border: 1px solid black;
+                        color: black;
+                    }
+
+                    cursor: pointer;
+                    width: 9em;
+                    padding: 0.5em;
+                }
+
+                align-items: center;
+                column-gap: 1em;
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+            }
+            align-items: center;
+            background-color: rgba(0, 0, 0, 0.7);
+            border-radius: 0.5em;
+            border: 1px solid white;
+            display: none;
+            flex-flow: column;
+            height: 13em;
+            justify-content: center;
+            left: calc(50% - 13em);
+            left: -moz-calc(50% - 13em);
+            left: -webkit-calc(50% - 13em);
+            margin: auto;
+            padding: 1em;
+            position: fixed;
+            row-gap: 1em;
+            top: calc(30% - 6em);
+            top: -moz-calc(30% - 6em);
+            top: -webkit-calc(30% - 6em);
+            width: 25em;
+            z-index: 100;
+        }
+    }
+}
