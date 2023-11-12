@@ -33,11 +33,17 @@ window.addEventListener('load',
                         data: [30, 30, 20, 20],
                         borderColor: '#595959',
                         backgroundColor: [
-                            '#75923C',
-                            '#EE8203',
-                            '#699ABA',
-                            '#7F7F7F',
+                            '#222',
+                            '#444',
+                            '#666',
+                            '#888',
                         ],
+                        // backgroundColor: [
+                        //     '#75923C',
+                        //     '#EE8203',
+                        //     '#699ABA',
+                        //     '#7F7F7F',
+                        // ],
                     }
                 ]
             },

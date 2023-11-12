@@ -6,7 +6,11 @@
 
 @page {
     size: A4 portrait;
-    margin: 1cm 1cm 1.5cm 1cm;
+    margin: 1cm 1cm 1cm 1cm;
+    //@bottom-right-corner {
+    //    text-align: right;
+    //    content: "Page " counter(page);
+    //}
 }
 
 div.container {
@@ -17,54 +21,26 @@ div.container {
             line-height: 1.3;
         }
         div#cv {
-            @media screen {
-                div#cv-main {
-                    flex: 3;
-                    min-width: 28em;
-                }
-                div#cv-side {
-                    flex: 1;
-                }
-                align-content: flex-start;
-                display: flex;
-                flex-direction: row;
-                flex-wrap: wrap;
-            }
             @media print {
-                div#cv-side {
-                    .cv-section-education {
-                        width: 100%;
-                        order: 1;
-                    }
-                    .cv-section-volunteering {
-                        width: 100%;
-                        order: 2;
-                    }
-                    .cv-section-verticals {
-                        order: 3;
-                    }
-                    .cv-section-side-projects {
-                        order: 4;
-                    }
-                    .cv-section-tech {
-                        order: 5;
-                    }
-                    .cv-section-side-projects,
-                    .cv-section-verticals,
-                    .cv-section-tech {
-                        max-width: 50%;
-                    }
-                    display: flex;
-                    flex-direction: row;
-                    flex-wrap: wrap;
+                .cv-section-tech {
+                    margin-bottom: 6em;
                 }
             }
+            div#cv-main {
+                flex: 3;
+                min-width: 28em;
+            }
+            div#cv-side {
+                flex: 1;
+            }
+            align-content: flex-start;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
         }
         div.cv-section {
-            @media print {
-                &:not(#cv-previous-roles) {
-                    break-inside: avoid;
-                }
+            &:not(#cv-previous-roles) {
+                break-inside: avoid;
             }
             h2 {
                 border-bottom: 1px solid $colour-grayscale-1;
@@ -86,20 +62,15 @@ div.container {
             width: 100%;
         }
         div#cv-chart-area {
-            @media print {
-                break-inside: avoid;
-            }
             #cv-chart {
                 margin: 0 auto;
                 max-width: 17em;
             }
-            width: 100%;
+            break-inside: avoid;
             padding-bottom: 1em;
+            width: 100%;
         }
         div#cv-side-projects {
-            @media print {
-                break-inside: avoid;
-            }
             div.cv-side-project {
                 div.cv-side-project-logo {
                     img {
@@ -133,6 +104,7 @@ div.container {
             }
             align-content: flex-start;
             align-items: flex-start;
+            break-inside: avoid;
             display: flex;
             flex-direction: column;
             flex-wrap: wrap;
@@ -141,9 +113,6 @@ div.container {
             row-gap: 0.2em;
         }
         div#cv-verticals {
-            @media print {
-                break-inside: avoid;
-            }
             div.cv-vertical {
                 img {
                     max-height: 2.5em;
@@ -161,6 +130,7 @@ div.container {
             }
             align-content: center;
             align-items: flex-start;
+            break-inside: avoid;
             column-gap: 0.5em;
             display: flex;
             flex-direction: row;
@@ -170,9 +140,6 @@ div.container {
             width: 100%;
         }
         div#cv-techs {
-            @media print {
-                break-inside: avoid;
-            }
             div.cv-tech {
                 img {
                     max-height: 2.3em;
@@ -194,6 +161,7 @@ div.container {
             }
             align-items: flex-end;
             column-gap: 1em;
+            break-inside: avoid;
             display: flex;
             flex-direction: row;
             flex-wrap: wrap;
@@ -208,9 +176,6 @@ div.container {
             }
         }
         div.cv-experience {
-            @media print {
-                break-inside: avoid;
-            }
             div.cv-experience-details {
                 div.cv-experience-logo, div.cv-experience-logo a {
                     img {
@@ -270,6 +235,7 @@ div.container {
             }
             align-content: flex-start;
             align-items: flex-start;
+            break-inside: avoid;
             display: flex;
             flex-direction: column;
             flex-wrap: wrap;
@@ -278,9 +244,6 @@ div.container {
             width: 100%;
         }
         div.cv-experience-side {
-            @media print {
-                break-inside: avoid;
-            }
             div.cv-experience-details {
                 div.cv-experience-logo, div.cv-experience-logo a {
                     img {
@@ -350,6 +313,7 @@ div.container {
             }
             align-content: flex-start;
             align-items: flex-start;
+            break-inside: avoid;
             display: flex;
             flex-direction: column;
             flex-wrap: wrap;
@@ -357,13 +321,15 @@ div.container {
             row-gap: 0.5em;
             width: 100%;
         }
-        p.footer-print {
-            width: 100%;
-            display: block;
-            text-align: center;
+        div.footer-print {
             @media screen {
                 display: none;
             }
+            display: table-cell;
+            height: 98vh;
+            text-align: right;
+            vertical-align: bottom;
+            width: 100vw;
         }
     }
 }
