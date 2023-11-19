@@ -1,14 +1,14 @@
 <div class="cv-experience-side">
                                 <div class="cv-experience-details">{% if experience.logo %}
                                     <div class="cv-experience-logo">
-                                        {% if experience.link %}<a href="{{ experience.link }}" target="_blank">{% endif %}<img src="/assets/images/cv/experience/{{ experience.logo }}" alt="{{ experience.organisation }} logo">{% if experience.link %}</a>{% endif %}
+                                        {% if experience.link %}<a href="{{ experience.link }}" target="_blank" title="{{ experience.organisation }}">{% endif %}<img src="/assets/images/cv/experience/{{ experience.logo }}" alt="{{ experience.organisation }} logo">{% if experience.link %}</a>{% endif %}
                                     </div>{% endif %}{% if experience.title %}
                                     <div class="cv-experience-title">
                                         <h3>{{ experience.title }}</h3>
                                     </div>
                                 </div>{% endif %}{% if experience.organisation %}
                                 <div class="cv-experience-organisation">
-                                    <p>{% if experience.link %}<a href="{{ experience.link }}" target="_blank">{% endif %}{{ experience.organisation }}{% if experience.link %}</a>{% endif %}</p>
+                                    <p>{% if experience.link %}<a href="{{ experience.link }}" target="_blank" title="{{ experience.organisation }}">{% endif %}{{ experience.organisation }}{% if experience.link %}</a>{% endif %}</p>
                                 </div>{% endif %}{% if experience.location %}
                                 <div class="cv-experience-location">
                                     <p>{{ experience.location }}</p>
