@@ -7,7 +7,7 @@
     icon: 'symfony.svg'
     link: 'https://symfony.com/'
 -
-    name: 'Go'
+    name: 'Go/Golang'
     icon: 'golang.svg'
     link: 'https://go.dev/'
 -
