@@ -14,8 +14,6 @@ export default class Time {
 
     /**
      * @param {Number} timestamp
-     * @param {String} timezone
-     * @param {String} locale
      */
     constructor(timestamp = Date.now(), timezone = DEFAULT_TIMEZONE, locale = DEFAULT_LOCALE) {
         this.#timestamp = timestamp;
@@ -47,51 +45,44 @@ export default class Time {
     /**
      * Returns a string like "19:53 (7:53 pm)".
      *
-     * @returns {String}
-     */
-    formatHour() {
-        return this.#formatHour24()+' ('+this.#formatHour12()+')';
-    }
-
-    /**
-     * Returns a string like "19:53".
+     * @param {Boolean} includeDate
      *
      * @returns {String}
      */
-    #formatHour24() {
-        const formatConfig = {
-            'timeZone': this.#timezone,
-            'hourCycle': 'h23',
-            'hour': '2-digit',
-            'minute': '2-digit'
-        };
-        return this.#format(formatConfig);
-    }
+    formatUserFriendlyHour(includeDate = false) {
+        const date = new Date(this.#timestamp);
 
-    /**
-     * Returns a string like "7:53 pm".
-     *
-     * @returns {String}
-     */
-    #formatHour12() {
-        const formatConfig = {
-            'timeZone': this.#timezone,
-            'hour': 'numeric',
-            'minute': '2-digit',
-            'hourCycle': 'h12',
-        };
-        return this.#format(formatConfig);
-    }
+        // using all this toLocaleString stuff because it handles the timezone correctly using daylight savings
+        const hour = parseInt(date.toLocaleString(this.#locale, {'timezone': this.#timezone, 'hour': 'numeric'}));
+        const min = parseInt(date.toLocaleString(this.#locale, {'timezone': this.#timezone, 'minute': 'numeric'}));
+        let str;
+        if (hour === 0 && min === 0) {
+            str = 'midnight';
+        } else if (hour === 12 && min === 0) {
+            str = 'noon';
+        } else {
+            // toLocaleString could do some of this with '2-digit', but it also has a bug
+            // with hour12: true and hourCycle: 'h12' at noon incorrectly showing '00:00'
+            const hour0pad = hour < 10 ? '0'+hour : hour;
+            const min0pad = min < 10 ? '0'+min : min;
+            str = hour0pad+':'+min0pad;
+            if (hour > 12) {
+                str += ' ('+(hour-12);
+                if (min > 0) {
+                    str +=':'+min0pad;
+                }
+                str += 'pm)';
+            }
+        }
 
-    /**
-     * Returns a formatted time string.
-     *
-     * @param {DateTimeFormatOptions|Object} formatConfig
-     *
-     * @returns {string}
-     */
-    #format(formatConfig) {
-        const format = new Intl.DateTimeFormat(this.#locale, formatConfig);
-        return format.format(this.#timestamp);
+        if (includeDate) {
+            // toLocaleDateString doesn't handle adding 'st', 'nd', 'rd', 'th' to the day of the month
+            const dayOfMonth = parseInt(date.toLocaleString(this.#locale, {'timezone': this.#timezone, 'day': 'numeric'}));
+            const suffix = dayOfMonth % 10 === 1 && dayOfMonth !== 11 ? 'st' : dayOfMonth % 10 === 2 && dayOfMonth !== 12 ? 'nd' : dayOfMonth % 10 === 3 && dayOfMonth !== 13 ? 'rd' : 'th';
+            const dayOfWeek = date.toLocaleString(this.#locale, {'timezone': this.#timezone, 'weekday': 'short'});
+            str += ' on '+dayOfWeek+' '+dayOfMonth+suffix+' '+date.toLocaleDateString(this.#locale, {'timezone': this.#timezone, 'month': 'short'});
+        }
+
+        return str;
     }
 }

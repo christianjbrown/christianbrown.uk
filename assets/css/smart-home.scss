@@ -16,7 +16,7 @@ div.container {
         div.smart-home-data {
             span.update-time {
                 display: none;
-                margin-left: 1em;
+                margin-left: 0.5em;
                 color: $colour-grayscale-2;
             }
             div {
@@ -45,7 +45,7 @@ div.container {
                                 }
                                 display: block;
                             }
-                            padding: 1em;
+                            padding: 1em 0.5em 1em 0.5em;
                             vertical-align: text-top;
                         }
                         td:last-child {
