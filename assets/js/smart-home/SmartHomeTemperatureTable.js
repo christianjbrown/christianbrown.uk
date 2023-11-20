@@ -25,11 +25,6 @@ export default class SmartHomeTemperatureTable extends UpdatingKeyValuePairTable
      * @param {Object} data
      */
     _renderUpdate(data) {
-        if (data['averageTempTimestamp']) {
-            const timeObj = new Time(data['averageTempTimestamp'] * 1000);
-            const timeDiff = timeObj.formatTimeAgo();
-            // this._updateDateSpan('As of '+timeDiff);
-        }
         this._addTempTableRow('Average', data['averageTempDegrees'], data['averageTempTimestamp'], false, true);
         const that = this;
         data['devices'].forEach(
