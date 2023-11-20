@@ -14,6 +14,11 @@ div.container {
             font-size: 1.1em;
         }
         div.smart-home-data {
+            span.update-time {
+                display: none;
+                margin-left: 2em;
+                color: $colour-grayscale-2;
+            }
             div {
                 table {
                     tr {
