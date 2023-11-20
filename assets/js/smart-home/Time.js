@@ -78,7 +78,7 @@ export default class Time {
             'timeZone': this.#timezone,
             'hour': 'numeric',
             'minute': '2-digit',
-            'hour12': true,
+            'hourCycle': 'h12',
         };
         return this.#format(formatConfig);
     }
@@ -91,7 +91,7 @@ export default class Time {
      * @returns {string}
      */
     #format(formatConfig) {
-        const format = new Intl.DateTimeFormat(this.#locale , formatConfig);
+        const format = new Intl.DateTimeFormat(this.#locale, formatConfig);
         return format.format(this.#timestamp);
     }
 }
