@@ -4,8 +4,10 @@ import Time from './Time.js';
 import MetWeatherTable from './MetWeatherTable.js';
 import SmartHomeTemperatureTable from './SmartHomeTemperatureTable.js';
 
-const WEATHER_API_URL_PROD = 'http://127.0.0.1:8081/';
-const HOME_TEMP_API_URL_PROD = 'http://127.0.0.1:8080/';
+const WEATHER_API_URL_PROD = 'https://cdn.christianbrown.uk/get-met-office-temps';
+const HOME_TEMP_API_URL_PROD = 'https://cdn.christianbrown.uk/get-smart-home-temps';
+// const WEATHER_API_URL_PROD = 'http://127.0.0.1:8081/';
+// const HOME_TEMP_API_URL_PROD = 'http://127.0.0.1:8080/';
 
 const MS_ONE_MIN = 60 * 1000;
 const MS_FIVE_MINS = 5 * MS_ONE_MIN;
