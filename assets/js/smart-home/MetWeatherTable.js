@@ -17,8 +17,8 @@ export default class MetWeatherTable extends UpdatingKeyValuePairTable {
     _renderUpdate(data) {
         if (data['valid_from']) {
             const timeObj = new Time(data['valid_from'] * 1000);
-            const timeDiff = timeObj.formatTimeAgo();
-            this._updateDateSpan('From '+timeDiff);
+            const timeDiff = timeObj.formatHour();
+            this._updateDateSpan('Met Office forecast for '+timeDiff);
         }
         this._addTempTableRow('Temperature', data['temp'], null, false, true);
         this._addTempTableRow('Temperature feels like', data['temp_feels_like']);
