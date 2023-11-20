@@ -6,14 +6,17 @@ import Time from './Time.js';
 
 export default class UpdatingKeyValuePairTable {
     #domTable;
+    #domUpdateTime;
     #dataFetcher;
 
     /**
      * @param {HTMLTableElement} domTable
+     * @param {HTMLTableElement} domUpdateTime
      * @param {String}           url
      */
-    constructor(domTable, url) {
+    constructor(domTable, domUpdateTime, url) {
         this.#domTable = domTable;
+        this.#domUpdateTime = domUpdateTime;
         this.#dataFetcher = new DataFetcher(url, this._getContract());
     }
 
@@ -102,6 +105,14 @@ export default class UpdatingKeyValuePairTable {
      */
     _renderUpdate(data) {
 
+    }
+
+    /**
+     * @param {String} text
+     */
+    _updateDateSpan(text) {
+        this.#domUpdateTime.innerText = text;
+        this.#domUpdateTime.style.display = 'inline';
     }
 
     /**
