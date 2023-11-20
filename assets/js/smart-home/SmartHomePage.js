@@ -4,10 +4,15 @@ import Time from './Time.js';
 import MetWeatherTable from './MetWeatherTable.js';
 import SmartHomeTemperatureTable from './SmartHomeTemperatureTable.js';
 
-const WEATHER_API_URL_PROD = 'https://cdn.christianbrown.uk/get-met-office-temps';
-const HOME_TEMP_API_URL_PROD = 'https://cdn.christianbrown.uk/get-smart-home-temps';
-// const WEATHER_API_URL_PROD = 'http://127.0.0.1:8081/';
-// const HOME_TEMP_API_URL_PROD = 'http://127.0.0.1:8080/';
+const isLocal = window.location.host === '127.0.0.1:4000';
+
+const API_SMART_HOME_TEMPS_URL_PROD = 'https://cdn.christianbrown.uk/get-smart-home-temps';
+const API_SMART_HOME_TEMPS_URL_DEV = 'http://127.0.0.1:8080';
+const API_SMART_HOME_TEMPS_URL = isLocal ? API_SMART_HOME_TEMPS_URL_DEV: API_SMART_HOME_TEMPS_URL_PROD;
+
+const API_MET_OFFICE_URL_PROD = 'https://cdn.christianbrown.uk/get-met-office-temps';
+const API_MET_OFFICE_URL_DEV = 'http://127.0.0.1:8081';
+const API_MET_OFFICE_URL = isLocal ? API_MET_OFFICE_URL_DEV: API_MET_OFFICE_URL_PROD;
 
 const MS_ONE_MIN = 60 * 1000;
 const MS_FIVE_MINS = 5 * MS_ONE_MIN;
@@ -15,9 +20,7 @@ const MS_FIVE_MINS = 5 * MS_ONE_MIN;
 export default class SmartHomePage {
     #clockDom;
     #homeTemperatureTableObj;
-    #homeTemperatureTableUpdateObj;
     #weatherTableObj;
-    #weatherTableUpdateObj;
 
     /**
      * @param {String}  clockDomSelector
@@ -31,11 +34,11 @@ export default class SmartHomePage {
 
         const homeTemperatureTableDom = SmartHomePage.#find(homeTemperatureTableDomSelector);
         const homeTemperatureTableUpdateDom = SmartHomePage.#find(homeTemperatureTableUpdateDomSelector);
-        this.#homeTemperatureTableObj = new SmartHomeTemperatureTable(homeTemperatureTableDom, homeTemperatureTableUpdateDom, HOME_TEMP_API_URL_PROD);
+        this.#homeTemperatureTableObj = new SmartHomeTemperatureTable(homeTemperatureTableDom, homeTemperatureTableUpdateDom, API_SMART_HOME_TEMPS_URL);
 
         const weatherTableDom = SmartHomePage.#find(weatherTableDomSelector);
         const weatherTableUpdateDom = SmartHomePage.#find(weatherTableUpdateDomSelector);
-        this.#weatherTableObj = new MetWeatherTable(weatherTableDom, weatherTableUpdateDom, WEATHER_API_URL_PROD);
+        this.#weatherTableObj = new MetWeatherTable(weatherTableDom, weatherTableUpdateDom, API_MET_OFFICE_URL);
     }
 
     /**
