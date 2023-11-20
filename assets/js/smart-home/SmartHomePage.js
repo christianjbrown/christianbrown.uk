@@ -96,6 +96,6 @@ export default class SmartHomePage {
     }
 
     async #updateClock() {
-        this.#clockDom.textContent = (new Time()).formatHour();
+        this.#clockDom.textContent = (new Time()).formatUserFriendlyHour(true);
     }
 }
