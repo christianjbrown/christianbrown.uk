@@ -8,6 +8,7 @@ const JSON_CONTRACT = {
     'temp_feels_like': {'type': 'number', 'keyRequired': true, 'cannotBeEmpty': true},
     'humidity': {'type': 'number', 'keyRequired': true, 'cannotBeEmpty': true},
     'precipitation': {'type': 'number', 'keyRequired': true, 'cannotBeEmpty': true},
+    'type_string': {'type': 'string', 'keyRequired': true, 'cannotBeEmpty': false},
 };
 
 export default class MetWeatherTable extends UpdatingKeyValuePairTable {
@@ -22,6 +23,9 @@ export default class MetWeatherTable extends UpdatingKeyValuePairTable {
         }
         this._addTempTableRow('Temperature', data['temp'], null, false, true);
         this._addTempTableRow('Temperature feels like', data['temp_feels_like']);
+        if (data['type_string']) {
+            this._addTableRow('Type', data['type_string']);
+        }
         this._addTableRow('Humidity', data['humidity']+'%');
         this._addTableRow('Chance of precipitation', data['precipitation']+'%');
     }
