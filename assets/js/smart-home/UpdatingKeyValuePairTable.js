@@ -56,11 +56,11 @@ export default class UpdatingKeyValuePairTable {
     /**
      * Adds a row with temperatures formatted.
      *
-     * @param {String}  name
-     * @param {Number}  degreesC
-     * @param {Number}  timestamp
-     * @param {Boolean} stale
-     * @param {Boolean} important
+     * @param {String}         name
+     * @param {Number|String}  degreesC
+     * @param {Number}         timestamp
+     * @param {Boolean}        stale
+     * @param {Boolean}        important
      */
     _addTempTableRow(name, degreesC, timestamp = null, stale = false, important = false) {
         const tempObj = new Temperature(degreesC);
@@ -111,7 +111,7 @@ export default class UpdatingKeyValuePairTable {
      * @param {String} text
      */
     _updateDateSpan(text) {
-        this.#domUpdateTime.innerText = text;
+        this.#domUpdateTime.innerHTML = text;
         this.#domUpdateTime.style.display = 'inline';
     }
 

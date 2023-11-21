@@ -15,6 +15,10 @@ div.container {
         }
         div.smart-home-data {
             span.update-time {
+                a {
+                    color: $colour-grayscale-2;
+                    text-decoration: underline;
+                }
                 display: none;
                 margin-left: 0.5em;
                 color: $colour-grayscale-2;
