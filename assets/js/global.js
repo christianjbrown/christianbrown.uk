@@ -32,11 +32,12 @@ cookiesDeclineButtonDom.addEventListener('click',
 );
 
 window.addEventListener('load',
-    () => {
+    async() => {
         console.log('%c'+DEV_CONSOLE_LINE_1, DEV_CONSOLE_LINE_1_STYLE);
         console.log('%c'+DEV_CONSOLE_LINE_2, DEV_CONSOLE_LINE_2_STYLE);
 
-        if (Cookie.needsConsent()) {
+        const needsConsent = await Cookie.needsConsent();
+        if (needsConsent) {
             const consent= Cookie.getConsent();
             if (consent === null) {
                 cookiesDivDom.style.display = 'flex';
