@@ -14,6 +14,8 @@ export default class Time {
 
     /**
      * @param {Number} timestamp
+     * @param {String} timezone
+     * @param {String} locale
      */
     constructor(timestamp = Date.now(), timezone = DEFAULT_TIMEZONE, locale = DEFAULT_LOCALE) {
         this.#timestamp = timestamp;
@@ -53,8 +55,8 @@ export default class Time {
         const date = new Date(this.#timestamp);
 
         // using all this toLocaleString stuff because it handles the timezone correctly using daylight savings
-        const hour = parseInt(date.toLocaleString(this.#locale, {'timezone': this.#timezone, 'hour': 'numeric'}));
-        const min = parseInt(date.toLocaleString(this.#locale, {'timezone': this.#timezone, 'minute': 'numeric'}));
+        const hour = parseInt(Intl.DateTimeFormat(this.#locale, {'timeZone': this.#timezone, 'hour': 'numeric'}).format(date));
+        const min = parseInt(Intl.DateTimeFormat(this.#locale, {'timeZone': this.#timezone, 'minute': 'numeric'}).format(date));
         let str;
         if (hour === 0 && min === 0) {
             str = 'midnight';
@@ -77,10 +79,10 @@ export default class Time {
 
         if (includeDate) {
             // toLocaleDateString doesn't handle adding 'st', 'nd', 'rd', 'th' to the day of the month
-            const dayOfMonth = parseInt(date.toLocaleString(this.#locale, {'timezone': this.#timezone, 'day': 'numeric'}));
+            const dayOfMonth = parseInt(Intl.DateTimeFormat(this.#locale, {'timeZone': this.#timezone, 'day': 'numeric'}).format(date));
             const suffix = dayOfMonth % 10 === 1 && dayOfMonth !== 11 ? 'st' : dayOfMonth % 10 === 2 && dayOfMonth !== 12 ? 'nd' : dayOfMonth % 10 === 3 && dayOfMonth !== 13 ? 'rd' : 'th';
-            const dayOfWeek = date.toLocaleString(this.#locale, {'timezone': this.#timezone, 'weekday': 'short'});
-            str += ' on '+dayOfWeek+' '+dayOfMonth+suffix+' '+date.toLocaleDateString(this.#locale, {'timezone': this.#timezone, 'month': 'short'});
+            const dayOfWeek = Intl.DateTimeFormat(this.#locale, {'timeZone': this.#timezone, 'weekday': 'short'}).format(date);
+            str += ' on '+dayOfWeek+' '+dayOfMonth+suffix+' '+Intl.DateTimeFormat(this.#locale, {'timeZone': this.#timezone, 'month': 'short'}).format(date);
         }
 
         return str;
