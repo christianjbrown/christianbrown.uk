@@ -2,7 +2,7 @@
 title: "Senior Customer Service Representative"
 name: "iiNet"
 location: "Perth, Australia"
-date_range: "Jan 2005 – Jul 2006 (1yr, 7mths)"
+date_range: "Jan 2005 – Jun 2006 (1yr, 6mths)"
 logo: "iinet.svg"
 link: "https://www.iinet.net.au/"
 ---
