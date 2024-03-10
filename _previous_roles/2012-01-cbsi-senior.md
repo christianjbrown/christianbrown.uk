@@ -3,7 +3,7 @@ title: "Senior Software Engineer"
 name: "CBS / CBS Interactive"
 location: "Singapore, then London, UK"
 name_location_markdown_override: "**[CBS](https://www.cbs.com/){:target='_blank'} / [CBS Interactive](https://www.cbsinteractive.com/){:target='_blank'}** in **Singapore**, then **London, UK**"
-date_range: "Jan 2012 – Apr 2016 (4yrs, 4mths)"
+date_range: "Jan 2012 – Mar 2016 (4yrs, 3mths)"
 logo: "cbsinteractive.svg"
 link: "https://www.cbsinteractive.com/"
 ---
