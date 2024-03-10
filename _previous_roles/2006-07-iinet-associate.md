@@ -2,7 +2,7 @@
 title: "Associate Programmer"
 name: "iiNet"
 location: "Perth, Australia"
-date_range: "Jul 2006 – Sep 2007 (1yr, 3mths)"
+date_range: "Jul 2006 – Aug 2007 (1yr, 2mths)"
 logo: "iinet.svg"
 link: "https://www.iinet.net.au/"
 ---
