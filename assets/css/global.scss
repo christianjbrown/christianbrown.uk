@@ -61,6 +61,8 @@ html {
                     div.header-avatar-border {
                         img {
                             width: 7.3em;
+                            border-radius: 50%;
+                            border: 0.25em solid $primary;
                         }
                     }
                     @media print {
