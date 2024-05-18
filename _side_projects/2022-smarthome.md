@@ -1,7 +1,7 @@
 ---
 name: "Smart Home"
 icon: "smarthome.svg"
-link: "/smart‑home"
+link: "/smart-home"
 link_nofollow: true
 ---
-A dashboard of weather and internal temperature data from the home. See [/smart‑home](/smart‑home){:target="_blank" rel="nofollow"}
+A dashboard of weather and internal temperature data from the home. See [/smart‑home](/smart-home){:target="_blank" rel="nofollow"}
