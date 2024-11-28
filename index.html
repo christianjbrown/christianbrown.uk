@@ -53,9 +53,14 @@ schema:
                         </div>{% endif %}
                     </div>
                     <div id="cv-side">
+                        {% if site.education %}
+                        <div class="cv-section cv-section-education">
+                            <h2>Education</h2>{% for experience in site.education reversed %}
+                            {% include cv-experience-side.html %}{% endfor %}
+                        </div>{% endif %}
                         {%- if site.data.cv-verticals %}
                         <div class="cv-section cv-section-verticals">
-                            <h2>Specialty Verticals</h2>
+                            <h2>Industry experience</h2>
                             <p>I have subject-matter expertise in:</p>
                             <div id="cv-verticals">{% for vertical in site.data.cv-verticals %}
                                 {% include cv-vertical.html %}{% endfor %}
@@ -68,11 +73,6 @@ schema:
                             <div id="cv-techs">{% for tech in site.data.cv-tech %}
                                 {% include cv-tech.html %}{% endfor %}
                             </div>
-                        </div>{% endif %}
-                        {% if site.education %}
-                        <div class="cv-section cv-section-education">
-                            <h2>Education</h2>{% for experience in site.education reversed %}
-                            {% include cv-experience-side.html %}{% endfor %}
                         </div>{% endif %}
 <!--                        <div class="cv-section">-->
 <!--                            <h2>My day</h2>-->
