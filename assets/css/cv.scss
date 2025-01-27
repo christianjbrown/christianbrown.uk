@@ -200,8 +200,7 @@ div.container {
             }
             &:not(:last-child) {
                 border-bottom: 1px solid $colour-grayscale-1;
-                padding-bottom: 0.8em;
-                margin-bottom: 0.8em;
+                margin-bottom: 1em;
             }
             align-content: flex-start;
             align-items: flex-start;
