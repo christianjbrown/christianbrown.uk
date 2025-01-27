@@ -1,6 +1,6 @@
 ---
 title: "Bachelor of Computer Science, BCompSci (Hons)"
-organisation: "University of Western Australia (UWA)"
+organisation: "University of Western Australia"
 logo: "uwa.svg"
 link: "https://www.uwa.edu.au/"
 ---

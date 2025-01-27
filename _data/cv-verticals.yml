@@ -1,11 +1,11 @@
 -
-    name: 'e-commerce'
-    icon: 'ecommerce.svg'
-    link: 'https://en.wikipedia.org/wiki/E-commerce'
--
     name: 'VOD'
     icon: 'vod.svg'
     link: 'https://en.wikipedia.org/wiki/Video_on_demand'
+-
+    name: 'e-commerce'
+    icon: 'e-commerce.svg'
+    link: 'https://en.wikipedia.org/wiki/E-commerce'
 -
     name: 'CMS'
     icon: 'cms.svg'

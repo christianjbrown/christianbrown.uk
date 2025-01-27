@@ -1,19 +1,11 @@
 ---
 layout: "global"
 title: "Christian Brown - Senior Engineering Manager - London"
-description: "I'm a people leader and solutions architect with a background in e-commerce, online video workflows, and content management systems; backed by two decades of experience with well-known, high-traffic, enterprise-level web properties that are created and maintained by globally distributed teams. I empower engineers to create high-quality, reusable, and maintainable solutions using SOLID design principles, automated testing, and continuous integration."
+description: &description "Experienced people leader and solutions architect with 20+ years shaping high&#8209;traffic enterprise services in online video, e&#8209;commerce, and content management. I empower globally distributed teams to deliver reusable, maintainable solutions through SOLID design principles, automated testing, and continuous integration."
 stylesheets:
     - "/assets/css/cv.css"
 javascripts:
-    #- "/assets/js/cv/index.js"
-    #- "https://cdn.jsdelivr.net/npm/chart.js@4.2.1/dist/chart.umd.min.js"
-    #- "https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"
 menu:
-    #  -
-    #    icon: 'print'
-    #    text: 'Print'
-    #    link: 'javascript:window.print();'
-    #    icon_alt: 'Printer icon'
     -
         icon: 'download'
         text: 'Download'
@@ -31,7 +23,7 @@ schema:
     "@type": "Person"
     name: "Christian Brown"
     jobTitle: "Senior Engineering Manager"
-    description: "I'm a people leader and solutions architect with a background in e-commerce, online video workflows, and content management systems; backed by two decades of experience with well-known, high-traffic, enterprise-level web properties that are created and maintained by globally distributed teams. I empower engineers to create high-quality, reusable, and maintainable solutions using SOLID design principles, automated testing, and continuous integration."
+    description: *description
     url: "https://christianbrown.uk/"
     image: "https://christianbrown.uk/assets/images/favicon/android-chrome-512x512.png"
     address:
@@ -40,24 +32,15 @@ schema:
         addressRegion: "Greater London"
         addressCountry: "GB"
 ---
-<p class="lead">{{ page.description }}</p>{% if site.current_role %}
+<p class="lead">{{ page.description }}</p>{% if site.work_experience %}
                 <div class="row" id="cv">
                     <div id="cv-main">
                         <div class="cv-section" id="cv-current-role">
-                            <h2>Current role</h2>{% for experience in site.current_role reversed %}
-                            {% include cv-experience.html %}{% endfor %}
-                        </div>{% endif %}{% if site.previous_roles %}
-                        <div class="cv-section" id="cv-previous-roles">
-                            <h2>Previous roles</h2>{% for experience in site.previous_roles reversed %}
+                            <h2>Work experience</h2>{% for experience in site.work_experience reversed %}
                             {% include cv-experience.html %}{% endfor %}
                         </div>{% endif %}
                     </div>
                     <div id="cv-side">
-                        {% if site.education %}
-                        <div class="cv-section cv-section-education">
-                            <h2>Education</h2>{% for experience in site.education reversed %}
-                            {% include cv-experience-side.html %}{% endfor %}
-                        </div>{% endif %}
                         {%- if site.data.cv-verticals %}
                         <div class="cv-section cv-section-verticals">
                             <h2>Industry experience</h2>
@@ -74,13 +57,11 @@ schema:
                                 {% include cv-tech.html %}{% endfor %}
                             </div>
                         </div>{% endif %}
-<!--                        <div class="cv-section">-->
-<!--                            <h2>My day</h2>-->
-<!--                            <p>The “hats I wear” each day varies, but in my current role, on average, it's a bit like this:</p>-->
-<!--                            <div id="cv-chart-area">-->
-<!--                                <canvas id="cv-chart"></canvas>-->
-<!--                            </div>-->
-<!--                        </div>-->
+                        {% if site.education %}
+                        <div class="cv-section cv-section-education">
+                            <h2>Education</h2>{% for experience in site.education reversed %}
+                            {% include cv-experience-side.html %}{% endfor %}
+                        </div>{% endif %}
                         {% if site.side_projects %}
                         <div class="cv-section cv-section-side-projects">
                             <h2>Side projects</h2>

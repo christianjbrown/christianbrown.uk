@@ -27,7 +27,7 @@ export default class Country {
      */
     async #getTimezones() {
         if (!this.#timezones) {
-            const { default: timezones } = await import('../data/timezones.json', { assert: { type: 'json' } });
+            const { default: timezones } = await import('../data/timezones.json', { with: { type: 'json' } });
 
             this.#timezones = timezones;
         }

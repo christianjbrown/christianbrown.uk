@@ -36,8 +36,7 @@ html {
             a {
                 font-weight: bold;
             }
-            line-height: 1.1;
-            font-size: 1.041em;
+            font-size: 1em;
         }
         a:hover {
             color: $colour-grayscale-3;
@@ -45,12 +44,13 @@ html {
         }
         h2 {
             color: $colour-grayscale-3;
+            font-size: 1.7em;
         }
         h3 {
             padding-top: 10px;
             padding-bottom: 2px;
             color: $colour-grayscale-3;
-            font-size: 1.5rem;
+            font-size: 1.1em;
         }
         div.container {
             header {
