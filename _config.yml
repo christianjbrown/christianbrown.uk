@@ -18,8 +18,7 @@ header_theme_color: "#ffffff"
 header_msapplication_tile_color: "#ffffff"
 
 collections:
-  - "previous_roles"
-  - "current_role"
+  - "work_experience"
   - "education"
   - "volunteering"
   - "side_projects"
