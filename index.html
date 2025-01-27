@@ -4,7 +4,6 @@ title: "Christian Brown - Senior Engineering Manager - London"
 description: &description "Experienced people leader and solutions architect with 20+ years shaping high&#8209;traffic enterprise services in online video, e&#8209;commerce, and content management. I empower globally distributed teams to deliver reusable, maintainable solutions through SOLID design principles, automated testing, and continuous integration."
 stylesheets:
     - "/assets/css/cv.css"
-javascripts:
 menu:
     -
         icon: 'download'
@@ -32,7 +31,7 @@ schema:
         addressRegion: "Greater London"
         addressCountry: "GB"
 ---
-<p class="lead">{{ page.description }}</p>{% if site.work_experience %}
+<div id="lead">{{ page.description }}</div>{% if site.work_experience %}
                 <div class="row" id="cv">
                     <div id="cv-main">
                         <div class="cv-section" id="cv-current-role">
@@ -75,6 +74,6 @@ schema:
                             <h2>Volunteering</h2>{% for experience in site.volunteering reversed %}
                             {% include cv-experience-side.html %}{% endfor %}
                         </div>{% endif %}
-                        <div class="footer-print">This CV is available online at:<br /><a href="{{ site.url }}" target="_blank" title="Christian Brown's website">{{ site.url }}</a><br /><br />Get in touch via LinkedIn:<br /><a href="{{ page.linkedin_url }}" target="_blank" title="Christian Brown's LinkedIn">{{ page.linkedin_text }}</a></div>
                     </div>
+                    <div class="footer-print">This CV is available online at:<br /><a href="{{ site.url }}" target="_blank" title="Christian Brown's website">{{ site.url }}</a><br /><br />Get in touch via LinkedIn:<br /><a href="{{ page.linkedin_url }}" target="_blank" title="Christian Brown's LinkedIn">{{ page.linkedin_text }}</a></div>
                 </div>

@@ -9,14 +9,6 @@ $primary: $colour-accent;
 $danger: $colour-error;
 @import 'bootstrap/bootstrap';
 
-::-webkit-scrollbar {
-    //background: $colour-grayscale-3;
-}
-::-webkit-scrollbar-thumb {
-    //background: $colour-accent;
-    //-webkit-border-radius: 1em;
-}
-
 html {
     body {
         .required .form-label:after {
@@ -63,11 +55,6 @@ html {
                             width: 7.3em;
                             border-radius: 50%;
                             border: 0.25em solid $primary;
-                        }
-                    }
-                    @media print {
-                        div.header-avatar-border {
-                            background-color: $colour-accent !important;
                         }
                     }
                 }
