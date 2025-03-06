@@ -1,13 +1,15 @@
 ---
-title: "Lead Software Engineer"
-name: "ViacomCBS / CBS Interactive"
-location: "London, UK"
+position: "Lead Software Engineer"
+organisation: "ViacomCBS"
+organisation_extra: "Viacom and CBS (inc. CBS Interactive), merged in 2019 to form ViacomCBS (now known as Paramount)."
+location: "London"
 date_range: "Apr 2016 - Oct 2020 (4yrs, 7mths)"
-logo: "viacomcbs.svg"
-link: "https://www.viacomcbs.com/"
+organisation_logo: "viacomcbs.svg"
+organisation_link: "https://www.viacomcbs.com/"
 ---
-In 2016, I reported to the VP of Engineering, and I was promoted to lead a small team of engineers based in the US and the UK. My team was one of three which maintained the CMS, APIs, and tech stack that powered [CBS](https://www.cbs.com/){:target="_blank"}{:title="CBS"}'s web properties. This included famous brands like [CBS News](https://www.cbsnews.com/){:target="_blank"}{:title="CBS News"}, [60 Minutes](https://www.cbsnews.com/60-minutes/){:target="_blank"}{:title="60 Minutes"}, [CBS Sports](https://www.cbssports.com/){:target="_blank"}{:title="CBS Sports"}, [24/7 Sports](https://247sports.com/){:target="_blank"}{:title="24/7 Sports"}, [MaxPreps](https://www.maxpreps.com/){:target="_blank"}{:title="MaxPreps"}, [SportsLine](https://www.sportsline.com/){:target="_blank"}{:title="SportsLine"}, [CNET](https://www.cnet.com/){:target="_blank"}{:title="CNET"}, [ZDNet](https://www.zdnet.com/){:target="_blank"}{:title="ZDNet"}, [TechRepublic](https://www.techrepublic.com/){:target="_blank"}{:title="TechRepublic"}, [Download.com](https://www.download.com/){:target="_blank"}{:title="Download.com"}, and [TV Guide](https://www.tvguide.com/){:target="_blank"}{:title="TV Guide"}.
+* I led a team of four direct reports across the US and the UK, reporting to the VP of Engineering.
+* My team was one of three responsible for developing the CMS, APIs, and technology stack that powered over 10 CBS web properties, including major brands such as [CBS News](https://www.cbsnews.com/){:target="_blank"}{:title="CBS News"}, [CBS Sports](https://www.cbssports.com/){:target="_blank"}{:title="CBS Sports"}, and [CNET](https://www.cnet.com/){:target="_blank"}{:title="CNET"} — collectively [serving 190 million unique visitors per month](https://ir.paramount.com/news-releases/news-release-details/cbs-announces-leadership-transition-cbs-interactive){:target="_blank"}{:title="Paramount press release"}.
+* My team and I were  the subject-matter experts on all aspects of video-on-demand (VOD) content, overseeing transcoding, ingestion, digital asset management, captioning & transcription, publishing, and distribution through both internal systems and third-party vendors.
+* A notable achievement was developing an alternative solution to a vendor that charged per play, resulting in annual cost savings of approximately US$500,000.
 
-My team and I were subject‑matter experts on all video‑on‑demand (VOD) content - using internal and third‑party vendors for transcoding, ingestion, digital asset management, captioning & transcription, publishing, and distribution. A key achievement was when I developed an alternative solution to a vendor that was charging a fee per play, saving the company ~US$500k pa.
-
-In 2019, [CBS](https://www.cbs.com/){:target="_blank"}{:title="CBS"} merged with Viacom to become [ViacomCBS](https://www.viacomcbs.com/){:target="_blank"}{:title="ViacomCBS"} (aka [Paramount](https://www.paramount.com/){:target="_blank"}{:title="Paramount"}).
+_Tech stack: [PHP](https://www.php.net/){:target="_blank"}{:title="PHP"} ([Symfony](https://symfony.com/){:target="_blank"}{:title="Symfony"}), [Go/Golang](https://go.dev/){:target="_blank"}{:title="Go/Golang"}, [Python](https://www.python.org/){:target="_blank"}{:title="Python"}, [MySQL](https://www.mysql.com/){:target="_blank"}{:title="MySQL"}, [MongoDB](https://www.mongodb.com/){:target="_blank"}{:title="MongoDB"}, [Redis](https://redis.io/){:target="_blank"}{:title="Redis"}, [Memcached](https://memcached.org/){:target="_blank"}{:title="Memcached"}, [GCP](https://cloud.google.com/){:target="_blank"}{:title="GCP"}, [AWS](https://aws.amazon.com/){:target="_blank"}{:title="AWS"}, [MPX/CVP](https://console.theplatform.com/sign-in){:target="_blank"}{:title="MPX/CVP"}, [TypeScript](https://www.typescriptlang.org/){:target="_blank"}{:title="TypeScript"}/JavaScript, [Material Design](https://www.material.io/){:target="_blank"}{:title="Material Design"}, [Fastly](https://www.fastly.com/){:target="_blank"}{:title="Fastly"}, [Akamai](https://www.akamai.com/){:target="_blank"}{:title="Akamai"}, [Vagrant](https://www.vagrantup.com/){:target="_blank"}{:title="Vagrant"}, [Docker](https://www.docker.com/){:target="_blank"}{:title="Docker"}, [Kubernetes](https://kubernetes.io/){:target="_blank"}{:title="Kubernetes"}, [Jenkins](https://www.jenkins.io/){:target="_blank"}{:title="Jenkins"}._

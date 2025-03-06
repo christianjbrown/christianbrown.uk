@@ -1,6 +1,6 @@
 ---
 name: "Smart Home"
-icon: "smarthome.svg"
+icon: "/cv/side-projects/smart-home.svg"
 link: "/smart-home"
 link_nofollow: true
 ---
