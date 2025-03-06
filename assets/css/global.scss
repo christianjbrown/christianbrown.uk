@@ -36,7 +36,7 @@ html {
         }
         h2 {
             color: $colour-grayscale-3;
-            font-size: 1.7em;
+            font-size: 1.5em;
         }
         h3 {
             padding-top: 10px;
@@ -72,7 +72,7 @@ html {
                         color: $colour-accent;
                         font-family: $font-serif;
                         font-size: 38pt;
-                        text-transform: lowercase;
+                        // text-transform: lowercase;
                     }
                     p {
                         * {
