@@ -6,7 +6,7 @@ date_range: "Aug 2022 - Now"
 organisation_logo: "ebay.svg"
 organisation_link: "https://www.ebay.com/"
 ---
-* I lead a user experience engineering team within Shipping, managing 5-7 direct reports: full-stack engineers from the UK and Canada, alongside contractors based in Cyprus.
+* I lead a user experience engineering team within Shipping, managing 5-8 direct reports: full-stack engineers from the UK and Canada, alongside contractors based in Cyprus.
 * We build, extend and ensure the uptime of the shipping purchase journeys on the web, handling over 30m purchases per month across five main  markets (US$500m per year).
 
 Key contributions:
@@ -23,6 +23,9 @@ Key contributions:
 **Customer & Business Impact:** Shifted focus from system observability to customer impact and business metrics. Implemented Amplitude tracking, streamlined surveys, and set up business dashboards. Encouraged engineers to proactively analyse feedback and propose user experience improvements.
 
 **Staff Onboarding & Retention:** Designed a structured onboarding plan to integrate new hires effectively. Provided ongoing support and check-ins to ensure smooth transitions. Managed underperformance and team dynamics, leading to improved morale and productivity.
+
+* A/B testing
+
 
 [//]: # (These workflows include payment selection, collection booking, insurance, customs forms, printerless labels via QR codes, and eBay programmes like [Simple Delivery]&#40;https://www.ebay.co.uk/sellercentre/postage/simple-delivery&#41;{:target="_blank"}{:title="Simple Delivery"}, [Global Shipping]&#40;https://www.ebay.co.uk/help/selling/posting-items/setting-postage-options/global-shipping-programme?id=4646&#41;{:target="_blank"}{:title="Global Shipping"}, [Authenticity Guarantee]&#40;https://www.ebay.co.uk/help/selling/selling-tools/ebay-authenticity-guarantee?id=4644&#41;{:target="_blank"}{:title="eBay Authentication Guarantee centres"}, and [Vault]&#40;https://www.ebay.com/vault&#41;{:target="_blank"}{:title="eBay Vault"}. We also manage non-purchase flows such as shipping history, cancellations, cost adjustments, insurance claims, and carrier outage tooling.)
 
