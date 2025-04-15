@@ -61,14 +61,6 @@ schema:
                             <h2>Education</h2>{% for experience in site.education reversed %}
                             {% include cv-experience-side.html %}{% endfor %}
                         </div>{% endif %}
-                        {% if site.side_projects %}
-                        <div class="cv-section cv-section-side-projects">
-                            <h2>Side projects</h2>
-                            <div id="cv-side-projects">{% for side_project in site.side_projects %}
-                                {% if side_project.hide != true %}{% include cv-side-project.html %}
-                                {% endif %}{% endfor %}
-                            </div>
-                        </div>{% endif %}
                         {% if site.volunteering %}
                         <div class="cv-section cv-section-volunteering">
                             <h2>Volunteering</h2>{% for experience in site.volunteering reversed %}
