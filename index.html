@@ -1,7 +1,7 @@
 ---
 layout: "global"
-title: "Christian Brown - Senior Engineering Manager - London"
-description: &description "Experienced people leader and solutions architect with 20+ years shaping high&#8209;traffic enterprise services in online video, e&#8209;commerce, and content management. I empower globally distributed teams to deliver reusable, maintainable solutions through SOLID design principles, automated testing, and continuous integration."
+title: "Christian Brown - Senior Engineering Manager - London, UK"
+description: &description "Experienced people leader and solutions architect with 20+ years shaping high&#8209;traffic enterprise services in e&#8209;commerce, online video, and content management systems. I empower globally distributed teams to deliver maintainable solutions through reusable design principles, automated testing, and continuous integration."
 stylesheets:
     - "/assets/css/cv.css"
 menu:
@@ -31,41 +31,73 @@ schema:
         addressRegion: "Greater London"
         addressCountry: "GB"
 ---
-<div id="lead">{{ page.description }}</div>{% if site.work_experience %}
-                <div class="row" id="cv">
+<div id="cv-lead">
+    <ul>
+        <li>People manager (9+ yrs)</li>
+        <li>Tech lead & architect (15+ yrs)</li>
+        <li>Software engineer (20+ yrs)</li>
+    </ul>
+    <ul>
+        <li>Leads and empowers global teams</li>
+        <li>High-traffic enterprise systems</li>
+        <li>Reusable, tested, CI-driven delivery</li>
+    </ul>
+</div>{%- if site.work_experience %}
+                <div id="cv-columns">
                     <div id="cv-main">
-                        <div class="cv-section" id="cv-current-role">
-                            <h2>Work experience</h2>{% for experience in site.work_experience reversed %}
-                            {% include cv-experience.html %}{% endfor %}
+                        <div class="cv-section">
+                            <h2>Work experience</h2>
+                            <div class="cv-experiences">
+                            {% assign previous = nil %}
+                            {% for experience in site.work_experience reversed %}
+                                {% include cv-experience.html %}
+                                {% assign previous = experience %}
+                            {% endfor %}
+                            </div>
+                        </div>{% endif %}{%- if site.volunteering %}
+                        <div class="cv-section">
+                            <h2>Recent volunteering</h2>
+                            <div class="cv-experiences">
+                                {% assign previous = nil %}
+                                {% for experience in site.volunteering reversed %}
+                                {% include cv-experience.html %}
+                                {% assign previous = experience %}
+                                {% endfor %}
+                            </div>
                         </div>{% endif %}
                     </div>
                     <div id="cv-side">
-                        {%- if site.data.cv-verticals %}
-                        <div class="cv-section cv-section-verticals">
-                            <h2>Industry experience</h2>
-                            <p>I have subject-matter expertise in:</p>
-                            <div id="cv-verticals">{% for vertical in site.data.cv-verticals %}
-                                {% include cv-vertical.html %}{% endfor %}
-                            </div>
-                        </div>{% endif -%}
                         {%- if site.data.cv-tech %}
-                        <div class="cv-section cv-section-tech">
+                        <div class="cv-section" id="cv-section-tech">
                             <h2>Tech</h2>
-                            <p>Some of the tech, frameworks and platforms I have recent industry experience with include:</p>
-                            <div id="cv-techs">{% for tech in site.data.cv-tech %}
-                                {% include cv-tech.html %}{% endfor %}
+                            <div class="grid-of-icons">{% for item in site.data.cv-tech %}
+                                {% include cv-side-grid-item.html %}{% endfor %}
                             </div>
                         </div>{% endif %}
-                        {% if site.education %}
-                        <div class="cv-section cv-section-education">
-                            <h2>Education</h2>{% for experience in site.education reversed %}
-                            {% include cv-experience-side.html %}{% endfor %}
+                        {%- if site.education %}
+                        <div class="cv-section" id="cv-section-education">
+                            <h2>Education</h2>
+                            <div class="list-of-icons">{% for item in site.education reversed %}
+                                {% include cv-side-list-item.html %}{% endfor %}
+                            </div>
                         </div>{% endif %}
-                        {% if site.volunteering %}
-                        <div class="cv-section cv-section-volunteering">
-                            <h2>Volunteering</h2>{% for experience in site.volunteering reversed %}
-                            {% include cv-experience-side.html %}{% endfor %}
+                        {%- if site.side_projects %}
+                        <div class="cv-section" id="cv-section-side-projects">
+                            <h2>Side projects</h2>
+                            <div class="list-of-icons">{% for item in site.side_projects %}
+                                {% include cv-side-list-item.html %}{% endfor %}
+                            </div>
                         </div>{% endif %}
+                        <div class="cv-section" id="cv-for-fun">
+                            <h2>For fun</h2>
+                            <ul>
+                                <li>Skiing</li>
+                                <li>Street photography</li>
+                                <li>Film &amp; TV</li>
+                                <li>Travelling</li>
+                                <li>Cooking</li>
+                                <li>Learning piano</li>
+                            </ul>
+                        </div>
                     </div>
-                    <div class="footer-print">This CV is available online at:<br /><a href="{{ site.url }}" target="_blank" title="Christian Brown's website">{{ site.url }}</a><br /><br />Get in touch via LinkedIn:<br /><a href="{{ page.linkedin_url }}" target="_blank" title="Christian Brown's LinkedIn">{{ page.linkedin_text }}</a></div>
                 </div>
