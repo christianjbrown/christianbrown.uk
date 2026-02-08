@@ -70,9 +70,7 @@ div.container {
                                     max-height: 2.2em;
                                     max-width: 4em;
                                 }
-                                display: flex;
-                                justify-content: center;
-                                min-width: 4em;
+                                min-width: 4rem;
                             }
                             div.cv-experience-company-main {
                                 div.cv-experience-company-metadata {
@@ -90,6 +88,8 @@ div.container {
                                             font-size: 0.9em;
                                             font-style: italic;
                                         }
+                                        display: flex;
+                                        flex-direction: column;
                                     }
                                     div.cv-experience-company-metadata-location {
                                         img.cv-experience-company-metadata-location-icon {
@@ -106,7 +106,8 @@ div.container {
                                     display: flex;
                                     justify-content: space-between;
                                     margin-bottom: 0.5em;
-                                    width: 100%;
+                                    flex-wrap: wrap;
+                                    flex-direction: row;
                                 }
                                 div.cv-experience-job {
                                     div.cv-experience-job-metadata {
@@ -117,6 +118,7 @@ div.container {
                                             margin: 0;
                                             padding: 0;
                                             white-space: nowrap;
+                                            flex: 0 0 30em;
                                         }
                                         div.cv-experience-job-metadata-dates {
                                             color: $colour-grayscale-4;
@@ -127,6 +129,7 @@ div.container {
                                         align-items: center;
                                         display: flex;
                                         flex-direction: row;
+                                        flex-wrap: wrap;
                                         justify-content: space-between;
                                         margin-bottom: 0.3em;
                                         width: 100%;
@@ -153,12 +156,16 @@ div.container {
                                             padding-left: 1em;
                                         }
                                     }
+                                    display: flex;
+                                    flex-wrap: wrap;
                                 }
+                                flex: 1 1 auto;
                                 @media print {
                                     page-break-inside: avoid;
                                 }
                             }
                             display: flex;
+                            justify-content: center;
                             column-gap: 0.7em;
                         }
                         div.cv-experience:not(:last-child) div.cv-experience-company-main {
