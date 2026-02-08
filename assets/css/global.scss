@@ -60,6 +60,7 @@ html {
                 }
                 div.header-data {
                     h1 {
+                        white-space: nowrap;
                         margin-bottom: 0;
                         color: $colour-accent;
                         font-family: $font-serif;
