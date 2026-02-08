@@ -6,8 +6,7 @@ site_name: "Christian Brown"
 site_author: "Christian Brown"
 site_image_name: "Christian Brown's avatar"
 
-header_firstname: "Christian"
-header_lastname: "Brown"
+header_name: "Christian Brown"
 header_job_title: "Senior Engineering Manager"
 header_location: "London, UK"
 

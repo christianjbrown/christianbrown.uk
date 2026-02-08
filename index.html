@@ -1,7 +1,7 @@
 ---
 layout: "global"
-title: "Christian Brown - Senior Engineering Manager - London"
-description: &description "Experienced people leader and solutions architect with 20+ years shaping high&#8209;traffic enterprise services in online video, e&#8209;commerce, and content management. I empower globally distributed teams to deliver reusable, maintainable solutions through SOLID design principles, automated testing, and continuous integration."
+title: "Christian Brown - Senior Engineering Manager - London, UK"
+description: &description "Experienced people leader and solutions architect with 20+ years shaping high&#8209;traffic enterprise services in e&#8209;commerce, online video, and content management systems. I empower globally distributed teams to deliver maintainable solutions through reusable design principles, automated testing, and continuous integration."
 stylesheets:
     - "/assets/css/cv.css"
 menu:
@@ -31,7 +31,18 @@ schema:
         addressRegion: "Greater London"
         addressCountry: "GB"
 ---
-<div id="cv-lead">{{ page.description }}</div>{%- if site.work_experience %}
+<div id="cv-lead">
+    <ul>
+        <li>People manager (9+ yrs)</li>
+        <li>Tech lead & architect (15+ yrs)</li>
+        <li>Software engineer (20+ yrs)</li>
+    </ul>
+    <ul>
+        <li>Leads and empowers global teams</li>
+        <li>High-traffic enterprise systems</li>
+        <li>Reusable, tested, CI-driven delivery</li>
+    </ul>
+</div>{%- if site.work_experience %}
                 <div id="cv-columns">
                     <div id="cv-main">
                         <div class="cv-section">
@@ -45,7 +56,7 @@ schema:
                             </div>
                         </div>{% endif %}{%- if site.volunteering %}
                         <div class="cv-section">
-                            <h2>Volunteering</h2>
+                            <h2>Recent volunteering</h2>
                             <div class="cv-experiences">
                                 {% assign previous = nil %}
                                 {% for experience in site.volunteering reversed %}
@@ -56,18 +67,9 @@ schema:
                         </div>{% endif %}
                     </div>
                     <div id="cv-side">
-                        {%- if site.data.cv-verticals %}
-                        <div class="cv-section" id="cv-section-verticals">
-                            <h2>Industry experience</h2>
-                            <p>I have industry experience in:</p>
-                            <div class="grid-of-icons">{% for item in site.data.cv-verticals %}
-                                {% include cv-side-grid-item.html %}{% endfor %}
-                            </div>
-                        </div>{% endif -%}
                         {%- if site.data.cv-tech %}
                         <div class="cv-section" id="cv-section-tech">
                             <h2>Tech</h2>
-                            <p>Some of the tech and platforms I have commercial experience with include:</p>
                             <div class="grid-of-icons">{% for item in site.data.cv-tech %}
                                 {% include cv-side-grid-item.html %}{% endfor %}
                             </div>
@@ -91,7 +93,6 @@ schema:
                             <ul>
                                 <li>Skiing</li>
                                 <li>Street photography</li>
-                                <li>Side projects</li>
                                 <li>Film &amp; TV</li>
                                 <li>Travelling</li>
                                 <li>Cooking</li>
