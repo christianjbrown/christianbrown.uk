@@ -69,6 +69,8 @@ div.container {
                                 img, a > img {
                                     max-height: 2.2em;
                                     max-width: 4em;
+                                    display: block;
+                                    margin: 0 auto;
                                 }
                                 min-width: 4rem;
                             }
@@ -81,7 +83,6 @@ div.container {
                                             font-weight: bold;
                                             margin: 0;
                                             padding: 0;
-                                            white-space: nowrap;
                                         }
                                         span.cv-experience-company-metadata-name-extra {
                                             color: $colour-grayscale-2;
@@ -101,7 +102,6 @@ div.container {
                                         color: $colour-grayscale-2;
                                         font-style: italic;
                                         text-align: right;
-                                        white-space: nowrap;
                                     }
                                     display: flex;
                                     justify-content: space-between;
@@ -117,14 +117,12 @@ div.container {
                                             font-weight: bold;
                                             margin: 0;
                                             padding: 0;
-                                            white-space: nowrap;
                                             flex: 0 0 30em;
                                         }
                                         div.cv-experience-job-metadata-dates {
                                             color: $colour-grayscale-4;
                                             font-style: italic;
                                             text-align: right;
-                                            white-space: nowrap;
                                         }
                                         align-items: center;
                                         display: flex;
@@ -159,7 +157,6 @@ div.container {
                                     display: flex;
                                     flex-wrap: wrap;
                                 }
-                                flex: 1 1 auto;
                                 @media print {
                                     page-break-inside: avoid;
                                 }
