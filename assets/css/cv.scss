@@ -20,276 +20,264 @@
 
 div.container {
     main {
-        div#lead {
-            font-size: 1.2em;
-            margin-bottom: 1em;
-        }
-        div#cv {
-            @media print {
-                .cv-section-education {
-                    margin-bottom: 6em;
+        div#cv-lead {
+            ul {
+                li {
+                    &::before{
+                        content: "•";
+                        color: $colour-accent;
+                        margin-right: 0.5rem;
+                    }
+                    white-space: nowrap;
+                    display: inline;
                 }
+                &:first-child {
+                    li {
+                        font-weight: bold;
+                    }
+                }
+                list-style-type: none;
+                padding: 0;
+                margin-bottom: 0;
+            }
+            font-size: 1.2em;
+            margin-bottom: 0.8em;
+        }
+        div#cv-columns {
+            div.cv-section {
+                h2 {
+                    border-bottom: 1px solid $colour-grayscale-1;
+                    color: $colour-accent;
+                    font-family: $font-serif;
+                    margin-bottom: 0.5em;
+                    padding-bottom: 0.2em;
+                    width: 100%;
+                }
+                align-content: flex-start;
+                align-items: flex-start;
+                display: flex;
+                flex-direction: column;
+                flex-wrap: wrap;
+                justify-content: left;
+                margin-bottom: 1em;
             }
             div#cv-main {
-                flex: 3;
-                min-width: 28em;
+                div.cv-section {
+                    div.cv-experiences {
+                        div.cv-experience {
+                            div.cv-experience-company-logo {
+                                img, a > img {
+                                    max-height: 2.2em;
+                                    max-width: 4em;
+                                }
+                                display: flex;
+                                justify-content: center;
+                                min-width: 4em;
+                            }
+                            div.cv-experience-company-main {
+                                div.cv-experience-company-metadata {
+                                    div.cv-experience-company-metadata-name {
+                                        h3.cv-experience-company-metadata-name-current, h3.cv-experience-company-metadata-name-current a {
+                                            color: $colour-grayscale-4;
+                                            font-size: 1.05em;
+                                            font-weight: bold;
+                                            margin: 0;
+                                            padding: 0;
+                                            white-space: nowrap;
+                                        }
+                                        span.cv-experience-company-metadata-name-extra {
+                                            color: $colour-grayscale-2;
+                                            font-size: 0.9em;
+                                            font-style: italic;
+                                        }
+                                    }
+                                    div.cv-experience-company-metadata-location {
+                                        img.cv-experience-company-metadata-location-icon {
+                                            height: 0.9em;
+                                            filter: grayscale(100%);
+                                            margin-right: 0.2em;
+                                            margin-bottom: 0.2em;
+                                        }
+                                        color: $colour-grayscale-2;
+                                        font-style: italic;
+                                        text-align: right;
+                                        white-space: nowrap;
+                                    }
+                                    display: flex;
+                                    justify-content: space-between;
+                                    margin-bottom: 0.5em;
+                                    width: 100%;
+                                }
+                                div.cv-experience-job {
+                                    div.cv-experience-job-metadata {
+                                        div.cv-experience-job-metadata-title, div.cv-experience-job-metadata-title h4 {
+                                            color: $colour-grayscale-4;
+                                            font-size: 1em;
+                                            font-weight: bold;
+                                            margin: 0;
+                                            padding: 0;
+                                            white-space: nowrap;
+                                        }
+                                        div.cv-experience-job-metadata-dates {
+                                            color: $colour-grayscale-4;
+                                            font-style: italic;
+                                            text-align: right;
+                                            white-space: nowrap;
+                                        }
+                                        align-items: center;
+                                        display: flex;
+                                        flex-direction: row;
+                                        justify-content: space-between;
+                                        margin-bottom: 0.3em;
+                                        width: 100%;
+                                    }
+                                    div.cv-experience-job-description {
+                                        * {
+                                            color: $colour-grayscale-2;
+                                        }
+                                        em {
+                                            a {
+                                                color: $colour-grayscale-1;
+                                            }
+                                            font-size: 0.9em;
+                                            color: $colour-grayscale-1;
+                                        }
+                                        a {
+                                            font-weight: normal;
+                                        }
+                                        p:has(+ ul) {
+                                            margin-bottom: 0;
+                                        }
+                                        ul {
+                                            margin-left: 1em;
+                                            padding-left: 1em;
+                                        }
+                                    }
+                                }
+                                @media print {
+                                    page-break-inside: avoid;
+                                }
+                            }
+                            display: flex;
+                            column-gap: 0.7em;
+                        }
+                        div.cv-experience:not(:last-child) div.cv-experience-company-main {
+                            border-bottom: 1px dashed $colour-grayscale-1;
+                        }
+                        display: flex;
+                        flex-direction: column;
+                        row-gap: 1em;
+                    }
+                }
+                @media print {
+                    width: 100%;
+                }
+                @media screen {
+                    flex: 3;
+                }
             }
             div#cv-side {
-                h3 {
-                    font-size: 1.1em;
+                div.grid-of-icons {
+                    div.grid-item {
+                        img {
+                            max-height: 2.3em;
+                            max-width: 2.8em;
+                            margin-bottom: 0.4em;
+                            filter: grayscale(100%);
+                        }
+                        div, div a {
+                            color: $colour-grayscale-4;
+                            white-space: nowrap;
+                        }
+                        &:hover {
+                            img {
+                                filter: grayscale(0%);
+                            }
+                        }
+                        text-align: center;
+                        align-self: end;
+                    }
+                    grid-template-columns: repeat(3, 1fr);
+                    display: grid;
+                    gap: 1em;
+                    margin: 0 auto 1em;
+                }
+                div.list-of-icons {
+                    div.list-item {
+                        div.list-item-icon {
+                            img, a img {
+                                max-height: 2.5em;
+                                width: 2.5em;
+                                margin: 0 auto;
+                            }
+                            width: 3em;
+                            min-width: 3em;
+                        }
+                        div.list-item-main {
+                            div.list-item-main-header {
+                                h3, h3 a {
+                                    color: $colour-grayscale-4;
+                                    font-size: 1.05em;
+                                    font-weight: bold;
+                                    margin: 0 0 0.5em;
+                                    padding: 0;
+                                }
+                                div.list-item-main-header-location {
+                                    color: $colour-grayscale-2;
+                                    margin: 0 0 0.5em;
+                                }
+                                h4 {
+                                    color: $colour-grayscale-3;
+                                    font-size: 1em;
+                                    font-weight: bold;
+                                    margin: 0 0 0.5em;
+                                    padding: 0;
+                                }
+                                div.list-item-main-header-dates {
+                                    color: $colour-grayscale-2;
+                                    font-style: italic;
+                                    font-size: 0.9em;
+                                    margin: 0 0 0.5em;
+                                }
+                            }
+                            div.list-item-main-content {
+                                p,li,em {
+                                    color: $colour-grayscale-2;
+                                }
+                                ul {
+                                    padding-left: 1em;
+                                }
+                                p:has(+ ul) {
+                                    margin-bottom: 0;
+                                }
+                                a {
+                                    font-weight: normal;
+                                }
+                            }
+                        }
+                        display: flex;
+                        flex-direction: row;
+                    }
+                }
+                div#cv-section-tech {
+                    @media print {
+                        div.grid-of-icons {
+                            grid-template-columns: repeat(9, 1fr);
+                        }
+                        grid-column: span 3;
+                    }
+                }
+                @media print {
+                    display: grid;
+                    gap: 1em;
+                    grid-template-columns: repeat(3, 1fr);
                 }
                 flex: 1;
             }
-            align-content: flex-start;
+            column-gap: 2em;
             display: flex;
             flex-direction: row;
             flex-wrap: wrap;
-        }
-        div.cv-section {
-            h2 {
-                border-bottom: 1px solid $colour-grayscale-1;
-                color: $colour-accent;
-                font-family: $font-serif;
-                margin-bottom: 0.5em;
-                padding-bottom: 0.2em;
-                text-transform: lowercase;
-                width: 100%;
-            }
-            align-content: flex-start;
-            align-items: flex-start;
-            display: flex;
-            flex-direction: column;
-            flex-wrap: wrap;
-            justify-content: left;
-            padding: 0 1em 1em;
-            width: 100%;
-        }
-        div#cv-side-projects {
-            div.cv-side-project {
-                div.cv-side-project-logo {
-                    img {
-                        width: 1.6em;
-                    }
-                    min-width: 2.5em;
-                    text-align: center;
-                }
-                div.cv-side-project-details {
-                    h3 {
-                        a {
-                            color: $colour-grayscale-4;
-                        }
-                        color: $colour-grayscale-4;
-                        font-weight: bold;
-                        margin-bottom: 0.1em;
-                        padding: 0;
-                    }
-                }
-                align-content: flex-start;
-                align-items: flex-start;
-                column-gap: 0.2em;
-                display: flex;
-                flex-direction: row;
-                flex-wrap: nowrap;
-                width: 100%;
-            }
-            align-content: flex-start;
-            align-items: flex-start;
-            break-inside: avoid;
-            display: flex;
-            flex-direction: column;
-            flex-wrap: wrap;
-            justify-content: left;
-            padding-bottom: 0.5em;
-            row-gap: 0.2em;
-        }
-        div#cv-verticals {
-            div.cv-vertical {
-                img {
-                    max-height: 2.5em;
-                    margin-bottom: 0.4em;
-                }
-                span, span a {
-                    color: $colour-grayscale-4;
-                    display: block;
-                }
-                display: block;
-                width: 6em;
-                text-align: center;
-            }
-            align-content: center;
-            align-items: flex-start;
-            break-inside: avoid;
-            column-gap: 0.5em;
-            display: flex;
-            flex-direction: row;
-            flex-wrap: nowrap;
-            justify-content: center;
-            row-gap: 1em;
-            width: 100%;
-        }
-        div#cv-techs {
-            div.cv-tech {
-                img {
-                    max-height: 2.3em;
-                    max-width: 2.8em;
-                    margin-bottom: 0.3em;
-                }
-                span, span a {
-                    color: $colour-grayscale-4;
-                    display: block;
-                }
-                display: block;
-                min-width: 4.5em;
-                text-align: center;
-            }
-            align-items: flex-end;
-            column-gap: 1em;
-            break-inside: avoid;
-            display: flex;
-            flex-direction: row;
-            flex-wrap: wrap;
-            justify-content: center;
-            margin-bottom: 1em;
-            row-gap: 1em;
-            width: 100%;
-        }
-        div.cv-experience {
-            div.cv-experience-details {
-                div.cv-experience-logo, div.cv-experience-logo a {
-                    img {
-                        max-height: 2.2em;
-                        max-width: 4.2em;
-                    }
-                    width: 4.2em;
-                    align-items: center;
-                    display: flex;
-                    justify-content: center;
-                }
-                div.cv-experience-metadata {
-                    * {
-                        color: $colour-grayscale-4;
-                        margin-bottom: 0;
-                    }
-                    h3 {
-                        font-weight: bold;
-                        padding-top: 0;
-                    }
-                    p.cv-experience-date-range {
-                        font-style: italic;
-                    }
-                    flex-basis: max-content;
-                }
-                column-gap: 0.6em;
-                display: flex;
-                flex-direction: row;
-                flex-wrap: nowrap;
-                min-width: 25em;
-                row-gap: 1em;
-            }
-            div.cv-experience-description {
-                p, p > a {
-                    font-size: 1.05rem;
-                }
-                p > a {
-                    font-weight: normal;
-                    color: $colour-grayscale-3;
-                    &:hover {
-                        color: $colour-accent;
-                    }
-                }
-            }
-            &:not(:last-child) {
-                border-bottom: 1px solid $colour-grayscale-1;
-                margin-bottom: 1.2em;
-            }
-            align-content: flex-start;
-            align-items: flex-start;
-            break-inside: avoid;
-            display: flex;
-            flex-direction: column;
-            flex-wrap: wrap;
-            justify-content: left;
-            row-gap: 0.5em;
-            width: 100%;
-        }
-        div.cv-experience-side {
-            div.cv-experience-details {
-                div.cv-experience-logo, div.cv-experience-logo a {
-                    img {
-                        max-width: 2.5em;
-                        max-height: 2.5em;
-                    }
-                    width: 3em;
-                    display: flex;
-                    justify-content: center;
-                }
-                div.cv-experience-title {
-                    * {
-                        color: $colour-grayscale-4;
-                        margin-bottom: 0;
-                    }
-                    h3 {
-                        padding-top: 0;
-                        font-weight: bold;
-                    }
-                }
-                align-content: flex-start;
-                align-items: flex-start;
-                column-gap: 0.2em;
-                display: flex;
-                flex-direction: row;
-                flex-wrap: nowrap;
-            }
-            div.cv-experience-organisation {
-                * {
-                    color: $colour-grayscale-4;
-                    font-weight: normal;
-                    margin-bottom: 0;
-                }
-            }
-            div.cv-experience-location {
-                * {
-                    color: $colour-grayscale-2;
-                    font-weight: normal;
-                    margin-bottom: 0;
-                }
-            }
-            div.cv-experience-date-range {
-                * {
-                    font-style: italic;
-                }
-            }
-            div.cv-experience-description {
-                a {
-                    font-weight: normal;
-                    color: $colour-grayscale-3;
-                    &:hover {
-                        color: $colour-accent;
-                    }
-                }
-            }
-            &:not(:last-child) {
-                border-bottom: 1px solid $colour-grayscale-1;
-            }
-            align-content: flex-start;
-            align-items: flex-start;
-            break-inside: avoid;
-            display: flex;
-            flex-direction: column;
-            flex-wrap: wrap;
-            justify-content: left;
-            row-gap: 0.5em;
-            width: 100%;
-        }
-        div.footer-print {
-            @media screen {
-                display: none;
-            }
-            display: table-cell;
-            height: 98vh;
-            text-align: right;
-            vertical-align: bottom;
-            width: 100vw;
         }
     }
 }
