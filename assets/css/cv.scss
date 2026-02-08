@@ -21,6 +21,25 @@
 div.container {
     main {
         div#cv-lead {
+            ul {
+                li {
+                    &::before{
+                        content: "•";
+                        color: $colour-accent;
+                        margin-right: 0.5rem;
+                    }
+                    white-space: nowrap;
+                    display: inline;
+                }
+                &:first-child {
+                    li {
+                        font-weight: bold;
+                    }
+                }
+                list-style-type: none;
+                padding: 0;
+                margin-bottom: 0;
+            }
             font-size: 1.2em;
             margin-bottom: 0.8em;
         }
@@ -74,11 +93,11 @@ div.container {
                                     div.cv-experience-company-metadata-location {
                                         img.cv-experience-company-metadata-location-icon {
                                             height: 0.9em;
-                                            //max-width: 1em;
                                             filter: grayscale(100%);
                                             margin-right: 0.2em;
                                             margin-bottom: 0.2em;
                                         }
+                                        white-space: nowrap;
                                         color: $colour-grayscale-2;
                                         font-style: italic;
                                         text-align: right;
@@ -242,7 +261,7 @@ div.container {
                         div.grid-of-icons {
                             grid-template-columns: repeat(9, 1fr);
                         }
-                        grid-column: span 2;
+                        grid-column: span 3;
                     }
                 }
                 @media print {
