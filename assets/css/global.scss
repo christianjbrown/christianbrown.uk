@@ -60,23 +60,20 @@ html {
                 }
                 div.header-data {
                     h1 {
-                        span.alternate {
-                            color: $colour-grayscale-2;
-                        }
-                        @media print {
-                            span.alternate {
-                                color: $colour-grayscale-1 !important;
-                            }
-                        }
                         margin-bottom: 0;
                         color: $colour-accent;
                         font-family: $font-serif;
                         font-size: 38pt;
-                        // text-transform: lowercase;
                     }
                     p {
                         * {
                             color: $colour-grayscale-4;
+                        }
+                        img.location-icon {
+                            height: 0.9em;
+                            filter: grayscale(100%);
+                            margin-right: 0.2em;
+                            margin-bottom: 0.2em;
                         }
                         color: $colour-grayscale-4;
                         margin-bottom: 4px;
