@@ -83,6 +83,7 @@ div.container {
                                             font-weight: bold;
                                             margin: 0;
                                             padding: 0;
+                                            white-space: nowrap;
                                         }
                                         span.cv-experience-company-metadata-name-extra {
                                             color: $colour-grayscale-2;
@@ -97,10 +98,10 @@ div.container {
                                             margin-right: 0.2em;
                                             margin-bottom: 0.2em;
                                         }
-                                        white-space: nowrap;
                                         color: $colour-grayscale-2;
                                         font-style: italic;
                                         text-align: right;
+                                        white-space: nowrap;
                                     }
                                     display: flex;
                                     justify-content: space-between;
@@ -115,11 +116,13 @@ div.container {
                                             font-weight: bold;
                                             margin: 0;
                                             padding: 0;
+                                            white-space: nowrap;
                                         }
                                         div.cv-experience-job-metadata-dates {
                                             color: $colour-grayscale-4;
                                             font-style: italic;
                                             text-align: right;
+                                            white-space: nowrap;
                                         }
                                         align-items: center;
                                         display: flex;
