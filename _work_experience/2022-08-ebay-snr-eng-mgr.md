@@ -6,7 +6,7 @@ date_range: "Aug 2022 - Present"
 organisation_logo: "ebay.svg"
 organisation_link: "https://www.ebay.com/"
 ---
-I lead a user experience engineering team within the Shipping department, **managing 10-12 full-stack engineers** from the UK, Canada, Germany, and contractors from Cyprus. My team builds, extends and ensures the uptime of the shipping purchase journeys on the web, handling over 30m purchases per month, serving as the primary entry point to ~US$400m/year in shipping revenue, moving ~US$8b of C2C and B2C merchandise.
+I lead a user experience engineering team within the Shipping department, **managing 10-12 full-stack engineers** from the UK, Canada, Germany, and contractors from Cyprus. My team builds, extends and ensures the uptime of the shipping purchase journeys on the web, **handling over 30m purchases per month**, serving as the primary entry point to ~US$400m/year in shipping revenue, moving ~US$8b of C2C and B2C merchandise.
 
 **Key contributions:**
 * **Team leadership:** I've built a high-impact team where trust and autonomy drive performance. I set clear goals, run regular 1:1s, provide actionable feedback, and support growth.
