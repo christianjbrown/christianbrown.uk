@@ -1,7 +1,7 @@
 ---
 position: "Senior Customer Service Representative"
 organisation: "iiNet"
-organisation_extra: "Australia's second largest ISP, now a wholly-owned subsidiary of TPG Telecom."
+organisation_extra: "Australia's second-largest ISP, now a wholly-owned subsidiary of TPG Telecom."
 date_range: "Jan 2005 – Jun 2006 (1yr, 6mths)"
 location: "Perth, Australia"
 organisation_logo: "iinet.svg"
