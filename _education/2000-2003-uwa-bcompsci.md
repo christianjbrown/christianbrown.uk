@@ -1,7 +1,8 @@
 ---
-name: "University of Western Australia"
-name_extra: "Bachelor of Computer Science"
-icon: "/cv/education/uwa.svg"
-link: "https://www.uwa.edu.au/"
+organisation: "University of Western Australia"
+organisation_logo: "/cv/education/uwa.svg"
+organisation_link: "https://www.uwa.edu.au/"
+position: "Bachelor of Computer Science"
+location: "Perth, Australia"
 ---
-Majored in Electronic&nbsp;Business and IT&nbsp;Systems.
+- Majored in Electronic Business and IT Systems.

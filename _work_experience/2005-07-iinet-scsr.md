@@ -7,6 +7,5 @@ location: "Perth, Australia"
 organisation_logo: "iinet.svg"
 organisation_link: "https://www.iinet.net.au/"
 ---
-I was a team leader in the billing and technical support contact centre. I coached junior staff, helped customers with escalated technical issues, and logged network-wide faults with the Network Operations Centre.
-
-As a side project, I created a set of web-based tools to help my colleagues, including one that produced the theoretical maximum DSL speed by calculating copper-wire attenuation from raw cable data. These tools ended up being used by all support staff across multiple countries, which led to winning 'Most Innovative Staff Member' in 2005 and supported my move to the Applications team.
+* Served as a Team Leader in the billing and technical support contact centre, coaching junior staff, resolving escalated technical issues, and coordinating network-wide fault reports with the Network Operations Centre.
+* Created a suite of web-based tools to improve support workflows, including a theoretical maximum DSL speed estimator based on copper-wire attenuation and raw cable data. The tools were adopted by support teams across multiple contact centres across Australia, New Zealand, and South Africa, contributing to the “Most Innovative Staff Member” award in 2005.
