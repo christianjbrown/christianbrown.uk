@@ -1,7 +1,7 @@
 ---
 layout: "global"
-title: "Christian Brown - Senior Engineering Manager - London, UK"
-description: &description "Experienced people leader and solutions architect with 20+ years shaping high&#8209;traffic enterprise services in e&#8209;commerce, online video, and content management systems. I empower globally distributed teams to deliver maintainable solutions through reusable design principles, automated testing, and continuous integration."
+title: "Christian Brown - Engineering Manager - London, UK"
+description: &description "Engineering Manager with 20 years in software engineering, 15 years in technical leadership, and 9 years managing engineers. Experienced in leading distributed full-stack teams, scaling high-traffic web platforms, improving operational reliability, and delivering revenue-critical systems."
 stylesheets:
     - "/assets/css/cv.css"
 menu:
@@ -21,7 +21,7 @@ schema:
     "@context": "https://schema.org/"
     "@type": "Person"
     name: "Christian Brown"
-    jobTitle: "Senior Engineering Manager"
+    jobTitle: "Engineering Manager"
     description: *description
     url: "https://christianbrown.uk/"
     image: "https://christianbrown.uk/assets/images/favicon/android-chrome-512x512.png"
@@ -31,73 +31,35 @@ schema:
         addressRegion: "Greater London"
         addressCountry: "GB"
 ---
-<div id="cv-lead">
-    <ul>
-        <li>People manager (9+ yrs)</li>
-        <li>Tech lead & architect (15+ yrs)</li>
-        <li>Software engineer (20+ yrs)</li>
-    </ul>
-    <ul>
-        <li>Leads and empowers global teams</li>
-        <li>High-traffic enterprise systems</li>
-        <li>Reusable, tested, CI-driven delivery</li>
-    </ul>
-</div>{%- if site.work_experience %}
-                <div id="cv-columns">
-                    <div id="cv-main">
-                        <div class="cv-section">
-                            <h2>Work experience</h2>
-                            <div class="cv-experiences">
-                            {% assign previous = nil %}
-                            {% for experience in site.work_experience reversed %}
-                                {% include cv-experience.html %}
-                                {% assign previous = experience %}
-                            {% endfor %}
-                            </div>
-                        </div>{% endif %}{%- if site.volunteering %}
-                        <div class="cv-section">
-                            <h2>Recent volunteering</h2>
-                            <div class="cv-experiences">
-                                {% assign previous = nil %}
-                                {% for experience in site.volunteering reversed %}
-                                {% include cv-experience.html %}
-                                {% assign previous = experience %}
-                                {% endfor %}
-                            </div>
-                        </div>{% endif %}
-                    </div>
-                    <div id="cv-side">
-                        {%- if site.data.cv-tech %}
-                        <div class="cv-section" id="cv-section-tech">
-                            <h2>Tech</h2>
-                            <div class="grid-of-icons">{% for item in site.data.cv-tech %}
-                                {% include cv-side-grid-item.html %}{% endfor %}
-                            </div>
-                        </div>{% endif %}
-                        {%- if site.education %}
-                        <div class="cv-section" id="cv-section-education">
-                            <h2>Education</h2>
-                            <div class="list-of-icons">{% for item in site.education reversed %}
-                                {% include cv-side-list-item.html %}{% endfor %}
-                            </div>
-                        </div>{% endif %}
-                        {%- if site.side_projects %}
-                        <div class="cv-section" id="cv-section-side-projects">
-                            <h2>Side projects</h2>
-                            <div class="list-of-icons">{% for item in site.side_projects %}
-                                {% include cv-side-list-item.html %}{% endfor %}
-                            </div>
-                        </div>{% endif %}
-                        <div class="cv-section" id="cv-for-fun">
-                            <h2>For fun</h2>
-                            <ul>
-                                <li>Skiing</li>
-                                <li>Street photography</li>
-                                <li>Film &amp; TV</li>
-                                <li>Travelling</li>
-                                <li>Cooking</li>
-                                <li>Learning piano</li>
-                            </ul>
+<div id="cv-lead">Engineering Manager with 20 years in software engineering, 15 years in technical leadership, and 9 years managing engineers. Experienced in leading distributed full-stack teams, scaling high-traffic web platforms, improving operational reliability, and delivering revenue-critical systems.</div>
+<!--    <ul>-->
+<!--        <li>People manager (9+ yrs)</li>-->
+<!--        <li>Tech lead & architect (15+ yrs)</li>-->
+<!--        <li>Software engineer (20+ yrs)</li>-->
+<!--    </ul>-->
+<!--    <ul>-->
+<!--        <li>Leads and empowers global teams</li>-->
+<!--        <li>High-traffic enterprise systems</li>-->
+<!--        <li>Reusable, tested, CI-driven delivery</li>-->
+<!--    </ul>-->
+                    <div class="cv-section">
+                        <h2>Work experience</h2>
+                        <div class="cv-experiences">
+                        {% assign previous = nil %}
+                        {% for experience in site.work_experience reversed %}
+                            {% include cv-experience.html %}
+                            {% assign previous = experience %}
+                        {% endfor %}
                         </div>
                     </div>
-                </div>
+                    {%- if site.education %}
+                    <div class="cv-section" id="cv-section-education">
+                        <h2>Education</h2>
+                        <div class="cv-experiences">
+                        {% assign previous = nil %}
+                        {% for experience in site.education reversed %}
+                            {% include cv-experience.html %}
+                            {% assign previous = experience %}
+                        {% endfor %}
+                        </div>
+                    </div>{% endif %}
