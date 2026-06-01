@@ -185,12 +185,9 @@ div.container {
             justify-content: left;
             margin-bottom: 1em;
         }
-        width: 65em;
-//         margin: auto;
-//         @media print {
-//             width: 60em;
-//         }
+        @media print {
+            width: 64em;
+        }
     }
     width: 65em;
-//     margin: auto;
 }
