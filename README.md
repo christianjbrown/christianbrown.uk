@@ -12,8 +12,8 @@ Follow Jekyll's [installation guide](https://jekyllrb.com/docs/installation/).
 To run the site locally, use the following command:
 
 ```shell
-bundle exec jekyll serve
+bundle exec jekyll serve --host 0.0.0.0
 ```
-then open your browser to [http://127.0.0.1:4000/](http://127.0.0.1:4000/).
+then open your browser to [http://0.0.0.0:4000/](http://0.0.0.0:4000/).
 
 

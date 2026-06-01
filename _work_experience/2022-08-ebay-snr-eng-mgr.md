@@ -2,16 +2,14 @@
 position: "Senior Engineering Manager"
 organisation: "eBay"
 location: "London, UK"
-date_range: "Aug 2022 - Present"
+date_range: "Aug 2022 - Apr 2026 (3yrs, 9mths)"
 organisation_logo: "ebay.svg"
 organisation_link: "https://www.ebay.com/"
 ---
-I lead a user experience engineering team within the Shipping department, **managing 10-12 full-stack engineers** from the UK, Canada, Germany, and contractors from Cyprus. My team builds, extends and ensures the uptime of the shipping purchase journeys on the web, **handling over 30m purchases per month**, serving as the primary entry point to ~US$400m/year in shipping revenue, moving ~US$8b of C2C and B2C merchandise.
-
-**Key contributions:**
-* **Team leadership:** I've built a high-impact team where trust and autonomy drive performance. I set clear goals, run regular 1:1s, provide actionable feedback, and support growth.
-* **Technical leadership:** I set the technical direction, balancing delivery commitments with long-term architectural health. I guide the team in building scalable, testable, and maintainable systems that avoid introducing technical debt and reduce overall operational risk. Under my leadership, the team reduced production outages by 75%+ and significantly decreased customer-reported defects.
-* **Delivery & cross-functional collaboration:** I work closely with product managers, engineering leadership, and business stakeholders on prioritisation, six-month capacity planning, and delivery timelines.
-* **Hiring & onboarding:** I contribute to hiring across the Shipping department. For my team, I created a structured onboarding programme, recognised by HR, that helps new joiners feel part of the team and contribute to production code from day one.
+* Built and led a team of 10-12 full-stack engineers across the UK, Canada, Germany, and Cyprus, supporting 30m+ shipping purchases a month on the web, within a broader domain accounting for ~US$530m in annual shipping revenue, moving ~US$8b of merchandise.
+* Created a high-performance team culture based on strong ownership, setting clear expectations, provided direct and actionable feedback in weekly 1:1s, whilst adapting management style to individual needs.
+* Set the technical direction for the team, balanced delivery commitments with long-term architectural health, and guided engineers in building scalable, testable, and maintainable systems that reduced technical debt and operational risk. In the first year, the team reduced production outages by over 75% and significantly decreased customer-reported defects.
+* Partnered with product managers to unblock engineers, determine prioritisation, and align on delivery timelines. Collaborated with engineering leadership and business stakeholders on six-month capacity planning cycles.
+* Led hiring for the team, contributed to hiring across the wider Shipping organisation, participated in annual calibration and promotion panels, and created a well-regarded team onboarding programme.
 
 _Tech stack: [TypeScript](https://www.typescriptlang.org/){:target="_blank"}{:title="TypeScript"}/JavaScript ([React](https://reactjs.org/){:target="_blank"}{:title="React"}, [Node.js](https://nodejs.org/){:target="_blank"}{:title="Node.js"}, [Playwright](https://playwright.dev/){:target="_blank"}{:title="Playwright"}), [Java](https://www.java.com/){:target="_blank"}{:title="Java"}, [Kotlin](https://kotlinlang.org/){:target="_blank"}{:title="Kotlin"}, [Oracle](https://www.oracle.com/database/){:target="_blank"}{:title="Oracle"}, [Kubernetes](https://kubernetes.io/){:target="_blank"}{:title="Kubernetes"}, CI/CD with [Jenkins](https://www.jenkins.io/){:target="_blank"}{:title="Jenkins"}._

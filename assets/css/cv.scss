@@ -40,255 +40,157 @@ div.container {
                 padding: 0;
                 margin-bottom: 0;
             }
-            font-size: 1.2em;
+            font-size: 1.3rem;
             margin-bottom: 0.8em;
         }
-        div#cv-columns {
-            div.cv-section {
-                h2 {
-                    border-bottom: 1px solid $colour-grayscale-1;
-                    color: $colour-accent;
-                    font-family: $font-serif;
-                    margin-bottom: 0.5em;
-                    padding-bottom: 0.2em;
-                    width: 100%;
-                }
-                align-content: flex-start;
-                align-items: flex-start;
-                display: flex;
-                flex-direction: column;
-                flex-wrap: wrap;
-                justify-content: left;
-                margin-bottom: 1em;
-            }
-            div#cv-main {
-                div.cv-section {
-                    div.cv-experiences {
-                        div.cv-experience {
-                            div.cv-experience-company-logo {
-                                img, a > img {
-                                    max-height: 2.2em;
-                                    max-width: 4em;
-                                    display: block;
-                                    margin: 0 auto;
-                                }
-                                min-width: 4rem;
-                            }
-                            div.cv-experience-company-main {
-                                div.cv-experience-company-metadata {
-                                    div.cv-experience-company-metadata-name {
-                                        h3.cv-experience-company-metadata-name-current, h3.cv-experience-company-metadata-name-current a {
-                                            color: $colour-grayscale-4;
-                                            font-size: 1.05em;
-                                            font-weight: bold;
-                                            margin: 0;
-                                            padding: 0;
-                                        }
-                                        span.cv-experience-company-metadata-name-extra {
-                                            color: $colour-grayscale-2;
-                                            font-size: 0.9em;
-                                            font-style: italic;
-                                        }
-                                        display: flex;
-                                        flex-direction: column;
-                                    }
-                                    div.cv-experience-company-metadata-location {
-                                        img.cv-experience-company-metadata-location-icon {
-                                            height: 0.9em;
-                                            filter: grayscale(100%);
-                                            margin-right: 0.2em;
-                                            margin-bottom: 0.2em;
-                                        }
-                                        color: $colour-grayscale-2;
-                                        font-style: italic;
-                                        text-align: right;
-                                    }
-                                    display: flex;
-                                    justify-content: space-between;
-                                    margin-bottom: 0.5em;
-                                    flex-wrap: wrap;
-                                    flex-direction: row;
-                                }
-                                div.cv-experience-job {
-                                    div.cv-experience-job-metadata {
-                                        div.cv-experience-job-metadata-title, div.cv-experience-job-metadata-title h4 {
-                                            color: $colour-grayscale-4;
-                                            font-size: 1em;
-                                            font-weight: bold;
-                                            margin: 0;
-                                            padding: 0;
-                                            flex: 0 0 30em;
-                                        }
-                                        div.cv-experience-job-metadata-dates {
-                                            color: $colour-grayscale-4;
-                                            font-style: italic;
-                                            text-align: right;
-                                        }
-                                        align-items: center;
-                                        display: flex;
-                                        flex-direction: row;
-                                        flex-wrap: wrap;
-                                        justify-content: space-between;
-                                        margin-bottom: 0.3em;
-                                        width: 100%;
-                                    }
-                                    div.cv-experience-job-description {
-                                        * {
-                                            color: $colour-grayscale-2;
-                                        }
-                                        em {
-                                            a {
-                                                color: $colour-grayscale-1;
-                                                font-weight: normal;
-                                            }
-                                            font-size: 0.9em;
-                                            color: $colour-grayscale-1;
-                                        }
-                                        strong {
-                                            a {
-                                                font-weight: bold;
-                                            }
-                                            font-weight: bold;
-                                        }
-                                        a {
-                                            font-weight: normal;
-                                        }
-                                        p:has(+ ul) {
-                                            margin-bottom: 0;
-                                        }
-                                        ul {
-                                            margin-left: 1em;
-                                            padding-left: 1em;
-                                        }
-                                    }
-                                    display: flex;
-                                    flex-wrap: wrap;
-                                }
-                                @media print {
-                                    page-break-inside: avoid;
-                                }
-                            }
-                            display: flex;
-                            justify-content: center;
-                            column-gap: 0.7em;
+        div.cv-section {
+            div.cv-experiences {
+                div.cv-experience {
+                    div.cv-experience-company-logo {
+                        img, a > img {
+                            max-height: 2.2em;
+                            max-width: 4em;
                         }
-                        div.cv-experience:not(:last-child) div.cv-experience-company-main {
-                            border-bottom: 1px dashed $colour-grayscale-1;
-                        }
+                        min-height: 2.1em;
                         display: flex;
-                        flex-direction: column;
-                        row-gap: 1em;
+                        align-items: center;
+                        justify-content: center;
                     }
-                }
-                @media print {
-                    width: 100%;
-                }
-                @media screen {
-                    flex: 3;
-                }
-            }
-            div#cv-side {
-                div.grid-of-icons {
-                    div.grid-item {
-                        img {
-                            max-height: 2.3em;
-                            max-width: 2.8em;
-                            margin-bottom: 0.4em;
-                            filter: grayscale(100%);
-                        }
-                        div, div a {
-                            color: $colour-grayscale-4;
-                            white-space: nowrap;
-                        }
-                        &:hover {
-                            img {
-                                filter: grayscale(0%);
-                            }
-                        }
-                        text-align: center;
-                        align-self: end;
-                    }
-                    grid-template-columns: repeat(3, 1fr);
-                    display: grid;
-                    gap: 1em;
-                    margin: 0 auto 1em;
-                }
-                div.list-of-icons {
-                    div.list-item {
-                        div.list-item-icon {
-                            img, a img {
-                                max-height: 2.5em;
-                                width: 2.5em;
-                                margin: 0 auto;
-                            }
-                            width: 3em;
-                            min-width: 3em;
-                        }
-                        div.list-item-main {
-                            div.list-item-main-header {
-                                h3, h3 a {
+                    div.cv-experience-company-main {
+                        div.cv-experience-company-metadata {
+                            div.cv-experience-company-metadata-name {
+                                h3.cv-experience-company-metadata-name-current, h3.cv-experience-company-metadata-name-current a {
                                     color: $colour-grayscale-4;
                                     font-size: 1.05em;
                                     font-weight: bold;
-                                    margin: 0 0 0.5em;
+                                    margin: 0;
                                     padding: 0;
                                 }
-                                div.list-item-main-header-location {
+                                span.cv-experience-company-metadata-name-extra {
                                     color: $colour-grayscale-2;
-                                    margin: 0 0 0.5em;
+                                    font-size: 0.9em;
+                                    font-style: italic;
                                 }
-                                h4 {
-                                    color: $colour-grayscale-3;
+                                display: flex;
+                                flex-direction: column;
+                            }
+                            div.cv-experience-company-metadata-location {
+                                img.cv-experience-company-metadata-location-icon {
+                                    height: 0.9em;
+                                    filter: grayscale(100%);
+                                    margin-right: 0.2em;
+                                    margin-bottom: 0.2em;
+                                }
+                                color: $colour-grayscale-2;
+                                font-style: italic;
+                                text-align: right;
+                            }
+                            display: flex;
+                            justify-content: space-between;
+                            margin-bottom: 0.5em;
+                            flex-wrap: wrap;
+                            flex-direction: row;
+                            width: 100%;
+                        }
+                        div.cv-experience-job {
+                            div.cv-experience-job-metadata {
+                                div.cv-experience-job-metadata-title, div.cv-experience-job-metadata-title h4 {
+                                    color: $colour-grayscale-4;
                                     font-size: 1em;
                                     font-weight: bold;
-                                    margin: 0 0 0.5em;
+                                    margin: 0;
                                     padding: 0;
+                                    flex: 0 0 30em;
                                 }
-                                div.list-item-main-header-dates {
-                                    color: $colour-grayscale-2;
+                                div.cv-experience-job-metadata-dates {
+                                    color: $colour-grayscale-4;
                                     font-style: italic;
-                                    font-size: 0.9em;
-                                    margin: 0 0 0.5em;
+                                    text-align: right;
+                                    margin-left: auto;
                                 }
+                                align-items: center;
+                                display: flex;
+                                flex-direction: row;
+                                flex-wrap: wrap;
+                                justify-content: space-between;
+                                margin-bottom: 0.3em;
+                                width: 100%;
                             }
-                            div.list-item-main-content {
-                                p,li,em {
+                            div.cv-experience-job-description {
+                                * {
                                     color: $colour-grayscale-2;
                                 }
-                                ul {
-                                    padding-left: 1em;
+                                em {
+                                    a {
+                                        color: $colour-grayscale-1;
+                                        font-weight: normal;
+                                    }
+                                    color: $colour-grayscale-1;
                                 }
-                                p:has(+ ul) {
-                                    margin-bottom: 0;
+                                strong {
+                                    a {
+                                        font-weight: bold;
+                                    }
+                                    font-weight: bold;
                                 }
                                 a {
                                     font-weight: normal;
                                 }
+                                p:has(+ ul) {
+                                    margin-bottom: 0;
+                                }
+                                ul {
+                                    margin-left: 1em;
+                                    padding-left: 1em;
+                                }
                             }
+                            display: flex;
+                            flex-wrap: wrap;
+                        }
+                        @media print {
+                            page-break-inside: avoid;
                         }
                         display: flex;
-                        flex-direction: row;
+                        flex-direction: column;
+                        flex: 1 1 auto;
+                        min-width: 0;
                     }
-                }
-                div#cv-section-tech {
-                    @media print {
-                        div.grid-of-icons {
-                            grid-template-columns: repeat(9, 1fr);
-                        }
-                        grid-column: span 3;
-                    }
-                }
-                @media print {
                     display: grid;
-                    gap: 1em;
-                    grid-template-columns: repeat(3, 1fr);
+                    grid-template-columns: 4rem minmax(0, 1fr);
+                    align-items: start;
+                    column-gap: 0.7em;
+                    width: 100%;
                 }
-                flex: 1;
+                div.cv-experience:not(:last-child) div.cv-experience-company-main {
+                    border-bottom: 1px dashed $colour-grayscale-1;
+                }
+                display: flex;
+                flex-direction: column;
+                row-gap: 1em;
+                width: 100%;
             }
-            column-gap: 2em;
+            h2 {
+                border-bottom: 1px solid $colour-grayscale-1;
+                color: $colour-accent;
+                font-family: $font-serif;
+                margin-bottom: 0.5em;
+                padding-bottom: 0.2em;
+                width: 100%;
+            }
+            align-content: flex-start;
+            align-items: flex-start;
             display: flex;
-            flex-direction: row;
+            flex-direction: column;
             flex-wrap: wrap;
+            justify-content: left;
+            margin-bottom: 1em;
         }
+        width: 65em;
+//         margin: auto;
+//         @media print {
+//             width: 60em;
+//         }
     }
+    width: 65em;
+//     margin: auto;
 }

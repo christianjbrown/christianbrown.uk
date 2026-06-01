@@ -7,6 +7,5 @@ date_range: "Sep 2007 – Dec 2011 (4yrs, 4mths)"
 organisation_logo: "cnet.svg"
 organisation_link: "https://en.wikipedia.org/wiki/CNET"
 ---
-I was a full-stack web developer, building features for UK editions of [CNET](https://www.cnet.com){:title="CNET"} and [ZDNet](https://www.zdnet.com){:title="ZDNet"}. I also supported US teams with [GameSpot](https://www.gamespot.com/){:target="_blank"}{:title="GameSpot"}, [TV.com](https://www.tv.com/){:target="_blank"}{:title="TV.com"} and [TechRepublic](https://www.techRepublic.com/){:target="_blank"}{:title="TechRepublic"}.
-
-I worked with engineers across countries to develop a framework of libraries that solved common problems like routing, caching, and CDN integration. I delivered training for the framework in the Paris office to French and German teams, and showcased our achievements at an off-site event in Singapore.
+* Built and maintained features for the UK editions of [CNET](https://www.cnet.com){:title="CNET"} and [ZDNet](https://www.zdnet.com){:title="ZDNet"}, while supporting US engineering teams on [GameSpot](https://www.gamespot.com/){:target="_blank"}, [TV.com](https://www.tv.com/){:target="_blank"}{:title="TV.com"} and [TechRepublic](https://www.techRepublic.com/){:target="_blank"}{:title="TechRepublic"}.
+* Co-developed a framework to solve common platform challenges, including routing, caching, and CDN integration. Trained French and German engineering teams on the framework in Paris and showcased the team’s work at an off-site event in Singapore.

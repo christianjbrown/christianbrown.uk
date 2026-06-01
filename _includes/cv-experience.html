@@ -1,7 +1,7 @@
     <div class="cv-experience">
         <div class="cv-experience-company-logo">
             {% if previous.organisation != experience.organisation %}
-            {% if experience.organisation_link %}<a href="{{ experience.organisation_link }}" target="_blank" title="{{ experience.organisation }}">{% endif %}<img src="/assets/images/cv/experience/{{ experience.organisation_logo }}" alt="{{ experience.organisation }} logo">{% if experience.organisation_link %}</a>{% endif %}
+            {% if experience.organisation_link %}<a href="{{ experience.organisation_link }}" target="_blank" title="{{ experience.organisation }}">{% endif %}{% if experience.organisation_logo contains "/" %}<img src="/assets/images{{ experience.organisation_logo }}" alt="{{ experience.organisation }} logo">{% else %}<img src="/assets/images/cv/experience/{{ experience.organisation_logo }}" alt="{{ experience.organisation }} logo">{% endif %}{% if experience.organisation_link %}</a>{% endif %}
             {% endif %}
         </div>
         <div class="cv-experience-company-main">
@@ -11,7 +11,7 @@
                                             <h3 class="cv-experience-company-metadata-name-current">{% if experience.organisation_link %}<a href="{{ experience.organisation_link }}" target="_blank" title="{{ experience.organisation }}">{% endif %}{{ experience.organisation }}{% if experience.organisation_link %}</a>{% endif %}</h3>{% if experience.organisation_extra %}
                                             <span class="cv-experience-company-metadata-name-extra">{{ experience.organisation_extra }}</span>{% endif %}
                                         </div>
-                                        <div class="cv-experience-company-metadata-location"><img src="/assets/images/icons/icon-location.svg" alt="Location icon" class="cv-experience-company-metadata-location-icon">{{ experience.location }}</div>
+                                        {% if experience.location %}<div class="cv-experience-company-metadata-location"><img src="/assets/images/icons/icon-location.svg" alt="Location icon" class="cv-experience-company-metadata-location-icon">{{ experience.location }}</div>{% endif %}
                                     </div>
                                     {% endif %}
                                     <div class="cv-experience-job">
