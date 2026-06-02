@@ -1,5 +1,5 @@
 <div class="cv-experience">
-                            <div class="cv-experience-company-logo">{% if previous.organisation != experience.organisation %}
+                            <div class="cv-experience-company-logo{% if previous.organisation == experience.organisation %} cv-experience-company-logo--empty{% endif %}">{% if previous.organisation != experience.organisation %}
                                 {% if experience.organisation_link %}<a href="{{ experience.organisation_link }}" target="_blank" title="{{ experience.organisation }}">{% endif %}{% if experience.organisation_logo contains "/" %}<img src="/assets/images{{ experience.organisation_logo }}" alt="{{ experience.organisation }} logo">{% else %}<img src="/assets/images/cv/experience/{{ experience.organisation_logo }}" alt="{{ experience.organisation }} logo">{% endif %}{% if experience.organisation_link %}</a>{% endif %}
                             {% endif %}</div>
                             <div class="cv-experience-company-main">{% if previous.organisation != experience.organisation %}
