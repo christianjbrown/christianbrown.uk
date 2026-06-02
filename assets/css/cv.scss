@@ -160,6 +160,9 @@ div.container {
                     align-items: start;
                     column-gap: 0.7em;
                     width: 100%;
+                    @media (max-width: 480px) {
+                        grid-template-columns: 1fr;
+                    }
                 }
                 div.cv-experience:not(:last-child) div.cv-experience-company-main {
                     border-bottom: 1px dashed $colour-grayscale-1;
@@ -189,5 +192,6 @@ div.container {
             width: 64em;
         }
     }
-    width: 65em;
+    max-width: 65em;
+    width: 100%;
 }
