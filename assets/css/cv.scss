@@ -6,16 +6,15 @@
 
 @page {
     size: A4 portrait;
-    margin: 1cm;
-    // @bottom-right-corner {
-    //    color: $colour-grayscale-1;
-    //    content: "page " counter(page);
-    //    font-family: $font-sans-serif;
-    //    font-size: 1em;
-    //    margin-bottom: 6em;
-    //    margin-right: 6em;
-    //    text-align: right;
-    // }
+    margin: 1cm 1cm 1cm 1cm;
+    @bottom-right {
+       content: "page " counter(page) " of " counter(pages);
+       color: $colour-grayscale-1;
+       font-family: $font-sans-serif;
+       font-size: 0.6rem;
+       padding-bottom: 10rem;
+       text-align: right;
+    }
 }
 
 div.container {
@@ -41,17 +40,17 @@ div.container {
                 margin-bottom: 0;
             }
             font-size: 1.3rem;
-            margin-bottom: 0.8em;
+            margin-bottom: 0.8rem;
         }
         div.cv-section {
             div.cv-experiences {
                 div.cv-experience {
                     div.cv-experience-company-logo {
                         img, a > img {
-                            max-height: 2.2em;
-                            max-width: 4em;
+                            max-height: 2.2rem;
+                            max-width: 4rem;
                         }
-                        min-height: 2.1em;
+                        min-height: 2.1rem;
                         display: flex;
                         align-items: center;
                         justify-content: center;
@@ -61,14 +60,14 @@ div.container {
                             div.cv-experience-company-metadata-name {
                                 h3.cv-experience-company-metadata-name-current, h3.cv-experience-company-metadata-name-current a {
                                     color: $colour-grayscale-4;
-                                    font-size: 1.05em;
+                                    font-size: 1.05rem;
                                     font-weight: bold;
                                     margin: 0;
                                     padding: 0;
                                 }
                                 span.cv-experience-company-metadata-name-extra {
                                     color: $colour-grayscale-2;
-                                    font-size: 0.9em;
+                                    font-size: 0.9rem;
                                     font-style: italic;
                                 }
                                 display: flex;
@@ -76,10 +75,10 @@ div.container {
                             }
                             div.cv-experience-company-metadata-location {
                                 img.cv-experience-company-metadata-location-icon {
-                                    height: 0.9em;
+                                    height: 0.9rem;
                                     filter: grayscale(100%);
-                                    margin-right: 0.2em;
-                                    margin-bottom: 0.2em;
+                                    margin-right: 0.2rem;
+                                    margin-bottom: 0.2rem;
                                 }
                                 color: $colour-grayscale-2;
                                 font-style: italic;
@@ -87,7 +86,7 @@ div.container {
                             }
                             display: flex;
                             justify-content: space-between;
-                            margin-bottom: 0.5em;
+                            margin-bottom: 0.5rem;
                             flex-wrap: wrap;
                             flex-direction: row;
                             width: 100%;
@@ -96,11 +95,11 @@ div.container {
                             div.cv-experience-job-metadata {
                                 div.cv-experience-job-metadata-title, div.cv-experience-job-metadata-title h4 {
                                     color: $colour-grayscale-4;
-                                    font-size: 1em;
+                                    font-size: 1rem;
                                     font-weight: bold;
                                     margin: 0;
                                     padding: 0;
-                                    flex: 0 0 30em;
+                                    flex: 0 0 30rem;
                                 }
                                 div.cv-experience-job-metadata-dates {
                                     color: $colour-grayscale-4;
@@ -113,7 +112,7 @@ div.container {
                                 flex-direction: row;
                                 flex-wrap: wrap;
                                 justify-content: space-between;
-                                margin-bottom: 0.3em;
+                                margin-bottom: 0.3rem;
                                 width: 100%;
                             }
                             div.cv-experience-job-description {
@@ -140,8 +139,8 @@ div.container {
                                     margin-bottom: 0;
                                 }
                                 ul {
-                                    margin-left: 1em;
-                                    padding-left: 1em;
+                                    margin-left: 1rem;
+                                    padding-left: 1rem;
                                 }
                             }
                             display: flex;
@@ -158,10 +157,13 @@ div.container {
                     display: grid;
                     grid-template-columns: 4rem minmax(0, 1fr);
                     align-items: start;
-                    column-gap: 0.7em;
+                    column-gap: 0.7rem;
                     width: 100%;
                     @media (max-width: 480px) {
                         grid-template-columns: 1fr;
+                        div.cv-experience-company-logo {
+                            margin-bottom: 0.4rem;
+                        }
                     }
                 }
                 div.cv-experience:not(:last-child) div.cv-experience-company-main {
@@ -169,15 +171,15 @@ div.container {
                 }
                 display: flex;
                 flex-direction: column;
-                row-gap: 1em;
+                row-gap: 1rem;
                 width: 100%;
             }
             h2 {
                 border-bottom: 1px solid $colour-grayscale-1;
                 color: $colour-accent;
                 font-family: $font-serif;
-                margin-bottom: 0.5em;
-                padding-bottom: 0.2em;
+                margin-bottom: 0.5rem;
+                padding-bottom: 0.2rem;
                 width: 100%;
             }
             align-content: flex-start;
@@ -186,12 +188,12 @@ div.container {
             flex-direction: column;
             flex-wrap: wrap;
             justify-content: left;
-            margin-bottom: 1em;
+            margin-bottom: 1rem;
         }
         @media print {
-            width: 64em;
+            width: 64rem;
         }
     }
-    max-width: 65em;
+    max-width: 65rem;
     width: 100%;
 }

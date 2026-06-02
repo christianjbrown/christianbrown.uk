@@ -11,7 +11,7 @@ div.container {
             span#clock {
                 font-weight: bold;
             }
-            font-size: 1.1em;
+            font-size: 1.1rem;
         }
         div.smart-home-data {
             span.update-time {
@@ -20,7 +20,7 @@ div.container {
                     text-decoration: underline;
                 }
                 display: none;
-                margin-left: 0.5em;
+                margin-left: 0.5rem;
                 color: $colour-grayscale-2;
             }
             div {
@@ -35,13 +35,13 @@ div.container {
                                     &.muted {
                                         color: $colour-grayscale-1;
                                     }
-                                    font-size: 1.2em;
+                                    font-size: 1.2rem;
                                 }
                                 &.secondary {
                                     &.muted {
                                         color: $colour-grayscale-1;
                                     }
-                                    font-size: 1em;
+                                    font-size: 1rem;
                                     color: $colour-grayscale-2;
                                 }
                                 &.error {
@@ -49,8 +49,8 @@ div.container {
                                 }
                                 display: block;
                             }
-                            min-width: 13em;
-                            padding: 1em 0.5em 1em 0.5em;
+                            min-width: 13rem;
+                            padding: 1rem 0.5rem 1rem 0.5rem;
                             vertical-align: text-top;
                         }
                         td:last-child {
@@ -66,11 +66,11 @@ div.container {
                     width: 100%;
                 }
                 flex: 1;
-                min-width: 25em;
-                margin-bottom: 1em;
+                min-width: 25rem;
+                margin-bottom: 1rem;
             }
             align-items: flex-start;
-            column-gap: 3em;
+            column-gap: 3rem;
             display: flex;
             flex-direction: row;
             flex-wrap: wrap;
