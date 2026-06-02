@@ -72,6 +72,8 @@ div.container {
                                 }
                                 display: flex;
                                 flex-direction: column;
+                                flex: 1 1 14rem;
+                                min-width: 0;
                             }
                             div.cv-experience-company-metadata-location {
                                 img.cv-experience-company-metadata-location-icon {
@@ -83,6 +85,11 @@ div.container {
                                 color: $colour-grayscale-2;
                                 font-style: italic;
                                 text-align: right;
+                                display: flex;
+                                align-items: center;
+                                justify-content: flex-end;
+                                margin-left: auto;
+                                white-space: nowrap;
                             }
                             display: flex;
                             justify-content: space-between;
@@ -163,6 +170,17 @@ div.container {
                         grid-template-columns: 1fr;
                         div.cv-experience-company-logo {
                             margin-bottom: 0.4rem;
+                            &.cv-experience-company-logo--empty {
+                                display: none;
+                            }
+                        }
+                        div.cv-experience-company-main {
+                            div.cv-experience-company-metadata {
+                                div.cv-experience-company-metadata-location {
+                                    width: 100%;
+                                    margin-top: 0.2rem;
+                                }
+                            }
                         }
                     }
                 }
