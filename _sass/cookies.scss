@@ -14,11 +14,11 @@ html {
                 }
 
                 background-color: white;
-                border-radius: 0.5em;
+                border-radius: 0.5rem;
                 border: 1px solid black;
                 color: black;
-                padding: 1em;
-                width: 15em;
+                padding: 1rem;
+                width: 15rem;
             }
             div.cookies-options {
                 button {
@@ -35,35 +35,35 @@ html {
                     }
 
                     cursor: pointer;
-                    width: 9em;
-                    padding: 0.5em;
+                    width: 9rem;
+                    padding: 0.5rem;
                 }
 
                 align-items: center;
-                column-gap: 1em;
+                column-gap: 1rem;
                 display: flex;
                 flex-direction: row;
                 justify-content: center;
             }
             align-items: center;
             background-color: rgba(0, 0, 0, 0.7);
-            border-radius: 0.5em;
+            border-radius: 0.5rem;
             border: 1px solid white;
             display: none;
             flex-flow: column;
-            height: 13em;
+            height: 13rem;
             justify-content: center;
-            left: calc(50% - 13em);
-            left: -moz-calc(50% - 13em);
-            left: -webkit-calc(50% - 13em);
+            left: calc(50% - 13rem);
+            left: -moz-calc(50% - 13rem);
+            left: -webkit-calc(50% - 13rem);
             margin: auto;
-            padding: 1em;
+            padding: 1rem;
             position: fixed;
-            row-gap: 1em;
-            top: calc(30% - 6em);
-            top: -moz-calc(30% - 6em);
-            top: -webkit-calc(30% - 6em);
-            width: 25em;
+            row-gap: 1rem;
+            top: calc(30% - 6rem);
+            top: -moz-calc(30% - 6rem);
+            top: -webkit-calc(30% - 6rem);
+            width: 25rem;
             z-index: 100;
         }
     }

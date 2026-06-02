@@ -28,7 +28,7 @@ html {
             a {
                 font-weight: bold;
             }
-            font-size: 1em;
+            font-size: 1rem;
         }
         a:hover {
             color: $colour-grayscale-3;
@@ -36,13 +36,13 @@ html {
         }
         h2 {
             color: $colour-grayscale-3;
-            font-size: 1.5em;
+            font-size: 1.5rem;
         }
         h3 {
-            padding-top: 10px;
-            padding-bottom: 2px;
+            padding-top: 0.625rem;
+            padding-bottom: 0.125rem;
             color: $colour-grayscale-3;
-            font-size: 1.1em;
+            font-size: 1.1rem;
         }
         div.container {
             header {
@@ -52,9 +52,9 @@ html {
                 div.header-avatar {
                     div.header-avatar-border {
                         img {
-                            width: 7.3em;
+                            width: 7.3rem;
                             border-radius: 50%;
-                            border: 0.25em solid $primary;
+                            border: 0.25rem solid $primary;
                         }
                     }
                 }
@@ -64,20 +64,20 @@ html {
                         margin-bottom: 0;
                         color: $colour-accent;
                         font-family: $font-serif;
-                        font-size: 38pt;
+                        font-size: 3.5rem;
                     }
                     p {
                         * {
                             color: $colour-grayscale-4;
                         }
                         img.location-icon {
-                            height: 0.9em;
+                            height: 0.9rem;
                             filter: grayscale(100%);
-                            margin-right: 0.2em;
-                            margin-bottom: 0.2em;
+                            margin-right: 0.2rem;
+                            margin-bottom: 0.2rem;
                         }
                         color: $colour-grayscale-4;
-                        margin-bottom: 4px;
+                        margin-bottom: 0.25rem;
                     }
                     nav {
                         @media print {
@@ -86,7 +86,7 @@ html {
                         a {
                             img.header-data-links-icon {
                                 vertical-align: middle;
-                                height: 18px;
+                                height: 1.125rem;
                             }
                             font-weight: bold;
                             color: $colour-grayscale-3;
@@ -97,12 +97,12 @@ html {
                         width: 100%;
                         text-align: right;
                     }
-                    min-height: 132px;
+                    min-height: 8.25rem;
                     flex-grow: 1;
                 }
                 align-content: flex-start;
                 align-items: center;
-                column-gap: 20px;
+                column-gap: 1.25rem;
                 display: flex;
                 flex-direction: row;
                 flex-wrap: wrap;
@@ -111,9 +111,9 @@ html {
             display: flex;
             flex-direction: column;
             margin: auto;
-            padding-bottom: 10em;
-            padding-top: 3em;
-            row-gap: 10px;
+            padding-bottom: 10rem;
+            padding-top: 3rem;
+            row-gap: 0.625rem;
             @media print {
                 padding-top: 0;
                 padding-bottom: 0;
@@ -133,5 +133,5 @@ html {
         color-scheme: light;
         font-family: $font-sans-serif;
     }
-    font-size: 10.85pt;
+    font-size: 0.9rem;
 }
