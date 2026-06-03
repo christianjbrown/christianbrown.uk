@@ -7,7 +7,6 @@ organisation_logo: "ebay.svg"
 organisation_link: "https://www.ebay.com/"
 ---
 * Led a team of 10-12 full-stack engineers across UK, Canada, Germany, and Cyprus, owning shipping purchase journeys on the web, handling over 30m purchases per month, contributing to ~US$530m in annual shipping revenue.
-* Owned desktop and mobile web experiences within a broader shipping purchase domain spanning web and native mobile apps, together generating ~US$530m in annual revenue, and moving ~US$8b of merchandise.
 * Built a high-performing team through strong ownership, clear expectations, direct and actionable feedback, tailored coaching, and effective weekly 1:1s.
 * Set the team’s technical direction, balancing delivery commitments with long-term architectural health, scalability, maintainability, and operational risk reduction.
 * Reduced production outages by over 75% in the first year, and significantly decreased customer-reported defects. Shifted the team from project-based delivery to a stronger product and customer mindset, improving customer satisfaction by 20%.
