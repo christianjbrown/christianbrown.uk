@@ -6,7 +6,7 @@ date_range: "Aug 2022 - Apr 2026 (3yrs, 9mths)"
 organisation_logo: "ebay.svg"
 organisation_link: "https://www.ebay.com/"
 ---
-* Led a team of 10-12 full-stack engineers across UK, Canada, Germany, and Cyprus, owning web shipping purchase journeys handling over 30m purchases per month, contributing to ~US$530m in annual shipping revenue.
+* Led a team of 10-12 full-stack engineers across UK, Canada, Germany, and Cyprus, owning shipping purchase journeys on the web, handling over 30m purchases per month, contributing to ~US$530m in annual shipping revenue.
 * Owned desktop and mobile web experiences within a broader shipping purchase domain spanning web and native mobile apps, together generating ~US$530m in annual revenue, and moving ~US$8b of merchandise.
 * Built a high-performing team through strong ownership, clear expectations, direct and actionable feedback, tailored coaching, and effective weekly 1:1s.
 * Set the team’s technical direction, balancing delivery commitments with long-term architectural health, scalability, maintainability, and operational risk reduction.
