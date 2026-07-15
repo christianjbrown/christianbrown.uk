@@ -42,7 +42,13 @@ export default class MetWeatherTable extends UpdatingKeyValuePairTable {
         if ('valid_from' in data && 'valid_to' in data) {
             const timeFrom = (new Time(data.valid_from * 1000)).formatUserFriendlyHour();
             const timeTo = (new Time(data.valid_to * 1000)).formatUserFriendlyHour();
-            this._updateDateSpan(`<a href="https://www.metoffice.gov.uk/" target="_blank">Met Office</a> forecast for between ${timeFrom} and ${timeTo}`);
+
+            const metOfficeLink = document.createElement('a');
+            metOfficeLink.href = 'https://www.metoffice.gov.uk/';
+            metOfficeLink.target = '_blank';
+            metOfficeLink.textContent = 'Met Office';
+
+            this._updateDateSpan(metOfficeLink, ` forecast for between ${timeFrom} and ${timeTo}`);
         }
 
         this._addTempTableRow('Temperature', ('temp' in data) ? data.temp : 'Unknown', null, false, true);
