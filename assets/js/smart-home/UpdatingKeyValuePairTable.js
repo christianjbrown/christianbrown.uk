@@ -121,12 +121,12 @@ export default class UpdatingKeyValuePairTable {
         const columnName = row.insertCell();
         columnName.append(UpdatingKeyValuePairTable.#getTableCellSpan(name, 'primary', tempStale, important));
         if (timeDiff) {
-            columnName.append(UpdatingKeyValuePairTable.#getTableCellSpan(timeDiff, 'secondary', tempStale, false));
+            columnName.append(UpdatingKeyValuePairTable.#getTableCellSpan(timeDiff, 'secondary', true, false));
         }
 
         const columnTemp = row.insertCell();
         columnTemp.append(UpdatingKeyValuePairTable.#getTableCellSpan(tempObj.formatC(), 'primary', tempStale, important));
-        columnTemp.append(UpdatingKeyValuePairTable.#getTableCellSpan(tempObj.formatF(), 'secondary', tempStale, false));
+        columnTemp.append(UpdatingKeyValuePairTable.#getTableCellSpan(tempObj.formatF(), 'secondary', true, false));
 
         const columnHumidity = row.insertCell();
         columnHumidity.append(UpdatingKeyValuePairTable.#getTableCellSpan(humidityValue, 'primary', humidityMuted, important));
