@@ -90,3 +90,17 @@ div.container {
         }
     }
 }
+
+// Inside climate table: name | temperature | humidity (3 columns)
+#home-temperature-table {
+    td {
+        min-width: 0;
+    }
+    td:first-child {
+        min-width: 11rem;
+    }
+    td:not(:first-child) {
+        text-align: right;
+        padding-left: 1.5rem;
+    }
+}
