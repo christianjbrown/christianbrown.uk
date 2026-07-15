@@ -168,10 +168,14 @@ export default class UpdatingKeyValuePairTable {
     }
 
     /**
-     * @param {String} text
+     * Replaces the update-time element's contents with the given nodes and
+     * reveals it. Accepts DOM nodes and/or strings (strings become inert text
+     * nodes), so no markup is ever parsed from a string.
+     *
+     * @param {...(Node|String)} nodes
      */
-    _updateDateSpan(text) {
-        this.#domUpdateTime.innerHTML = text;
+    _updateDateSpan(...nodes) {
+        this.#domUpdateTime.replaceChildren(...nodes);
         this.#domUpdateTime.style.display = 'inline';
     }
 
@@ -204,10 +208,19 @@ export default class UpdatingKeyValuePairTable {
      * @param {Error} error
      */
     #renderError(error) {
+        console.error(error);
         this.#clearContents();
         const errorSpan = document.createElement('span');
         errorSpan.setAttribute('class', 'error');
-        errorSpan.append('Error: '+error.message+'. Try again later.');
+        const link = document.createElement('a');
+        link.setAttribute('href', 'https://www.youtube.com/watch?v=Fdjf4lMmiiI');
+        link.setAttribute('target', '_blank');
+        link.append('top men');
+        errorSpan.append(
+            "I'm having trouble loading this data right now, I'm aware - ",
+            link,
+            ' are working on it, please try again later'
+        );
         this.#domTable.insertRow().insertCell().append(errorSpan);
     }
 

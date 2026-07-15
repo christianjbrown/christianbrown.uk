@@ -77,7 +77,7 @@ export default class Cookie {
     static set(key, value, days = 365, opts = {}) {
         const options = { ...opts, [CONSENT_OPT_KEY_MAX_AGE]: days * 60 * 60 * 24 };
         const optionsStr = Object.entries(options).map(([k, v]) => `${k}=${v}`).join('; ');
-        document.cookie = `${key}=${encodeURIComponent(value)}; ${optionsStr}`;
+        document.cookie = `${key}=${encodeURIComponent(value)}; ${optionsStr}; Path=/; SameSite=Lax; Secure`;
     }
 
     /**

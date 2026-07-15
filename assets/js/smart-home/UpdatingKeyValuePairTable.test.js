@@ -76,7 +76,11 @@ describe('UpdatingKeyValuePairTable', () => {
 
             await subject.update();
 
-            expect(table.textContent).toBe('Error: nope. Try again later.');
+            expect(table.textContent).toBe("I'm having trouble loading this data right now, I'm aware - top men are working on it, please try again later");
+            const link = table.querySelector('span.error a');
+            expect(link).not.toBeNull();
+            expect(link.getAttribute('href')).toBe('https://www.youtube.com/watch?v=Fdjf4lMmiiI');
+            expect(link.getAttribute('target')).toBe('_blank');
             expect(table.querySelector('span.error')).not.toBeNull();
         });
     });
@@ -100,10 +104,29 @@ describe('UpdatingKeyValuePairTable', () => {
             expect(subject._getContract()).toEqual([]);
         });
 
-        it('_updateDateSpan sets the html and reveals the element', () => {
-            subject._updateDateSpan('<b>hi</b>');
-            expect(updateSpan.innerHTML).toBe('<b>hi</b>');
+        it('_updateDateSpan appends the given nodes and reveals the element', () => {
+            const link = document.createElement('a');
+            link.textContent = 'Met Office';
+            subject._updateDateSpan(link, ' and text');
+
+            expect(updateSpan.querySelector('a').textContent).toBe('Met Office');
+            expect(updateSpan.textContent).toBe('Met Office and text');
             expect(updateSpan.style.display).toBe('inline');
+        });
+
+        it('_updateDateSpan replaces any existing children', () => {
+            updateSpan.append(document.createElement('span'));
+            subject._updateDateSpan('fresh');
+
+            expect(updateSpan.querySelectorAll('span')).toHaveLength(0);
+            expect(updateSpan.textContent).toBe('fresh');
+        });
+
+        it('_updateDateSpan renders a hostile string as inert text, not HTML', () => {
+            subject._updateDateSpan('<img src=x onerror=alert(1)>');
+
+            expect(updateSpan.querySelector('img')).toBeNull();
+            expect(updateSpan.textContent).toBe('<img src=x onerror=alert(1)>');
         });
 
         describe('_addTempTableRow', () => {
