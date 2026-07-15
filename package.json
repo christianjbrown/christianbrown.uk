@@ -1,0 +1,28 @@
+{
+  "name": "christianbrown.uk",
+  "version": "1.0.0",
+  "description": "This is the personal website of Christian Brown, created with static website generator [Jekyll](https://jekyllrb.com/), which itself is based on Ruby.",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "coverage": "vitest run --coverage"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/christianjbrown/christianbrown.uk.git"
+  },
+  "keywords": [],
+  "author": "Christian Brown",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/christianjbrown/christianbrown.uk/issues"
+  },
+  "homepage": "https://github.com/christianjbrown/christianbrown.uk#readme",
+  "devDependencies": {
+    "@vitest/coverage-v8": "^3.2.7",
+    "jsdom": "^25.0.1",
+    "vitest": "^3.2.7"
+  }
+}
