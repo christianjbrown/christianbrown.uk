@@ -32,10 +32,14 @@ noindex: true
                     </div>
                 </div>
                 <div class="faq">
-                    <a href="#" data-bs-toggle="collapse" data-bs-target="#smart-home-how-it-works-collapse"><h3>🏗️ How it works</h3></a>
-                    <div class="collapse" id="smart-home-how-it-works-collapse">
-                        <div class="card card-body">
-                            <a href="/assets/images/smart-home/how-it-works.svg" target="_blank" title="Open diagram in new window"><img src="/assets/images/smart-home/how-it-works.svg" alt="Diagram showing how this page works" class="how-it-works" /></a>
-                        </div>
-                    </div>
+                    <h3>🏗️ How it works</h3>
+                    <p>This page is a static site built with <a href="https://jekyllrb.com/" target="_blank">Jekyll</a> and hosted on GitHub Pages. When it loads, its JavaScript calls two APIs through the <a href="https://www.fastly.com/" target="_blank">Fastly</a> CDN, which caches the responses and forwards any misses to a pair of <a href="https://cloud.google.com/functions" target="_blank">Google Cloud Functions</a>. One function reads the indoor temperature and humidity from our Samsung SmartThings sensors; the other fetches the outdoor forecast from the Met Office.</p>
+                    <p>The moving parts are open source:</p>
+                    <ul>
+                        <li><a href="https://github.com/christianjbrown/cloud-function-smart-home-temps" target="_blank">cloud-function-smart-home-temps</a> — the Google Cloud Function that serves the indoor climate data.</li>
+                        <li><a href="https://github.com/christianjbrown/php-smartthings-api-lib" target="_blank">php-smartthings-api-lib</a> — PHP client for the Samsung SmartThings API.</li>
+                        <li><a href="https://github.com/christianjbrown/php-cloud-function-lib" target="_blank">php-cloud-function-lib</a> — shared helpers for running the PHP Cloud Functions.</li>
+                        <li><a href="https://github.com/christianjbrown/php-api-client-lib" target="_blank">php-api-client-lib</a> — the underlying HTTP API client library the above build on.</li>
+                    </ul>
+                    <a href="/assets/images/smart-home/how-it-works.svg" target="_blank" title="Open diagram in new window"><img src="/assets/images/smart-home/how-it-works.svg" alt="Diagram showing how this page works" class="how-it-works" /></a>
                 </div>
