@@ -217,9 +217,13 @@ export default class UpdatingKeyValuePairTable {
         link.setAttribute('target', '_blank');
         link.append('top men');
         errorSpan.append(
-            "⚠️ I'm having trouble loading this data right now, I'm aware - ",
+            "⚠️ I'm having trouble loading this data right now.",
+            document.createElement('br'),
+            "I'm aware - ",
             link,
-            ' are working on it. Please try again later.'
+            ' are working on it.',
+            document.createElement('br'),
+            'Please try again later.'
         );
         const errorCell = this.#domTable.insertRow().insertCell();
         errorCell.setAttribute('class', 'error-cell');
