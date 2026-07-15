@@ -12,6 +12,7 @@ const JSON_CONTRACT = {
         'keyRequired': true,
         'contract': {
             'name': {'type': 'string', 'keyRequired': true, 'cannotBeEmpty': true},
+            'roomName': {'type': 'string', 'cannotBeEmpty': true},
             'temperatureTimestamp': {'type': 'number', 'keyRequired': true, 'cannotBeEmpty': true},
             'temperatureValue': {'type': 'number', 'keyRequired': true, 'cannotBeEmpty': true},
             'temperatureStale': {'type': 'boolean', 'keyRequired': true, 'cannotBeEmpty': true},
@@ -29,7 +30,9 @@ export default class SmartHomeTemperatureTable extends UpdatingKeyValuePairTable
         const that = this;
         data['devices'].forEach(
              (dataPoint) => {
-                that._addTempTableRow(dataPoint['name'], dataPoint['temperatureValue'], dataPoint['temperatureTimestamp'], dataPoint['temperatureStale']);
+                const roomName = dataPoint['roomName'];
+                const label = roomName ? roomName + ' - ' + dataPoint['name'] : dataPoint['name'];
+                that._addTempTableRow(label, dataPoint['temperatureValue'], dataPoint['temperatureTimestamp'], dataPoint['temperatureStale']);
             }
         );
     }
