@@ -29,8 +29,12 @@ describe('MetWeatherTable', () => {
             wind_gust: 25,
         });
 
-        expect(updateSpan.innerHTML).toContain('Met Office');
-        expect(updateSpan.innerHTML).toContain('forecast for between');
+        const metOfficeLink = updateSpan.querySelector('a');
+        expect(metOfficeLink).not.toBeNull();
+        expect(metOfficeLink.textContent).toBe('Met Office');
+        expect(metOfficeLink.getAttribute('href')).toBe('https://www.metoffice.gov.uk/');
+        expect(metOfficeLink.target).toBe('_blank');
+        expect(updateSpan.textContent).toContain('forecast for between');
         expect(table.textContent).toContain('Temperature feels like');
         expect(table.textContent).toContain('☁️ Cloudy');
         expect(table.textContent).toContain('80%');
@@ -42,7 +46,8 @@ describe('MetWeatherTable', () => {
         const { table, updateSpan, subject } = make();
         subject._renderUpdate({ temp: 10, humidity: 80, precipitation: 20, wind_speed: 5 });
 
-        expect(updateSpan.innerHTML).toBe('');
+        expect(updateSpan.textContent).toBe('');
+        expect(updateSpan.querySelector('a')).toBeNull();
         expect(table.textContent).not.toContain('feels like');
         expect(table.textContent).not.toContain('Type');
         expect(table.textContent).toContain('5mph');

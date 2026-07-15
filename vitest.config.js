@@ -25,6 +25,13 @@ export default defineConfig({
     plugins: [stripJekyllFrontMatter()],
     test: {
         environment: 'jsdom',
+        // Serve the jsdom document from an https origin so cookies written with
+        // the `Secure` flag (see Cookie.set) are retained and readable in tests.
+        environmentOptions: {
+            jsdom: {
+                url: 'https://localhost:3000/',
+            },
+        },
         globals: true,
         include: ['assets/js/**/*.test.js', 'config/**/*.test.js'],
         coverage: {
