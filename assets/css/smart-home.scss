@@ -50,7 +50,7 @@ div.container {
                                 display: block;
                             }
                             min-width: 13rem;
-                            padding: 1rem 0.5rem 1rem 0.5rem;
+                            padding: 1rem 0.5rem;
                             vertical-align: text-top;
                         }
                         td:last-child {
@@ -72,8 +72,7 @@ div.container {
             align-items: flex-start;
             column-gap: 3rem;
             display: flex;
-            flex-direction: row;
-            flex-wrap: wrap;
+            flex-flow: row wrap;
             justify-content: center;
         }
         div.faq {
@@ -90,7 +89,7 @@ div.container {
             }
             img.how-it-works {
                 display: block;
-                margin: 1rem auto 0 auto;
+                margin: 1rem auto 0;
                 width: 80%;
             }
             margin: auto;
