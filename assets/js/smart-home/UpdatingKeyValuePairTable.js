@@ -2,6 +2,7 @@
 
 import DataFetcher from '../DataFetcher.js';
 import Temperature from './Temperature.js';
+import Humidity from './Humidity.js';
 import Time from './Time.js';
 
 export default class UpdatingKeyValuePairTable {
@@ -70,6 +71,49 @@ export default class UpdatingKeyValuePairTable {
             timeDiff = timeObj.formatTimeAgo();
         }
         this._addTableRow(name, tempObj.formatC(), tempObj.formatF(), timeDiff, stale, important);
+    }
+
+    /**
+     * Adds a row showing temperature and humidity side by side.
+     *
+     * Each metric keeps its own timestamp and stale state; a device that
+     * reports no humidity shows a muted dash in the humidity column.
+     *
+     * @param {String}         name
+     * @param {Number|String}  degreesC
+     * @param {Number}         tempTimestamp
+     * @param {Boolean}        tempStale
+     * @param {Number|null}    humidityPercent
+     * @param {Number|null}    humidityTimestamp
+     * @param {Boolean}        humidityStale
+     * @param {Boolean}        important
+     */
+    _addClimateTableRow(name, degreesC, tempTimestamp = null, tempStale = false, humidityPercent = null, humidityTimestamp = null, humidityStale = false, important = false) {
+        const tempObj = new Temperature(degreesC);
+        const tempTimeDiff = tempTimestamp ? (new Time(tempTimestamp * 1000)).formatTimeAgo() : null;
+
+        const hasHumidity = (humidityPercent !== null && humidityPercent !== undefined);
+        const humidityValue = hasHumidity ? (new Humidity(humidityPercent)).formatPercent() : '—';
+        const humidityTimeDiff = (hasHumidity && humidityTimestamp) ? (new Time(humidityTimestamp * 1000)).formatTimeAgo() : null;
+        const humidityMuted = hasHumidity ? humidityStale : true;
+
+        const row = this.#domTable.insertRow();
+
+        const columnName = row.insertCell();
+        columnName.append(UpdatingKeyValuePairTable.#getTableCellSpan(name, 'primary', tempStale, important));
+        if (tempTimeDiff) {
+            columnName.append(UpdatingKeyValuePairTable.#getTableCellSpan(tempTimeDiff, 'secondary', tempStale, false));
+        }
+
+        const columnTemp = row.insertCell();
+        columnTemp.append(UpdatingKeyValuePairTable.#getTableCellSpan(tempObj.formatC(), 'primary', tempStale, important));
+        columnTemp.append(UpdatingKeyValuePairTable.#getTableCellSpan(tempObj.formatF(), 'secondary', tempStale, false));
+
+        const columnHumidity = row.insertCell();
+        columnHumidity.append(UpdatingKeyValuePairTable.#getTableCellSpan(humidityValue, 'primary', humidityMuted, important));
+        if (humidityTimeDiff) {
+            columnHumidity.append(UpdatingKeyValuePairTable.#getTableCellSpan(humidityTimeDiff, 'secondary', humidityMuted, false));
+        }
     }
 
     /**
