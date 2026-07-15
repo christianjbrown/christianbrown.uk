@@ -20,6 +20,11 @@ collections:
   - "education"
   - "professional_experience"
 
+# Fail the build on Liquid syntax errors instead of rendering them silently, so
+# CI's `jekyll build --strict_front_matter` acts as a real rendering gate.
+liquid:
+  error_mode: strict
+
 # Never publish test tooling or the coverage report to the live site (the
 # coverage report used to leak to christianbrown.uk/coverage/ because it isn't
 # excluded by default). Co-located *.test.js files are excluded via a glob.
@@ -32,3 +37,4 @@ exclude:
   - "*.test.js"
   - "assets/js/*.test.js"
   - "assets/js/smart-home/*.test.js"
+  - "config/stylelint-jekyll-scss.mjs"

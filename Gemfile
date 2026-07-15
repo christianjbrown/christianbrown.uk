@@ -27,3 +27,13 @@ gem "wdm", "~> 0.1.1", :platforms => [:mingw, :x64_mingw, :mswin]
 gem "http_parser.rb", "~> 0.6.0", :platforms => [:jruby]
 
 gem "webrick", "~> 1.7"
+
+# Validate the rendered site (broken links, missing images, invalid HTML) as a
+# test step. Only needed for local/CI testing, never at site-build time.
+group :test do
+  gem "html-proofer", "~> 5.0"
+  # html-proofer 5.2.1 collects results from `async` fibers in a way that broke
+  # with async 2.24+ (checks silently return zero links, so the build passes even
+  # with broken links/images). Pin to the last known-good async release.
+  gem "async", "~> 2.23.0"
+end
