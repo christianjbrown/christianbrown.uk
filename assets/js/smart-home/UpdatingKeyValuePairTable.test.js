@@ -76,12 +76,13 @@ describe('UpdatingKeyValuePairTable', () => {
 
             await subject.update();
 
-            expect(table.textContent).toBe("I'm having trouble loading this data right now, I'm aware - top men are working on it, please try again later");
+            expect(table.textContent).toBe("⚠️ I'm having trouble loading this data right now, I'm aware - top men are working on it. Please try again later.");
             const link = table.querySelector('span.error a');
             expect(link).not.toBeNull();
             expect(link.getAttribute('href')).toBe('https://www.youtube.com/watch?v=Fdjf4lMmiiI');
             expect(link.getAttribute('target')).toBe('_blank');
             expect(table.querySelector('span.error')).not.toBeNull();
+            expect(table.querySelector('td.error-cell')).not.toBeNull();
         });
     });
 
