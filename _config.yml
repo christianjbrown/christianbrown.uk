@@ -21,3 +21,8 @@ collections:
   - "side_projects"
   - "volunteering"
   - "professional_experience"
+
+# Never publish the Jest coverage report to the live site (it used to leak to
+# christianbrown.uk/coverage/ because it isn't excluded by default).
+exclude:
+  - "coverage"
