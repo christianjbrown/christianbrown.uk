@@ -41,8 +41,8 @@ but maybe you're looking for an engineering manager? you've come to right place!
         {%- if page.javascripts -%}{%- for javascript in page.javascripts %}
         <script type="module" src="{{ javascript }}"></script>
         {%- endfor -%}{%- endif %}
-        {%- if site.google_analytics %}
-        <script async type="module" src="https://www.googletagmanager.com/gtag/js?id={{ site.google_analytics }}"></script>
+        {%- if site.google_analytics_id %}
+        <script async type="module" src="https://www.googletagmanager.com/gtag/js?id={{ site.google_analytics_id }}"></script>
         {%- endif %}
         <meta name="author" content="{{ site.site_author }}">
         <meta name="description" content="{{ page.description }}">
