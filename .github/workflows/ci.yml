@@ -38,10 +38,17 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
 
+      # `bundler-cache: true` would install in frozen/deployment mode, which
+      # requires the CI platform (x86_64-linux) to be listed in Gemfile.lock.
+      # The committed lockfile is arm64-darwin only, so install non-frozen and
+      # let Bundler resolve the Linux platform (and its precompiled gems).
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          bundler-cache: true
+          bundler-cache: false
+
+      - name: Install gems
+        run: bundle install --jobs 4
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
