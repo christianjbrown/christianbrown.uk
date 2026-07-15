@@ -28,7 +28,10 @@ export default class SmartHomeTemperatureTable extends UpdatingKeyValuePairTable
     _renderUpdate(data) {
         this._addTempTableRow('Average', data['averageTempDegrees'], data['averageTempTimestamp'], false, true);
         const that = this;
-        data['devices'].forEach(
+        const devices = [...data['devices']].sort(
+            (a, b) => b['temperatureTimestamp'] - a['temperatureTimestamp']
+        );
+        devices.forEach(
              (dataPoint) => {
                 const roomName = dataPoint['roomName'];
                 const label = roomName ? roomName + ' - ' + dataPoint['name'] : dataPoint['name'];
