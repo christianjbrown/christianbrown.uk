@@ -10,7 +10,7 @@ const JSON_CONTRACT = {
     },
     'success': {'type': 'boolean', 'keyRequired': true, 'cannotBeEmpty': true},
     'error': {'type': 'string', 'cannotBeEmpty': true},
-    'version': {'type': 'number', 'keyRequired': true, 'cannotBeEmpty': true},
+    'version': {'type': 'string', 'keyRequired': true, 'cannotBeEmpty': true},
 };
 
 export default class DataFetcher {
