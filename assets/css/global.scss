@@ -9,10 +9,10 @@ $primary: $colour-accent;
 $danger: $colour-error;
 
 // Import only the Bootstrap partials this site actually uses, rather than the
-// whole framework, to avoid shipping dead CSS (carousel, modal, popover,
-// tooltip, jumbotron, dropdown, navbar, etc.). Base partials first, then the
-// components in use: grid, tables, forms, buttons, input-group, card,
-// transitions (collapse) and utilities.
+// whole framework, to avoid shipping dead CSS. Base partials first, then the
+// components in use: grid (.container), tables, card, transitions (.collapse)
+// and utilities. Forms/buttons/input-group were dropped along with the contact
+// and recruiters pages that were the only things using them.
 @import 'bootstrap/functions';
 @import 'bootstrap/variables';
 @import 'bootstrap/mixins';
@@ -21,20 +21,13 @@ $danger: $colour-error;
 @import 'bootstrap/type';
 @import 'bootstrap/grid';
 @import 'bootstrap/tables';
-@import 'bootstrap/forms';
-@import 'bootstrap/buttons';
 @import 'bootstrap/transitions';
-@import 'bootstrap/input-group';
 @import 'bootstrap/card';
 @import 'bootstrap/utilities';
 @import 'bootstrap/print';
 
 html {
     body {
-        .required .form-label:after {
-            content: ' *';
-            color: $colour-error;
-        }
         * {
             color: $colour-grayscale-3;
         }

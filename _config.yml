@@ -18,8 +18,6 @@ header_msapplication_tile_color: "#ffffff"
 
 collections:
   - "education"
-  - "side_projects"
-  - "volunteering"
   - "professional_experience"
 
 # Never publish the Jest coverage report to the live site (it used to leak to
