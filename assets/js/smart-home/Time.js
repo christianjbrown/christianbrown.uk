@@ -24,24 +24,23 @@ export default class Time {
     }
 
     /**
-     * Returns a string like "21 min(s) ago".
+     * Returns a string like "21 mins ago".
      *
      * @returns {String}
      */
     formatTimeAgo() {
         const elapsed = (Date.now() - this.#timestamp)/MS_PER_SEC;
-        let str;
+        // Singular unit only when the value is exactly 1; plural otherwise.
+        const withUnit = (value, unit) => value + ' ' + unit + (value === 1 ? '' : 's') + ' ago';
         if (elapsed < MS_PER_MINUTE) {
-            str = Math.floor(elapsed) + ' sec(s) ago';
+            return withUnit(Math.floor(elapsed), 'sec');
         } else if (elapsed < MS_PER_HOUR) {
-            str = Math.floor(elapsed/MS_PER_MINUTE) + ' min(s) ago';
+            return withUnit(Math.floor(elapsed/MS_PER_MINUTE), 'min');
         } else if (elapsed < MS_PER_DAY) {
-            str = Math.floor(elapsed/MS_PER_HOUR ) + ' hr(s) ago';
+            return withUnit(Math.floor(elapsed/MS_PER_HOUR), 'hr');
         } else {
-            str = Math.floor(elapsed/MS_PER_DAY) + ' day(s) ago';
+            return withUnit(Math.floor(elapsed/MS_PER_DAY), 'day');
         }
-
-        return str;
     };
 
     /**
