@@ -4,6 +4,4 @@
 .sass-cache
 .idea/
 _site/
-coverage/
-node_modules/
 vendor/

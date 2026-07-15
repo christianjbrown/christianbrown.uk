@@ -16,5 +16,24 @@ window.addEventListener('load',
 
         void smartHomePage.runAll();
         smartHomePage.setupSchedule();
+
+        setupCollapseToggles();
     }
 );
+
+/**
+ * Toggle the Bootstrap `.collapse` targets without pulling in Bootstrap's JS.
+ * The `.collapse` / `.show` styling still comes from the Bootstrap SCSS.
+ */
+function setupCollapseToggles() {
+    const toggles = document.querySelectorAll('[data-bs-toggle="collapse"]');
+    toggles.forEach(toggle => {
+        toggle.addEventListener('click', event => {
+            event.preventDefault();
+            const target = document.querySelector(toggle.getAttribute('data-bs-target'));
+            if (target) {
+                target.classList.toggle('show');
+            }
+        });
+    });
+}
