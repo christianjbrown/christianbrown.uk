@@ -1,0 +1,25 @@
+{
+  "extends": "stylelint-config-standard-scss",
+  "ignoreFiles": ["_sass/bootstrap/**/*.scss", "_site/**", "node_modules/**", "coverage/**"],
+  "overrides": [
+    {
+      "files": ["assets/css/*.scss"],
+      "customSyntax": "./config/stylelint-jekyll-scss.mjs"
+    }
+  ],
+  "rules": {
+    "rule-empty-line-before": null,
+    "declaration-empty-line-before": null,
+    "at-rule-empty-line-before": null,
+    "comment-empty-line-before": null,
+    "scss/dollar-variable-empty-line-before": null,
+    "scss/double-slash-comment-empty-line-before": null,
+    "value-no-vendor-prefix": null,
+    "property-no-deprecated": null,
+    "media-feature-range-notation": null,
+    "color-function-notation": null,
+    "color-function-alias-notation": null,
+    "alpha-value-notation": null,
+    "selector-class-pattern": null
+  }
+}

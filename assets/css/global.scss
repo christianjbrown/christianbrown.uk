@@ -111,13 +111,11 @@ html {
                     min-height: 8.25rem;
                     flex-grow: 1;
                 }
-                align-content: flex-start;
+                place-content: flex-start center;
                 align-items: center;
                 column-gap: 1.25rem;
                 display: flex;
-                flex-direction: row;
-                flex-wrap: wrap;
-                justify-content: center;
+                flex-flow: row wrap;
             }
             display: flex;
             flex-direction: column;
