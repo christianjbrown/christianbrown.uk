@@ -1,6 +1,8 @@
 
 # Overview
 
+[![CI](https://github.com/christianjbrown/christianbrown.uk/actions/workflows/ci.yml/badge.svg)](https://github.com/christianjbrown/christianbrown.uk/actions/workflows/ci.yml)
+
 This is the personal website of Christian Brown, created with static website generator [Jekyll](https://jekyllrb.com/), which itself is based on Ruby.
 
 # :construction: Installation
