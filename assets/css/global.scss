@@ -10,9 +10,9 @@ $danger: $colour-error;
 
 // Import only the Bootstrap partials this site actually uses, rather than the
 // whole framework, to avoid shipping dead CSS. Base partials first, then the
-// components in use: grid (.container), tables, card, transitions (.collapse)
-// and utilities. Forms/buttons/input-group were dropped along with the contact
-// and recruiters pages that were the only things using them.
+// components in use: grid (.container), tables and utilities. Forms, buttons
+// and input-group went with the contact/recruiters pages; card and transitions
+// went with the smart-home "How it works" collapse, which is now always open.
 @import 'bootstrap/functions';
 @import 'bootstrap/variables';
 @import 'bootstrap/mixins';
@@ -21,8 +21,6 @@ $danger: $colour-error;
 @import 'bootstrap/type';
 @import 'bootstrap/grid';
 @import 'bootstrap/tables';
-@import 'bootstrap/transitions';
-@import 'bootstrap/card';
 @import 'bootstrap/utilities';
 @import 'bootstrap/print';
 
@@ -55,7 +53,7 @@ html {
             padding-top: 0.625rem;
             padding-bottom: 0.125rem;
             color: $colour-grayscale-3;
-            font-size: 1.1rem;
+            font-size: 1.25rem;
         }
         div.container {
             header {
