@@ -51,6 +51,24 @@ describe('Cookie', () => {
             expect(Cookie.get('greeting')).toBe('hello world');
         });
 
+        it('writes the cookie with hardening flags', () => {
+            const written = [];
+            const spy = vi.spyOn(document, 'cookie', 'set').mockImplementation((value) => {
+                written.push(value);
+            });
+
+            try {
+                Cookie.set('flagged', 'value');
+            } finally {
+                spy.mockRestore();
+            }
+
+            expect(written).toHaveLength(1);
+            expect(written[0]).toContain('Path=/');
+            expect(written[0]).toContain('SameSite=Lax');
+            expect(written[0]).toContain('Secure');
+        });
+
         it('accepts custom day and option arguments', () => {
             Cookie.set('token', 'abc', 10, { path: '/' });
             expect(Cookie.get('token')).toBe('abc');
