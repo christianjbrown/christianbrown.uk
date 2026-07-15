@@ -20,7 +20,15 @@ collections:
   - "education"
   - "professional_experience"
 
-# Never publish the Jest coverage report to the live site (it used to leak to
-# christianbrown.uk/coverage/ because it isn't excluded by default).
+# Never publish test tooling or the coverage report to the live site (the
+# coverage report used to leak to christianbrown.uk/coverage/ because it isn't
+# excluded by default). Co-located *.test.js files are excluded via a glob.
 exclude:
   - "coverage"
+  - "node_modules"
+  - "package.json"
+  - "package-lock.json"
+  - "vitest.config.js"
+  - "*.test.js"
+  - "assets/js/*.test.js"
+  - "assets/js/smart-home/*.test.js"
