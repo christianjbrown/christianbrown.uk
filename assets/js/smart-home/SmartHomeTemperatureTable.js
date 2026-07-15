@@ -31,6 +31,7 @@ export default class SmartHomeTemperatureTable extends UpdatingKeyValuePairTable
      * @param {Object} data
      */
     _renderUpdate(data) {
+        this._addClimateHeaderRow('🌡️', '💧');
         this._addClimateTableRow(
             'Average',
             data['averageTempDegrees'], data['averageTempTimestamp'], false,
