@@ -7,7 +7,11 @@
   "scripts": {
     "test": "vitest run",
     "test:watch": "vitest",
-    "coverage": "vitest run --coverage"
+    "coverage": "vitest run --coverage",
+    "lint:css": "stylelint \"assets/css/**/*.scss\" \"_sass/*.scss\"",
+    "lint:css:fix": "stylelint \"assets/css/**/*.scss\" \"_sass/*.scss\" --fix",
+    "serve:site": "http-server _site -p 8080 -s",
+    "test:a11y": "pa11y-ci"
   },
   "repository": {
     "type": "git",
@@ -22,7 +26,11 @@
   "homepage": "https://github.com/christianjbrown/christianbrown.uk#readme",
   "devDependencies": {
     "@vitest/coverage-v8": "^3.2.7",
+    "http-server": "^14.1.1",
     "jsdom": "^25.0.1",
+    "pa11y-ci": "^4.1.1",
+    "stylelint": "^17.14.0",
+    "stylelint-config-standard-scss": "^17.0.0",
     "vitest": "^3.2.7"
   }
 }
