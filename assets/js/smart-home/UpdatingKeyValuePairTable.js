@@ -74,10 +74,25 @@ export default class UpdatingKeyValuePairTable {
     }
 
     /**
+     * Adds a header row for the climate table, labelling the temperature
+     * and humidity columns.
+     *
+     * @param {String} tempLabel
+     * @param {String} humidityLabel
+     */
+    _addClimateHeaderRow(tempLabel, humidityLabel) {
+        const row = this.#domTable.insertRow();
+        row.insertCell();
+        row.insertCell().append(UpdatingKeyValuePairTable.#getTableCellSpan(tempLabel, 'primary', false, false));
+        row.insertCell().append(UpdatingKeyValuePairTable.#getTableCellSpan(humidityLabel, 'primary', false, false));
+    }
+
+    /**
      * Adds a row showing temperature and humidity side by side.
      *
-     * Each metric keeps its own timestamp and stale state; a device that
-     * reports no humidity shows a muted dash in the humidity column.
+     * A single "time ago" is shown under the name, based on the oldest
+     * (least recent) of the temperature and humidity readings. A device
+     * that reports no humidity shows a muted dash in the humidity column.
      *
      * @param {String}         name
      * @param {Number|String}  degreesC
@@ -90,19 +105,23 @@ export default class UpdatingKeyValuePairTable {
      */
     _addClimateTableRow(name, degreesC, tempTimestamp = null, tempStale = false, humidityPercent = null, humidityTimestamp = null, humidityStale = false, important = false) {
         const tempObj = new Temperature(degreesC);
-        const tempTimeDiff = tempTimestamp ? (new Time(tempTimestamp * 1000)).formatTimeAgo() : null;
 
         const hasHumidity = (humidityPercent !== null && humidityPercent !== undefined);
         const humidityValue = hasHumidity ? (new Humidity(humidityPercent)).formatPercent() : '—';
-        const humidityTimeDiff = (hasHumidity && humidityTimestamp) ? (new Time(humidityTimestamp * 1000)).formatTimeAgo() : null;
         const humidityMuted = hasHumidity ? humidityStale : true;
+
+        let oldestTimestamp = tempTimestamp;
+        if (hasHumidity && humidityTimestamp && (!oldestTimestamp || humidityTimestamp < oldestTimestamp)) {
+            oldestTimestamp = humidityTimestamp;
+        }
+        const timeDiff = oldestTimestamp ? (new Time(oldestTimestamp * 1000)).formatTimeAgo() : null;
 
         const row = this.#domTable.insertRow();
 
         const columnName = row.insertCell();
         columnName.append(UpdatingKeyValuePairTable.#getTableCellSpan(name, 'primary', tempStale, important));
-        if (tempTimeDiff) {
-            columnName.append(UpdatingKeyValuePairTable.#getTableCellSpan(tempTimeDiff, 'secondary', tempStale, false));
+        if (timeDiff) {
+            columnName.append(UpdatingKeyValuePairTable.#getTableCellSpan(timeDiff, 'secondary', tempStale, false));
         }
 
         const columnTemp = row.insertCell();
@@ -111,9 +130,6 @@ export default class UpdatingKeyValuePairTable {
 
         const columnHumidity = row.insertCell();
         columnHumidity.append(UpdatingKeyValuePairTable.#getTableCellSpan(humidityValue, 'primary', humidityMuted, important));
-        if (humidityTimeDiff) {
-            columnHumidity.append(UpdatingKeyValuePairTable.#getTableCellSpan(humidityTimeDiff, 'secondary', humidityMuted, false));
-        }
     }
 
     /**
