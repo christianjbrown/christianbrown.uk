@@ -1,0 +1,114 @@
+import { describe, it, expect } from 'vitest';
+import JsonPayloadContractValidator from './JsonPayloadContractValidator.js';
+import JsonPayloadContractViolation from './JsonPayloadContractViolation.js';
+
+const validator = () => new JsonPayloadContractValidator();
+
+const detailsOf = async (data, contract, path) => {
+    try {
+        await validator().validateContract(data, contract, path);
+    } catch (err) {
+        expect(err).toBeInstanceOf(JsonPayloadContractViolation);
+        return err.getFieldDetails();
+    }
+    throw new Error('Expected validateContract to throw');
+};
+
+describe('JsonPayloadContractValidator', () => {
+    it('rejects data that is not an object', async () => {
+        const details = await detailsOf('not-an-object', {});
+        expect(details).toMatchObject({ fieldPath: '', fieldProblem: 'type', fieldCorrection: 'object' });
+    });
+
+    it('accepts an empty contract', async () => {
+        await expect(validator().validateContract({}, {})).resolves.toBeUndefined();
+    });
+
+    describe('required', () => {
+        it('throws when a required key is missing', async () => {
+            const details = await detailsOf({}, { a: { keyRequired: true } });
+            expect(details).toMatchObject({ fieldPath: 'a', fieldProblem: 'required' });
+        });
+
+        it('passes when a required key is present', async () => {
+            await expect(validator().validateContract({ a: 1 }, { a: { keyRequired: true, type: 'number' } }))
+                .resolves.toBeUndefined();
+        });
+    });
+
+    describe('cannotBeEmpty', () => {
+        it('throws for an empty string', async () => {
+            const details = await detailsOf({ a: '' }, { a: { cannotBeEmpty: true } });
+            expect(details).toMatchObject({ fieldPath: 'a', fieldProblem: 'empty' });
+        });
+
+        it('throws for null', async () => {
+            const details = await detailsOf({ a: null }, { a: { cannotBeEmpty: true } });
+            expect(details).toMatchObject({ fieldPath: 'a', fieldProblem: 'empty' });
+        });
+
+        it('ignores null when emptiness is not enforced', async () => {
+            await expect(validator().validateContract({ a: null }, { a: { type: 'number' } }))
+                .resolves.toBeUndefined();
+        });
+    });
+
+    describe('scalar types', () => {
+        it('throws on a type mismatch', async () => {
+            const details = await detailsOf({ a: 'x' }, { a: { type: 'number' } });
+            expect(details).toMatchObject({ fieldPath: 'a', fieldProblem: 'type', fieldCorrection: 'number' });
+        });
+
+        it('passes when the type matches', async () => {
+            await expect(validator().validateContract({ a: true }, { a: { type: 'boolean' } }))
+                .resolves.toBeUndefined();
+        });
+
+        it('skips validation for absent, optional keys', async () => {
+            await expect(validator().validateContract({}, { a: { type: 'number' } }))
+                .resolves.toBeUndefined();
+        });
+    });
+
+    describe('arrays', () => {
+        it('throws when an array is expected but a scalar is given', async () => {
+            const details = await detailsOf({ a: 'x' }, { a: { type: 'array' } });
+            expect(details).toMatchObject({ fieldPath: 'a', fieldProblem: 'type', fieldCorrection: 'array' });
+        });
+
+        it('accepts an array with no element contract', async () => {
+            await expect(validator().validateContract({ a: [1, 2, 3] }, { a: { type: 'array' } }))
+                .resolves.toBeUndefined();
+        });
+
+        it('validates each element against the element contract', async () => {
+            const contract = { a: { type: 'array', contract: { b: { type: 'number', keyRequired: true } } } };
+            await expect(validator().validateContract({ a: [{ b: 1 }, { b: 2 }] }, contract))
+                .resolves.toBeUndefined();
+        });
+
+        it('reports the failing element with an indexed path', async () => {
+            const contract = { a: { type: 'array', contract: { b: { type: 'number', keyRequired: true } } } };
+            const details = await detailsOf({ a: [{}] }, contract);
+            expect(details).toMatchObject({ fieldPath: 'a[].b', fieldProblem: 'required' });
+        });
+    });
+
+    describe('nested objects', () => {
+        it('recurses into an object contract and builds a dotted path', async () => {
+            const contract = { a: { type: 'object', contract: { b: { type: 'string', keyRequired: true } } } };
+            const details = await detailsOf({ a: {} }, contract);
+            expect(details).toMatchObject({ fieldPath: 'a.b', fieldProblem: 'required' });
+        });
+
+        it('passes a valid nested object', async () => {
+            const contract = { a: { type: 'object', contract: { b: { type: 'string', keyRequired: true } } } };
+            await expect(validator().validateContract({ a: { b: 'hi' } }, contract)).resolves.toBeUndefined();
+        });
+
+        it('accepts an object with no nested contract', async () => {
+            await expect(validator().validateContract({ a: { anything: 1 } }, { a: { type: 'object' } }))
+                .resolves.toBeUndefined();
+        });
+    });
+});
