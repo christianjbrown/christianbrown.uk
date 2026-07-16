@@ -17,6 +17,14 @@
     }
 }
 
+// Live indoor-temperature link in the header (homepage only). Revealed by JS
+// only once the climate API responds — otherwise it stays hidden with no
+// fallback. It sits at the start of the right-aligned nav so growing it can't
+// nudge the Download / LinkedIn links, and it inherits the nav's print: none.
+a.cv-home-temp {
+    margin-right: 1rem;
+}
+
 div.container {
     main {
         div#cv-lead {
