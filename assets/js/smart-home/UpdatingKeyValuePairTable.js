@@ -82,9 +82,14 @@ export default class UpdatingKeyValuePairTable {
      */
     _addClimateHeaderRow(tempLabel, humidityLabel) {
         const row = this.#domTable.insertRow();
-        row.insertCell();
-        row.insertCell().append(UpdatingKeyValuePairTable.#getTableCellSpan(tempLabel, 'primary', false, false));
-        row.insertCell().append(UpdatingKeyValuePairTable.#getTableCellSpan(humidityLabel, 'primary', false, false));
+        for (const label of [null, tempLabel, humidityLabel]) {
+            const th = document.createElement('th');
+            th.scope = 'col';
+            if (label !== null) {
+                th.append(UpdatingKeyValuePairTable.#getTableCellSpan(label, 'primary', false, false));
+            }
+            row.appendChild(th);
+        }
     }
 
     /**
