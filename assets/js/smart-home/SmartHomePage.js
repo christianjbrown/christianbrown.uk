@@ -6,7 +6,7 @@ import SmartHomeTemperatureTable from './SmartHomeTemperatureTable.js';
 
 const isLocal = window.location.host === '127.0.0.1:4000';
 
-const API_SMART_HOME_TEMPS_URL_PROD = 'https://cdn.christianbrown.uk/get-smart-home-temps';
+const API_SMART_HOME_TEMPS_URL_PROD = 'https://cdn.christianbrown.uk/get-smartthings-climate';
 const API_SMART_HOME_TEMPS_URL_DEV = 'http://127.0.0.1:8080';
 const API_SMART_HOME_TEMPS_URL = isLocal ? API_SMART_HOME_TEMPS_URL_DEV: API_SMART_HOME_TEMPS_URL_PROD;
 

@@ -122,7 +122,7 @@ describe('SmartHomePage', () => {
         it('uses the prod cdn urls on any other host', async () => {
             await constructOn('christianbrown.uk');
 
-            expect(homeTableArgs.at(-1)[2]).toBe('https://cdn.christianbrown.uk/get-smart-home-temps');
+            expect(homeTableArgs.at(-1)[2]).toBe('https://cdn.christianbrown.uk/get-smartthings-climate');
             expect(weatherTableArgs.at(-1)[2]).toBe('https://cdn.christianbrown.uk/get-met-office-temps');
         });
     });
