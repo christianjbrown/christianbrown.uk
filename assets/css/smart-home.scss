@@ -41,13 +41,16 @@ div.container {
                                         color: $colour-grayscale-1;
                                     }
                                     &.title {
+                                        // Match the "How it works" h3 (1.25rem / 500)
+                                        // so the table titles read as section
+                                        // headings, no bigger or bolder.
                                         // The title sits in a right-aligned header
                                         // cell; left-align it like the name column.
                                         // Keep it on one line so both tables'
                                         // header rows stay the same height and
                                         // their first separator lines align.
-                                        font-size: 1.5rem;
-                                        font-weight: bold;
+                                        font-size: 1.25rem;
+                                        font-weight: 500;
                                         text-align: left;
                                         white-space: nowrap;
                                     }
