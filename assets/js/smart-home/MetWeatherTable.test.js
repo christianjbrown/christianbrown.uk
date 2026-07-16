@@ -1,6 +1,12 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import MetWeatherTable from './MetWeatherTable.js';
 
+// Wind figures use non-breaking spaces between coupled parts (number/unit,
+// direction/degrees); normalise them to ordinary spaces so the expectations
+// below stay readable. One test pins the non-breaking spaces explicitly.
+const NBSP = String.fromCharCode(0xA0);
+const stripNbsp = (text) => text.split(NBSP).join(String.fromCharCode(0x20));
+
 function make() {
     const table = document.createElement('table');
     const updateSpan = document.createElement('span');
@@ -51,8 +57,18 @@ describe('MetWeatherTable', () => {
         expect(table.textContent).toContain('20%');
         // 15mph → 24.1km/h, 25mph gust → 40.2km/h; direction carries its degrees;
         // mph kept as the muted line without the direction.
-        expect(table.textContent).toContain('Northerly (350°) 24.1 km/h (40.2 km/h gusts)');
-        expect(table.textContent).toContain('15 mph (25 mph gusts)');
+        expect(stripNbsp(table.textContent)).toContain('Northerly (350°) 24.1 km/h (40.2 km/h gusts)');
+        expect(stripNbsp(table.textContent)).toContain('15 mph (25 mph gusts)');
+    });
+
+    it('couples the direction, degrees and units with non-breaking spaces', () => {
+        const { subject } = make();
+        // Non-breaking between direction and degrees, and between each figure
+        // and its unit; ordinary (breakable) space between speed and gusts.
+        expect(subject._formatWindSpeed({ wind_direction: 'N', wind_direction_degrees: 350, wind_speed: 15, wind_gust: 25 }))
+            .toBe(`Northerly${NBSP}(350°) 24.1${NBSP}km/h (40.2${NBSP}km/h gusts)`);
+        expect(subject._formatWindSpeedMph({ wind_speed: 15, wind_gust: 25 }))
+            .toBe(`15${NBSP}mph (25${NBSP}mph gusts)`);
     });
 
     it('renders a minimal forecast with plain wind and no optional rows', () => {
@@ -64,8 +80,8 @@ describe('MetWeatherTable', () => {
         expect(table.textContent).not.toContain('feels like');
         expect(table.textContent).not.toContain('Weather type');
         // 5mph → 8km/h primary, mph kept as the muted line.
-        expect(table.textContent).toContain('8 km/h');
-        expect(table.textContent).toContain('5 mph');
+        expect(stripNbsp(table.textContent)).toContain('8 km/h');
+        expect(stripNbsp(table.textContent)).toContain('5 mph');
         expect(table.textContent).not.toContain('gusts');
     });
 
@@ -88,7 +104,7 @@ describe('MetWeatherTable', () => {
     it('ignores an unknown wind direction and zero gusts', () => {
         const { table, subject } = make();
         subject._renderUpdate({ temp: 10, humidity: 50, precipitation: 0, wind_speed: 5, wind_direction: 'XX', wind_gust: 0 });
-        const windText = table.textContent;
+        const windText = stripNbsp(table.textContent);
         expect(windText).toContain('5 mph');
         expect(windText).not.toContain('Easterly');
         expect(windText).not.toContain('gusts');
@@ -111,14 +127,14 @@ describe('MetWeatherTable', () => {
         });
     });
 
-    it('renders its title in the header, even without any data (e.g. on API failure)', () => {
+    it('renders its title spanning both columns, even without data (e.g. on API failure)', () => {
         const { table, subject } = make();
         subject._renderHeader();
         const headerCells = table.querySelector('tr').querySelectorAll('th');
-        expect(headerCells).toHaveLength(2);
-        expect(headerCells[0].textContent).toBe('🌤 Outside weather forecast');
+        expect(headerCells).toHaveLength(1);
+        expect(headerCells[0].colSpan).toBe(2);
+        expect(headerCells[0].textContent).toContain('Outside weather forecast');
         expect(headerCells[0].querySelector('span.title')).not.toBeNull();
-        expect(headerCells[1].textContent).toBe('');
     });
 
     it('renders Weather type before the temperature', () => {
@@ -154,18 +170,18 @@ describe('MetWeatherTable', () => {
     describe('_formatWindSpeed', () => {
         it('prefixes a friendly compass name and omits speed when absent', () => {
             const { subject } = make();
-            expect(subject._formatWindSpeed({ wind_direction: 'N' })).toBe('Northerly ');
+            expect(subject._formatWindSpeed({ wind_direction: 'N' })).toBe(`Northerly${String.fromCharCode(0x20)}`);
         });
 
         it('converts mph to km/h with direction and gusts', () => {
             const { subject } = make();
-            expect(subject._formatWindSpeed({ wind_direction: 'N', wind_speed: 15, wind_gust: 25 }))
+            expect(stripNbsp(subject._formatWindSpeed({ wind_direction: 'N', wind_speed: 15, wind_gust: 25 })))
                 .toBe('Northerly 24.1 km/h (40.2 km/h gusts)');
         });
 
         it('includes the direction in degrees when available', () => {
             const { subject } = make();
-            expect(subject._formatWindSpeed({ wind_direction: 'ESE', wind_direction_degrees: 112.5, wind_speed: 15 }))
+            expect(stripNbsp(subject._formatWindSpeed({ wind_direction: 'ESE', wind_direction_degrees: 112.5, wind_speed: 15 })))
                 .toBe('East south easterly (112.5°) 24.1 km/h');
         });
     });
@@ -173,7 +189,7 @@ describe('MetWeatherTable', () => {
     describe('_formatWindSpeedMph', () => {
         it('keeps mph with gusts but no direction', () => {
             const { subject } = make();
-            expect(subject._formatWindSpeedMph({ wind_direction: 'N', wind_speed: 15, wind_gust: 25 }))
+            expect(stripNbsp(subject._formatWindSpeedMph({ wind_direction: 'N', wind_speed: 15, wind_gust: 25 })))
                 .toBe('15 mph (25 mph gusts)');
         });
 

@@ -103,16 +103,22 @@ export default class UpdatingKeyValuePairTable {
      * Adds a header row. The first cell carries the table's title; the rest
      * carry optional column headings (a null entry leaves that cell empty). The
      * title sits in the first cell of both tables so their header rows are the
-     * same height and their first separator lines align.
+     * same height and their first separator lines align. A table with no column
+     * headings can let its title span every column (titleColSpan) so it does not
+     * force the first column wider than its data needs.
      *
      * @param {Array<String|null>} labels
+     * @param {Number}             titleColSpan
      */
-    _addHeaderRow(labels) {
+    _addHeaderRow(labels, titleColSpan = 1) {
         const row = this.#domTable.insertRow();
         labels.forEach(
             (label, index) => {
                 const th = document.createElement('th');
                 th.scope = 'col';
+                if (index === 0 && titleColSpan > 1) {
+                    th.colSpan = titleColSpan;
+                }
                 if (label !== null) {
                     const cssClass = index === 0 ? 'primary title' : 'primary';
                     th.append(UpdatingKeyValuePairTable.#getTableCellSpan(label, cssClass, false, false));
@@ -269,9 +275,14 @@ export default class UpdatingKeyValuePairTable {
         );
         const errorCell = this.#domTable.insertRow().insertCell();
         errorCell.setAttribute('class', 'error-cell');
+        // Span the header's columns (counting a colspanned title cell) so the
+        // error message sits under the full width of the table.
         const headerRow = this.#domTable.rows[0];
-        if (headerRow && headerRow.cells.length > 1) {
-            errorCell.colSpan = headerRow.cells.length;
+        if (headerRow) {
+            const columnCount = [...headerRow.cells].reduce((total, cell) => total + cell.colSpan, 0);
+            if (columnCount > 1) {
+                errorCell.colSpan = columnCount;
+            }
         }
         errorCell.append(errorSpan);
     }
