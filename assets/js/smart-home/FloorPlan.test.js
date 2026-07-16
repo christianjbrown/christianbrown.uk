@@ -8,12 +8,18 @@ const ROOM_ANCHORS = {
 };
 const OUTSIDE_ANCHORS = [{'x': 50, 'y': 3}, {'x': 50, 'y': 97}];
 
+let section;
 let container;
 
-function make() {
+function make(roomAnchors = ROOM_ANCHORS, outsideAnchors = OUTSIDE_ANCHORS) {
+    section = document.createElement('div');
+    section.className = 'floor-plan-section';
+    section.hidden = true;
     container = document.createElement('div');
-    document.body.append(container);
-    return new FloorPlan(container, ROOM_ANCHORS, OUTSIDE_ANCHORS);
+    container.className = 'floor-plan';
+    section.append(container);
+    document.body.append(section);
+    return new FloorPlan(section, roomAnchors, outsideAnchors);
 }
 
 function labels() {
@@ -29,7 +35,7 @@ beforeEach(() => {
 });
 
 describe('FloorPlan', () => {
-    it('labels only rooms present in the data, averaging their devices', () => {
+    it('reveals the section and labels only rooms present in the data, averaging their devices', () => {
         const subject = make();
         subject.render({
             devices: [
@@ -42,6 +48,7 @@ describe('FloorPlan', () => {
             ],
         }, null);
 
+        expect(section.hidden).toBe(false);
         // Living room + Study only: Kitchen has no anchor, Bathroom no data,
         // Empty has no reading, and the device with no room is skipped.
         expect(labels()).toHaveLength(2);
@@ -56,6 +63,24 @@ describe('FloorPlan', () => {
         expect(study.querySelector('.floor-plan-temp').textContent).toContain('26.9°c');
         // No humidity reported -> no humidity line.
         expect(study.querySelector('.floor-plan-humidity')).toBeNull();
+    });
+
+    it('keeps the section hidden until the indoor data has loaded', () => {
+        const subject = make();
+
+        // Weather only -> still hidden, nothing rendered.
+        subject.render(null, {temp: 26.7, humidity: 39.3});
+        expect(section.hidden).toBe(true);
+        expect(labels()).toHaveLength(0);
+
+        // No data at all -> hidden.
+        subject.render(null, null);
+        expect(section.hidden).toBe(true);
+
+        // Indoor data arrives -> revealed.
+        subject.render({devices: [{roomName: 'Study', temperatureValue: 20, temperatureStale: false}]}, null);
+        expect(section.hidden).toBe(false);
+        expect(labelFor('Study')).not.toBeUndefined();
     });
 
     it('mutes a room whose readings are all stale', () => {
@@ -85,9 +110,9 @@ describe('FloorPlan', () => {
         expect(livingRoom.querySelector('.floor-plan-humidity').classList.contains('muted')).toBe(false);
     });
 
-    it('places an outside label at each outside anchor', () => {
+    it('adds an outside label at each anchor once the indoor data is present', () => {
         const subject = make();
-        subject.render(null, {temp: 26.7, humidity: 39.3});
+        subject.render({devices: []}, {temp: 26.7, humidity: 39.3});
 
         const outside = labels();
         expect(outside).toHaveLength(2);
@@ -100,39 +125,41 @@ describe('FloorPlan', () => {
 
     it('shows the outside temperature even when its humidity is missing', () => {
         const subject = make();
-        subject.render(null, {temp: 26.7});
+        subject.render({devices: []}, {temp: 26.7});
 
         const outside = labelFor('Outside');
         expect(outside.querySelector('.floor-plan-temp').textContent).toContain('26.7°c');
         expect(outside.querySelector('.floor-plan-humidity')).toBeNull();
     });
 
-    it('renders nothing without data, and ignores payloads with no devices/temp', () => {
+    it('renders no labels for indoor data with no devices or weather with no temp', () => {
         const subject = make();
-        subject.render(null, null);
-        expect(labels()).toHaveLength(0);
-
         subject.render({}, {});
+        expect(section.hidden).toBe(false);
         expect(labels()).toHaveLength(0);
     });
 
-    it('clears previous labels on re-render', () => {
+    it('clears previous labels and re-hides on losing the indoor data', () => {
         const subject = make();
         subject.render({devices: [{roomName: 'Living room', temperatureValue: 26, temperatureStale: false}]}, {temp: 20});
         expect(labels()).toHaveLength(3);
 
         subject.render(null, null);
         expect(labels()).toHaveLength(0);
+        expect(section.hidden).toBe(true);
     });
 
     it('defaults to the real anchors when none are given', () => {
-        const dom = document.createElement('div');
-        document.body.append(dom);
-        const subject = new FloorPlan(dom);
+        section = document.createElement('div');
+        container = document.createElement('div');
+        container.className = 'floor-plan';
+        section.append(container);
+        document.body.append(section);
+        const subject = new FloorPlan(section);
         subject.render({devices: [{roomName: 'Kitchen', temperatureValue: 24, temperatureStale: false}]}, {temp: 20});
 
         // Kitchen is one of the real room anchors, plus two outside labels.
-        expect(dom.querySelectorAll('.floor-plan-label')).toHaveLength(3);
-        expect([...dom.querySelectorAll('.floor-plan-label')].some((l) => l.textContent.startsWith('Kitchen'))).toBe(true);
+        expect(labels()).toHaveLength(3);
+        expect(labels().some((l) => l.textContent.startsWith('Kitchen'))).toBe(true);
     });
 });
