@@ -1,10 +1,19 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 
-const { tableUpdate, homeTableArgs, weatherTableArgs, lastData } = vi.hoisted(() => ({
+const { tableUpdate, homeTableArgs, weatherTableArgs, lastData, floorPlanRender } = vi.hoisted(() => ({
     tableUpdate: vi.fn(() => Promise.resolve()),
     homeTableArgs: [],
     weatherTableArgs: [],
     lastData: { home: null, weather: null },
+    floorPlanRender: vi.fn(),
+}));
+
+vi.mock('./FloorPlan.js', () => ({
+    default: class {
+        render(...args) {
+            floorPlanRender(...args);
+        }
+    },
 }));
 
 vi.mock('./SmartHomeTemperatureTable.js', () => ({
@@ -37,11 +46,12 @@ vi.mock('./MetWeatherTable.js', () => ({
 
 import SmartHomePage from './SmartHomePage.js';
 
-const SELECTORS = ['#status', '#home', '#home-u', '#weather', '#weather-u'];
+const SELECTORS = ['#status', '#floor-plan', '#home', '#home-u', '#weather', '#weather-u'];
 
 function setupDom() {
     document.body.innerHTML = `
         <p id="status"></p>
+        <div id="floor-plan"></div>
         <table id="home"></table>
         <span id="home-u"></span>
         <table id="weather"></table>
@@ -55,6 +65,7 @@ function newPage() {
 beforeEach(() => {
     setupDom();
     tableUpdate.mockClear();
+    floorPlanRender.mockClear();
     homeTableArgs.length = 0;
     weatherTableArgs.length = 0;
     lastData.home = null;
@@ -82,6 +93,15 @@ describe('SmartHomePage', () => {
             expect(tableUpdate).toHaveBeenCalledWith('home');
             expect(tableUpdate).toHaveBeenCalledWith('weather');
             expect(tableUpdate).toHaveBeenCalledTimes(2);
+        });
+
+        it('renders the floor plan with the latest data', async () => {
+            lastData.home = { averageTempDegrees: 26.6, devices: [] };
+            lastData.weather = { temp: 25 };
+
+            await newPage().runAll();
+
+            expect(floorPlanRender).toHaveBeenCalledWith(lastData.home, lastData.weather);
         });
     });
 

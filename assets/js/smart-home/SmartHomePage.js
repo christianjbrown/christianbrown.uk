@@ -2,6 +2,7 @@
 
 import Time from './Time.js';
 import ClimateSummary from './ClimateSummary.js';
+import FloorPlan from './FloorPlan.js';
 import MetWeatherTable from './MetWeatherTable.js';
 import SmartHomeTemperatureTable from './SmartHomeTemperatureTable.js';
 
@@ -20,18 +21,21 @@ const MS_FIVE_MINS = 5 * MS_ONE_MIN;
 
 export default class SmartHomePage {
     #statusDom;
+    #floorPlan;
     #homeTemperatureTableObj;
     #weatherTableObj;
 
     /**
      * @param {String}  statusDomSelector
+     * @param {String}  floorPlanDomSelector
      * @param {String}  homeTemperatureTableDomSelector
      * @param {String}  homeTemperatureTableUpdateDomSelector
      * @param {String}  weatherTableDomSelector
      * @param {String}  weatherTableUpdateDomSelector
      */
-    constructor(statusDomSelector, homeTemperatureTableDomSelector, homeTemperatureTableUpdateDomSelector, weatherTableDomSelector, weatherTableUpdateDomSelector) {
+    constructor(statusDomSelector, floorPlanDomSelector, homeTemperatureTableDomSelector, homeTemperatureTableUpdateDomSelector, weatherTableDomSelector, weatherTableUpdateDomSelector) {
         this.#statusDom = SmartHomePage.#find(statusDomSelector);
+        this.#floorPlan = new FloorPlan(SmartHomePage.#find(floorPlanDomSelector));
 
         const homeTemperatureTableDom = SmartHomePage.#find(homeTemperatureTableDomSelector);
         const homeTemperatureTableUpdateDom = SmartHomePage.#find(homeTemperatureTableUpdateDomSelector);
@@ -55,15 +59,15 @@ export default class SmartHomePage {
      */
     async runAll() {
         // Show the time straight away, then re-render once the tables have
-        // loaded so the climate comparison can be woven in.
-        this.#renderStatusLine();
+        // loaded so the climate comparison and floor-plan labels can appear.
+        this.#render();
         const result = await Promise.all(
             [
                 this.#homeTemperatureTableObj.update(),
                 this.#weatherTableObj.update(),
             ]
         );
-        this.#renderStatusLine();
+        this.#render();
 
         return result;
     }
@@ -73,7 +77,7 @@ export default class SmartHomePage {
      */
     async #update5min() {
         const result = await this.#weatherTableObj.update();
-        this.#renderStatusLine();
+        this.#render();
 
         return result;
     }
@@ -83,9 +87,21 @@ export default class SmartHomePage {
      */
     async #update1min() {
         const result = await this.#homeTemperatureTableObj.update();
-        this.#renderStatusLine();
+        this.#render();
 
         return result;
+    }
+
+    /**
+     * Re-renders everything that depends on the latest data: the status line
+     * and the floor-plan labels.
+     */
+    #render() {
+        const homeData = this.#homeTemperatureTableObj.getLastData();
+        const weatherData = this.#weatherTableObj.getLastData();
+
+        this.#renderStatusLine(homeData, weatherData);
+        this.#floorPlan.render(homeData, weatherData);
     }
 
     /**
@@ -108,10 +124,8 @@ export default class SmartHomePage {
      * climate woven into the same sentence. If either API failed (or has yet to
      * load) it falls back to the time on its own, so the line never empties.
      */
-    #renderStatusLine() {
+    #renderStatusLine(homeData, weatherData) {
         const time = (new Time()).formatUserFriendlyHour(true, true);
-        const homeData = this.#homeTemperatureTableObj.getLastData();
-        const weatherData = this.#weatherTableObj.getLastData();
 
         if (!homeData || !weatherData) {
             this.#statusDom.textContent = `🕐 It's ${time} in London.`;
