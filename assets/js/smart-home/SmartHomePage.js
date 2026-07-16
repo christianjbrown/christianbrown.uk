@@ -1,6 +1,7 @@
 'use strict';
 
 import Time from './Time.js';
+import ClimateSummary from './ClimateSummary.js';
 import MetWeatherTable from './MetWeatherTable.js';
 import SmartHomeTemperatureTable from './SmartHomeTemperatureTable.js';
 
@@ -19,18 +20,21 @@ const MS_FIVE_MINS = 5 * MS_ONE_MIN;
 
 export default class SmartHomePage {
     #clockDom;
+    #climateSummaryDom;
     #homeTemperatureTableObj;
     #weatherTableObj;
 
     /**
      * @param {String}  clockDomSelector
+     * @param {String}  climateSummaryDomSelector
      * @param {String}  homeTemperatureTableDomSelector
      * @param {String}  homeTemperatureTableUpdateDomSelector
      * @param {String}  weatherTableDomSelector
      * @param {String}  weatherTableUpdateDomSelector
      */
-    constructor(clockDomSelector, homeTemperatureTableDomSelector, homeTemperatureTableUpdateDomSelector, weatherTableDomSelector, weatherTableUpdateDomSelector) {
+    constructor(clockDomSelector, climateSummaryDomSelector, homeTemperatureTableDomSelector, homeTemperatureTableUpdateDomSelector, weatherTableDomSelector, weatherTableUpdateDomSelector) {
         this.#clockDom = SmartHomePage.#find(clockDomSelector);
+        this.#climateSummaryDom = SmartHomePage.#find(climateSummaryDomSelector);
 
         const homeTemperatureTableDom = SmartHomePage.#find(homeTemperatureTableDomSelector);
         const homeTemperatureTableUpdateDom = SmartHomePage.#find(homeTemperatureTableUpdateDomSelector);
@@ -53,32 +57,41 @@ export default class SmartHomePage {
      * @return {Promise}
      */
     async runAll() {
-        return Promise.all(
+        const result = await Promise.all(
             [
                 this.#updateClock(),
                 this.#homeTemperatureTableObj.update(),
                 this.#weatherTableObj.update(),
             ]
         );
+        this.#updateSummary();
+
+        return result;
     }
 
     /**
      * @return {Promise}
      */
     async #update5min() {
-        return this.#weatherTableObj.update();
+        const result = await this.#weatherTableObj.update();
+        this.#updateSummary();
+
+        return result;
     }
 
     /**
      * @return {Promise}
      */
     async #update1min() {
-        return Promise.all(
+        const result = await Promise.all(
             [
                 this.#updateClock(),
                 this.#homeTemperatureTableObj.update(),
             ]
         );
+        this.#updateSummary();
+
+        return result;
     }
 
     /**
@@ -96,6 +109,31 @@ export default class SmartHomePage {
     }
 
     async #updateClock() {
-        this.#clockDom.textContent = (new Time()).formatUserFriendlyHour(true);
+        this.#clockDom.textContent = (new Time()).formatUserFriendlyHour(true, true);
+    }
+
+    /**
+     * Renders a one-line summary comparing the inside and outside climate, but
+     * only once both APIs have returned successfully; if either failed (or has
+     * yet to load), the summary is hidden.
+     */
+    #updateSummary() {
+        const homeData = this.#homeTemperatureTableObj.getLastData();
+        const weatherData = this.#weatherTableObj.getLastData();
+
+        if (!homeData || !weatherData) {
+            this.#climateSummaryDom.textContent = '';
+            this.#climateSummaryDom.style.display = 'none';
+            return;
+        }
+
+        const summary = new ClimateSummary(
+            homeData['averageTempDegrees'],
+            homeData['averageHumidity'] ?? null,
+            weatherData['temp'],
+            weatherData['humidity'] ?? null
+        );
+        this.#climateSummaryDom.textContent = summary.format();
+        this.#climateSummaryDom.style.display = 'block';
     }
 }
