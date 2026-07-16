@@ -24,8 +24,8 @@ export default class ClimateSummary {
 
     /**
      * Returns a sentence comparing the inside and outside climate, e.g.
-     * "It's 1.6°c warmer inside (26.6°c inside, 25.0°c outside), and 10.2% more
-     * humid (52.8% inside, 42.6% outside)."
+     * "It's 1.6°c warmer inside (26.6°c inside, 25°c outside), and 10.2% more
+     * humid (52.8% inside, 42.6% outside)." Whole numbers drop their ".0".
      *
      * @returns {String}
      */
@@ -68,15 +68,16 @@ export default class ClimateSummary {
     #formatTemperature() {
         const inside = new Temperature(this.#insideTempC);
         const outside = new Temperature(this.#outsideTempC);
+        const trim = ClimateSummary.#trimZero;
 
         if (inside.formatC() === outside.formatC()) {
-            return `It's ${inside.formatC()} inside and outside`;
+            return `It's ${trim(inside.formatC())} inside and outside`;
         }
 
         const diff = new Temperature(Math.abs(this.#insideTempC - this.#outsideTempC));
         const warmerOrCooler = this.#insideTempC > this.#outsideTempC ? 'warmer' : 'cooler';
 
-        return `It's ${diff.formatC()} ${warmerOrCooler} inside (${inside.formatC()} inside, ${outside.formatC()} outside)`;
+        return `It's ${trim(diff.formatC())} ${warmerOrCooler} inside (${trim(inside.formatC())} inside, ${trim(outside.formatC())} outside)`;
     }
 
     /**
@@ -90,14 +91,27 @@ export default class ClimateSummary {
 
         const inside = new Humidity(this.#insideHumidity);
         const outside = new Humidity(this.#outsideHumidity);
+        const trim = ClimateSummary.#trimZero;
 
         if (inside.formatPercent(1) === outside.formatPercent(1)) {
-            return `it's ${inside.formatPercent(1)} humidity inside and outside`;
+            return `it's ${trim(inside.formatPercent(1))} humidity inside and outside`;
         }
 
         const diff = new Humidity(Math.abs(this.#insideHumidity - this.#outsideHumidity));
         const moreOrLess = this.#insideHumidity > this.#outsideHumidity ? 'more' : 'less';
 
-        return `${diff.formatPercent(1)} ${moreOrLess} humid (${inside.formatPercent(1)} inside, ${outside.formatPercent(1)} outside)`;
+        return `${trim(diff.formatPercent(1))} ${moreOrLess} humid (${trim(inside.formatPercent(1))} inside, ${trim(outside.formatPercent(1))} outside)`;
+    }
+
+    /**
+     * Drops a whole number's trailing ".0" for display, e.g. "4.0%" becomes
+     * "4%" and "25.0°c" becomes "25°c", while "3.9%" is left alone.
+     *
+     * @param {String} formatted
+     *
+     * @returns {String}
+     */
+    static #trimZero(formatted) {
+        return formatted.replace(/\.0(?=°c|%)/, '');
     }
 }
