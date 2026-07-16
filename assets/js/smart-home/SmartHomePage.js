@@ -3,6 +3,7 @@
 import Time from './Time.js';
 import ClimateSummary from './ClimateSummary.js';
 import FloorPlan from './FloorPlan.js';
+import { averageTemperature, averageHumidity } from './averageReadings.js';
 import MetWeatherTable from './MetWeatherTable.js';
 import SmartHomeTemperatureTable from './SmartHomeTemperatureTable.js';
 
@@ -128,14 +129,16 @@ export default class SmartHomePage {
         const now = new Time();
         const when = `It's currently ${now.formatUserFriendlyHour(false, true)} on ${now.formatUserFriendlyDate(true)} in my London home`;
 
-        if (!homeData || !weatherData) {
+        const insideTemp = homeData ? averageTemperature(homeData['devices'] ?? []) : null;
+        if (!insideTemp || !weatherData) {
             this.#statusDom.textContent = `${when}.`;
             return;
         }
 
+        const insideHumidity = averageHumidity(homeData['devices']);
         const climate = (new ClimateSummary(
-            homeData['averageTempDegrees'],
-            homeData['averageHumidity'] ?? null,
+            insideTemp.value,
+            insideHumidity ? insideHumidity.value : null,
             weatherData['temp'],
             weatherData['humidity'] ?? null
         )).format();

@@ -1,13 +1,9 @@
 'use strict';
 
 import UpdatingKeyValuePairTable from './UpdatingKeyValuePairTable.js';
-import Time from './Time.js';
+import { averageTemperature, averageHumidity } from './averageReadings.js';
 
 const JSON_CONTRACT = {
-    'averageTempDegrees': {'type': 'number', 'keyRequired': true, 'cannotBeEmpty': true},
-    'averageTempTimestamp': {'type': 'number', 'keyRequired': true, 'cannotBeEmpty': true},
-    'averageHumidity': {'type': 'number', 'cannotBeEmpty': true},
-    'averageHumidityTimestamp': {'type': 'number', 'cannotBeEmpty': true},
     'devices': {
         'type': 'array',
         'cannotBeEmpty': true,
@@ -39,12 +35,16 @@ export default class SmartHomeTemperatureTable extends UpdatingKeyValuePairTable
      * @param {Object} data
      */
     _renderUpdate(data) {
-        this._addClimateTableRow(
-            'Average',
-            data['averageTempDegrees'], data['averageTempTimestamp'], false,
-            data['averageHumidity'] ?? null, data['averageHumidityTimestamp'] ?? null, false,
-            true
-        );
+        const temperature = averageTemperature(data['devices']);
+        if (temperature) {
+            const humidity = averageHumidity(data['devices']);
+            this._addClimateTableRow(
+                'Average',
+                temperature.value, temperature.timestamp, temperature.stale,
+                humidity ? humidity.value : null, humidity ? humidity.timestamp : null, humidity ? humidity.stale : false,
+                true
+            );
+        }
         const that = this;
         const devices = [...data['devices']].sort(
             (a, b) => b['temperatureTimestamp'] - a['temperatureTimestamp']
