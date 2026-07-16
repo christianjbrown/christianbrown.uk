@@ -149,7 +149,7 @@ describe('UpdatingKeyValuePairTable', () => {
         describe('_addClimateHeaderRow', () => {
             it('adds a header row with two labelled columns', () => {
                 subject._addClimateHeaderRow('🌡️', '💧');
-                const cells = table.querySelectorAll('td');
+                const cells = table.querySelectorAll('th');
                 expect(cells).toHaveLength(3);
                 expect(cells[1].textContent).toBe('🌡️');
                 expect(cells[2].textContent).toBe('💧');

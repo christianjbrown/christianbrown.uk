@@ -26,7 +26,7 @@ div.container {
             div {
                 table {
                     tr {
-                        td {
+                        td, th {
                             span {
                                 &.primary {
                                     &.important {
@@ -52,6 +52,11 @@ div.container {
                             min-width: 13rem;
                             padding: 1rem 0.5rem;
                             vertical-align: text-top;
+                        }
+                        th {
+                            text-align: right;
+                            font-weight: normal;
+                            padding-right: 1rem;
                         }
                         td:last-child {
                             text-align: right;
@@ -105,14 +110,17 @@ div.container {
 
 // Inside climate table: name | temperature | humidity (3 columns)
 #home-temperature-table {
-    td {
+    td, th {
         min-width: 0;
     }
-    td:first-child {
+    td:first-child, th:first-child {
         min-width: 11rem;
     }
     td:not(:first-child) {
         text-align: right;
+        padding-left: 1.5rem;
+    }
+    th:not(:first-child) {
         padding-left: 1.5rem;
     }
 }
