@@ -13,8 +13,9 @@ beforeEach(() => {
 });
 
 describe('SmartHomeTemperatureTable', () => {
-    it('renders a header, the average and each device sorted newest-first', () => {
+    it('renders the title header, the average and each device sorted newest-first', () => {
         const { table, subject } = make();
+        subject._renderHeader();
         subject._renderUpdate({
             averageTempDegrees: 20,
             averageTempTimestamp: 1000,
@@ -36,16 +37,26 @@ describe('SmartHomeTemperatureTable', () => {
         const rows = table.querySelectorAll('tr');
         // header + average + 2 devices
         expect(rows).toHaveLength(4);
+        expect(rows[0].textContent).toContain('🏠 Inside climate');
         expect(rows[1].textContent).toContain('Average');
         expect(rows[1].textContent).toContain('55%');
+        // 55% humidity reads as "Pleasant".
+        expect(rows[1].textContent).toContain('Pleasant');
         // Sensor B has the newest temperature timestamp, so it sorts above Sensor A.
         expect(rows[2].textContent).toContain('Sensor B');
         expect(rows[3].textContent).toContain('Kitchen - Sensor A');
         expect(rows[3].textContent).toContain('50%');
     });
 
+    it('renders the title header even when the update fails to load', () => {
+        const { subject } = make();
+        subject._renderHeader();
+        expect(document.querySelector('table').textContent).toContain('🏠 Inside climate');
+    });
+
     it('handles a missing average humidity and devices without a room or humidity', () => {
         const { table, subject } = make();
+        subject._renderHeader();
         subject._renderUpdate({
             averageTempDegrees: 20,
             averageTempTimestamp: 1000,

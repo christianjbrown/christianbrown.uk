@@ -34,10 +34,32 @@ export default class ClimateSummary {
 
         const humidity = this.#formatHumidity();
         if (humidity !== null) {
-            sentence += ', '+humidity;
+            sentence += `, ${this.#conjunction()} ${humidity}`;
         }
 
         return sentence+'.';
+    }
+
+    /**
+     * Chooses the conjunction joining the temperature and humidity clauses.
+     * When the temperature is a good thing — cooler inside while it's hot out,
+     * or warmer inside while it's cold out — but the air is more humid inside
+     * (the bad thing), the two clauses contrast, so use "but". Otherwise "and".
+     *
+     * Only called when both humidities are present.
+     *
+     * @returns {String}
+     */
+    #conjunction() {
+        const temperatureGood = (this.#outsideTempC > 25 && this.#insideTempC < this.#outsideTempC)
+            || (this.#outsideTempC < 18 && this.#insideTempC > this.#outsideTempC);
+
+        const inside = new Humidity(this.#insideHumidity);
+        const outside = new Humidity(this.#outsideHumidity);
+        const humidityWorseInside = inside.formatPercent(1) !== outside.formatPercent(1)
+            && this.#insideHumidity > this.#outsideHumidity;
+
+        return (temperatureGood && humidityWorseInside) ? 'but' : 'and';
     }
 
     /**
@@ -70,12 +92,12 @@ export default class ClimateSummary {
         const outside = new Humidity(this.#outsideHumidity);
 
         if (inside.formatPercent(1) === outside.formatPercent(1)) {
-            return `and it's ${inside.formatPercent(1)} humidity inside and outside`;
+            return `it's ${inside.formatPercent(1)} humidity inside and outside`;
         }
 
         const diff = new Humidity(Math.abs(this.#insideHumidity - this.#outsideHumidity));
         const moreOrLess = this.#insideHumidity > this.#outsideHumidity ? 'more' : 'less';
 
-        return `and ${diff.formatPercent(1)} ${moreOrLess} humid (${inside.formatPercent(1)} inside, ${outside.formatPercent(1)} outside)`;
+        return `${diff.formatPercent(1)} ${moreOrLess} humid (${inside.formatPercent(1)} inside, ${outside.formatPercent(1)} outside)`;
     }
 }

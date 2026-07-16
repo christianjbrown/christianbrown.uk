@@ -80,6 +80,13 @@ describe('Time', () => {
             });
         });
 
+        describe('formatUserFriendlyDate', () => {
+            it('returns the weekday, ordinal day of month and month', () => {
+                expect(new Time(utc(2023, 10, 20, 9, 5), 'UTC').formatUserFriendlyDate()).toBe('Mon 20th Nov');
+                expect(new Time(utc(2023, 0, 1, 10, 15), 'UTC').formatUserFriendlyDate()).toBe('Sun 1st Jan');
+            });
+        });
+
         describe('getTimezoneAbbreviation', () => {
             it('returns GMT in winter and BST in summer for London', () => {
                 expect(new Time(utc(2023, 0, 15, 12, 0), 'Europe/London').getTimezoneAbbreviation()).toBe('GMT');

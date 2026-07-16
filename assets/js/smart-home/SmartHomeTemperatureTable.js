@@ -28,10 +28,17 @@ const JSON_CONTRACT = {
 export default class SmartHomeTemperatureTable extends UpdatingKeyValuePairTable {
 
     /**
+     * Title in the first cell, then the temperature and humidity column
+     * headings.
+     */
+    _renderHeader() {
+        this._addHeaderRow(['🏠 Inside climate', '🌡️', '💧']);
+    }
+
+    /**
      * @param {Object} data
      */
     _renderUpdate(data) {
-        this._addClimateHeaderRow('🌡️', '💧');
         this._addClimateTableRow(
             'Average',
             data['averageTempDegrees'], data['averageTempTimestamp'], false,

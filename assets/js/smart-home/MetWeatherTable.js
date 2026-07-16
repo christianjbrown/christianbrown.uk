@@ -40,6 +40,14 @@ const COMPASS_FRIENDLY_NAMES= {
 
 export default class MetWeatherTable extends UpdatingKeyValuePairTable {
     /**
+     * Title in the first cell; the second column has no heading of its own, so
+     * the title alone keeps this header the same height as the inside table's.
+     */
+    _renderHeader() {
+        this._addHeaderRow(['🌤 Outside weather forecast', null]);
+    }
+
+    /**
      * @param {Object} data
      */
     _renderUpdate(data) {
@@ -49,14 +57,16 @@ export default class MetWeatherTable extends UpdatingKeyValuePairTable {
             const timeFrom = fromObj.formatUserFriendlyHour();
             const timeTo = toObj.formatUserFriendlyHour();
 
-            // Both times normally share a timezone (GMT or BST); only around the
-            // twice-yearly clock change do they differ. Show the indicator once,
-            // after the second time, when they match; otherwise after each.
-            const tzFrom = fromObj.getTimezoneAbbreviation();
-            const tzTo = toObj.getTimezoneAbbreviation();
-            const range = tzFrom === tzTo
-                ? `${timeFrom} and ${timeTo} ${tzTo}`
-                : `${timeFrom} ${tzFrom} and ${timeTo} ${tzTo}`;
+            // Both ends of the hour-long window normally share a timezone and
+            // date; only the twice-yearly clock change (timezone) or a window
+            // that straddles midnight (date) make them differ. Show the shared
+            // "TZ on date" suffix once, after the second time, when they match;
+            // otherwise show each time's own suffix.
+            const suffixFrom = `${fromObj.getTimezoneAbbreviation()} on ${fromObj.formatUserFriendlyDate()}`;
+            const suffixTo = `${toObj.getTimezoneAbbreviation()} on ${toObj.formatUserFriendlyDate()}`;
+            const range = suffixFrom === suffixTo
+                ? `${timeFrom} and ${timeTo} ${suffixTo}`
+                : `${timeFrom} ${suffixFrom} and ${timeTo} ${suffixTo}`;
 
             const metOfficeLink = document.createElement('a');
             metOfficeLink.href = 'https://www.metoffice.gov.uk/';
@@ -65,10 +75,6 @@ export default class MetWeatherTable extends UpdatingKeyValuePairTable {
 
             this._updateDateSpan('Source: ', metOfficeLink, ` forecast for between ${range}`);
         }
-
-        // Blank header row so the outside table lines up with the inside climate
-        // table, which carries 🌡️/💧 column headings we have no equivalent for.
-        this._addBlankHeaderRow(2);
 
         if ('type_string' in data && 'type_emoji' in data) {
             this._addTableRow('Weather type', `${data.type_emoji} ${data.type_string}`);
@@ -90,7 +96,7 @@ export default class MetWeatherTable extends UpdatingKeyValuePairTable {
 
     /**
      * Primary wind line, in km/h with a friendly direction prefix, e.g.
-     * "Northerly 24.1km/h (40.2km/h gusts)".
+     * "Northerly 24.1 km/h (40.2 km/h gusts)".
      */
     _formatWindSpeed(data) {
         let wind = '';
@@ -103,21 +109,21 @@ export default class MetWeatherTable extends UpdatingKeyValuePairTable {
         }
         // wind_speed / wind_gust arrive as full-precision floats (converted m/s → mph);
         // convert to km/h and round to one decimal place for display.
-        wind += ('wind_speed' in data) ? `${MetWeatherTable._round(data.wind_speed * MPH_TO_KMH)}km/h` : '';
+        wind += ('wind_speed' in data) ? `${MetWeatherTable._round(data.wind_speed * MPH_TO_KMH)} km/h` : '';
         if ('wind_gust' in data && data.wind_gust > 0) {
-            wind += ` (${MetWeatherTable._round(data.wind_gust * MPH_TO_KMH)}km/h gusts)`;
+            wind += ` (${MetWeatherTable._round(data.wind_gust * MPH_TO_KMH)} km/h gusts)`;
         }
         return wind;
     }
 
     /**
      * Muted secondary wind line, in mph without the direction, e.g.
-     * "15mph (25mph gusts)".
+     * "15 mph (25 mph gusts)".
      */
     _formatWindSpeedMph(data) {
-        let wind = ('wind_speed' in data) ? `${MetWeatherTable._round(data.wind_speed)}mph` : '';
+        let wind = ('wind_speed' in data) ? `${MetWeatherTable._round(data.wind_speed)} mph` : '';
         if ('wind_gust' in data && data.wind_gust > 0) {
-            wind += ` (${MetWeatherTable._round(data.wind_gust)}mph gusts)`;
+            wind += ` (${MetWeatherTable._round(data.wind_gust)} mph gusts)`;
         }
         return wind;
     }

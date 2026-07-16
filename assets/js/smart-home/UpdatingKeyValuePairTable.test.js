@@ -34,6 +34,13 @@ class TestTable extends UpdatingKeyValuePairTable {
     }
 }
 
+/** A subclass that renders a multi-column title header, like the real tables. */
+class HeaderedTestTable extends TestTable {
+    _renderHeader() {
+        this._addHeaderRow(['🏠 Title', '🌡️', '💧']);
+    }
+}
+
 function makeDom() {
     const table = document.createElement('table');
     const updateSpan = document.createElement('span');
@@ -86,6 +93,20 @@ describe('UpdatingKeyValuePairTable', () => {
             expect(link.getAttribute('target')).toBe('_blank');
             expect(table.querySelector('span.error')).not.toBeNull();
             expect(table.querySelector('td.error-cell')).not.toBeNull();
+        });
+
+        it('keeps the title header and spans the error across its columns on failure', async () => {
+            const { table, updateSpan } = makeDom();
+            const subject = new HeaderedTestTable(table, updateSpan, 'url');
+            fetchMock.mockRejectedValue(new Error('nope'));
+
+            await subject.update();
+
+            // Header (title + column headings) stays so the reader can tell which
+            // table failed, and the error cell spans its three columns.
+            expect(table.textContent).toContain('🏠 Title');
+            expect(table.querySelector('th span.title')).not.toBeNull();
+            expect(table.querySelector('td.error-cell').colSpan).toBe(3);
         });
     });
 
@@ -149,23 +170,32 @@ describe('UpdatingKeyValuePairTable', () => {
             });
         });
 
-        describe('_addClimateHeaderRow', () => {
-            it('adds a header row with two labelled columns', () => {
-                subject._addClimateHeaderRow('🌡️', '💧');
+        describe('_addHeaderRow', () => {
+            it('puts the title in the first cell and column headings after it', () => {
+                subject._addHeaderRow(['🏠 Inside climate', '🌡️', '💧']);
                 const cells = table.querySelectorAll('th');
                 expect(cells).toHaveLength(3);
+                expect(cells[0].textContent).toBe('🏠 Inside climate');
+                expect(cells[0].querySelector('span.title')).not.toBeNull();
+                expect(cells[0].scope).toBe('col');
                 expect(cells[1].textContent).toBe('🌡️');
                 expect(cells[2].textContent).toBe('💧');
             });
-        });
 
-        describe('_addBlankHeaderRow', () => {
-            it('adds a header row of empty cells', () => {
-                subject._addBlankHeaderRow(2);
+            it('leaves a null-labelled cell empty (no span)', () => {
+                subject._addHeaderRow(['🌤 Outside weather forecast', null]);
                 const cells = table.querySelectorAll('th');
                 expect(cells).toHaveLength(2);
-                expect(table.textContent).toBe('');
-                expect(cells[0].scope).toBe('col');
+                expect(cells[0].textContent).toBe('🌤 Outside weather forecast');
+                expect(cells[1].textContent).toBe('');
+                expect(cells[1].querySelector('span')).toBeNull();
+            });
+        });
+
+        describe('_renderHeader', () => {
+            it('is a no-op by default', () => {
+                subject._renderHeader();
+                expect(table.querySelectorAll('tr')).toHaveLength(0);
             });
         });
 
@@ -197,9 +227,20 @@ describe('UpdatingKeyValuePairTable', () => {
                 expect(table.textContent).toContain('50%');
             });
 
-            it('shows a muted dash when there is no humidity', () => {
+            it('shows a muted humidity "feel" description under the value', () => {
+                subject._addClimateTableRow('Average', 20, ts, false, 50, olderTs, false, false);
+                const humidityCell = table.querySelector('tr td:last-child');
+                const description = humidityCell.querySelector('span.secondary.muted');
+                expect(description).not.toBeNull();
+                // 50% reads as "Pleasant".
+                expect(description.textContent).toBe('Pleasant');
+            });
+
+            it('shows a muted dash and no description when there is no humidity', () => {
                 subject._addClimateTableRow('Sensor', 20, ts, false, null, null, false, false);
                 expect(table.textContent).toContain('—');
+                const humidityCell = table.querySelector('tr td:last-child');
+                expect(humidityCell.querySelector('span.secondary')).toBeNull();
             });
 
             it('omits the "time ago" when there is no timestamp at all', () => {
