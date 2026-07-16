@@ -74,11 +74,22 @@ export default class MetWeatherTable extends UpdatingKeyValuePairTable {
         if ('wind_direction' in data && COMPASS_FRIENDLY_NAMES[data.wind_direction]) {
             wind += `${COMPASS_FRIENDLY_NAMES[data.wind_direction]} `;
         }
-        wind += ('wind_speed' in data) ? `${data.wind_speed}mph` : '';
+        // wind_speed / wind_gust arrive as full-precision floats (converted m/s → mph),
+        // so round to one decimal place for display.
+        wind += ('wind_speed' in data) ? `${MetWeatherTable._round(data.wind_speed)}mph` : '';
         if ('wind_gust' in data && data.wind_gust > 0) {
-            wind += ` (${data.wind_gust}mph gusts)`;
+            wind += ` (${MetWeatherTable._round(data.wind_gust)}mph gusts)`;
         }
         return wind;
+    }
+
+    /**
+     * @param {Number} value
+     *
+     * @returns {Number}
+     */
+    static _round(value) {
+        return Math.round(value * 10) / 10;
     }
 
     /**

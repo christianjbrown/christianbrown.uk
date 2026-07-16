@@ -123,7 +123,7 @@ describe('SmartHomePage', () => {
             await constructOn('christianbrown.uk');
 
             expect(homeTableArgs.at(-1)[2]).toBe('https://cdn.christianbrown.uk/get-smartthings-climate');
-            expect(weatherTableArgs.at(-1)[2]).toBe('https://cdn.christianbrown.uk/get-met-office-temps');
+            expect(weatherTableArgs.at(-1)[2]).toBe('https://cdn.christianbrown.uk/get-met-office-weather');
         });
     });
 });
