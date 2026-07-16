@@ -1,7 +1,6 @@
 import { describe, it, expect, beforeAll, vi } from 'vitest';
 import {
-    CLOCK_SPAN_SELECTOR,
-    CLIMATE_SUMMARY_SELECTOR,
+    STATUS_LINE_SELECTOR,
     HOME_TEMP_TABLE_SELECTOR,
     HOME_TEMP_TABLE_UPDATE_TIME_SELECTOR,
     WEATHER_TABLE_SELECTOR,
@@ -39,8 +38,7 @@ describe('smart-home/index.js', () => {
         window.dispatchEvent(new Event('load'));
 
         expect(ctor).toHaveBeenCalledWith(
-            CLOCK_SPAN_SELECTOR,
-            CLIMATE_SUMMARY_SELECTOR,
+            STATUS_LINE_SELECTOR,
             HOME_TEMP_TABLE_SELECTOR,
             HOME_TEMP_TABLE_UPDATE_TIME_SELECTOR,
             WEATHER_TABLE_SELECTOR,

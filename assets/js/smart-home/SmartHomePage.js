@@ -19,22 +19,19 @@ const MS_ONE_MIN = 60 * 1000;
 const MS_FIVE_MINS = 5 * MS_ONE_MIN;
 
 export default class SmartHomePage {
-    #clockDom;
-    #climateSummaryDom;
+    #statusDom;
     #homeTemperatureTableObj;
     #weatherTableObj;
 
     /**
-     * @param {String}  clockDomSelector
-     * @param {String}  climateSummaryDomSelector
+     * @param {String}  statusDomSelector
      * @param {String}  homeTemperatureTableDomSelector
      * @param {String}  homeTemperatureTableUpdateDomSelector
      * @param {String}  weatherTableDomSelector
      * @param {String}  weatherTableUpdateDomSelector
      */
-    constructor(clockDomSelector, climateSummaryDomSelector, homeTemperatureTableDomSelector, homeTemperatureTableUpdateDomSelector, weatherTableDomSelector, weatherTableUpdateDomSelector) {
-        this.#clockDom = SmartHomePage.#find(clockDomSelector);
-        this.#climateSummaryDom = SmartHomePage.#find(climateSummaryDomSelector);
+    constructor(statusDomSelector, homeTemperatureTableDomSelector, homeTemperatureTableUpdateDomSelector, weatherTableDomSelector, weatherTableUpdateDomSelector) {
+        this.#statusDom = SmartHomePage.#find(statusDomSelector);
 
         const homeTemperatureTableDom = SmartHomePage.#find(homeTemperatureTableDomSelector);
         const homeTemperatureTableUpdateDom = SmartHomePage.#find(homeTemperatureTableUpdateDomSelector);
@@ -57,14 +54,16 @@ export default class SmartHomePage {
      * @return {Promise}
      */
     async runAll() {
+        // Show the time straight away, then re-render once the tables have
+        // loaded so the climate comparison can be woven in.
+        this.#renderStatusLine();
         const result = await Promise.all(
             [
-                this.#updateClock(),
                 this.#homeTemperatureTableObj.update(),
                 this.#weatherTableObj.update(),
             ]
         );
-        this.#updateSummary();
+        this.#renderStatusLine();
 
         return result;
     }
@@ -74,7 +73,7 @@ export default class SmartHomePage {
      */
     async #update5min() {
         const result = await this.#weatherTableObj.update();
-        this.#updateSummary();
+        this.#renderStatusLine();
 
         return result;
     }
@@ -83,13 +82,8 @@ export default class SmartHomePage {
      * @return {Promise}
      */
     async #update1min() {
-        const result = await Promise.all(
-            [
-                this.#updateClock(),
-                this.#homeTemperatureTableObj.update(),
-            ]
-        );
-        this.#updateSummary();
+        const result = await this.#homeTemperatureTableObj.update();
+        this.#renderStatusLine();
 
         return result;
     }
@@ -108,32 +102,37 @@ export default class SmartHomePage {
         return found;
     }
 
-    async #updateClock() {
-        this.#clockDom.textContent = (new Time()).formatUserFriendlyHour(true, true);
-    }
-
     /**
-     * Renders a one-line summary comparing the inside and outside climate, but
-     * only once both APIs have returned successfully; if either failed (or has
-     * yet to load), the summary is hidden.
+     * Renders the status line: the current London time, and — once both APIs
+     * have returned successfully — a comparison of the inside and outside
+     * climate woven into the same sentence. If either API failed (or has yet to
+     * load) it falls back to the time on its own, so the line never empties.
      */
-    #updateSummary() {
+    #renderStatusLine() {
+        const time = (new Time()).formatUserFriendlyHour(true, true);
         const homeData = this.#homeTemperatureTableObj.getLastData();
         const weatherData = this.#weatherTableObj.getLastData();
 
         if (!homeData || !weatherData) {
-            this.#climateSummaryDom.textContent = '';
-            this.#climateSummaryDom.style.display = 'none';
+            this.#statusDom.textContent = `🕐 It's ${time} in London.`;
             return;
         }
 
-        const summary = new ClimateSummary(
+        const climate = (new ClimateSummary(
             homeData['averageTempDegrees'],
             homeData['averageHumidity'] ?? null,
             weatherData['temp'],
             weatherData['humidity'] ?? null
-        );
-        this.#climateSummaryDom.textContent = summary.format();
-        this.#climateSummaryDom.style.display = 'block';
+        )).format();
+        this.#statusDom.textContent = `🕐 At ${time} in London, ${SmartHomePage.#lowercaseFirst(climate)}`;
+    }
+
+    /**
+     * @param {String} text
+     *
+     * @return {String}
+     */
+    static #lowercaseFirst(text) {
+        return text.charAt(0).toLowerCase() + text.slice(1);
     }
 }
