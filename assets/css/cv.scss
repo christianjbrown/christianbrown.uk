@@ -175,7 +175,13 @@ div.container {
                     @media (max-width: 480px) {
                         grid-template-columns: 1fr;
                         div.cv-experience-company-logo {
+                            // Stacked on its own row here, so let the logo grow
+                            // beyond the narrow desktop column's cap.
                             margin-bottom: 0.4rem;
+                            img, a > img {
+                                max-height: 4rem;
+                                max-width: 10rem;
+                            }
                             &.cv-experience-company-logo--empty {
                                 display: none;
                             }
