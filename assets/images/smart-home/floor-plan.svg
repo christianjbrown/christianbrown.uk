@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1022px" height="988px" viewBox="0 0 1022 988" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>floor-plan</title>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="Rectangle" stroke="#000000" stroke-width="3" x="18" y="89" width="478" height="820"></rect>
+        <rect id="Rectangle" stroke="#000000" stroke-width="3" x="531" y="90" width="478" height="820"></rect>
+        <line x1="726.5" y1="90.5" x2="726.5" y2="325.5" id="Line" stroke="#000000" stroke-width="3" stroke-linecap="square"></line>
+        <line x1="18" y1="290.5" x2="101" y2="290.5" id="Line" stroke="#000000" stroke-width="3" stroke-linecap="square"></line>
+        <line x1="18" y1="260.5" x2="101" y2="260.5" id="Line" stroke="#000000" stroke-width="3" stroke-linecap="square"></line>
+        <line x1="101" y1="501.5" x2="18" y2="501.5" id="Line" stroke="#000000" stroke-width="3" stroke-linecap="square"></line>
+        <line x1="101" y1="471.5" x2="18" y2="471.5" id="Line" stroke="#000000" stroke-width="3" stroke-linecap="square"></line>
+        <line x1="101" y1="411.5" x2="18" y2="411.5" id="Line" stroke="#000000" stroke-width="3" stroke-linecap="square"></line>
+        <line x1="101" y1="381.5" x2="18" y2="381.5" id="Line" stroke="#000000" stroke-width="3" stroke-linecap="square"></line>
+        <line x1="101" y1="350.5" x2="18" y2="350.5" id="Line" stroke="#000000" stroke-width="3" stroke-linecap="square"></line>
+        <line x1="101" y1="320.5" x2="18" y2="320.5" id="Line" stroke="#000000" stroke-width="3" stroke-linecap="square"></line>
+        <line x1="101" y1="441.5" x2="18" y2="441.5" id="Line" stroke="#000000" stroke-width="3" stroke-linecap="square"></line>
+        <line x1="726.5" y1="328.5" x2="616.5" y2="328.5" id="Line" stroke="#000000" stroke-width="3" stroke-linecap="square"></line>
+        <line x1="1008.5" y1="525.5" x2="706.5" y2="525.5" id="Line" stroke="#000000" stroke-width="3" stroke-linecap="square"></line>
+        <line x1="1008.5" y1="615.5" x2="530.5" y2="615.5" id="Line" stroke="#000000" stroke-width="3" stroke-linecap="square"></line>
+        <line x1="495.5" y1="531.5" x2="18.5" y2="531.5" id="Line" stroke="#000000" stroke-width="3" stroke-linecap="square"></line>
+        <line x1="186.5" y1="89.5" x2="186.5" y2="531.5" id="Line" stroke="#000000" stroke-width="3" stroke-linecap="square"></line>
+        <line x1="102.5" y1="89.5" x2="102.5" y2="531.5" id="Line" stroke="#000000" stroke-width="3" stroke-linecap="square"></line>
+        <line x1="18" y1="230.5" x2="101" y2="230.5" id="Line" stroke="#000000" stroke-width="3" stroke-linecap="square"></line>
+        <line x1="531.5" y1="290.9" x2="616.5" y2="290.9" id="Line" stroke="#000000" stroke-width="3" stroke-linecap="square"></line>
+        <line x1="615.576087" y1="502.3" x2="531.5" y2="502.3" id="Line" stroke="#000000" stroke-width="3" stroke-linecap="square"></line>
+        <line x1="616.576087" y1="531.3" x2="532.5" y2="531.3" id="Line" stroke="#000000" stroke-width="3" stroke-linecap="square"></line>
+        <line x1="615.576087" y1="472.1" x2="531.5" y2="472.1" id="Line" stroke="#000000" stroke-width="3" stroke-linecap="square"></line>
+        <line x1="615.576087" y1="411.7" x2="531.5" y2="411.7" id="Line" stroke="#000000" stroke-width="3" stroke-linecap="square"></line>
+        <line x1="616.5" y1="381.5" x2="532.423913" y2="381.5" id="Line" stroke="#000000" stroke-width="3" stroke-linecap="square"></line>
+        <line x1="616.5" y1="351.3" x2="532.423913" y2="351.3" id="Line" stroke="#000000" stroke-width="3" stroke-linecap="square"></line>
+        <line x1="616.5" y1="321.1" x2="532.423913" y2="321.1" id="Line" stroke="#000000" stroke-width="3" stroke-linecap="square"></line>
+        <line x1="615.576087" y1="441.9" x2="531.5" y2="441.9" id="Line" stroke="#000000" stroke-width="3" stroke-linecap="square"></line>
+        <line x1="616.5" y1="291.5" x2="616.5" y2="530.5" id="Line" stroke="#000000" stroke-width="3" stroke-linecap="square"></line>
+        <line x1="706.5" y1="328.5" x2="706.5" y2="615.5" id="Line" stroke="#000000" stroke-width="3" stroke-linecap="square"></line>
+        <g id="door" transform="translate(186.5, 236.5)" stroke="#000000" stroke-linecap="square">
+            <line x1="1" y1="0" x2="64" y2="0" id="Line" stroke-width="4"></line>
+            <path d="M0,64 C20.9146452,65.015245 36.5222746,59.6788298 46.8228883,47.9907543 C57.123502,36.3026789 62.8492059,20.3057941 64,0.0001" id="Line-2" stroke-width="3"></path>
+        </g>
+        <g id="door" transform="translate(145.5609, 121.0609) rotate(90) translate(-145.5609, -121.0609)translate(113.5609, 88.5609)" stroke="#000000" stroke-linecap="square">
+            <line x1="1" y1="0" x2="64" y2="0" id="Line" stroke-width="4"></line>
+            <path d="M0,64 C20.9146452,65.015245 36.5222746,59.6788298 46.8228883,47.9907543 C57.123502,36.3026789 62.8492059,20.3057941 64,0.000100000001" id="Line-2" stroke-width="3"></path>
+        </g>
+        <g id="door" transform="translate(63.5609, 564.0609) scale(-1, 1) rotate(90) translate(-63.5609, -564.0609)translate(31.5609, 531.5609)" stroke="#000000" stroke-linecap="square">
+            <line x1="1" y1="0" x2="64" y2="0" id="Line" stroke-width="4"></line>
+            <path d="M0,64 C20.9146452,65.015245 36.5222746,59.6788298 46.8228883,47.9907543 C57.123502,36.3026789 62.8492059,20.3057941 64,0.000100000001" id="Line-2" stroke-width="3"></path>
+        </g>
+        <g id="door" transform="translate(143.5609, 564.0609) scale(-1, 1) rotate(90) translate(-143.5609, -564.0609)translate(111.5609, 531.5609)" stroke="#000000" stroke-linecap="square">
+            <line x1="1" y1="0" x2="64" y2="0" id="Line" stroke-width="4"></line>
+            <path d="M0,64 C20.9146452,65.015245 36.5222746,59.6788298 46.8228883,47.9907543 C57.123502,36.3026789 62.8492059,20.3057941 64,0.000100000001" id="Line-2" stroke-width="3"></path>
+        </g>
+        <g id="door" transform="translate(609.5609, 648.0609) scale(-1, 1) rotate(90) translate(-609.5609, -648.0609)translate(577.5609, 615.5609)" stroke="#000000" stroke-linecap="square">
+            <line x1="1" y1="0" x2="64" y2="0" id="Line" stroke-width="4"></line>
+            <path d="M0,64 C20.9146452,65.015245 36.5222746,59.6788298 46.8228883,47.9907543 C57.123502,36.3026789 62.8492059,20.3057941 64,0.000100000001" id="Line-2" stroke-width="3"></path>
+        </g>
+        <g id="door" transform="translate(738.6217, 460.1217) scale(-1, 1) rotate(180) translate(-738.6217, -460.1217)translate(706.6217, 427.6217)" stroke="#000000" stroke-linecap="square">
+            <line x1="1" y1="0" x2="64" y2="0" id="Line" stroke-width="4"></line>
+            <path d="M0,64 C20.9146452,65.015245 36.5222746,59.6788298 46.8228883,47.9907543 C57.123502,36.3026789 62.8492059,20.3057941 64,0.000100000001" id="Line-2" stroke-width="3"></path>
+        </g>
+        <g id="door" transform="translate(661.5609, 360.0609) rotate(90) translate(-661.5609, -360.0609)translate(629.5609, 327.5609)" stroke="#000000" stroke-linecap="square">
+            <line x1="2" y1="0" x2="65" y2="0" id="Line" stroke-width="4"></line>
+            <path d="M1,64 C21.9146452,65.015245 37.5222746,59.6788298 47.8228883,47.9907543 C58.123502,36.3026789 63.8492059,20.3057941 65,0.000100000001" id="Line-2" stroke-width="3"></path>
+        </g>
+        <text id="Third-floor" font-family="Poppins-Regular, Poppins" font-size="20" font-weight="normal" fill="#000000">
+            <tspan x="207.79" y="52">Third floor</tspan>
+        </text>
+        <text id="Fourth-floor" font-family="Poppins-Regular, Poppins" font-size="20" font-weight="normal" fill="#000000">
+            <tspan x="712.94" y="52">Fourth floor</tspan>
+        </text>
+    </g>
+</svg>
