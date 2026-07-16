@@ -105,6 +105,12 @@ html {
                         a:hover {
                             color: $colour-accent;
                         }
+                        // Right-aligned beside the details on wider screens; when
+                        // the header stacks on small screens, centre it under the
+                        // (centred) avatar and name.
+                        @media (max-width: 600px) {
+                            text-align: center;
+                        }
                         width: 100%;
                         text-align: right;
                     }
