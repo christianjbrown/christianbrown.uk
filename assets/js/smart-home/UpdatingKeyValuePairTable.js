@@ -9,6 +9,7 @@ export default class UpdatingKeyValuePairTable {
     #domTable;
     #domUpdateTime;
     #dataFetcher;
+    #lastData = null;
 
     /**
      * @param {HTMLTableElement} domTable
@@ -32,15 +33,27 @@ export default class UpdatingKeyValuePairTable {
         return this.#dataFetcher.fetch()
             .then(
                 (data) => {
+                    that.#lastData = data;
                     that.#clearContents();
                     that._renderUpdate(data);
                 }
             )
             .catch(
                 (err) => {
+                    that.#lastData = null;
                     that.#renderError(err);
                 }
             );
+    }
+
+    /**
+     * Returns the payload from the most recent successful fetch, or null if the
+     * last fetch failed (or none has completed yet).
+     *
+     * @returns {Object|null}
+     */
+    getLastData() {
+        return this.#lastData;
     }
 
     /**
@@ -70,7 +83,22 @@ export default class UpdatingKeyValuePairTable {
             const timeObj = new Time(timestamp * 1000);
             timeDiff = timeObj.formatTimeAgo();
         }
-        this._addTableRow(name, tempObj.formatC(), tempObj.formatF(), timeDiff, stale, important);
+        this._addTableRow(name, tempObj.formatC(), tempObj.formatF(), timeDiff, stale, important, true);
+    }
+
+    /**
+     * Adds a header row of empty cells, used to line a key/value table up with
+     * the taller climate table that carries column headings.
+     *
+     * @param {Number} cellCount
+     */
+    _addBlankHeaderRow(cellCount = 2) {
+        const row = this.#domTable.insertRow();
+        for (let i = 0; i < cellCount; i++) {
+            const th = document.createElement('th');
+            th.scope = 'col';
+            row.appendChild(th);
+        }
     }
 
     /**
@@ -146,20 +174,21 @@ export default class UpdatingKeyValuePairTable {
      * @param {String}  secondaryKey
      * @param {Boolean} muted
      * @param {Boolean} importantPrimary
+     * @param {Boolean} secondaryMuted
      */
-    _addTableRow(primaryKey, primaryValue, secondaryValue = null, secondaryKey = null, muted = false, importantPrimary = false) {
+    _addTableRow(primaryKey, primaryValue, secondaryValue = null, secondaryKey = null, muted = false, importantPrimary = false, secondaryMuted = muted) {
         const row = this.#domTable.insertRow();
 
         const columnLeft = row.insertCell();
         columnLeft.append(UpdatingKeyValuePairTable.#getTableCellSpan(primaryKey, 'primary', muted, importantPrimary));
         if (secondaryKey) {
-            columnLeft.append(UpdatingKeyValuePairTable.#getTableCellSpan(secondaryKey, 'secondary', muted, false));
+            columnLeft.append(UpdatingKeyValuePairTable.#getTableCellSpan(secondaryKey, 'secondary', secondaryMuted, false));
         }
 
         const columnRight = row.insertCell();
         columnRight.append(UpdatingKeyValuePairTable.#getTableCellSpan(primaryValue, 'primary', muted, importantPrimary));
         if (secondaryValue) {
-            columnRight.append(UpdatingKeyValuePairTable.#getTableCellSpan(secondaryValue, 'secondary', muted, false));
+            columnRight.append(UpdatingKeyValuePairTable.#getTableCellSpan(secondaryValue, 'secondary', secondaryMuted, false));
         }
     }
 
@@ -181,7 +210,7 @@ export default class UpdatingKeyValuePairTable {
      */
     _updateDateSpan(...nodes) {
         this.#domUpdateTime.replaceChildren(...nodes);
-        this.#domUpdateTime.style.display = 'inline';
+        this.#domUpdateTime.style.display = 'block';
     }
 
     /**

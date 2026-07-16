@@ -2,6 +2,8 @@
 
 export const CLOCK_SPAN_ID = 'clock';
 export const CLOCK_SPAN_SELECTOR = '#'+CLOCK_SPAN_ID;
+export const CLIMATE_SUMMARY_ID = 'climate-summary';
+export const CLIMATE_SUMMARY_SELECTOR = '#'+CLIMATE_SUMMARY_ID;
 export const HOME_TEMP_TABLE_ID = 'home-temperature-table';
 export const HOME_TEMP_TABLE_SELECTOR = '#'+HOME_TEMP_TABLE_ID;
 export const HOME_TEMP_TABLE_UPDATE_TIME_SELECTOR = '#'+HOME_TEMP_TABLE_ID+'-update-time';

@@ -44,13 +44,28 @@ export default class Time {
     };
 
     /**
-     * Returns a string like "19:53 (7:53 pm)".
-     *
-     * @param {Boolean} includeDate
+     * Returns the daylight-savings-aware timezone abbreviation for this
+     * timestamp in the configured timezone, e.g. "GMT" or "BST".
      *
      * @returns {String}
      */
-    formatUserFriendlyHour(includeDate = false) {
+    getTimezoneAbbreviation() {
+        // Asking for timeZoneName: 'short' guarantees a timeZoneName part in the
+        // output (e.g. "GMT"/"BST" for Europe/London).
+        const parts = Intl.DateTimeFormat(this.#locale, {'timeZone': this.#timezone, 'timeZoneName': 'short'}).formatToParts(new Date(this.#timestamp));
+
+        return parts.find((part) => part.type === 'timeZoneName').value;
+    }
+
+    /**
+     * Returns a string like "19:53 (7:53 pm)".
+     *
+     * @param {Boolean} includeDate
+     * @param {Boolean} includeTimezone
+     *
+     * @returns {String}
+     */
+    formatUserFriendlyHour(includeDate = false, includeTimezone = false) {
         const date = new Date(this.#timestamp);
 
         // using all this toLocaleString stuff because it handles the timezone correctly using daylight savings
@@ -74,6 +89,10 @@ export default class Time {
                 }
                 str += 'pm)';
             }
+        }
+
+        if (includeTimezone) {
+            str += ' '+this.getTimezoneAbbreviation();
         }
 
         if (includeDate) {
