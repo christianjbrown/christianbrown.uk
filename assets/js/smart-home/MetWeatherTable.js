@@ -6,6 +6,9 @@ import Time from './Time.js';
 
 const MPH_TO_KMH = 1.609344;
 
+// A non-breaking space keeps each wind figure and its unit together on one line.
+const NBSP = ' ';
+
 const JSON_CONTRACT = {
     'humidity': {'type': 'number', 'keyRequired': true, 'cannotBeEmpty': true},
     'precipitation': {'type': 'number', 'keyRequired': true, 'cannotBeEmpty': true},
@@ -40,11 +43,15 @@ const COMPASS_FRIENDLY_NAMES= {
 
 export default class MetWeatherTable extends UpdatingKeyValuePairTable {
     /**
-     * Title in the first cell; the second column has no heading of its own, so
-     * the title alone keeps this header the same height as the inside table's.
+     * The title spans both columns (this table has no column headings), so it
+     * doesn't force the first column wider than its labels need and the value
+     * column gets more room. It still keeps this header the same height as the
+     * inside table's.
      */
     _renderHeader() {
-        this._addHeaderRow(['🌤 Outside weather forecast', null]);
+        // 🌤 (U+1F324) needs the U+FE0F variation selector to be a fully-qualified
+        // emoji; without it it renders and copies inconsistently.
+        this._addHeaderRow(['🌤️ Outside weather forecast'], 2);
     }
 
     /**
@@ -103,15 +110,16 @@ export default class MetWeatherTable extends UpdatingKeyValuePairTable {
         if ('wind_direction' in data && COMPASS_FRIENDLY_NAMES[data.wind_direction]) {
             wind += COMPASS_FRIENDLY_NAMES[data.wind_direction];
             if ('wind_direction_degrees' in data) {
-                wind += ` (${MetWeatherTable._round(data.wind_direction_degrees)}°)`;
+                // Keep the direction and its degrees together on one line.
+                wind += `${NBSP}(${MetWeatherTable._round(data.wind_direction_degrees)}°)`;
             }
             wind += ' ';
         }
         // wind_speed / wind_gust arrive as full-precision floats (converted m/s → mph);
         // convert to km/h and round to one decimal place for display.
-        wind += ('wind_speed' in data) ? `${MetWeatherTable._round(data.wind_speed * MPH_TO_KMH)} km/h` : '';
+        wind += ('wind_speed' in data) ? `${MetWeatherTable._round(data.wind_speed * MPH_TO_KMH)}${NBSP}km/h` : '';
         if ('wind_gust' in data && data.wind_gust > 0) {
-            wind += ` (${MetWeatherTable._round(data.wind_gust * MPH_TO_KMH)} km/h gusts)`;
+            wind += ` (${MetWeatherTable._round(data.wind_gust * MPH_TO_KMH)}${NBSP}km/h gusts)`;
         }
         return wind;
     }
@@ -121,9 +129,9 @@ export default class MetWeatherTable extends UpdatingKeyValuePairTable {
      * "15 mph (25 mph gusts)".
      */
     _formatWindSpeedMph(data) {
-        let wind = ('wind_speed' in data) ? `${MetWeatherTable._round(data.wind_speed)} mph` : '';
+        let wind = ('wind_speed' in data) ? `${MetWeatherTable._round(data.wind_speed)}${NBSP}mph` : '';
         if ('wind_gust' in data && data.wind_gust > 0) {
-            wind += ` (${MetWeatherTable._round(data.wind_gust)} mph gusts)`;
+            wind += ` (${MetWeatherTable._round(data.wind_gust)}${NBSP}mph gusts)`;
         }
         return wind;
     }
