@@ -13,15 +13,20 @@ div.container {
             }
             font-size: 1.1rem;
         }
+        p.climate-summary {
+            // Revealed (as a block) by SmartHomePage once both APIs have loaded.
+            display: none;
+        }
         div.smart-home-data {
             span.update-time {
                 a {
-                    color: $colour-grayscale-2;
+                    color: $colour-grayscale-1;
                     text-decoration: underline;
                 }
                 display: none;
-                margin-left: 0.5rem;
-                color: $colour-grayscale-2;
+                margin-top: 0.5rem;
+                font-size: 1rem;
+                color: $colour-grayscale-1;
             }
             div {
                 table {

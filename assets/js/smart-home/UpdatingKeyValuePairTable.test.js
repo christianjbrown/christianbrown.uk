@@ -66,6 +66,7 @@ describe('UpdatingKeyValuePairTable', () => {
             expect(table.querySelectorAll('tr')).toHaveLength(1);
             expect(table.textContent).toContain('rendered');
             expect(table.textContent).toContain('yes');
+            expect(subject.getLastData()).toEqual({ hello: 'world' });
         });
 
         it('renders an error message when the fetch rejects', async () => {
@@ -76,6 +77,7 @@ describe('UpdatingKeyValuePairTable', () => {
 
             await subject.update();
 
+            expect(subject.getLastData()).toBeNull();
             expect(table.textContent).toBe("⚠️ I'm having trouble loading this data right now.I'm aware - top men are working on it.Please try again later.");
             expect(table.querySelectorAll('span.error br')).toHaveLength(2);
             const link = table.querySelector('span.error a');
@@ -113,7 +115,7 @@ describe('UpdatingKeyValuePairTable', () => {
 
             expect(updateSpan.querySelector('a').textContent).toBe('Met Office');
             expect(updateSpan.textContent).toBe('Met Office and text');
-            expect(updateSpan.style.display).toBe('inline');
+            expect(updateSpan.style.display).toBe('block');
         });
 
         it('_updateDateSpan replaces any existing children', () => {
@@ -132,11 +134,12 @@ describe('UpdatingKeyValuePairTable', () => {
         });
 
         describe('_addTempTableRow', () => {
-            it('renders celsius and fahrenheit without a timestamp', () => {
+            it('renders celsius and fahrenheit without a timestamp, muting the fahrenheit', () => {
                 subject._addTempTableRow('Temperature', 21);
                 expect(table.textContent).toContain('21.0°c');
                 expect(table.textContent).toContain('69.8°f');
                 expect(table.textContent).not.toContain('ago');
+                expect(table.querySelector('span.secondary.muted').textContent).toBe('69.8°f');
             });
 
             it('renders a "time ago" and important styling when given a timestamp', () => {
@@ -153,6 +156,16 @@ describe('UpdatingKeyValuePairTable', () => {
                 expect(cells).toHaveLength(3);
                 expect(cells[1].textContent).toBe('🌡️');
                 expect(cells[2].textContent).toBe('💧');
+            });
+        });
+
+        describe('_addBlankHeaderRow', () => {
+            it('adds a header row of empty cells', () => {
+                subject._addBlankHeaderRow(2);
+                const cells = table.querySelectorAll('th');
+                expect(cells).toHaveLength(2);
+                expect(table.textContent).toBe('');
+                expect(cells[0].scope).toBe('col');
             });
         });
 
@@ -211,6 +224,15 @@ describe('UpdatingKeyValuePairTable', () => {
                 expect(table.querySelectorAll('span.secondary')).toHaveLength(2);
                 expect(table.textContent).toContain('about');
                 expect(table.textContent).toContain('69.8°f');
+            });
+
+            it('mutes the secondary independently when secondaryMuted is set', () => {
+                subject._addTableRow('Wind', '24.1km/h', '15mph', null, false, false, true);
+                const secondary = table.querySelector('span.secondary');
+                expect(secondary.textContent).toBe('15mph');
+                expect(secondary.classList.contains('muted')).toBe(true);
+                // The primary value stays unmuted.
+                expect(table.querySelector('span.primary').classList.contains('muted')).toBe(false);
             });
         });
     });

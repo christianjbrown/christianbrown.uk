@@ -64,6 +64,29 @@ describe('Time', () => {
             expect(new Time(utc(2023, 10, 20, 12, 30), 'UTC').formatUserFriendlyHour()).toBe('12:30');
         });
 
+        describe('includeTimezone', () => {
+            it('appends the timezone abbreviation after the time', () => {
+                // 09:05 UTC in winter is 09:05 GMT in London.
+                expect(new Time(utc(2023, 10, 20, 9, 5), 'Europe/London').formatUserFriendlyHour(false, true))
+                    .toBe('09:05 GMT');
+                // 09:05 UTC in summer is 10:05 BST in London.
+                expect(new Time(utc(2023, 5, 20, 9, 5), 'Europe/London').formatUserFriendlyHour(false, true))
+                    .toBe('10:05 BST');
+            });
+
+            it('places the timezone between the time and the date', () => {
+                expect(new Time(utc(2023, 10, 20, 9, 5), 'Europe/London').formatUserFriendlyHour(true, true))
+                    .toBe('09:05 GMT on Mon 20th Nov');
+            });
+        });
+
+        describe('getTimezoneAbbreviation', () => {
+            it('returns GMT in winter and BST in summer for London', () => {
+                expect(new Time(utc(2023, 0, 15, 12, 0), 'Europe/London').getTimezoneAbbreviation()).toBe('GMT');
+                expect(new Time(utc(2023, 6, 15, 12, 0), 'Europe/London').getTimezoneAbbreviation()).toBe('BST');
+            });
+        });
+
         describe('includeDate', () => {
             const withDate = (day) => new Time(utc(2023, 0, day, 10, 15), 'UTC').formatUserFriendlyHour(true);
 
