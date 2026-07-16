@@ -35,12 +35,15 @@ export default class UpdatingKeyValuePairTable {
                 (data) => {
                     that.#lastData = data;
                     that.#clearContents();
+                    that._renderHeader();
                     that._renderUpdate(data);
                 }
             )
             .catch(
                 (err) => {
                     that.#lastData = null;
+                    that.#clearContents();
+                    that._renderHeader();
                     that.#renderError(err);
                 }
             );
@@ -87,37 +90,36 @@ export default class UpdatingKeyValuePairTable {
     }
 
     /**
-     * Adds a header row of empty cells, used to line a key/value table up with
-     * the taller climate table that carries column headings.
-     *
-     * @param {Number} cellCount
+     * Renders the table's header row. The default is a no-op; subclasses
+     * override it to add their title (and any column headings). It is called on
+     * every render — success or failure — so the table's title stays visible
+     * even when its API fails, telling the user which one is down.
      */
-    _addBlankHeaderRow(cellCount = 2) {
-        const row = this.#domTable.insertRow();
-        for (let i = 0; i < cellCount; i++) {
-            const th = document.createElement('th');
-            th.scope = 'col';
-            row.appendChild(th);
-        }
+    _renderHeader() {
+
     }
 
     /**
-     * Adds a header row for the climate table, labelling the temperature
-     * and humidity columns.
+     * Adds a header row. The first cell carries the table's title; the rest
+     * carry optional column headings (a null entry leaves that cell empty). The
+     * title sits in the first cell of both tables so their header rows are the
+     * same height and their first separator lines align.
      *
-     * @param {String} tempLabel
-     * @param {String} humidityLabel
+     * @param {Array<String|null>} labels
      */
-    _addClimateHeaderRow(tempLabel, humidityLabel) {
+    _addHeaderRow(labels) {
         const row = this.#domTable.insertRow();
-        for (const label of [null, tempLabel, humidityLabel]) {
-            const th = document.createElement('th');
-            th.scope = 'col';
-            if (label !== null) {
-                th.append(UpdatingKeyValuePairTable.#getTableCellSpan(label, 'primary', false, false));
+        labels.forEach(
+            (label, index) => {
+                const th = document.createElement('th');
+                th.scope = 'col';
+                if (label !== null) {
+                    const cssClass = index === 0 ? 'primary title' : 'primary';
+                    th.append(UpdatingKeyValuePairTable.#getTableCellSpan(label, cssClass, false, false));
+                }
+                row.appendChild(th);
             }
-            row.appendChild(th);
-        }
+        );
     }
 
     /**
@@ -125,7 +127,8 @@ export default class UpdatingKeyValuePairTable {
      *
      * A single "time ago" is shown under the name, based on the oldest
      * (least recent) of the temperature and humidity readings. A device
-     * that reports no humidity shows a muted dash in the humidity column.
+     * that reports no humidity shows a muted dash in the humidity column;
+     * one that does gets a muted "feel" description under the value.
      *
      * @param {String}         name
      * @param {Number|String}  degreesC
@@ -140,7 +143,8 @@ export default class UpdatingKeyValuePairTable {
         const tempObj = new Temperature(degreesC);
 
         const hasHumidity = (humidityPercent !== null && humidityPercent !== undefined);
-        const humidityValue = hasHumidity ? (new Humidity(humidityPercent)).formatPercent() : '—';
+        const humidityObj = hasHumidity ? new Humidity(humidityPercent) : null;
+        const humidityValue = hasHumidity ? humidityObj.formatPercent() : '—';
         const humidityMuted = hasHumidity ? humidityStale : true;
 
         let oldestTimestamp = tempTimestamp;
@@ -163,6 +167,9 @@ export default class UpdatingKeyValuePairTable {
 
         const columnHumidity = row.insertCell();
         columnHumidity.append(UpdatingKeyValuePairTable.#getTableCellSpan(humidityValue, 'primary', humidityMuted, important));
+        if (hasHumidity) {
+            columnHumidity.append(UpdatingKeyValuePairTable.#getTableCellSpan(humidityObj.describe(), 'secondary', true, false));
+        }
     }
 
     /**
@@ -237,13 +244,14 @@ export default class UpdatingKeyValuePairTable {
     }
 
     /**
-     * Clears the table and adds a single cell with an error message.
+     * Adds a single cell with an error message under the (already rendered)
+     * header. The header is left in place so the reader can still tell which
+     * table failed; the error cell spans the header's columns.
      *
      * @param {Error} error
      */
     #renderError(error) {
         console.error(error);
-        this.#clearContents();
         const errorSpan = document.createElement('span');
         errorSpan.setAttribute('class', 'error');
         const link = document.createElement('a');
@@ -261,6 +269,10 @@ export default class UpdatingKeyValuePairTable {
         );
         const errorCell = this.#domTable.insertRow().insertCell();
         errorCell.setAttribute('class', 'error-cell');
+        const headerRow = this.#domTable.rows[0];
+        if (headerRow && headerRow.cells.length > 1) {
+            errorCell.colSpan = headerRow.cells.length;
+        }
         errorCell.append(errorSpan);
     }
 

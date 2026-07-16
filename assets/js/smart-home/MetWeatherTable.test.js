@@ -37,9 +37,9 @@ describe('MetWeatherTable', () => {
         expect(metOfficeLink.target).toBe('_blank');
         expect(updateSpan.textContent).toContain('Source: ');
         expect(updateSpan.textContent).toContain('forecast for between');
-        // Both ends of this November window fall in GMT, so the timezone is
-        // shown once, after the second time.
-        expect(updateSpan.textContent).toMatch(/ and .* GMT$/);
+        // Both ends of this November window fall in GMT on the same day, so the
+        // "TZ on date" suffix is shown once, after the second time.
+        expect(updateSpan.textContent).toMatch(/ and .* GMT on \w{3} \d+\w{2} \w{3}$/);
         expect(table.textContent).toContain('🌡️ Temperature');
         expect(table.textContent).toContain('Temperature feels like');
         expect(table.textContent).toContain('Weather type');
@@ -51,8 +51,8 @@ describe('MetWeatherTable', () => {
         expect(table.textContent).toContain('20%');
         // 15mph → 24.1km/h, 25mph gust → 40.2km/h; direction carries its degrees;
         // mph kept as the muted line without the direction.
-        expect(table.textContent).toContain('Northerly (350°) 24.1km/h (40.2km/h gusts)');
-        expect(table.textContent).toContain('15mph (25mph gusts)');
+        expect(table.textContent).toContain('Northerly (350°) 24.1 km/h (40.2 km/h gusts)');
+        expect(table.textContent).toContain('15 mph (25 mph gusts)');
     });
 
     it('renders a minimal forecast with plain wind and no optional rows', () => {
@@ -64,8 +64,8 @@ describe('MetWeatherTable', () => {
         expect(table.textContent).not.toContain('feels like');
         expect(table.textContent).not.toContain('Weather type');
         // 5mph → 8km/h primary, mph kept as the muted line.
-        expect(table.textContent).toContain('8km/h');
-        expect(table.textContent).toContain('5mph');
+        expect(table.textContent).toContain('8 km/h');
+        expect(table.textContent).toContain('5 mph');
         expect(table.textContent).not.toContain('gusts');
     });
 
@@ -89,7 +89,7 @@ describe('MetWeatherTable', () => {
         const { table, subject } = make();
         subject._renderUpdate({ temp: 10, humidity: 50, precipitation: 0, wind_speed: 5, wind_direction: 'XX', wind_gust: 0 });
         const windText = table.textContent;
-        expect(windText).toContain('5mph');
+        expect(windText).toContain('5 mph');
         expect(windText).not.toContain('Easterly');
         expect(windText).not.toContain('gusts');
     });
@@ -111,13 +111,14 @@ describe('MetWeatherTable', () => {
         });
     });
 
-    it('opens with a blank header row so it lines up with the inside table', () => {
+    it('renders its title in the header, even without any data (e.g. on API failure)', () => {
         const { table, subject } = make();
-        subject._renderUpdate({ temp: 10, humidity: 50, precipitation: 0, wind_speed: 5 });
-        const firstRow = table.querySelector('tr');
-        const headerCells = firstRow.querySelectorAll('th');
+        subject._renderHeader();
+        const headerCells = table.querySelector('tr').querySelectorAll('th');
         expect(headerCells).toHaveLength(2);
-        expect(firstRow.textContent).toBe('');
+        expect(headerCells[0].textContent).toBe('🌤 Outside weather forecast');
+        expect(headerCells[0].querySelector('span.title')).not.toBeNull();
+        expect(headerCells[1].textContent).toBe('');
     });
 
     it('renders Weather type before the temperature', () => {
@@ -142,11 +143,12 @@ describe('MetWeatherTable', () => {
 
     it('shows the timezone on each time when the window spans a clock change', () => {
         const { updateSpan, subject } = make();
-        // 00:30–01:30 UTC on 26 Oct 2025 straddles the BST→GMT fall-back.
+        // 00:30–01:30 UTC on 26 Oct 2025 straddles the BST→GMT fall-back, so the
+        // two ends have different suffixes and each carries its own.
         const from = Date.parse('2025-10-26T00:30:00Z') / 1000;
         subject._renderUpdate({ valid_from: from, valid_to: from + 3600, temp: 10, humidity: 50, precipitation: 0, wind_speed: 5 });
-        expect(updateSpan.textContent).toContain('BST and');
-        expect(updateSpan.textContent).toContain('GMT');
+        expect(updateSpan.textContent).toContain('BST on Sun 26th Oct and');
+        expect(updateSpan.textContent).toContain('GMT on Sun 26th Oct');
     });
 
     describe('_formatWindSpeed', () => {
@@ -158,13 +160,13 @@ describe('MetWeatherTable', () => {
         it('converts mph to km/h with direction and gusts', () => {
             const { subject } = make();
             expect(subject._formatWindSpeed({ wind_direction: 'N', wind_speed: 15, wind_gust: 25 }))
-                .toBe('Northerly 24.1km/h (40.2km/h gusts)');
+                .toBe('Northerly 24.1 km/h (40.2 km/h gusts)');
         });
 
         it('includes the direction in degrees when available', () => {
             const { subject } = make();
             expect(subject._formatWindSpeed({ wind_direction: 'ESE', wind_direction_degrees: 112.5, wind_speed: 15 }))
-                .toBe('East south easterly (112.5°) 24.1km/h');
+                .toBe('East south easterly (112.5°) 24.1 km/h');
         });
     });
 
@@ -172,7 +174,7 @@ describe('MetWeatherTable', () => {
         it('keeps mph with gusts but no direction', () => {
             const { subject } = make();
             expect(subject._formatWindSpeedMph({ wind_direction: 'N', wind_speed: 15, wind_gust: 25 }))
-                .toBe('15mph (25mph gusts)');
+                .toBe('15 mph (25 mph gusts)');
         });
 
         it('returns an empty string when there is no wind speed', () => {

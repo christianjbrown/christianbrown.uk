@@ -96,13 +96,25 @@ export default class Time {
         }
 
         if (includeDate) {
-            // toLocaleDateString doesn't handle adding 'st', 'nd', 'rd', 'th' to the day of the month
-            const dayOfMonth = parseInt(Intl.DateTimeFormat(this.#locale, {'timeZone': this.#timezone, 'day': 'numeric'}).format(date));
-            const suffix = dayOfMonth % 10 === 1 && dayOfMonth !== 11 ? 'st' : dayOfMonth % 10 === 2 && dayOfMonth !== 12 ? 'nd' : dayOfMonth % 10 === 3 && dayOfMonth !== 13 ? 'rd' : 'th';
-            const dayOfWeek = Intl.DateTimeFormat(this.#locale, {'timeZone': this.#timezone, 'weekday': 'short'}).format(date);
-            str += ' on '+dayOfWeek+' '+dayOfMonth+suffix+' '+Intl.DateTimeFormat(this.#locale, {'timeZone': this.#timezone, 'month': 'short'}).format(date);
+            str += ' on '+this.formatUserFriendlyDate();
         }
 
         return str;
+    }
+
+    /**
+     * Returns a string like "Thu 16th Jul".
+     *
+     * @returns {String}
+     */
+    formatUserFriendlyDate() {
+        const date = new Date(this.#timestamp);
+
+        // toLocaleDateString doesn't handle adding 'st', 'nd', 'rd', 'th' to the day of the month
+        const dayOfMonth = parseInt(Intl.DateTimeFormat(this.#locale, {'timeZone': this.#timezone, 'day': 'numeric'}).format(date));
+        const suffix = dayOfMonth % 10 === 1 && dayOfMonth !== 11 ? 'st' : dayOfMonth % 10 === 2 && dayOfMonth !== 12 ? 'nd' : dayOfMonth % 10 === 3 && dayOfMonth !== 13 ? 'rd' : 'th';
+        const dayOfWeek = Intl.DateTimeFormat(this.#locale, {'timeZone': this.#timezone, 'weekday': 'short'}).format(date);
+
+        return dayOfWeek+' '+dayOfMonth+suffix+' '+Intl.DateTimeFormat(this.#locale, {'timeZone': this.#timezone, 'month': 'short'}).format(date);
     }
 }
