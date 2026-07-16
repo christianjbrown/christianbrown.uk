@@ -13,23 +13,20 @@ beforeEach(() => {
 });
 
 describe('SmartHomeTemperatureTable', () => {
-    it('renders the title header, the average and each device sorted newest-first', () => {
+    it('renders the title header, the computed average and each device sorted newest-first', () => {
         const { table, subject } = make();
         subject._renderHeader();
         subject._renderUpdate({
-            averageTempDegrees: 20,
-            averageTempTimestamp: 1000,
-            averageHumidity: 55,
-            averageHumidityTimestamp: 900,
             devices: [
                 {
                     name: 'Sensor A', roomName: 'Kitchen',
-                    temperatureValue: 21, temperatureTimestamp: 2000, temperatureStale: false,
+                    temperatureValue: 22, temperatureTimestamp: 2000, temperatureStale: false,
                     humidityValue: 50, humidityTimestamp: 1900, humidityStale: false,
                 },
                 {
                     name: 'Sensor B',
-                    temperatureValue: 19, temperatureTimestamp: 3000, temperatureStale: true,
+                    temperatureValue: 24, temperatureTimestamp: 3000, temperatureStale: false,
+                    humidityValue: 60, humidityTimestamp: 1800, humidityStale: false,
                 },
             ],
         });
@@ -39,6 +36,8 @@ describe('SmartHomeTemperatureTable', () => {
         expect(rows).toHaveLength(4);
         expect(rows[0].textContent).toContain('🏠 Inside climate');
         expect(rows[1].textContent).toContain('Average');
+        // Averaged from the devices: (22 + 24) / 2 and (50 + 60) / 2.
+        expect(rows[1].textContent).toContain('23.0°c');
         expect(rows[1].textContent).toContain('55%');
         // 55% humidity reads as "Pleasant".
         expect(rows[1].textContent).toContain('Pleasant');
@@ -58,8 +57,6 @@ describe('SmartHomeTemperatureTable', () => {
         const { table, subject } = make();
         subject._renderHeader();
         subject._renderUpdate({
-            averageTempDegrees: 20,
-            averageTempTimestamp: 1000,
             devices: [
                 { name: 'Bare', temperatureValue: 21, temperatureTimestamp: 2000, temperatureStale: false },
             ],
@@ -75,10 +72,10 @@ describe('SmartHomeTemperatureTable', () => {
     });
 
     describe('_getContract', () => {
-        it('returns the smart-home temperature contract', () => {
+        it('requires the devices array and no longer any server-computed averages', () => {
             const { subject } = make();
             expect(subject._getContract()).toHaveProperty('devices');
-            expect(subject._getContract()).toHaveProperty('averageTempDegrees');
+            expect(subject._getContract()).not.toHaveProperty('averageTempDegrees');
         });
     });
 });

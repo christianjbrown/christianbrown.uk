@@ -2,6 +2,7 @@
 
 import Temperature from './Temperature.js';
 import Humidity from './Humidity.js';
+import { averageTemperature, averageHumidity } from './averageReadings.js';
 
 // Label anchor points as percentages of the floor-plan image, taken from the
 // centre of each red room name in floor-plan-annotated.svg.
@@ -86,9 +87,9 @@ export default class FloorPlan {
     }
 
     /**
-     * Groups devices by room name and averages their temperature and humidity.
-     * A reading is treated as stale only when every device contributing to it
-     * is stale. Rooms with no temperature reading are dropped.
+     * Groups devices by room name and averages each room's temperature and
+     * humidity (fresh readings preferred, stale used only as a fallback and
+     * marked so). Rooms with no temperature reading are dropped.
      *
      * @param {Array} devices
      *
@@ -102,42 +103,27 @@ export default class FloorPlan {
                 continue;
             }
             if (!grouped.has(roomName)) {
-                grouped.set(roomName, {'temps': [], 'tempStale': [], 'humidities': [], 'humidityStale': []});
+                grouped.set(roomName, []);
             }
-            const room = grouped.get(roomName);
-            if (typeof device['temperatureValue'] === 'number') {
-                room.temps.push(device['temperatureValue']);
-                room.tempStale.push(device['temperatureStale'] === true);
-            }
-            if (typeof device['humidityValue'] === 'number') {
-                room.humidities.push(device['humidityValue']);
-                room.humidityStale.push(device['humidityStale'] === true);
-            }
+            grouped.get(roomName).push(device);
         }
 
         const averaged = new Map();
-        for (const [roomName, room] of grouped) {
-            if (room.temps.length === 0) {
+        for (const [roomName, roomDevices] of grouped) {
+            const temperature = averageTemperature(roomDevices);
+            if (!temperature) {
                 continue;
             }
+            const humidity = averageHumidity(roomDevices);
             averaged.set(roomName, {
-                'temp': FloorPlan.#average(room.temps),
-                'tempStale': room.tempStale.every(Boolean),
-                'humidity': room.humidities.length ? FloorPlan.#average(room.humidities) : null,
-                'humidityStale': room.humidities.length ? room.humidityStale.every(Boolean) : false,
+                'temp': temperature.value,
+                'tempStale': temperature.stale,
+                'humidity': humidity ? humidity.value : null,
+                'humidityStale': humidity ? humidity.stale : false,
             });
         }
 
         return averaged;
-    }
-
-    /**
-     * @param {Array<Number>} values
-     *
-     * @return {Number}
-     */
-    static #average(values) {
-        return values.reduce((sum, value) => sum + value, 0) / values.length;
     }
 
     /**

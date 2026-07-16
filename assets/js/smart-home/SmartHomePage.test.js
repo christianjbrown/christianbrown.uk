@@ -108,8 +108,16 @@ describe('SmartHomePage', () => {
     describe('status line', () => {
         const statusText = () => document.querySelector('#status').textContent;
 
+        // A single indoor device the front-end averages into the given readings.
+        const homeWith = (temperatureValue, humidityValue) => ({
+            devices: [{
+                temperatureValue, temperatureStale: false, temperatureTimestamp: 1,
+                ...(humidityValue === undefined ? {} : { humidityValue, humidityStale: false, humidityTimestamp: 1 }),
+            }],
+        });
+
         it('weaves the climate comparison into the time once both tables have loaded', async () => {
-            lastData.home = { averageTempDegrees: 26.6, averageHumidity: 52.8 };
+            lastData.home = homeWith(26.6, 52.8);
             lastData.weather = { temp: 25, humidity: 42.6 };
 
             await newPage().runAll();
@@ -119,7 +127,7 @@ describe('SmartHomePage', () => {
         });
 
         it('falls back to just the time when the weather fetch failed', async () => {
-            lastData.home = { averageTempDegrees: 26.6, averageHumidity: 52.8 };
+            lastData.home = homeWith(26.6, 52.8);
             lastData.weather = null;
 
             await newPage().runAll();
@@ -138,7 +146,7 @@ describe('SmartHomePage', () => {
         });
 
         it('compares temperature only when either humidity is missing', async () => {
-            lastData.home = { averageTempDegrees: 26.6 };
+            lastData.home = homeWith(26.6);
             lastData.weather = { temp: 25 };
 
             await newPage().runAll();
@@ -146,6 +154,15 @@ describe('SmartHomePage', () => {
             expect(statusText()).toMatch(/^It's currently .+ in my London home, where it's 1\.6°c warmer inside/);
             expect(statusText()).toContain("where it's 1.6°c warmer inside (26.6°c inside, 25°c outside).");
             expect(statusText()).not.toContain('humid');
+        });
+
+        it('falls back to just the time when the indoor data carries no usable readings', async () => {
+            lastData.home = {};
+            lastData.weather = { temp: 25, humidity: 42.6 };
+
+            await newPage().runAll();
+
+            expect(statusText()).toMatch(/^It's currently .+ in my London home\.$/);
         });
     });
 
