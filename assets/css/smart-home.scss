@@ -123,6 +123,20 @@ div.container {
                     span.muted {
                         color: $colour-grayscale-1;
                     }
+                    // Full width on small screens makes the plan (and so these
+                    // labels) proportionally larger, crowding the outside
+                    // readings against it — scale the text down to match.
+                    @media (max-width: 600px) {
+                        span.floor-plan-name {
+                            font-size: 0.7rem;
+                        }
+                        span.floor-plan-temp {
+                            font-size: 0.7rem;
+                        }
+                        span.floor-plan-humidity {
+                            font-size: 0.6rem;
+                        }
+                    }
                     position: absolute;
                     transform: translate(-50%, -50%);
                     text-align: center;
