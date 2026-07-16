@@ -8,14 +8,7 @@
 div.container {
     main {
         p {
-            span#clock {
-                font-weight: bold;
-            }
             font-size: 1.1rem;
-        }
-        p.climate-summary {
-            // Revealed (as a block) by SmartHomePage once both APIs have loaded.
-            display: none;
         }
         div.smart-home-data {
             span.update-time {
