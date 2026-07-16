@@ -10,7 +10,7 @@ const API_SMART_HOME_TEMPS_URL_PROD = 'https://cdn.christianbrown.uk/get-smartth
 const API_SMART_HOME_TEMPS_URL_DEV = 'http://127.0.0.1:8080';
 const API_SMART_HOME_TEMPS_URL = isLocal ? API_SMART_HOME_TEMPS_URL_DEV: API_SMART_HOME_TEMPS_URL_PROD;
 
-const API_MET_OFFICE_URL_PROD = 'https://cdn.christianbrown.uk/get-met-office-temps';
+const API_MET_OFFICE_URL_PROD = 'https://cdn.christianbrown.uk/get-met-office-weather';
 const API_MET_OFFICE_URL_DEV = 'http://127.0.0.1:8081';
 const API_MET_OFFICE_URL = isLocal ? API_MET_OFFICE_URL_DEV: API_MET_OFFICE_URL_PROD;
 
