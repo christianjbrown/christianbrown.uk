@@ -37,12 +37,11 @@ vi.mock('./MetWeatherTable.js', () => ({
 
 import SmartHomePage from './SmartHomePage.js';
 
-const SELECTORS = ['#clock', '#summary', '#home', '#home-u', '#weather', '#weather-u'];
+const SELECTORS = ['#status', '#home', '#home-u', '#weather', '#weather-u'];
 
 function setupDom() {
     document.body.innerHTML = `
-        <span id="clock"></span>
-        <p id="summary"></p>
+        <p id="status"></p>
         <table id="home"></table>
         <span id="home-u"></span>
         <table id="weather"></table>
@@ -66,7 +65,7 @@ describe('SmartHomePage', () => {
     describe('constructor', () => {
         it('throws when a selector matches no element', () => {
             document.body.innerHTML = '';
-            expect(() => newPage()).toThrow('Found no DOM element matching selector "#clock"');
+            expect(() => newPage()).toThrow('Found no DOM element matching selector "#status"');
         });
 
         it('constructs when every selector resolves', () => {
@@ -75,62 +74,58 @@ describe('SmartHomePage', () => {
     });
 
     describe('runAll', () => {
-        it('updates the clock and both tables', async () => {
+        it('renders the status line and updates both tables', async () => {
             const page = newPage();
             await page.runAll();
 
-            expect(document.querySelector('#clock').textContent).not.toBe('');
+            expect(document.querySelector('#status').textContent).not.toBe('');
             expect(tableUpdate).toHaveBeenCalledWith('home');
             expect(tableUpdate).toHaveBeenCalledWith('weather');
             expect(tableUpdate).toHaveBeenCalledTimes(2);
         });
     });
 
-    describe('climate summary', () => {
-        it('shows a comparison once both tables have loaded', async () => {
+    describe('status line', () => {
+        const statusText = () => document.querySelector('#status').textContent;
+
+        it('weaves the climate comparison into the time once both tables have loaded', async () => {
             lastData.home = { averageTempDegrees: 26.6, averageHumidity: 52.8 };
             lastData.weather = { temp: 25, humidity: 42.6 };
 
-            const page = newPage();
-            await page.runAll();
+            await newPage().runAll();
 
-            const summary = document.querySelector('#summary');
-            expect(summary.style.display).toBe('block');
-            expect(summary.textContent).toBe("It's 1.6°c warmer inside (26.6°c inside, 25.0°c outside), and 10.2% more humid (52.8% inside, 42.6% outside).");
+            expect(statusText()).toMatch(/^🕐 At .+ in London, it's 1\.6°c warmer inside/);
+            expect(statusText()).toContain("it's 1.6°c warmer inside (26.6°c inside, 25.0°c outside), and 10.2% more humid (52.8% inside, 42.6% outside).");
         });
 
-        it('stays hidden when the weather fetch failed', async () => {
+        it('falls back to just the time when the weather fetch failed', async () => {
             lastData.home = { averageTempDegrees: 26.6, averageHumidity: 52.8 };
             lastData.weather = null;
 
-            const page = newPage();
-            await page.runAll();
+            await newPage().runAll();
 
-            const summary = document.querySelector('#summary');
-            expect(summary.style.display).toBe('none');
-            expect(summary.textContent).toBe('');
+            expect(statusText()).toMatch(/^🕐 It's .+ in London\.$/);
+            expect(statusText()).not.toContain('humid');
         });
 
-        it('stays hidden when the inside fetch failed', async () => {
+        it('falls back to just the time when the inside fetch failed', async () => {
             lastData.home = null;
             lastData.weather = { temp: 25, humidity: 42.6 };
 
-            const page = newPage();
-            await page.runAll();
+            await newPage().runAll();
 
-            expect(document.querySelector('#summary').style.display).toBe('none');
+            expect(statusText()).toMatch(/^🕐 It's .+ in London\.$/);
         });
 
         it('compares temperature only when either humidity is missing', async () => {
             lastData.home = { averageTempDegrees: 26.6 };
             lastData.weather = { temp: 25 };
 
-            const page = newPage();
-            await page.runAll();
+            await newPage().runAll();
 
-            const summary = document.querySelector('#summary');
-            expect(summary.style.display).toBe('block');
-            expect(summary.textContent).toBe("It's 1.6°c warmer inside (26.6°c inside, 25.0°c outside).");
+            expect(statusText()).toMatch(/^🕐 At .+ in London, it's 1\.6°c warmer inside/);
+            expect(statusText()).toContain("it's 1.6°c warmer inside (26.6°c inside, 25.0°c outside).");
+            expect(statusText()).not.toContain('humid');
         });
     });
 
