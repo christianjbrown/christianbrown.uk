@@ -103,18 +103,24 @@ export default class Time {
     }
 
     /**
-     * Returns a string like "Thu 16th Jul".
+     * Returns a string like "Thu 16th Jul", or — when long is true —
+     * "Thursday, 16th of July".
+     *
+     * @param {Boolean} long
      *
      * @returns {String}
      */
-    formatUserFriendlyDate() {
+    formatUserFriendlyDate(long = false) {
         const date = new Date(this.#timestamp);
 
         // toLocaleDateString doesn't handle adding 'st', 'nd', 'rd', 'th' to the day of the month
         const dayOfMonth = parseInt(Intl.DateTimeFormat(this.#locale, {'timeZone': this.#timezone, 'day': 'numeric'}).format(date));
         const suffix = dayOfMonth % 10 === 1 && dayOfMonth !== 11 ? 'st' : dayOfMonth % 10 === 2 && dayOfMonth !== 12 ? 'nd' : dayOfMonth % 10 === 3 && dayOfMonth !== 13 ? 'rd' : 'th';
-        const dayOfWeek = Intl.DateTimeFormat(this.#locale, {'timeZone': this.#timezone, 'weekday': 'short'}).format(date);
+        const dayOfWeek = Intl.DateTimeFormat(this.#locale, {'timeZone': this.#timezone, 'weekday': long ? 'long' : 'short'}).format(date);
+        const month = Intl.DateTimeFormat(this.#locale, {'timeZone': this.#timezone, 'month': long ? 'long' : 'short'}).format(date);
 
-        return dayOfWeek+' '+dayOfMonth+suffix+' '+Intl.DateTimeFormat(this.#locale, {'timeZone': this.#timezone, 'month': 'short'}).format(date);
+        return long
+            ? dayOfWeek+', '+dayOfMonth+suffix+' of '+month
+            : dayOfWeek+' '+dayOfMonth+suffix+' '+month;
     }
 }

@@ -81,9 +81,14 @@ describe('Time', () => {
         });
 
         describe('formatUserFriendlyDate', () => {
-            it('returns the weekday, ordinal day of month and month', () => {
+            it('returns the short weekday, ordinal day of month and month by default', () => {
                 expect(new Time(utc(2023, 10, 20, 9, 5), 'UTC').formatUserFriendlyDate()).toBe('Mon 20th Nov');
                 expect(new Time(utc(2023, 0, 1, 10, 15), 'UTC').formatUserFriendlyDate()).toBe('Sun 1st Jan');
+            });
+
+            it('returns a long form when asked', () => {
+                expect(new Time(utc(2023, 10, 20, 9, 5), 'UTC').formatUserFriendlyDate(true)).toBe('Monday, 20th of November');
+                expect(new Time(utc(2023, 0, 1, 10, 15), 'UTC').formatUserFriendlyDate(true)).toBe('Sunday, 1st of January');
             });
         });
 
