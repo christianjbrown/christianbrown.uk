@@ -125,10 +125,11 @@ export default class SmartHomePage {
      * load) it falls back to the time on its own, so the line never empties.
      */
     #renderStatusLine(homeData, weatherData) {
-        const time = (new Time()).formatUserFriendlyHour(true, true);
+        const now = new Time();
+        const when = `It's currently ${now.formatUserFriendlyHour(false, true)} on ${now.formatUserFriendlyDate(true)} in my London home`;
 
         if (!homeData || !weatherData) {
-            this.#statusDom.textContent = `🕐 It's ${time} in London.`;
+            this.#statusDom.textContent = `${when}.`;
             return;
         }
 
@@ -138,7 +139,7 @@ export default class SmartHomePage {
             weatherData['temp'],
             weatherData['humidity'] ?? null
         )).format();
-        this.#statusDom.textContent = `🕐 At ${time} in London, ${SmartHomePage.#lowercaseFirst(climate)}`;
+        this.#statusDom.textContent = `${when}, where ${SmartHomePage.#lowercaseFirst(climate)}`;
     }
 
     /**
