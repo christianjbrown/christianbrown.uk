@@ -27,15 +27,15 @@ export default class SmartHomePage {
 
     /**
      * @param {String}  statusDomSelector
-     * @param {String}  floorPlanDomSelector
+     * @param {String}  roomsSectionDomSelector
      * @param {String}  homeTemperatureTableDomSelector
      * @param {String}  homeTemperatureTableUpdateDomSelector
      * @param {String}  weatherTableDomSelector
      * @param {String}  weatherTableUpdateDomSelector
      */
-    constructor(statusDomSelector, floorPlanDomSelector, homeTemperatureTableDomSelector, homeTemperatureTableUpdateDomSelector, weatherTableDomSelector, weatherTableUpdateDomSelector) {
+    constructor(statusDomSelector, roomsSectionDomSelector, homeTemperatureTableDomSelector, homeTemperatureTableUpdateDomSelector, weatherTableDomSelector, weatherTableUpdateDomSelector) {
         this.#statusDom = SmartHomePage.#find(statusDomSelector);
-        this.#floorPlan = new FloorPlan(SmartHomePage.#find(floorPlanDomSelector));
+        this.#floorPlan = new FloorPlan(SmartHomePage.#find(roomsSectionDomSelector));
 
         const homeTemperatureTableDom = SmartHomePage.#find(homeTemperatureTableDomSelector);
         const homeTemperatureTableUpdateDom = SmartHomePage.#find(homeTemperatureTableUpdateDomSelector);
@@ -58,18 +58,18 @@ export default class SmartHomePage {
      * @return {Promise}
      */
     async runAll() {
-        // Show the time straight away, then re-render once the tables have
-        // loaded so the climate comparison and floor-plan labels can appear.
-        this.#render();
-        const result = await Promise.all(
-            [
-                this.#homeTemperatureTableObj.update(),
-                this.#weatherTableObj.update(),
-            ]
-        );
+        // Show the time straight away, then re-render as each table resolves
+        // (rather than only once both have) so the Rooms section can appear as
+        // soon as the indoor data lands, with the outside reading following
+        // when the weather arrives.
         this.#render();
 
-        return result;
+        return Promise.all(
+            [
+                this.#homeTemperatureTableObj.update().then(() => this.#render()),
+                this.#weatherTableObj.update().then(() => this.#render()),
+            ]
+        );
     }
 
     /**

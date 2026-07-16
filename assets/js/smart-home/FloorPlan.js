@@ -22,26 +22,31 @@ export const OUTSIDE_ANCHORS = [
 ];
 
 export default class FloorPlan {
+    #section;
     #dom;
     #roomAnchors;
     #outsideAnchors;
 
     /**
-     * @param {HTMLElement} dom
+     * @param {HTMLElement} section The whole "Rooms" section, hidden until the
+     *                              indoor data has loaded. Its `.floor-plan`
+     *                              descendant holds the plan and its labels.
      * @param {Object}      roomAnchors
      * @param {Array}       outsideAnchors
      */
-    constructor(dom, roomAnchors = ROOM_ANCHORS, outsideAnchors = OUTSIDE_ANCHORS) {
-        this.#dom = dom;
+    constructor(section, roomAnchors = ROOM_ANCHORS, outsideAnchors = OUTSIDE_ANCHORS) {
+        this.#section = section;
+        this.#dom = section.querySelector('.floor-plan');
         this.#roomAnchors = roomAnchors;
         this.#outsideAnchors = outsideAnchors;
     }
 
     /**
-     * Renders the room and outside labels onto the plan. A room is only
-     * labelled when it appears in the indoor data; if that data is missing no
-     * room labels are shown at all. The outside reading is likewise only shown
-     * when the weather data is present.
+     * Renders the room and outside labels onto the plan. The whole section
+     * stays hidden until the indoor (SmartThings) data has loaded — it is never
+     * shown for weather data alone, or when the indoor data has failed to load.
+     * Once shown, a room is only labelled when it appears in the indoor data,
+     * and the outside reading is added as soon as the weather data arrives.
      *
      * @param {Object|null} homeData
      * @param {Object|null} weatherData
@@ -49,7 +54,12 @@ export default class FloorPlan {
     render(homeData, weatherData) {
         this.#clear();
 
-        if (homeData && Array.isArray(homeData['devices'])) {
+        this.#section.hidden = !homeData;
+        if (!homeData) {
+            return;
+        }
+
+        if (Array.isArray(homeData['devices'])) {
             const rooms = FloorPlan.#averageByRoom(homeData['devices']);
             for (const [roomName, anchor] of Object.entries(this.#roomAnchors)) {
                 const room = rooms.get(roomName);

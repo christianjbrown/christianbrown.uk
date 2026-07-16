@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeAll, vi } from 'vitest';
 import {
     STATUS_LINE_SELECTOR,
-    FLOOR_PLAN_SELECTOR,
+    ROOMS_SECTION_SELECTOR,
     HOME_TEMP_TABLE_SELECTOR,
     HOME_TEMP_TABLE_UPDATE_TIME_SELECTOR,
     WEATHER_TABLE_SELECTOR,
@@ -40,7 +40,7 @@ describe('smart-home/index.js', () => {
 
         expect(ctor).toHaveBeenCalledWith(
             STATUS_LINE_SELECTOR,
-            FLOOR_PLAN_SELECTOR,
+            ROOMS_SECTION_SELECTOR,
             HOME_TEMP_TABLE_SELECTOR,
             HOME_TEMP_TABLE_UPDATE_TIME_SELECTOR,
             WEATHER_TABLE_SELECTOR,

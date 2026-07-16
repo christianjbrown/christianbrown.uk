@@ -46,12 +46,12 @@ vi.mock('./MetWeatherTable.js', () => ({
 
 import SmartHomePage from './SmartHomePage.js';
 
-const SELECTORS = ['#status', '#floor-plan', '#home', '#home-u', '#weather', '#weather-u'];
+const SELECTORS = ['#status', '#rooms', '#home', '#home-u', '#weather', '#weather-u'];
 
 function setupDom() {
     document.body.innerHTML = `
         <p id="status"></p>
-        <div id="floor-plan"></div>
+        <div id="rooms"></div>
         <table id="home"></table>
         <span id="home-u"></span>
         <table id="weather"></table>
