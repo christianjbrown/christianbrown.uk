@@ -167,14 +167,19 @@ html {
                 }
                 div.header-data {
                     h1 {
-                        // No nowrap: at 3.5rem the name is wider than a small
-                        // phone, and forcing one line gave the page a few px of
-                        // horizontal scroll. Let it wrap only when it can't fit
-                        // (it stays on one line at any normal width).
+                        // Keep the name on one line. Below ~420px (where 3.5rem
+                        // would be too wide to fit) scale it to the viewport so
+                        // it fills the width without wrapping; 12vw meets 3.5rem
+                        // exactly at 420px, so the change is seamless and wider
+                        // screens (tablets, desktop) keep the full 3.5rem.
+                        white-space: nowrap;
                         margin-bottom: 0;
                         color: $colour-accent;
                         font-family: $font-serif;
                         font-size: 3.5rem;
+                        @media (max-width: 420px) {
+                            font-size: 12vw;
+                        }
                     }
                     p {
                         * {
