@@ -36,7 +36,7 @@ export default class SmartHomeTemperatureTable extends UpdatingKeyValuePairTable
      * @param {Number|null} generatedAtUnix
      */
     _renderUpdate(data, generatedAtUnix = null) {
-        const updated = this._updatedLabel(generatedAtUnix);
+        const updated = this._updatedElement(generatedAtUnix);
         if (updated) {
             this._updateDateSpan(updated);
         }

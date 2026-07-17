@@ -16,6 +16,11 @@ div.container {
                     color: $colour-grayscale-1;
                     text-decoration: underline;
                 }
+                // The "Updated <time ago>" note: a touch smaller than the rest
+                // of the caption so it stays understated.
+                span.freshness {
+                    font-size: 0.85rem;
+                }
                 display: none;
                 margin-top: 0.5rem;
                 font-size: 1rem;

@@ -146,6 +146,21 @@ describe('UpdatingKeyValuePairTable', () => {
             });
         });
 
+        describe('_updatedElement', () => {
+            it('wraps the label in a muted freshness span', () => {
+                const twoMinsAgo = Math.floor(Date.parse('2023-11-20T11:58:00Z') / 1000);
+                const element = subject._updatedElement(twoMinsAgo);
+                expect(element.tagName).toBe('SPAN');
+                expect(element.className).toBe('freshness');
+                expect(element.textContent).toBe('Updated 2 mins ago');
+            });
+
+            it('returns null when there is no timestamp', () => {
+                expect(subject._updatedElement(null)).toBeNull();
+                expect(subject._updatedElement()).toBeNull();
+            });
+        });
+
         it('_updateDateSpan appends the given nodes and reveals the element', () => {
             const link = document.createElement('a');
             link.textContent = 'Met Office';

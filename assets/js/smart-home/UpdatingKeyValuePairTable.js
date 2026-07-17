@@ -234,6 +234,30 @@ export default class UpdatingKeyValuePairTable {
     }
 
     /**
+     * The "Updated <time ago>" label wrapped in a small, muted `freshness`
+     * span, or null when the time is unknown. Both tables render this so each
+     * shows its own feed's freshness (they are fetched independently and can
+     * differ) — the climate table on its own line beneath the table, the
+     * weather table as a second sentence after its source line.
+     *
+     * @param {Number|null} generatedAtUnix
+     *
+     * @returns {HTMLSpanElement|null}
+     */
+    _updatedElement(generatedAtUnix = null) {
+        const label = this._updatedLabel(generatedAtUnix);
+        if (null === label) {
+            return null;
+        }
+
+        const span = document.createElement('span');
+        span.className = 'freshness';
+        span.append(label);
+
+        return span;
+    }
+
+    /**
      * Replaces the update-time element's contents with the given nodes and
      * reveals it. Accepts DOM nodes and/or strings (strings become inert text
      * nodes), so no markup is ever parsed from a string.
