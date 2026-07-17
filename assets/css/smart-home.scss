@@ -146,7 +146,12 @@ div.container {
                     transform: translate(-50%, -50%);
                     text-align: center;
                     white-space: nowrap;
-                    pointer-events: none;
+                    // A translucent pill keeps a label legible where it overspills
+                    // a narrow room (e.g. the hallway on mobile), instead of the
+                    // text clashing with the wall lines beneath it.
+                    background: rgba(255, 255, 255, 0.82);
+                    border-radius: 6px;
+                    padding: 0.15rem 0.4rem;
                 }
                 // Sized like the "How it works" diagram: 80% wide and centred,
                 // full width on small screens.
