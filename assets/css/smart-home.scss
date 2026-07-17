@@ -20,6 +20,7 @@ div.container {
                 // of the caption so it stays understated.
                 span.freshness {
                     font-size: 0.85rem;
+                    color: $colour-grayscale-1;
                 }
                 display: none;
                 margin-top: 0.5rem;
@@ -180,6 +181,11 @@ div.container {
             }
         }
         div.faq {
+            h4 {
+                max-width: 45rem;
+                margin: 1.75rem auto 0.5rem;
+                font-size: 1.1rem;
+            }
             p, ul {
                 max-width: 45rem;
                 margin-left: auto;
