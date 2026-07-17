@@ -59,8 +59,10 @@ describe('SmartHomeTemperatureTable', () => {
             Math.floor(Date.now() / 1000) - 120,
         );
 
-        expect(updateSpan.textContent).toContain('Updated');
-        expect(updateSpan.textContent).toContain('ago');
+        const freshness = updateSpan.querySelector('span.freshness');
+        expect(freshness).not.toBeNull();
+        expect(freshness.textContent).toContain('Updated');
+        expect(freshness.textContent).toContain('ago');
     });
 
     it('leaves the update span empty when no envelope timestamp is given', () => {

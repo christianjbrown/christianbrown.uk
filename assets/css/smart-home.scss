@@ -16,6 +16,13 @@ div.container {
                     color: $colour-grayscale-1;
                     text-decoration: underline;
                 }
+                // The "Updated <time ago>" freshness note: its own line, and
+                // smaller than the source line so it stays understated.
+                span.freshness {
+                    display: block;
+                    margin-top: 0.25rem;
+                    font-size: 0.8rem;
+                }
                 display: none;
                 margin-top: 0.5rem;
                 font-size: 1rem;

@@ -234,6 +234,29 @@ export default class UpdatingKeyValuePairTable {
     }
 
     /**
+     * The "Updated <time ago>" label as a muted, block-level element (its own
+     * line, less prominent than the data), or null when the time is unknown.
+     * Both tables render this beneath themselves so each shows its own feed's
+     * freshness — the two are fetched independently and can differ.
+     *
+     * @param {Number|null} generatedAtUnix
+     *
+     * @returns {HTMLSpanElement|null}
+     */
+    _updatedElement(generatedAtUnix = null) {
+        const label = this._updatedLabel(generatedAtUnix);
+        if (null === label) {
+            return null;
+        }
+
+        const span = document.createElement('span');
+        span.className = 'freshness';
+        span.append(label);
+
+        return span;
+    }
+
+    /**
      * Replaces the update-time element's contents with the given nodes and
      * reveals it. Accepts DOM nodes and/or strings (strings become inert text
      * nodes), so no markup is ever parsed from a string.
