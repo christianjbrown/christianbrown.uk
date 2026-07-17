@@ -55,9 +55,10 @@ export default class MetWeatherTable extends UpdatingKeyValuePairTable {
     }
 
     /**
-     * @param {Object} data
+     * @param {Object}      data
+     * @param {Number|null} generatedAtUnix
      */
-    _renderUpdate(data) {
+    _renderUpdate(data, generatedAtUnix = null) {
         if ('valid_from' in data && 'valid_to' in data) {
             const fromObj = new Time(data.valid_from * 1000);
             const toObj = new Time(data.valid_to * 1000);
@@ -80,7 +81,9 @@ export default class MetWeatherTable extends UpdatingKeyValuePairTable {
             metOfficeLink.target = '_blank';
             metOfficeLink.textContent = 'Met Office';
 
-            this._updateDateSpan('Source: ', metOfficeLink, ` forecast for between ${range}`);
+            const updated = this._updatedLabel(generatedAtUnix);
+            const freshness = updated ? ` · ${updated.toLowerCase()}` : '';
+            this._updateDateSpan('Source: ', metOfficeLink, ` forecast for between ${range}${freshness}`);
         }
 
         if ('type_string' in data && 'type_emoji' in data) {

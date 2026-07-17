@@ -10,12 +10,14 @@ const JSON_CONTRACT = {
     },
     'success': {'type': 'boolean', 'keyRequired': true, 'cannotBeEmpty': true},
     'error': {'type': 'string', 'cannotBeEmpty': true},
+    'timestamp_unix': {'type': 'number', 'keyRequired': true, 'cannotBeEmpty': true},
     'version': {'type': 'string', 'keyRequired': true, 'cannotBeEmpty': true},
 };
 
 export default class DataFetcher {
     #url;
     #dataContract;
+    #generatedAtUnix = null;
 
     /**
      * @param {String} url
@@ -76,6 +78,21 @@ export default class DataFetcher {
         }
         await jsonPayloadContractValidator.validateContract(data['data'], this.#dataContract, 'data');
 
+        // The envelope timestamp records when the origin generated this payload.
+        // Surfacing it lets callers show honest freshness — an edge that serves a
+        // stale-while-revalidate copy returns an older timestamp here.
+        this.#generatedAtUnix = data['timestamp_unix'];
+
         return data['data'];
+    }
+
+    /**
+     * The Unix timestamp (seconds) at which the origin generated the most recent
+     * successful payload, or null if no fetch has succeeded yet.
+     *
+     * @return {Number|null}
+     */
+    getGeneratedAtUnix() {
+        return this.#generatedAtUnix;
     }
 }

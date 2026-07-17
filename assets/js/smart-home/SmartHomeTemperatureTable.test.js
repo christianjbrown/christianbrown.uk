@@ -47,6 +47,34 @@ describe('SmartHomeTemperatureTable', () => {
         expect(rows[3].textContent).toContain('50%');
     });
 
+    it('shows an "Updated" freshness label in the update span when given the envelope timestamp', () => {
+        const { updateSpan, subject } = make();
+        subject._renderHeader();
+        subject._renderUpdate(
+            {
+                devices: [
+                    { name: 'Sensor', temperatureValue: 21, temperatureTimestamp: 2000, temperatureStale: false },
+                ],
+            },
+            Math.floor(Date.now() / 1000) - 120,
+        );
+
+        expect(updateSpan.textContent).toContain('Updated');
+        expect(updateSpan.textContent).toContain('ago');
+    });
+
+    it('leaves the update span empty when no envelope timestamp is given', () => {
+        const { updateSpan, subject } = make();
+        subject._renderHeader();
+        subject._renderUpdate({
+            devices: [
+                { name: 'Sensor', temperatureValue: 21, temperatureTimestamp: 2000, temperatureStale: false },
+            ],
+        });
+
+        expect(updateSpan.textContent).toBe('');
+    });
+
     it('renders the title header even when the update fails to load', () => {
         const { subject } = make();
         subject._renderHeader();
