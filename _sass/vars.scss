@@ -2,9 +2,22 @@
 $font-serif: 'WebGeorgia', serif;
 $font-sans-serif: 'WebProductSans', sans-serif;
 
-$colour-accent: #75923C;
-$colour-grayscale-1: #AAA;
-$colour-grayscale-2: #222;
-$colour-grayscale-3: #222;
-$colour-grayscale-4: #222;
-$colour-error: orange;
+// Fixed brand palette — real colour values, used where a colour must exist at
+// compile time (Bootstrap's colour maths on $primary/$danger) or must stay put
+// regardless of the theme (e.g. the always-light cookie card).
+$colour-accent-fixed: #75923C;
+$colour-ink-fixed: #222;
+$colour-error-fixed: orange;
+
+// Themeable tokens — resolve to CSS custom properties so a
+// prefers-color-scheme override can repaint the whole site at runtime. The
+// light values live in :root and the dark values in the media query, both in
+// global.scss (loaded on every page). grayscale-2/3/4 were all the same ink,
+// so they share the one foreground token.
+$colour-accent: var(--c-accent);
+$colour-grayscale-1: var(--c-muted);
+$colour-grayscale-2: var(--c-fg);
+$colour-grayscale-3: var(--c-fg);
+$colour-grayscale-4: var(--c-fg);
+$colour-error: var(--c-error);
+$colour-pill: var(--c-pill);

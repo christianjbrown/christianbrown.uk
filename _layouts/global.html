@@ -51,7 +51,8 @@ but maybe you're looking for an engineering manager? you've come to right place!
         <meta name="msapplication-TileColor" content="{{ site.header_msapplication_tile_color }}">
         {%- if page.noindex %}
         <meta name="robots" content="noindex">{%- endif %}
-        <meta name="theme-color" content="{{ site.header_theme_color }}">
+        <meta name="theme-color" content="{{ site.header_theme_color }}" media="(prefers-color-scheme: light)">
+        <meta name="theme-color" content="#16181d" media="(prefers-color-scheme: dark)">
         <meta name="twitter:card" content="summary">
         <meta name="twitter:description" content="{{ page.description }}">
         <meta name="twitter:image" content="{{ site.url }}/assets/images/favicon/android-chrome-512x512.png">
