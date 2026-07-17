@@ -5,6 +5,7 @@
 export const COOKIES_ACCEPT_BUTTON_ID = 'cookies-accept';
 export const COOKIES_DECLINE_BUTTON_ID = 'cookies-decline';
 export const COOKIES_DIV_ID = 'cookies';
+export const THEME_TOGGLE_ID = 'theme-toggle';
 export const DEV_CONSOLE_LINE_1 = `
                                                                                                                         _
 _|_ |_   _   _  _    _. ._ _   ._   _ _|_  _|_ |_   _    _| ._ _  o  _|  _      _     /._ _   |  _   _  |  o ._   _   _|_ _  ._
