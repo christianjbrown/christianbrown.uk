@@ -238,7 +238,7 @@ export default class UpdatingKeyValuePairTable {
      * span, or null when the time is unknown. Both tables render this so each
      * shows its own feed's freshness (they are fetched independently and can
      * differ) — the climate table on its own line beneath the table, the
-     * weather table as a second sentence after its source line.
+     * weather table on its own line beneath its source line.
      *
      * @param {Number|null} generatedAtUnix
      *
