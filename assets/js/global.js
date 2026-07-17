@@ -1,6 +1,7 @@
 'use strict';
 
 import Cookie from './Cookie.js';
+import Theme from './Theme.js';
 import {
     COOKIES_ACCEPT_BUTTON_ID,
     COOKIES_DECLINE_BUTTON_ID,
@@ -9,12 +10,17 @@ import {
     DEV_CONSOLE_LINE_1_STYLE,
     DEV_CONSOLE_LINE_2,
     DEV_CONSOLE_LINE_2_STYLE,
-    GOOGLE_ANALYTICS_ID
+    GOOGLE_ANALYTICS_ID,
+    THEME_TOGGLE_ID
 } from '/config/global.const.js';
 
 const cookiesDivDom = document.getElementById(COOKIES_DIV_ID);
 const cookiesAcceptButtonDom = document.getElementById(COOKIES_ACCEPT_BUTTON_ID);
 const cookiesDeclineButtonDom = document.getElementById(COOKIES_DECLINE_BUTTON_ID);
+
+// Header colour-theme toggle (Auto → Light → Dark). Present on every page; the
+// saved choice was already applied pre-paint by theme-init.js in the <head>.
+Theme.bindToggle(document.getElementById(THEME_TOGGLE_ID));
 
 cookiesAcceptButtonDom.addEventListener('click',
     () => {
