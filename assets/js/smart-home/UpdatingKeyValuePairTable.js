@@ -36,7 +36,7 @@ export default class UpdatingKeyValuePairTable {
                     that.#lastData = data;
                     that.#clearContents();
                     that._renderHeader();
-                    that._renderUpdate(data);
+                    that._renderUpdate(data, that.#dataFetcher.getGeneratedAtUnix());
                 }
             )
             .catch(
@@ -208,10 +208,29 @@ export default class UpdatingKeyValuePairTable {
     /**
      * Renders the update.
      *
-     * @param {Object} data
+     * @param {Object}      data
+     * @param {Number|null} generatedAtUnix
      */
-    _renderUpdate(data) {
+    _renderUpdate(data, generatedAtUnix = null) {
 
+    }
+
+    /**
+     * A short "Updated <time ago>" label describing when the origin generated
+     * the payload (the envelope timestamp), or null when it is unknown.
+     * Surfacing this keeps freshness honest even when the edge serves a
+     * stale-while-revalidate copy of an older response.
+     *
+     * @param {Number|null} generatedAtUnix
+     *
+     * @returns {String|null}
+     */
+    _updatedLabel(generatedAtUnix = null) {
+        if (!generatedAtUnix) {
+            return null;
+        }
+
+        return `Updated ${(new Time(generatedAtUnix * 1000)).formatTimeAgo()}`;
     }
 
     /**

@@ -15,6 +15,7 @@ function response({ ok = true, status = 200, statusText = 'OK', json } = {}) {
 const validEnvelope = (overrides = {}) => ({
     data: { temp: 21 },
     success: true,
+    timestamp_unix: 1_700_000_000,
     version: '1.0.0',
     ...overrides,
 });
@@ -126,6 +127,25 @@ describe('DataFetcher', () => {
             const contract = { temp: { type: 'string', keyRequired: true } };
             stubFetch(async () => response({ json: async () => validEnvelope({ data: { temp: 21 } }) }));
             await expect(new DataFetcher('u', contract).fetch()).rejects.toThrow(/must be of type "string"/);
+        });
+    });
+
+    describe('envelope timestamp', () => {
+        it('exposes the origin-generated timestamp after a successful fetch', async () => {
+            stubFetch(async () => response({ json: async () => validEnvelope({ timestamp_unix: 1_712_345_678 }) }));
+            const fetcher = new DataFetcher('u');
+            await fetcher.fetch();
+            expect(fetcher.getGeneratedAtUnix()).toBe(1_712_345_678);
+        });
+
+        it('reports null before any fetch has succeeded', () => {
+            expect(new DataFetcher('u').getGeneratedAtUnix()).toBeNull();
+        });
+
+        it('rejects when the envelope has no timestamp', async () => {
+            stubFetch(async () => response({ json: async () => ({ data: { temp: 21 }, success: true, version: '1.0.0' }) }));
+            await expect(new DataFetcher('u').fetch())
+                .rejects.toThrow(/Fetched and parsed the data okay, but it's not what we expected\./);
         });
     });
 });
