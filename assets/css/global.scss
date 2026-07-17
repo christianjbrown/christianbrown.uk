@@ -115,6 +115,11 @@ button.theme-toggle {
     &:hover {
         color: $colour-accent;
     }
+    // Drop the focus ring that lingered after a tap/click, but keep it for
+    // keyboard focus (:focus-visible) so it stays reachable without a mouse.
+    &:focus:not(:focus-visible) {
+        outline: none;
+    }
     @media print {
         display: none;
     }
