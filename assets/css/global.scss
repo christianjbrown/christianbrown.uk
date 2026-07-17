@@ -5,8 +5,11 @@
 @import 'fonts';
 @import 'cookies';
 
-$primary: $colour-accent;
-$danger: $colour-error;
+// Bootstrap does colour maths on these at compile time, so they must be real
+// values, not the themeable var() tokens. The accent green reads well on both
+// light and dark, so the avatar ring and other $primary uses stay fixed.
+$primary: $colour-accent-fixed;
+$danger: $colour-error-fixed;
 
 // Import only the Bootstrap partials this site actually uses, rather than the
 // whole framework, to avoid shipping dead CSS. Base partials first, then the
@@ -23,6 +26,49 @@ $danger: $colour-error;
 @import 'bootstrap/tables';
 @import 'bootstrap/utilities';
 @import 'bootstrap/print';
+
+// Themeable colour tokens. Every $colour-* the site uses resolves to one of
+// these (see _sass/vars.scss), so the theme is defined entirely here: light by
+// default, repainted under a dark colour-scheme, and forced back to light for
+// print (dark ink on white paper) whatever the screen was showing.
+:root {
+    --c-bg: #fff;
+    --c-fg: #222;
+    --c-muted: #aaa;
+    --c-accent: #75923c;
+    --c-error: orange;
+    // Translucent pill behind the floor-plan room labels.
+    --c-pill: rgba(255, 255, 255, 0.82);
+    // Light chip sat behind logos/illustrations that were drawn for a light
+    // background; transparent (a no-op) in light mode.
+    --c-chip: transparent;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --c-bg: #16181d;
+        --c-fg: #e8e8e6;
+        // Mid-grey that still reads as "muted" against the dark ground.
+        --c-muted: #8c8c8c;
+        // The brand green lightened for enough contrast on the dark ground.
+        --c-accent: #a3c76d;
+        --c-error: #ffb454;
+        --c-pill: rgba(22, 24, 29, 0.85);
+        --c-chip: #f5f5f5;
+    }
+}
+
+@media print {
+    :root {
+        --c-bg: #fff;
+        --c-fg: #222;
+        --c-muted: #aaa;
+        --c-accent: #75923c;
+        --c-error: orange;
+        --c-pill: rgba(255, 255, 255, 0.82);
+        --c-chip: transparent;
+    }
+}
 
 html {
     body {
@@ -145,8 +191,28 @@ html {
             }
             color: $colour-grayscale-2;
         }
-        color-scheme: light;
+        // Paint the page ground from the theme token so the whole viewport
+        // follows the colour scheme, not just the text.
+        background-color: var(--c-bg);
+        color-scheme: light dark;
         font-family: $font-sans-serif;
+
+        @media (prefers-color-scheme: dark) {
+            // The location pin is a grayscaled red mark; on the dark ground it
+            // needs lifting to stay visible beside its text.
+            img.location-icon,
+            img.cv-experience-company-metadata-location-icon {
+                filter: grayscale(100%) brightness(1.9);
+            }
+            // Company logos are brand marks drawn for a light background (some
+            // are dark or low-contrast). Sit each on a light chip so every logo
+            // stays legible, whatever colours it uses internally.
+            div.cv-experience-company-logo img {
+                background: var(--c-chip);
+                padding: 0.35rem;
+                border-radius: 0.4rem;
+            }
+        }
     }
     font-size: 0.9rem;
 }

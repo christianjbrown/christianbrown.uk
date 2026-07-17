@@ -22,14 +22,17 @@ html {
             }
             div.cookies-options {
                 button {
+                    // The cookie card is a deliberately light modal (white card
+                    // on a dark overlay) in both themes, so its buttons use the
+                    // fixed brand colours rather than the themeable tokens.
                     &#cookies-accept {
-                        background-color: $colour-accent;
+                        background-color: $colour-accent-fixed;
                         border: 1px solid white;
                         color: white;
                     }
 
                     &#cookies-decline {
-                        background-color: $colour-grayscale-2;
+                        background-color: $colour-ink-fixed;
                         border: 1px solid black;
                         color: black;
                     }
