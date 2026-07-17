@@ -81,12 +81,14 @@ export default class MetWeatherTable extends UpdatingKeyValuePairTable {
             metOfficeLink.target = '_blank';
             metOfficeLink.textContent = 'Met Office';
 
-            // The freshness reads as its own sentence after the source line,
-            // e.g. "… on Fri 17th Jul. Updated 9 mins ago".
-            const nodes = ['Source: ', metOfficeLink, ` forecast for between ${range}`];
+            // The freshness sits on its own line beneath the source line (the
+            // `freshness` span is display:block), e.g.
+            //   Source: Met Office forecast for between … on Fri 17th Jul.
+            //   Updated 9 mins ago
+            const nodes = ['Source: ', metOfficeLink, ` forecast for between ${range}.`];
             const updated = this._updatedElement(generatedAtUnix);
             if (updated) {
-                nodes.push('. ', updated);
+                nodes.push(updated);
             }
             this._updateDateSpan(...nodes);
         }
