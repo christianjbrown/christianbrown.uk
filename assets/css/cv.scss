@@ -121,7 +121,12 @@ div.container {
                                     font-weight: bold;
                                     margin: 0;
                                     padding: 0;
-                                    flex: 0 0 30rem;
+                                    // Prefers ~30rem so the dates sit out to the
+                                    // right on wide screens, but must be allowed
+                                    // to shrink: with flex-shrink 0 the rigid
+                                    // 30rem basis overflowed a phone's width and
+                                    // gave the page a horizontal scroll.
+                                    flex: 0 1 30rem;
                                 }
                                 div.cv-experience-job-metadata-dates {
                                     color: $colour-grayscale-4;

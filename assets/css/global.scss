@@ -167,7 +167,10 @@ html {
                 }
                 div.header-data {
                     h1 {
-                        white-space: nowrap;
+                        // No nowrap: at 3.5rem the name is wider than a small
+                        // phone, and forcing one line gave the page a few px of
+                        // horizontal scroll. Let it wrap only when it can't fit
+                        // (it stays on one line at any normal width).
                         margin-bottom: 0;
                         color: $colour-accent;
                         font-family: $font-serif;
