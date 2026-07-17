@@ -17,6 +17,18 @@ describe('ClimateSummary', () => {
             .toBe("It's 26°c inside and outside, and it's 53% humidity inside and outside.");
     });
 
+    // With no "warmer/cooler inside" clause to frame the comparison, the
+    // humidity clause names the side itself: "more humid inside".
+    it('names the side when temperatures match but humidity differs', () => {
+        expect(new ClimateSummary(26.3, 40, 26.3, 35.2).format())
+            .toBe("It's 26.3°c inside and outside, and 4.8% more humid inside (40% inside, 35.2% outside).");
+    });
+
+    it('names the side when temperatures match and it is less humid inside', () => {
+        expect(new ClimateSummary(26.3, 35.2, 26.3, 40).format())
+            .toBe("It's 26.3°c inside and outside, and 4.8% less humid inside (35.2% inside, 40% outside).");
+    });
+
     it('treats values that round to the same display as matching', () => {
         expect(new ClimateSummary(26.01, 53.02, 26.04, 53.01).format())
             .toBe("It's 26°c inside and outside, and it's 53% humidity inside and outside.");
