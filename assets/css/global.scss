@@ -95,18 +95,17 @@ $danger: $colour-error-fixed;
     }
 }
 
-// Colour-theme toggle, fixed in the top-right corner of the viewport. A solid,
-// theme-coloured pill so it stays legible over whatever it floats above; ships
-// hidden and is revealed by JS, and never prints.
+// Colour-theme toggle, fixed in the top-right corner of the viewport: just the
+// icon and label, no border or background. Ships hidden and is revealed by JS,
+// and never prints.
 button.theme-toggle {
     position: fixed;
     top: 0.75rem;
     right: 0.75rem;
     z-index: 50;
-    padding: 0.3rem 0.65rem;
-    border: 1px solid $colour-grayscale-1;
-    border-radius: 999px;
-    background: var(--c-bg);
+    padding: 0.3rem 0.5rem;
+    border: none;
+    background: none;
     font-family: $font-sans-serif;
     font-size: 0.9rem;
     font-weight: bold;
@@ -115,7 +114,6 @@ button.theme-toggle {
     cursor: pointer;
     &:hover {
         color: $colour-accent;
-        border-color: $colour-accent;
     }
     @media print {
         display: none;
