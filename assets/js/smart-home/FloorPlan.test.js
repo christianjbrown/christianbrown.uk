@@ -7,11 +7,12 @@ const ROOM_ANCHORS = {
     'Bathroom': {'x': 60, 'y': 20},
 };
 const OUTSIDE_ANCHORS = [{'x': 50, 'y': 3}, {'x': 50, 'y': 97}];
+const FLOOR_ANCHORS = {'Third floor': {'x': 25, 'y': 4}, 'Fourth floor': {'x': 74, 'y': 4}};
 
 let section;
 let container;
 
-function make(roomAnchors = ROOM_ANCHORS, outsideAnchors = OUTSIDE_ANCHORS) {
+function make(roomAnchors = ROOM_ANCHORS, outsideAnchors = OUTSIDE_ANCHORS, floorAnchors = FLOOR_ANCHORS) {
     section = document.createElement('div');
     section.className = 'floor-plan-section';
     section.hidden = true;
@@ -19,11 +20,15 @@ function make(roomAnchors = ROOM_ANCHORS, outsideAnchors = OUTSIDE_ANCHORS) {
     container.className = 'floor-plan';
     section.append(container);
     document.body.append(section);
-    return new FloorPlan(section, roomAnchors, outsideAnchors);
+    return new FloorPlan(section, roomAnchors, outsideAnchors, floorAnchors);
 }
 
 function labels() {
     return [...container.querySelectorAll('.floor-plan-label')];
+}
+
+function floorLabels() {
+    return [...container.querySelectorAll('.floor-plan-floor-label')];
 }
 
 function labelFor(name) {
@@ -63,6 +68,27 @@ describe('FloorPlan', () => {
         expect(study.querySelector('.floor-plan-temp').textContent).toContain('26.9°c');
         // No humidity reported -> no humidity line.
         expect(study.querySelector('.floor-plan-humidity')).toBeNull();
+    });
+
+    it('draws the floor headings at their anchors whenever the plan is shown', () => {
+        const subject = make();
+        subject.render({devices: [{roomName: 'Study', temperatureValue: 20, temperatureStale: false}]}, null);
+
+        const floors = floorLabels();
+        expect(floors.map((floor) => floor.textContent)).toEqual(['Third floor', 'Fourth floor']);
+        const third = floors.find((floor) => floor.textContent === 'Third floor');
+        expect(third.style.left).toBe('25%');
+        expect(third.style.top).toBe('4%');
+    });
+
+    it('clears the floor headings on re-render and omits them while the plan is hidden', () => {
+        const subject = make();
+        subject.render({devices: []}, null);
+        expect(floorLabels()).toHaveLength(2);
+
+        subject.render(null, null);
+        expect(section.hidden).toBe(true);
+        expect(floorLabels()).toHaveLength(0);
     });
 
     it('keeps the section hidden until the indoor data has loaded', () => {
