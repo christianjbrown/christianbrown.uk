@@ -59,12 +59,10 @@ div.container {
                             max-width: 4rem;
                             // Company logos are brand marks drawn for a light
                             // background (some are dark or low-contrast). In dark
-                            // mode the tokens sit each on a light chip so every
-                            // logo stays legible; in light mode they're no-ops
-                            // (transparent chip, zero padding).
-                            background: var(--c-chip);
-                            padding: var(--c-chip-pad-logo);
-                            border-radius: 0.4rem;
+                            // mode render them as soft-white silhouettes so they
+                            // read cleanly and uniformly on the dark ground; in
+                            // light mode the token is a no-op.
+                            filter: var(--c-logo-filter);
                         }
                         min-height: 2.1rem;
                         display: flex;
