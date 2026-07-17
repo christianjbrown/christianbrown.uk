@@ -47,7 +47,7 @@ describe('SmartHomeTemperatureTable', () => {
         expect(rows[3].textContent).toContain('50%');
     });
 
-    it('shows an "Updated" freshness label in the update span when given the envelope timestamp', () => {
+    it('shows its own muted "Updated" line (under the table) when given the envelope timestamp', () => {
         const { updateSpan, subject } = make();
         subject._renderHeader();
         subject._renderUpdate(
@@ -59,8 +59,9 @@ describe('SmartHomeTemperatureTable', () => {
             Math.floor(Date.now() / 1000) - 120,
         );
 
-        expect(updateSpan.textContent).toContain('Updated');
-        expect(updateSpan.textContent).toContain('ago');
+        const freshness = updateSpan.querySelector('span.freshness');
+        expect(freshness).not.toBeNull();
+        expect(freshness.textContent).toMatch(/^Updated .* ago$/);
     });
 
     it('leaves the update span empty when no envelope timestamp is given', () => {
