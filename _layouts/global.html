@@ -25,6 +25,10 @@ but maybe you're looking for an engineering manager? you've come to right place!
         <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicon/favicon-16x16.png">
         <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon/favicon-32x32.png">
         <link rel="manifest" href="/site.webmanifest">
+        <!-- Apply the saved colour theme before the stylesheets paint, to avoid
+             a flash of the wrong theme. Classic (not module) and render-blocking
+             on purpose so it runs ahead of the CSS below. -->
+        <script src="/assets/js/theme-init.js"></script>
         {%- if layout.global.stylesheets -%}{%- for stylesheet in layout.global.stylesheets %}
         <link rel="stylesheet" href="{{ stylesheet }}">
         {%- endfor -%}{%- endif %}

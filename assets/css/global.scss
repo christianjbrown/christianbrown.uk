@@ -28,10 +28,12 @@ $danger: $colour-error-fixed;
 @import 'bootstrap/print';
 
 // Themeable colour tokens. Every $colour-* the site uses resolves to one of
-// these (see _sass/vars.scss), so the theme is defined entirely here: light by
-// default, repainted under a dark colour-scheme, and forced back to light for
-// print (dark ink on white paper) whatever the screen was showing.
-:root {
+// these (see _sass/vars.scss), and the handful of dark-only tweaks (image
+// filters, the light chip behind illustrations) are tokens too — so the theme
+// is defined entirely by which of these two mixins :root gets.
+@mixin theme-light {
+    color-scheme: light;
+
     --c-bg: #fff;
     --c-fg: #222;
     --c-muted: #aaa;
@@ -39,34 +41,57 @@ $danger: $colour-error-fixed;
     --c-error: orange;
     // Translucent pill behind the floor-plan room labels.
     --c-pill: rgba(255, 255, 255, 0.82);
-    // Light chip sat behind logos/illustrations that were drawn for a light
-    // background; transparent (a no-op) in light mode.
+    // Light chip sat behind logos/illustrations drawn for a light background,
+    // with zero padding — both no-ops in light mode.
     --c-chip: transparent;
+    --c-chip-pad-logo: 0;
+    --c-chip-pad-diagram: 0;
+    // The location pin is grayscaled; on dark it also needs brightening.
+    --c-location-icon-filter: grayscale(100%);
+    // The floor-plan line-art is inverted on dark so its walls read.
+    --c-floorplan-filter: none;
+}
+
+@mixin theme-dark {
+    color-scheme: dark;
+
+    --c-bg: #16181d;
+    --c-fg: #e8e8e6;
+    // Mid-grey that still reads as "muted" against the dark ground.
+    --c-muted: #8c8c8c;
+    // The brand green lightened for enough contrast on the dark ground.
+    --c-accent: #a3c76d;
+    --c-error: #ffb454;
+    --c-pill: rgba(22, 24, 29, 0.85);
+    --c-chip: #f5f5f5;
+    --c-chip-pad-logo: 0.35rem;
+    --c-chip-pad-diagram: 1rem;
+    --c-location-icon-filter: grayscale(100%) brightness(1.9);
+    --c-floorplan-filter: invert(0.88);
+}
+
+// Light by default. Dark applies when the OS prefers it — unless the visitor
+// has forced light via the header toggle (data-theme="light") — or whenever the
+// visitor has forced dark (data-theme="dark"). Print is always light (dark ink
+// on white paper), overriding a forced-dark screen.
+:root {
+    @include theme-light;
 }
 
 @media (prefers-color-scheme: dark) {
-    :root {
-        --c-bg: #16181d;
-        --c-fg: #e8e8e6;
-        // Mid-grey that still reads as "muted" against the dark ground.
-        --c-muted: #8c8c8c;
-        // The brand green lightened for enough contrast on the dark ground.
-        --c-accent: #a3c76d;
-        --c-error: #ffb454;
-        --c-pill: rgba(22, 24, 29, 0.85);
-        --c-chip: #f5f5f5;
+    :root:not([data-theme="light"]) {
+        @include theme-dark;
     }
 }
 
+:root[data-theme="dark"] {
+    @include theme-dark;
+}
+
 @media print {
-    :root {
-        --c-bg: #fff;
-        --c-fg: #222;
-        --c-muted: #aaa;
-        --c-accent: #75923c;
-        --c-error: orange;
-        --c-pill: rgba(255, 255, 255, 0.82);
-        --c-chip: transparent;
+    :root,
+    :root[data-theme] {
+        @include theme-light;
     }
 }
 
@@ -129,7 +154,7 @@ html {
                         }
                         img.location-icon {
                             height: 0.9rem;
-                            filter: grayscale(100%);
+                            filter: var(--c-location-icon-filter);
                             margin-right: 0.2rem;
                             margin-bottom: 0.2rem;
                         }
@@ -150,6 +175,23 @@ html {
                         }
                         a:hover {
                             color: $colour-accent;
+                        }
+                        // The colour-theme toggle, styled to match the nav links
+                        // (bold, same colour, accent on hover) but as a bare
+                        // button. Ships hidden and is revealed by JS.
+                        button.theme-toggle {
+                            margin-left: 1rem;
+                            padding: 0;
+                            border: none;
+                            background: none;
+                            font-family: inherit;
+                            font-size: inherit;
+                            font-weight: bold;
+                            color: $colour-grayscale-3;
+                            cursor: pointer;
+                            &:hover {
+                                color: $colour-accent;
+                            }
                         }
                         // Right-aligned beside the details on wider screens; when
                         // the header stacks on small screens, centre it under the
@@ -191,28 +233,13 @@ html {
             }
             color: $colour-grayscale-2;
         }
-        // Paint the page ground from the theme token so the whole viewport
-        // follows the colour scheme, not just the text.
+        // Paint the page ground and default ink from the theme tokens so the
+        // whole viewport follows the colour scheme, not just the descendant text
+        // the `*` rule above colours. (color-scheme rides on the token mixins,
+        // so it tracks a forced theme too.)
         background-color: var(--c-bg);
-        color-scheme: light dark;
+        color: var(--c-fg);
         font-family: $font-sans-serif;
-
-        @media (prefers-color-scheme: dark) {
-            // The location pin is a grayscaled red mark; on the dark ground it
-            // needs lifting to stay visible beside its text.
-            img.location-icon,
-            img.cv-experience-company-metadata-location-icon {
-                filter: grayscale(100%) brightness(1.9);
-            }
-            // Company logos are brand marks drawn for a light background (some
-            // are dark or low-contrast). Sit each on a light chip so every logo
-            // stays legible, whatever colours it uses internally.
-            div.cv-experience-company-logo img {
-                background: var(--c-chip);
-                padding: 0.35rem;
-                border-radius: 0.4rem;
-            }
-        }
     }
     font-size: 0.9rem;
 }

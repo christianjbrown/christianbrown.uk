@@ -108,6 +108,11 @@ div.container {
                     display: block;
                     width: 100%;
                     height: auto;
+                    // Plain black line-art on a transparent ground; the token
+                    // inverts it in dark mode so the walls read against the dark
+                    // page (a no-op in light mode). Its room labels are HTML
+                    // overlays, themed separately via --c-pill.
+                    filter: var(--c-floorplan-filter);
                 }
                 // The "Third floor" / "Fourth floor" headings, drawn as overlay
                 // text so they scale with the room labels rather than being baked
@@ -206,6 +211,13 @@ div.container {
                 display: block;
                 margin: 1rem auto 0;
                 width: 80%;
+                // A full-colour illustration (black text, white boxes, brand
+                // logos) drawn for a light background. Inverting it would wreck
+                // those colours, so the tokens instead sit it on a light card in
+                // dark mode (a no-op in light mode).
+                background: var(--c-chip);
+                padding: var(--c-chip-pad-diagram);
+                border-radius: 0.5rem;
                 @media (max-width: 600px) {
                     width: 100%;
                 }
@@ -243,27 +255,5 @@ div.container {
         td, th {
             min-width: 0;
         }
-    }
-}
-
-// Dark-mode fixups for the two illustrations, which were both drawn for a
-// light background.
-@media (prefers-color-scheme: dark) {
-    // The floor plan is plain black line-art on a transparent ground, so a
-    // straight invert turns the walls light to read against the dark page. Its
-    // room labels are HTML overlays, themed separately via --c-pill, so the
-    // invert doesn't touch them.
-    img.floor-plan-image {
-        filter: invert(0.88);
-    }
-
-    // The "How it works" diagram is a full-colour illustration (black text,
-    // white boxes, brand-coloured logos). Inverting it would wreck those
-    // colours, so instead sit it on a light card: its text stays legible and
-    // its colours stay true.
-    img.how-it-works {
-        background: var(--c-chip);
-        padding: 1rem;
-        border-radius: 0.5rem;
     }
 }
