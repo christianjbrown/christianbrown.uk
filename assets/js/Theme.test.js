@@ -15,7 +15,15 @@ describe('Theme', () => {
 
     afterEach(() => {
         vi.restoreAllMocks();
+        // matchMedia is stubbed directly (jsdom doesn't provide it), so clear it
+        // between tests rather than relying on vi.restoreAllMocks.
+        delete window.matchMedia;
     });
+
+    // jsdom has no matchMedia; stub the OS colour-scheme preference.
+    const stubOS = (dark) => {
+        window.matchMedia = (query) => ({ matches: dark && query.includes('dark') });
+    };
 
     describe('get', () => {
         it('defaults to auto when nothing is stored', () => {
@@ -80,14 +88,44 @@ describe('Theme', () => {
         });
     });
 
+    describe('prefersDark', () => {
+        it('is true when the OS prefers dark', () => {
+            stubOS(true);
+            expect(Theme.prefersDark()).toBe(true);
+        });
+
+        it('is false when the OS prefers light', () => {
+            stubOS(false);
+            expect(Theme.prefersDark()).toBe(false);
+        });
+
+        it('is false when matchMedia is unavailable', () => {
+            expect(Theme.prefersDark()).toBe(false);
+        });
+    });
+
     describe('next', () => {
-        it('cycles auto -> light -> dark -> auto', () => {
+        // First tap from auto goes to the opposite of what the OS shows.
+        it('cycles auto -> dark -> light -> auto when the OS is light', () => {
+            stubOS(false);
+            expect(Theme.next(THEME_AUTO)).toBe(THEME_DARK);
+            expect(Theme.next(THEME_DARK)).toBe(THEME_LIGHT);
+            expect(Theme.next(THEME_LIGHT)).toBe(THEME_AUTO);
+        });
+
+        it('cycles auto -> light -> dark -> auto when the OS is dark', () => {
+            stubOS(true);
             expect(Theme.next(THEME_AUTO)).toBe(THEME_LIGHT);
             expect(Theme.next(THEME_LIGHT)).toBe(THEME_DARK);
             expect(Theme.next(THEME_DARK)).toBe(THEME_AUTO);
         });
 
-        it('treats an unknown theme as before auto', () => {
+        it('defaults to the OS-light order when matchMedia is unavailable', () => {
+            expect(Theme.next(THEME_AUTO)).toBe(THEME_DARK);
+        });
+
+        it('returns to auto for an unknown theme', () => {
+            stubOS(false);
             expect(Theme.next('chartreuse')).toBe(THEME_AUTO);
         });
     });
@@ -124,20 +162,22 @@ describe('Theme', () => {
             expect(button.getAttribute('aria-label')).toContain('Dark');
         });
 
-        it('cycles the theme, storage and label on click', () => {
-            // Starts at auto (nothing stored).
+        it('cycles the theme, storage and label on click (OS light)', () => {
+            stubOS(false);
+            // Starts at auto (nothing stored); first tap goes to the opposite
+            // of the OS (dark), then to light, then back to auto.
             const button = document.createElement('button');
             Theme.bindToggle(button);
             expect(button.textContent).toBe('◐ Auto');
 
             button.dispatchEvent(new Event('click'));
-            expect(button.textContent).toBe('☀ Light');
-            expect(window.localStorage.getItem(THEME_STORAGE_KEY)).toBe(THEME_LIGHT);
-            expect(document.documentElement.getAttribute('data-theme')).toBe(THEME_LIGHT);
+            expect(button.textContent).toBe('☾ Dark');
+            expect(window.localStorage.getItem(THEME_STORAGE_KEY)).toBe(THEME_DARK);
+            expect(document.documentElement.getAttribute('data-theme')).toBe(THEME_DARK);
 
             button.dispatchEvent(new Event('click'));
-            expect(button.textContent).toBe('☾ Dark');
-            expect(document.documentElement.getAttribute('data-theme')).toBe(THEME_DARK);
+            expect(button.textContent).toBe('☀ Light');
+            expect(document.documentElement.getAttribute('data-theme')).toBe(THEME_LIGHT);
 
             button.dispatchEvent(new Event('click'));
             expect(button.textContent).toBe('◐ Auto');
