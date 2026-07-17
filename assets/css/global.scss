@@ -95,6 +95,33 @@ $danger: $colour-error-fixed;
     }
 }
 
+// Colour-theme toggle, fixed in the top-right corner of the viewport. A solid,
+// theme-coloured pill so it stays legible over whatever it floats above; ships
+// hidden and is revealed by JS, and never prints.
+button.theme-toggle {
+    position: fixed;
+    top: 0.75rem;
+    right: 0.75rem;
+    z-index: 50;
+    padding: 0.3rem 0.65rem;
+    border: 1px solid $colour-grayscale-1;
+    border-radius: 999px;
+    background: var(--c-bg);
+    font-family: $font-sans-serif;
+    font-size: 0.9rem;
+    font-weight: bold;
+    line-height: 1;
+    color: $colour-grayscale-3;
+    cursor: pointer;
+    &:hover {
+        color: $colour-accent;
+        border-color: $colour-accent;
+    }
+    @media print {
+        display: none;
+    }
+}
+
 html {
     body {
         * {
@@ -175,23 +202,6 @@ html {
                         }
                         a:hover {
                             color: $colour-accent;
-                        }
-                        // The colour-theme toggle, styled to match the nav links
-                        // (bold, same colour, accent on hover) but as a bare
-                        // button. Ships hidden and is revealed by JS.
-                        button.theme-toggle {
-                            margin-left: 1rem;
-                            padding: 0;
-                            border: none;
-                            background: none;
-                            font-family: inherit;
-                            font-size: inherit;
-                            font-weight: bold;
-                            color: $colour-grayscale-3;
-                            cursor: pointer;
-                            &:hover {
-                                color: $colour-accent;
-                            }
                         }
                         // Right-aligned beside the details on wider screens; when
                         // the header stacks on small screens, centre it under the

@@ -76,6 +76,9 @@ but maybe you're looking for an engineering manager? you've come to right place!
         </script>{%- endif %}
     </head>
     <body>
+        <!-- Colour-theme toggle (Auto → Light → Dark), fixed in the top-right
+             corner of the viewport. Ships hidden; global.js reveals and wires it. -->
+        <button type="button" id="theme-toggle" class="theme-toggle" title="Switch colour theme" aria-label="Colour theme" hidden></button>
         <div class="container">
             {% include global-cookie.html %}
             <header>
