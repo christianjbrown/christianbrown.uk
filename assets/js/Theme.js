@@ -17,7 +17,8 @@ export const THEME_AUTO = 'auto';
 export const THEME_LIGHT = 'light';
 export const THEME_DARK = 'dark';
 
-// The order the toggle cycles through: Auto → Light → Dark → Auto.
+// The recognised themes (used to validate stored/incoming values). The toggle
+// cycle order is decided at tap time by Theme.next, not by this array.
 export const THEMES = [THEME_AUTO, THEME_LIGHT, THEME_DARK];
 
 const LABELS = {
@@ -88,16 +89,39 @@ export default class Theme {
     }
 
     /**
-     * The next theme in the cycle after the given one.
+     * Whether the operating system currently prefers a dark colour scheme.
+     *
+     * @returns {Boolean}
+     */
+    static prefersDark() {
+        return typeof window.matchMedia === 'function'
+            && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    }
+
+    /**
+     * The next theme in the toggle cycle. From Auto the first tap always goes
+     * to the theme opposite what the OS is currently showing (so it's a visible
+     * change), then to the theme matching the OS, then back to Auto:
+     *
+     *   OS light:  Auto → Dark → Light → Auto
+     *   OS dark:   Auto → Light → Dark → Auto
      *
      * @param {String} theme
      *
      * @returns {String}
      */
     static next(theme) {
-        const index = THEMES.indexOf(theme);
+        const opposite = Theme.prefersDark() ? THEME_LIGHT : THEME_DARK;
+        const matching = Theme.prefersDark() ? THEME_DARK : THEME_LIGHT;
 
-        return THEMES[(index + 1) % THEMES.length];
+        if (theme === THEME_AUTO) {
+            return opposite;
+        }
+        if (theme === opposite) {
+            return matching;
+        }
+
+        return THEME_AUTO;
     }
 
     /**
