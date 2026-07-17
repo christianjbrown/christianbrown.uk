@@ -44,8 +44,9 @@ describe('MetWeatherTable', () => {
         expect(updateSpan.textContent).toContain('Source: ');
         expect(updateSpan.textContent).toContain('forecast for between');
         // Both ends of this November window fall in GMT on the same day, so the
-        // "TZ on date" suffix is shown once, after the second time.
-        expect(updateSpan.textContent).toMatch(/ and .* GMT on \w{3} \d+\w{2} \w{3}$/);
+        // "TZ on date" suffix is shown once, after the second time, and the
+        // source line ends with a full stop.
+        expect(updateSpan.textContent).toMatch(/ and .* GMT on \w{3} \d+\w{2} \w{3}\.$/);
         expect(table.textContent).toContain('🌡️ Temperature');
         expect(table.textContent).toContain('Temperature feels like');
         expect(table.textContent).toContain('Weather type');
@@ -61,7 +62,7 @@ describe('MetWeatherTable', () => {
         expect(stripNbsp(table.textContent)).toContain('15 mph (25 mph gusts)');
     });
 
-    it('adds the freshness as a separate sentence after the source line when given the envelope timestamp', () => {
+    it('adds the freshness on its own line beneath the source line when given the envelope timestamp', () => {
         const { updateSpan, subject } = make();
         subject._renderUpdate(
             { valid_from: 1_700_000_000, valid_to: 1_700_003_600, temp: 10, humidity: 50, precipitation: 0, wind_speed: 5 },
@@ -69,8 +70,8 @@ describe('MetWeatherTable', () => {
         );
 
         expect(updateSpan.textContent).toContain('Source: ');
-        // A ". " sentence break, not the old " · " middot.
-        expect(updateSpan.textContent).toContain('. Updated');
+        // The source line ends with a full stop; the freshness is a separate
+        // block, so its text is not run together with the source line.
         expect(updateSpan.textContent).not.toContain('·');
         const freshness = updateSpan.querySelector('span.freshness');
         expect(freshness).not.toBeNull();

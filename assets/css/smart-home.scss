@@ -16,15 +16,15 @@ div.container {
                     color: $colour-grayscale-1;
                     text-decoration: underline;
                 }
-                // The "Updated <time ago>" note: a touch smaller than the rest
-                // of the caption so it stays understated.
+                // The "Updated <time ago>" note sits on its own line beneath the
+                // source caption, at the same small, muted size.
                 span.freshness {
-                    font-size: 0.85rem;
+                    display: block;
                     color: $colour-grayscale-1;
                 }
                 display: none;
                 margin-top: 0.5rem;
-                font-size: 1rem;
+                font-size: 0.85rem;
                 color: $colour-grayscale-1;
             }
             div {
