@@ -14,14 +14,16 @@ export default class Temperature {
     }
 
     /**
-     * Returns a string like "21°c".
+     * Returns a string like "21°c". Rounds to the given number of decimal
+     * places but drops a trailing ".0" (and any trailing zeros), so 26.0 reads
+     * as "26°c" while 25.9 and 26.1 keep their decimal.
      *
      * @param {Number} decimalPlaces
      *
      * @returns {String}
      */
     formatC(decimalPlaces = 1) {
-        return this.#degreesC.toFixed(decimalPlaces)+SUFFIX_C;
+        return parseFloat(this.#degreesC.toFixed(decimalPlaces)).toString()+SUFFIX_C;
     };
 
     /**
