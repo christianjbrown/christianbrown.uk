@@ -64,6 +64,18 @@ div.container {
                             // light mode the token is a no-op.
                             filter: var(--c-logo-filter);
                         }
+                        // A logo too detailed to silhouette (e.g. the UWA crest)
+                        // can ship a bespoke dark variant via organisation_logo_dark;
+                        // the include then emits a day/night pair. Show the right
+                        // one per theme, and don't silhouette the night version —
+                        // it's already drawn for the dark ground.
+                        img.cv-logo-day {
+                            display: var(--c-logo-day-display);
+                        }
+                        img.cv-logo-night {
+                            display: var(--c-logo-night-display);
+                            filter: none;
+                        }
                         min-height: 2.1rem;
                         display: flex;
                         align-items: center;
