@@ -64,6 +64,12 @@ div.container {
                             // light mode the token is a no-op.
                             filter: var(--c-logo-filter);
                         }
+                        // The UWA crest is too detailed to flatten to a
+                        // silhouette (it washes out to a white blob), and its own
+                        // colours read fine on the dark ground, so show it as-is.
+                        img[src$="uwa.svg"] {
+                            filter: none;
+                        }
                         min-height: 2.1rem;
                         display: flex;
                         align-items: center;
