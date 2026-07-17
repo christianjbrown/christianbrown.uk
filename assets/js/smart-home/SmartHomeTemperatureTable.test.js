@@ -37,7 +37,7 @@ describe('SmartHomeTemperatureTable', () => {
         expect(rows[0].textContent).toContain('🏠 Inside climate');
         expect(rows[1].textContent).toContain('Average');
         // Averaged from the devices: (22 + 24) / 2 and (50 + 60) / 2.
-        expect(rows[1].textContent).toContain('23.0°c');
+        expect(rows[1].textContent).toContain('23°c');
         expect(rows[1].textContent).toContain('55%');
         // 55% humidity reads as "Pleasant".
         expect(rows[1].textContent).toContain('Pleasant');

@@ -3,8 +3,11 @@ import Temperature from './Temperature.js';
 
 describe('Temperature', () => {
     describe('formatC', () => {
-        it('formats celsius with one decimal place by default', () => {
-            expect(new Temperature(21).formatC()).toBe('21.0°c');
+        it('formats celsius to one decimal place, dropping a trailing .0', () => {
+            expect(new Temperature(21).formatC()).toBe('21°c');
+            expect(new Temperature(26.0).formatC()).toBe('26°c');
+            expect(new Temperature(25.9).formatC()).toBe('25.9°c');
+            expect(new Temperature(26.1).formatC()).toBe('26.1°c');
         });
 
         it('honours a custom number of decimal places', () => {

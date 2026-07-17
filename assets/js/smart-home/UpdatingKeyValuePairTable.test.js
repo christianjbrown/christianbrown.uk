@@ -174,7 +174,7 @@ describe('UpdatingKeyValuePairTable', () => {
         describe('_addTempTableRow', () => {
             it('renders celsius and fahrenheit without a timestamp, muting the fahrenheit', () => {
                 subject._addTempTableRow('Temperature', 21);
-                expect(table.textContent).toContain('21.0°c');
+                expect(table.textContent).toContain('21°c');
                 expect(table.textContent).toContain('69.8°f');
                 expect(table.textContent).not.toContain('ago');
                 expect(table.querySelector('span.secondary.muted').textContent).toBe('69.8°f');
