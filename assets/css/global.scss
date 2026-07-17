@@ -41,11 +41,13 @@ $danger: $colour-error-fixed;
     --c-error: orange;
     // Translucent pill behind the floor-plan room labels.
     --c-pill: rgba(255, 255, 255, 0.82);
-    // Light chip sat behind logos/illustrations drawn for a light background,
-    // with zero padding — both no-ops in light mode.
+    // Light chip (and its padding) behind the colour "How it works" diagram,
+    // which is drawn for a light background — both no-ops in light mode.
     --c-chip: transparent;
-    --c-chip-pad-logo: 0;
     --c-chip-pad-diagram: 0;
+    // Company logos: rendered to soft-white silhouettes on dark, untouched on
+    // light. (The company name sits beside each, so brand colour isn't needed.)
+    --c-logo-filter: none;
     // The location pin is grayscaled; on dark it also needs brightening.
     --c-location-icon-filter: grayscale(100%);
     // The floor-plan line-art is inverted on dark so its walls read.
@@ -64,8 +66,10 @@ $danger: $colour-error-fixed;
     --c-error: #ffb454;
     --c-pill: rgba(22, 24, 29, 0.85);
     --c-chip: #f5f5f5;
-    --c-chip-pad-logo: 0.35rem;
     --c-chip-pad-diagram: 1rem;
+    // brightness(0) flattens each logo to a silhouette, invert(0.9) lifts it to
+    // a soft (not harsh) white; transparent areas are untouched.
+    --c-logo-filter: brightness(0) invert(0.9);
     --c-location-icon-filter: grayscale(100%) brightness(1.9);
     --c-floorplan-filter: invert(0.88);
 }
