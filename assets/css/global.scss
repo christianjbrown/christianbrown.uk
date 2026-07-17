@@ -48,6 +48,10 @@ $danger: $colour-error-fixed;
     // Company logos: rendered to soft-white silhouettes on dark, untouched on
     // light. (The company name sits beside each, so brand colour isn't needed.)
     --c-logo-filter: none;
+    // A logo with a bespoke dark variant shows its day version on light and its
+    // night version on dark (see the cv-logo-day/-night pair in cv.scss).
+    --c-logo-day-display: block;
+    --c-logo-night-display: none;
     // The location pin is grayscaled; on dark it also needs brightening.
     --c-location-icon-filter: grayscale(100%);
     // The floor-plan line-art is inverted on dark so its walls read.
@@ -70,6 +74,8 @@ $danger: $colour-error-fixed;
     // brightness(0) flattens each logo to a silhouette, invert(0.9) lifts it to
     // a soft (not harsh) white; transparent areas are untouched.
     --c-logo-filter: brightness(0) invert(0.9);
+    --c-logo-day-display: none;
+    --c-logo-night-display: block;
     --c-location-icon-filter: grayscale(100%) brightness(1.9);
     --c-floorplan-filter: invert(0.88);
 }
