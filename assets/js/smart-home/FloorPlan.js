@@ -22,11 +22,20 @@ export const OUTSIDE_ANCHORS = [
     {'x': 50.5, 'y': 98},
 ];
 
+// The floor headings, once part of the plan image but now drawn as overlay
+// labels so they scale with the room readings (the embedded text stayed too
+// small on mobile). Centres taken from floor-plan-reference.svg.
+export const FLOOR_ANCHORS = {
+    'Third floor': {'x': 24.8, 'y': 4.5},
+    'Fourth floor': {'x': 73.8, 'y': 4.5},
+};
+
 export default class FloorPlan {
     #section;
     #dom;
     #roomAnchors;
     #outsideAnchors;
+    #floorAnchors;
 
     /**
      * @param {HTMLElement} section The whole "Rooms" section, hidden until the
@@ -35,11 +44,12 @@ export default class FloorPlan {
      * @param {Object}      roomAnchors
      * @param {Array}       outsideAnchors
      */
-    constructor(section, roomAnchors = ROOM_ANCHORS, outsideAnchors = OUTSIDE_ANCHORS) {
+    constructor(section, roomAnchors = ROOM_ANCHORS, outsideAnchors = OUTSIDE_ANCHORS, floorAnchors = FLOOR_ANCHORS) {
         this.#section = section;
         this.#dom = section.querySelector('.floor-plan');
         this.#roomAnchors = roomAnchors;
         this.#outsideAnchors = outsideAnchors;
+        this.#floorAnchors = floorAnchors;
     }
 
     /**
@@ -58,6 +68,11 @@ export default class FloorPlan {
         this.#section.hidden = !homeData;
         if (!homeData) {
             return;
+        }
+
+        // Floor headings are part of the plan, so they show whenever it does.
+        for (const [name, anchor] of Object.entries(this.#floorAnchors)) {
+            this.#addFloorLabel(anchor, name);
         }
 
         if (Array.isArray(homeData['devices'])) {
@@ -81,9 +96,25 @@ export default class FloorPlan {
      * Removes any labels from a previous render.
      */
     #clear() {
-        this.#dom.querySelectorAll('.floor-plan-label').forEach(
+        this.#dom.querySelectorAll('.floor-plan-label, .floor-plan-floor-label').forEach(
             (node) => node.remove()
         );
+    }
+
+    /**
+     * Adds a static floor heading (e.g. "Third floor") at the given anchor.
+     *
+     * @param {Object} anchor
+     * @param {String} text
+     */
+    #addFloorLabel(anchor, text) {
+        const label = document.createElement('div');
+        label.className = 'floor-plan-floor-label';
+        label.style.left = anchor.x + '%';
+        label.style.top = anchor.y + '%';
+        label.textContent = text;
+
+        this.#dom.append(label);
     }
 
     /**

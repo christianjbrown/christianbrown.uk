@@ -108,6 +108,21 @@ div.container {
                     width: 100%;
                     height: auto;
                 }
+                // The "Third floor" / "Fourth floor" headings, drawn as overlay
+                // text so they scale with the room labels rather than being baked
+                // into the plan image (where they stayed too small on mobile).
+                div.floor-plan-floor-label {
+                    position: absolute;
+                    transform: translate(-50%, -50%);
+                    text-align: center;
+                    white-space: nowrap;
+                    font-size: 1.25rem;
+                    font-weight: 500;
+                    color: $colour-grayscale-2;
+                    @media (max-width: 600px) {
+                        font-size: 1rem;
+                    }
+                }
                 div.floor-plan-label {
                     span {
                         display: block;
