@@ -6,8 +6,8 @@
                 <div class="header-data">
                     <h1 class="mt-2"><a href="/" title="Christian Brown homepage">{{ site.header_name }}</a></h1>
                     <p><strong>{{ site.header_job_title }}</strong></p>
-                    <p><img src="/assets/images/icons/icon-location.svg" alt="Location icon" class="location-icon"> {{ site.header_location }}</p>
-                    <nav>{% if page.home_temp_link %}<a href="/smart-home" id="cv-home-temp" class="cv-home-temp" title="Christian Brown's smart home" rel="nofollow" hidden></a>{% endif %}{% if page.menu %}{% for nav in page.menu %}
-                        {% if page.menu.first != nav -%}&nbsp;&nbsp;&nbsp;{%- endif -%}<a href="{{ nav.link }}"{% assign firstchar = nav.link | slice: 0 %}{% if firstchar != '/' %} target="_blank"{% endif %} title="{{ nav.text }}" id="cv-menu-{{ nav.icon }}"><img src="/assets/images/icons/icon-{{ nav.icon }}.svg" alt="{{ nav.icon_alt }}" class="header-data-links-icon"> {{ nav.text }}</a>{% endfor %}{% endif %}<button type="button" id="theme-toggle" class="theme-toggle" title="Switch colour theme" aria-label="Colour theme" hidden></button>
-                    </nav>
+                    <p><img src="/assets/images/icons/icon-location.svg" alt="Location icon" class="location-icon"> {{ site.header_location }}</p>{%- if page.menu %}
+                    <nav>{% if page.home_temp_link %}<a href="/smart-home" id="cv-home-temp" class="cv-home-temp" title="Christian Brown's smart home" rel="nofollow" hidden></a>{% endif %}{% for nav in page.menu %}
+                        {% if page.menu.first != nav -%}&nbsp;&nbsp;&nbsp;{%- endif -%}<a href="{{ nav.link }}"{% assign firstchar = nav.link | slice: 0 %}{% if firstchar != '/' %} target="_blank"{% endif %} title="{{ nav.text }}" id="cv-menu-{{ nav.icon }}"><img src="/assets/images/icons/icon-{{ nav.icon }}.svg" alt="{{ nav.icon_alt }}" class="header-data-links-icon"> {{ nav.text }}</a>{% endfor %}
+                    </nav>{% endif %}
                 </div>
