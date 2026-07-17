@@ -230,3 +230,17 @@ div.container {
         padding-left: 1.5rem;
     }
 }
+
+// Outside weather table: label | value (2 columns). Each cell inherits the
+// shared 13rem min-width, so the two columns force the table past a phone's
+// width and hard against the right edge (the inside table escapes this with
+// its own min-width overrides above). On narrow screens drop the min-width so
+// the table shrinks to fit the viewport; desktop, where each table has room
+// to spare, is left untouched.
+@media (max-width: 600px) {
+    #weather-table {
+        td, th {
+            min-width: 0;
+        }
+    }
+}
