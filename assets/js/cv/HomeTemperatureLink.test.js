@@ -30,9 +30,12 @@ beforeEach(() => {
 });
 
 describe('HomeTemperatureLink', () => {
-    it('fills in and reveals the link on success', async () => {
+    it('averages the device temperatures, then fills in and reveals the link on success', async () => {
         const dom = makeDom();
-        fetchMock.mockResolvedValue({ averageTempDegrees: 26.6 });
+        fetchMock.mockResolvedValue({ devices: [
+            { temperatureValue: 26.0, temperatureTimestamp: 100, temperatureStale: false },
+            { temperatureValue: 27.2, temperatureTimestamp: 200, temperatureStale: false },
+        ] });
 
         await new HomeTemperatureLink(dom, 'url').update();
 
@@ -43,6 +46,18 @@ describe('HomeTemperatureLink', () => {
     it('leaves the link hidden and empty on failure (no fallback)', async () => {
         const dom = makeDom();
         fetchMock.mockRejectedValue(new Error('nope'));
+
+        await new HomeTemperatureLink(dom, 'url').update();
+
+        expect(dom.textContent).toBe('');
+        expect(dom.hidden).toBe(true);
+    });
+
+    it('leaves the link hidden when no device has a usable temperature', async () => {
+        const dom = makeDom();
+        fetchMock.mockResolvedValue({ devices: [
+            { temperatureValue: null, temperatureTimestamp: 100, temperatureStale: false },
+        ] });
 
         await new HomeTemperatureLink(dom, 'url').update();
 

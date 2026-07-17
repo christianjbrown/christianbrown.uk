@@ -32,9 +32,15 @@ export default class SmartHomeTemperatureTable extends UpdatingKeyValuePairTable
     }
 
     /**
-     * @param {Object} data
+     * @param {Object}      data
+     * @param {Number|null} generatedAtUnix
      */
-    _renderUpdate(data) {
+    _renderUpdate(data, generatedAtUnix = null) {
+        const updated = this._updatedLabel(generatedAtUnix);
+        if (updated) {
+            this._updateDateSpan(updated);
+        }
+
         const temperature = averageTemperature(data['devices']);
         if (temperature) {
             const humidity = averageHumidity(data['devices']);

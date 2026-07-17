@@ -61,6 +61,18 @@ describe('MetWeatherTable', () => {
         expect(stripNbsp(table.textContent)).toContain('15 mph (25 mph gusts)');
     });
 
+    it('appends an "updated" freshness note to the source line when given the envelope timestamp', () => {
+        const { updateSpan, subject } = make();
+        subject._renderUpdate(
+            { valid_from: 1_700_000_000, valid_to: 1_700_003_600, temp: 10, humidity: 50, precipitation: 0, wind_speed: 5 },
+            Math.floor(Date.now() / 1000) - 120,
+        );
+
+        expect(updateSpan.textContent).toContain('Source: ');
+        expect(updateSpan.textContent).toContain('· updated');
+        expect(updateSpan.textContent).toContain('ago');
+    });
+
     it('couples the direction, degrees and units with non-breaking spaces', () => {
         const { subject } = make();
         // Non-breaking between direction and degrees, and between each figure

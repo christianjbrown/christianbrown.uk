@@ -12,6 +12,10 @@ vi.mock('../DataFetcher.js', () => ({
         fetch() {
             return fetchMock();
         }
+
+        getGeneratedAtUnix() {
+            return null;
+        }
     },
 }));
 
@@ -127,6 +131,19 @@ describe('UpdatingKeyValuePairTable', () => {
 
         it('base _getContract returns an empty array', () => {
             expect(subject._getContract()).toEqual([]);
+        });
+
+        describe('_updatedLabel', () => {
+            it('formats the envelope timestamp as an "Updated <time ago>" label', () => {
+                // System time is fixed at 2023-11-20T12:00:00Z; two minutes earlier.
+                const twoMinsAgo = Math.floor(Date.parse('2023-11-20T11:58:00Z') / 1000);
+                expect(subject._updatedLabel(twoMinsAgo)).toBe('Updated 2 mins ago');
+            });
+
+            it('returns null when there is no timestamp', () => {
+                expect(subject._updatedLabel(null)).toBeNull();
+                expect(subject._updatedLabel()).toBeNull();
+            });
         });
 
         it('_updateDateSpan appends the given nodes and reveals the element', () => {
