@@ -120,8 +120,7 @@ export default class UpdatingKeyValuePairTable {
                     th.colSpan = titleColSpan;
                 }
                 if (label !== null) {
-                    const cssClass = index === 0 ? 'primary title' : 'primary';
-                    th.append(UpdatingKeyValuePairTable.#getTableCellSpan(label, cssClass, false, false));
+                    th.append(UpdatingKeyValuePairTable.#getTableCellSpan(label, 'primary', false, false, index === 0));
                 }
                 row.appendChild(th);
             }
@@ -251,7 +250,7 @@ export default class UpdatingKeyValuePairTable {
         }
 
         const span = document.createElement('span');
-        span.className = 'freshness';
+        span.className = 'update-time__freshness';
         span.append(label);
 
         return span;
@@ -270,23 +269,32 @@ export default class UpdatingKeyValuePairTable {
     }
 
     /**
-     * Creates and returns a Span element with desired formatting.
+     * Creates and returns a value span carrying its BEM modifier classes. The
+     * base is always `smart-home-table__value`; `variant` picks --primary or
+     * --secondary, and the flags layer on --title, --emphasis or --muted.
      *
      * @param {String}  text
-     * @param {String}  cssClass
+     * @param {String}  variant   'primary' or 'secondary'
      * @param {Boolean} muted
      * @param {Boolean} important
+     * @param {Boolean} title
      *
      * @returns {HTMLSpanElement}
      */
-    static #getTableCellSpan(text, cssClass, muted, important) {
-        const span = document.createElement('span');
-        if (important) {
-            cssClass += ' important';
-        } else if (muted) {
-            cssClass += ' muted';
+    static #getTableCellSpan(text, variant, muted, important, title = false) {
+        const base = 'smart-home-table__value';
+        const classes = [base, `${base}--${variant}`];
+        if (title) {
+            classes.push(`${base}--title`);
         }
-        span.setAttribute('class', cssClass);
+        if (important) {
+            classes.push(`${base}--emphasis`);
+        } else if (muted) {
+            classes.push(`${base}--muted`);
+        }
+
+        const span = document.createElement('span');
+        span.setAttribute('class', classes.join(' '));
         span.append(text);
 
         return span;
@@ -302,10 +310,11 @@ export default class UpdatingKeyValuePairTable {
     #renderError(error) {
         console.error(error);
         const errorSpan = document.createElement('span');
-        errorSpan.setAttribute('class', 'error');
+        errorSpan.setAttribute('class', 'smart-home-table__error');
         const link = document.createElement('a');
         link.setAttribute('href', 'https://www.youtube.com/watch?v=Fdjf4lMmiiI');
         link.setAttribute('target', '_blank');
+        link.setAttribute('rel', 'noopener noreferrer');
         link.append('top men');
         errorSpan.append(
             "⚠️ I'm having trouble loading this data right now.",
@@ -317,7 +326,7 @@ export default class UpdatingKeyValuePairTable {
             'Please try again later.'
         );
         const errorCell = this.#domTable.insertRow().insertCell();
-        errorCell.setAttribute('class', 'error-cell');
+        errorCell.setAttribute('class', 'smart-home-table__error-cell');
         // Span the header's columns (counting a colspanned title cell) so the
         // error message sits under the full width of the table.
         const headerRow = this.#domTable.rows[0];
