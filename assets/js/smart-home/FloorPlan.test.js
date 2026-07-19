@@ -24,11 +24,11 @@ function make(roomAnchors = ROOM_ANCHORS, outsideAnchors = OUTSIDE_ANCHORS, floo
 }
 
 function labels() {
-    return [...container.querySelectorAll('.floor-plan-label')];
+    return [...container.querySelectorAll('.floor-plan__label')];
 }
 
 function floorLabels() {
-    return [...container.querySelectorAll('.floor-plan-floor-label')];
+    return [...container.querySelectorAll('.floor-plan__floor-label')];
 }
 
 function labelFor(name) {
@@ -59,15 +59,15 @@ describe('FloorPlan', () => {
         expect(labels()).toHaveLength(2);
 
         const livingRoom = labelFor('Living room');
-        expect(livingRoom.querySelector('.floor-plan-temp').textContent).toContain('26.8°c');
-        expect(livingRoom.querySelector('.floor-plan-humidity').textContent).toContain('52%');
+        expect(livingRoom.querySelector('.floor-plan__temp').textContent).toContain('26.8°c');
+        expect(livingRoom.querySelector('.floor-plan__humidity').textContent).toContain('52%');
         expect(livingRoom.style.left).toBe('25%');
         expect(livingRoom.style.top).toBe('70%');
 
         const study = labelFor('Study');
-        expect(study.querySelector('.floor-plan-temp').textContent).toContain('26.9°c');
+        expect(study.querySelector('.floor-plan__temp').textContent).toContain('26.9°c');
         // No humidity reported -> no humidity line.
-        expect(study.querySelector('.floor-plan-humidity')).toBeNull();
+        expect(study.querySelector('.floor-plan__humidity')).toBeNull();
     });
 
     it('draws the floor headings at their anchors whenever the plan is shown', () => {
@@ -118,8 +118,8 @@ describe('FloorPlan', () => {
         }, null);
 
         const livingRoom = labelFor('Living room');
-        expect(livingRoom.querySelector('.floor-plan-temp').classList.contains('muted')).toBe(true);
-        expect(livingRoom.querySelector('.floor-plan-humidity').classList.contains('muted')).toBe(true);
+        expect(livingRoom.querySelector('.floor-plan__temp').classList.contains('floor-plan__temp--muted')).toBe(true);
+        expect(livingRoom.querySelector('.floor-plan__humidity').classList.contains('floor-plan__humidity--muted')).toBe(true);
     });
 
     it('keeps a room fresh when only some of its devices are stale', () => {
@@ -132,8 +132,8 @@ describe('FloorPlan', () => {
         }, null);
 
         const livingRoom = labelFor('Living room');
-        expect(livingRoom.querySelector('.floor-plan-temp').classList.contains('muted')).toBe(false);
-        expect(livingRoom.querySelector('.floor-plan-humidity').classList.contains('muted')).toBe(false);
+        expect(livingRoom.querySelector('.floor-plan__temp').classList.contains('floor-plan__temp--muted')).toBe(false);
+        expect(livingRoom.querySelector('.floor-plan__humidity').classList.contains('floor-plan__humidity--muted')).toBe(false);
     });
 
     it('adds an outside label at each anchor once the indoor data is present', () => {
@@ -143,8 +143,8 @@ describe('FloorPlan', () => {
         const outside = labels();
         expect(outside).toHaveLength(2);
         expect(outside[0].textContent).toContain('Outside');
-        expect(outside[0].querySelector('.floor-plan-temp').textContent).toContain('26.7°c');
-        expect(outside[0].querySelector('.floor-plan-humidity').textContent).toContain('39%');
+        expect(outside[0].querySelector('.floor-plan__temp').textContent).toContain('26.7°c');
+        expect(outside[0].querySelector('.floor-plan__humidity').textContent).toContain('39%');
         expect(outside[0].style.top).toBe('3%');
         expect(outside[1].style.top).toBe('97%');
     });
@@ -154,8 +154,8 @@ describe('FloorPlan', () => {
         subject.render({devices: []}, {temp: 26.7});
 
         const outside = labelFor('Outside');
-        expect(outside.querySelector('.floor-plan-temp').textContent).toContain('26.7°c');
-        expect(outside.querySelector('.floor-plan-humidity')).toBeNull();
+        expect(outside.querySelector('.floor-plan__temp').textContent).toContain('26.7°c');
+        expect(outside.querySelector('.floor-plan__humidity')).toBeNull();
     });
 
     it('renders no labels for indoor data with no devices or weather with no temp', () => {

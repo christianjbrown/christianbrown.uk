@@ -73,7 +73,7 @@ describe('MetWeatherTable', () => {
         // The source line ends with a full stop; the freshness is a separate
         // block, so its text is not run together with the source line.
         expect(updateSpan.textContent).not.toContain('·');
-        const freshness = updateSpan.querySelector('span.freshness');
+        const freshness = updateSpan.querySelector('span.update-time__freshness');
         expect(freshness).not.toBeNull();
         expect(freshness.textContent).toMatch(/^Updated .* ago$/);
     });
@@ -151,7 +151,7 @@ describe('MetWeatherTable', () => {
         expect(headerCells).toHaveLength(1);
         expect(headerCells[0].colSpan).toBe(2);
         expect(headerCells[0].textContent).toContain('Outside weather forecast');
-        expect(headerCells[0].querySelector('span.title')).not.toBeNull();
+        expect(headerCells[0].querySelector('span.smart-home-table__value--title')).not.toBeNull();
     });
 
     it('renders Weather type before the temperature', () => {

@@ -59,7 +59,7 @@ describe('SmartHomeTemperatureTable', () => {
             Math.floor(Date.now() / 1000) - 120,
         );
 
-        const freshness = updateSpan.querySelector('span.freshness');
+        const freshness = updateSpan.querySelector('span.update-time__freshness');
         expect(freshness).not.toBeNull();
         expect(freshness.textContent).toMatch(/^Updated .* ago$/);
     });

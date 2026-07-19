@@ -5,240 +5,292 @@
 @import 'fonts';
 @import 'loader';
 
-div.container {
-    main {
-        p {
+// The "muted" treatment (a low-contrast grey) is shared by the table values and
+// the floor-plan labels. Defining it once as a mixin keeps the rule DRY while
+// each consumer still carries its own BEM modifier class in the markup.
+@mixin muted {
+    color: $colour-grayscale-1;
+}
+
+main {
+    p {
+        font-size: 1.1rem;
+    }
+}
+
+// Two feed tables side by side (indoor climate + outdoor weather), each in its
+// own column above its update-time note.
+.smart-home-data {
+    align-items: flex-start;
+    column-gap: 3rem;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+
+    &__column {
+        flex: 1;
+        margin-bottom: 1rem;
+        min-width: 25rem;
+    }
+}
+
+.update-time {
+    color: $colour-grayscale-1;
+    display: none;
+    font-size: 0.85rem;
+    margin-top: 0.5rem;
+
+    a {
+        color: $colour-grayscale-1;
+        text-decoration: underline;
+    }
+
+    // The "Updated <time ago>" note sits on its own line beneath the source
+    // caption, at the same small, muted size.
+    &__freshness {
+        color: $colour-grayscale-1;
+        display: block;
+    }
+}
+
+.smart-home-table {
+    width: 100%;
+
+    td,
+    th {
+        min-width: 13rem;
+        padding: 1rem 0.5rem;
+        vertical-align: text-top;
+    }
+
+    th {
+        font-weight: normal;
+        padding-right: 1rem;
+        text-align: right;
+    }
+
+    td:last-child {
+        text-align: right;
+    }
+
+    td.data-loader {
+        text-align: center;
+    }
+
+    tr:not(:first-child) {
+        border-top: 1px solid $colour-accent;
+    }
+
+    // A single value inside a cell. Modifiers stack: --primary/--secondary set
+    // the base size, then --emphasis/--muted/--title layer on. --muted is last
+    // so its grey wins over --secondary's colour when both apply.
+    &__value {
+        display: block;
+
+        &--primary {
             font-size: 1.1rem;
         }
-        div.smart-home-data {
-            span.update-time {
-                a {
-                    color: $colour-grayscale-1;
-                    text-decoration: underline;
-                }
-                // The "Updated <time ago>" note sits on its own line beneath the
-                // source caption, at the same small, muted size.
-                span.freshness {
-                    display: block;
-                    color: $colour-grayscale-1;
-                }
-                display: none;
-                margin-top: 0.5rem;
-                font-size: 0.85rem;
-                color: $colour-grayscale-1;
-            }
-            div {
-                table {
-                    tr {
-                        td, th {
-                            span {
-                                &.primary {
-                                    &.important {
-                                        font-weight: bold;
-                                    }
-                                    &.muted {
-                                        color: $colour-grayscale-1;
-                                    }
-                                    &.title {
-                                        // Match the "How it works" h3 (1.25rem / 500)
-                                        // so the table titles read as section
-                                        // headings, no bigger or bolder.
-                                        // The title sits in a right-aligned header
-                                        // cell; left-align it like the name column.
-                                        // Keep it on one line so both tables'
-                                        // header rows stay the same height and
-                                        // their first separator lines align.
-                                        font-size: 1.25rem;
-                                        font-weight: 500;
-                                        text-align: left;
-                                        white-space: nowrap;
-                                    }
-                                    font-size: 1.1rem;
-                                }
-                                &.secondary {
-                                    &.muted {
-                                        color: $colour-grayscale-1;
-                                    }
-                                    font-size: 1rem;
-                                    color: $colour-grayscale-2;
-                                }
-                                &.error {
-                                    color: $colour-error;
-                                }
-                                display: block;
-                            }
-                            min-width: 13rem;
-                            padding: 1rem 0.5rem;
-                            vertical-align: text-top;
-                        }
-                        th {
-                            text-align: right;
-                            font-weight: normal;
-                            padding-right: 1rem;
-                        }
-                        td:last-child {
-                            text-align: right;
-                        }
-                        td.data-loader {
-                            text-align: center;
-                        }
-                        td.error-cell {
-                            text-align: center;
-                        }
-                    }
-                    tr:not(:first-child) {
-                        border-top: 1px solid $colour-accent;
-                    }
-                    width: 100%;
-                }
-                flex: 1;
-                min-width: 25rem;
-                margin-bottom: 1rem;
-            }
-            align-items: flex-start;
-            column-gap: 3rem;
-            display: flex;
-            flex-flow: row wrap;
-            justify-content: center;
+
+        &--secondary {
+            color: $colour-grayscale-2;
+            font-size: 1rem;
         }
-        div.floor-plan-section {
-            margin-bottom: 2rem;
-            div.floor-plan {
-                img.floor-plan-image {
-                    display: block;
-                    width: 100%;
-                    height: auto;
-                    // Plain black line-art on a transparent ground; the token
-                    // inverts it in dark mode so the walls read against the dark
-                    // page (a no-op in light mode). Its room labels are HTML
-                    // overlays, themed separately via --c-pill.
-                    filter: var(--c-floorplan-filter);
-                }
-                // The "Third floor" / "Fourth floor" headings, drawn as overlay
-                // text so they scale with the room labels rather than being baked
-                // into the plan image (where they stayed too small on mobile).
-                div.floor-plan-floor-label {
-                    position: absolute;
-                    transform: translate(-50%, -50%);
-                    text-align: center;
-                    white-space: nowrap;
-                    font-size: 1.25rem;
-                    font-weight: 500;
-                    color: $colour-grayscale-2;
-                    @media (max-width: 600px) {
-                        font-size: 1rem;
-                    }
-                }
-                div.floor-plan-label {
-                    span {
-                        display: block;
-                        line-height: 1.15;
-                    }
-                    span.floor-plan-name {
-                        font-size: 0.95rem;
-                        color: $colour-grayscale-2;
-                    }
-                    span.floor-plan-temp {
-                        font-size: 0.9rem;
-                        font-weight: bold;
-                    }
-                    span.floor-plan-humidity {
-                        font-size: 0.75rem;
-                        color: $colour-grayscale-2;
-                    }
-                    span.muted {
-                        color: $colour-grayscale-1;
-                    }
-                    // Full width on small screens makes the plan (and so these
-                    // labels) proportionally larger, crowding the outside
-                    // readings against it — scale the text down to match.
-                    @media (max-width: 600px) {
-                        span.floor-plan-name {
-                            font-size: 0.7rem;
-                        }
-                        span.floor-plan-temp {
-                            font-size: 0.7rem;
-                        }
-                        span.floor-plan-humidity {
-                            font-size: 0.6rem;
-                        }
-                    }
-                    position: absolute;
-                    transform: translate(-50%, -50%);
-                    text-align: center;
-                    white-space: nowrap;
-                    // A translucent pill keeps a label legible where it overspills
-                    // a narrow room (e.g. the hallway on mobile), instead of the
-                    // text clashing with the wall lines beneath it. The tint
-                    // follows the theme (light pill on light, dark on dark).
-                    background: $colour-pill;
-                    border-radius: 6px;
-                    padding: 0.15rem 0.4rem;
-                }
-                // Sized like the "How it works" diagram: 80% wide and centred,
-                // full width on small screens.
-                position: relative;
-                display: block;
-                width: 80%;
-                margin: 1rem auto 0;
-                @media (max-width: 600px) {
-                    width: 100%;
-                }
-            }
+
+        &--emphasis {
+            font-weight: bold;
         }
-        div.faq {
-            h4 {
-                max-width: 45rem;
-                margin: 1.75rem auto 0.5rem;
-                font-size: 1.1rem;
-                // Bootstrap sets headings to 500, but WebProductSans ships only
-                // 400 and 700 faces, so 500 falls back to the light 400 face.
-                // Use bold to render the actual bold face.
-                font-weight: bold;
-            }
-            p, ul {
-                max-width: 45rem;
-                margin-left: auto;
-                margin-right: auto;
-            }
-            ul {
-                padding-left: 1.2rem;
-                li {
-                    margin-bottom: 0.35rem;
-                }
-            }
-            img.how-it-works {
-                display: block;
-                margin: 1rem auto 0;
-                width: 80%;
-                // A full-colour illustration (black text, white boxes, brand
-                // logos) drawn for a light background. Inverting it would wreck
-                // those colours, so the tokens instead sit it on a light card in
-                // dark mode (a no-op in light mode).
-                background: var(--c-chip);
-                padding: var(--c-chip-pad-diagram);
-                border-radius: 0.5rem;
-                @media (max-width: 600px) {
-                    width: 100%;
-                }
-            }
-            margin: auto;
+
+        &--title {
+            // Match the "How it works" h3 (1.25rem / 500) so the table titles
+            // read as section headings, no bigger or bolder. The title sits in
+            // a header cell; left-align it like the name column and keep it on
+            // one line so both tables' header rows stay the same height and
+            // their first separator lines align.
+            font-size: 1.25rem;
+            font-weight: 500;
+            text-align: left;
+            white-space: nowrap;
+        }
+
+        &--muted {
+            @include muted;
+        }
+    }
+
+    &__error {
+        color: $colour-error;
+    }
+
+    &__error-cell {
+        text-align: center;
+    }
+}
+
+.floor-plan-section {
+    margin-bottom: 2rem;
+}
+
+.floor-plan {
+    // Sized like the "How it works" diagram: 80% wide and centred, full width
+    // on small screens.
+    display: block;
+    margin: 1rem auto 0;
+    position: relative;
+    width: 80%;
+
+    @media (max-width: 600px) {
+        width: 100%;
+    }
+
+    &__image {
+        display: block;
+        height: auto;
+        width: 100%;
+        // Plain black line-art on a transparent ground; the token inverts it in
+        // dark mode so the walls read against the dark page (a no-op in light
+        // mode). Its room labels are HTML overlays, themed separately via
+        // --c-pill.
+        filter: var(--c-floorplan-filter);
+    }
+
+    // The "Third floor" / "Fourth floor" headings, drawn as overlay text so they
+    // scale with the room labels rather than being baked into the plan image
+    // (where they stayed too small on mobile).
+    &__floor-label {
+        color: $colour-grayscale-2;
+        font-size: 1.25rem;
+        font-weight: 500;
+        position: absolute;
+        text-align: center;
+        transform: translate(-50%, -50%);
+        white-space: nowrap;
+
+        @media (max-width: 600px) {
+            font-size: 1rem;
+        }
+    }
+
+    &__label {
+        position: absolute;
+        text-align: center;
+        transform: translate(-50%, -50%);
+        white-space: nowrap;
+        // A translucent pill keeps a label legible where it overspills a narrow
+        // room (e.g. the hallway on mobile), instead of the text clashing with
+        // the wall lines beneath it. The tint follows the theme (light pill on
+        // light, dark on dark).
+        background: $colour-pill;
+        border-radius: 6px;
+        padding: 0.15rem 0.4rem;
+
+        span {
+            display: block;
+            line-height: 1.15;
+        }
+    }
+
+    &__name {
+        color: $colour-grayscale-2;
+        font-size: 0.95rem;
+
+        // Full width on small screens makes the plan (and so these labels)
+        // proportionally larger, crowding the outside readings against it —
+        // scale the text down to match.
+        @media (max-width: 600px) {
+            font-size: 0.7rem;
+        }
+    }
+
+    &__temp {
+        font-size: 0.9rem;
+        font-weight: bold;
+
+        @media (max-width: 600px) {
+            font-size: 0.7rem;
+        }
+
+        &--muted {
+            @include muted;
+        }
+    }
+
+    &__humidity {
+        color: $colour-grayscale-2;
+        font-size: 0.75rem;
+
+        @media (max-width: 600px) {
+            font-size: 0.6rem;
+        }
+
+        &--muted {
+            @include muted;
+        }
+    }
+}
+
+.faq {
+    margin: auto;
+
+    h4 {
+        max-width: 45rem;
+        margin: 1.75rem auto 0.5rem;
+        font-size: 1.1rem;
+        // Bootstrap sets headings to 500, but WebProductSans ships only 400 and
+        // 700 faces, so 500 falls back to the light 400 face. Use bold to render
+        // the actual bold face.
+        font-weight: bold;
+    }
+
+    p,
+    ul {
+        max-width: 45rem;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    ul {
+        padding-left: 1.2rem;
+
+        li {
+            margin-bottom: 0.35rem;
+        }
+    }
+
+    .how-it-works {
+        display: block;
+        margin: 1rem auto 0;
+        width: 80%;
+        // A full-colour illustration (black text, white boxes, brand logos)
+        // drawn for a light background. Inverting it would wreck those colours,
+        // so the tokens instead sit it on a light card in dark mode (a no-op in
+        // light mode).
+        background: var(--c-chip);
+        padding: var(--c-chip-pad-diagram);
+        border-radius: 0.5rem;
+
+        @media (max-width: 600px) {
+            width: 100%;
         }
     }
 }
 
 // Inside climate table: name | temperature | humidity (3 columns)
 #home-temperature-table {
-    td, th {
+    td,
+    th {
         min-width: 0;
     }
-    td:first-child, th:first-child {
+
+    td:first-child,
+    th:first-child {
         min-width: 11rem;
     }
+
     td:not(:first-child) {
         text-align: right;
         padding-left: 1.5rem;
     }
+
     th:not(:first-child) {
         padding-left: 1.5rem;
     }
@@ -246,13 +298,14 @@ div.container {
 
 // Outside weather table: label | value (2 columns). Each cell inherits the
 // shared 13rem min-width, so the two columns force the table past a phone's
-// width and hard against the right edge (the inside table escapes this with
-// its own min-width overrides above). On narrow screens drop the min-width so
-// the table shrinks to fit the viewport; desktop, where each table has room
-// to spare, is left untouched.
+// width and hard against the right edge (the inside table escapes this with its
+// own min-width overrides above). On narrow screens drop the min-width so the
+// table shrinks to fit the viewport; desktop, where each table has room to
+// spare, is left untouched.
 @media (max-width: 600px) {
     #weather-table {
-        td, th {
+        td,
+        th {
             min-width: 0;
         }
     }

@@ -90,13 +90,13 @@ describe('UpdatingKeyValuePairTable', () => {
 
             expect(subject.getLastData()).toBeNull();
             expect(table.textContent).toBe("⚠️ I'm having trouble loading this data right now.I'm aware - top men are working on it.Please try again later.");
-            expect(table.querySelectorAll('span.error br')).toHaveLength(2);
-            const link = table.querySelector('span.error a');
+            expect(table.querySelectorAll('span.smart-home-table__error br')).toHaveLength(2);
+            const link = table.querySelector('span.smart-home-table__error a');
             expect(link).not.toBeNull();
             expect(link.getAttribute('href')).toBe('https://www.youtube.com/watch?v=Fdjf4lMmiiI');
             expect(link.getAttribute('target')).toBe('_blank');
-            expect(table.querySelector('span.error')).not.toBeNull();
-            expect(table.querySelector('td.error-cell')).not.toBeNull();
+            expect(table.querySelector('span.smart-home-table__error')).not.toBeNull();
+            expect(table.querySelector('td.smart-home-table__error-cell')).not.toBeNull();
         });
 
         it('keeps the title header and spans the error across its columns on failure', async () => {
@@ -109,8 +109,8 @@ describe('UpdatingKeyValuePairTable', () => {
             // Header (title + column headings) stays so the reader can tell which
             // table failed, and the error cell spans its three columns.
             expect(table.textContent).toContain('🏠 Title');
-            expect(table.querySelector('th span.title')).not.toBeNull();
-            expect(table.querySelector('td.error-cell').colSpan).toBe(3);
+            expect(table.querySelector('th span.smart-home-table__value--title')).not.toBeNull();
+            expect(table.querySelector('td.smart-home-table__error-cell').colSpan).toBe(3);
         });
     });
 
@@ -151,7 +151,7 @@ describe('UpdatingKeyValuePairTable', () => {
                 const twoMinsAgo = Math.floor(Date.parse('2023-11-20T11:58:00Z') / 1000);
                 const element = subject._updatedElement(twoMinsAgo);
                 expect(element.tagName).toBe('SPAN');
-                expect(element.className).toBe('freshness');
+                expect(element.className).toBe('update-time__freshness');
                 expect(element.textContent).toBe('Updated 2 mins ago');
             });
 
@@ -192,13 +192,13 @@ describe('UpdatingKeyValuePairTable', () => {
                 expect(table.textContent).toContain('21°c');
                 expect(table.textContent).toContain('69.8°f');
                 expect(table.textContent).not.toContain('ago');
-                expect(table.querySelector('span.secondary.muted').textContent).toBe('69.8°f');
+                expect(table.querySelector('span.smart-home-table__value--secondary.smart-home-table__value--muted').textContent).toBe('69.8°f');
             });
 
             it('renders a "time ago" and important styling when given a timestamp', () => {
                 subject._addTempTableRow('Temperature', 21, 1_700_000_000, false, true);
                 expect(table.textContent).toContain('ago');
-                expect(table.querySelector('span.important')).not.toBeNull();
+                expect(table.querySelector('span.smart-home-table__value--emphasis')).not.toBeNull();
             });
         });
 
@@ -208,7 +208,7 @@ describe('UpdatingKeyValuePairTable', () => {
                 const cells = table.querySelectorAll('th');
                 expect(cells).toHaveLength(3);
                 expect(cells[0].textContent).toBe('🏠 Inside climate');
-                expect(cells[0].querySelector('span.title')).not.toBeNull();
+                expect(cells[0].querySelector('span.smart-home-table__value--title')).not.toBeNull();
                 expect(cells[0].scope).toBe('col');
                 expect(cells[1].textContent).toBe('🌡️');
                 expect(cells[2].textContent).toBe('💧');
@@ -240,7 +240,7 @@ describe('UpdatingKeyValuePairTable', () => {
                 subject._addClimateTableRow('Average', 20, ts, false, 50, olderTs, true, true);
                 expect(table.textContent).toContain('50%');
                 expect(table.textContent).toContain('ago');
-                expect(table.querySelector('span.important')).not.toBeNull();
+                expect(table.querySelector('span.smart-home-table__value--emphasis')).not.toBeNull();
             });
 
             it('falls back to the humidity timestamp when the temperature has none', () => {
@@ -262,7 +262,7 @@ describe('UpdatingKeyValuePairTable', () => {
             it('shows a muted humidity "feel" description under the value', () => {
                 subject._addClimateTableRow('Average', 20, ts, false, 50, olderTs, false, false);
                 const humidityCell = table.querySelector('tr td:last-child');
-                const description = humidityCell.querySelector('span.secondary.muted');
+                const description = humidityCell.querySelector('span.smart-home-table__value--secondary.smart-home-table__value--muted');
                 expect(description).not.toBeNull();
                 // 50% reads as "Pleasant".
                 expect(description.textContent).toBe('Pleasant');
@@ -272,7 +272,7 @@ describe('UpdatingKeyValuePairTable', () => {
                 subject._addClimateTableRow('Sensor', 20, ts, false, null, null, false, false);
                 expect(table.textContent).toContain('—');
                 const humidityCell = table.querySelector('tr td:last-child');
-                expect(humidityCell.querySelector('span.secondary')).toBeNull();
+                expect(humidityCell.querySelector('span.smart-home-table__value--secondary')).toBeNull();
             });
 
             it('omits the "time ago" when there is no timestamp at all', () => {
@@ -288,24 +288,24 @@ describe('UpdatingKeyValuePairTable', () => {
                 expect(table.querySelectorAll('td')).toHaveLength(2);
                 expect(table.textContent).toContain('Humidity');
                 expect(table.textContent).toContain('55%');
-                expect(table.querySelector('span.secondary')).toBeNull();
+                expect(table.querySelector('span.smart-home-table__value--secondary')).toBeNull();
             });
 
             it('adds secondary key/value with muted and important styling', () => {
                 subject._addTableRow('Temp', '21°c', '69.8°f', 'about', true, true);
-                expect(table.querySelector('span.important')).not.toBeNull();
-                expect(table.querySelectorAll('span.secondary')).toHaveLength(2);
+                expect(table.querySelector('span.smart-home-table__value--emphasis')).not.toBeNull();
+                expect(table.querySelectorAll('span.smart-home-table__value--secondary')).toHaveLength(2);
                 expect(table.textContent).toContain('about');
                 expect(table.textContent).toContain('69.8°f');
             });
 
             it('mutes the secondary independently when secondaryMuted is set', () => {
                 subject._addTableRow('Wind', '24.1km/h', '15mph', null, false, false, true);
-                const secondary = table.querySelector('span.secondary');
+                const secondary = table.querySelector('span.smart-home-table__value--secondary');
                 expect(secondary.textContent).toBe('15mph');
-                expect(secondary.classList.contains('muted')).toBe(true);
+                expect(secondary.classList.contains('smart-home-table__value--muted')).toBe(true);
                 // The primary value stays unmuted.
-                expect(table.querySelector('span.primary').classList.contains('muted')).toBe(false);
+                expect(table.querySelector('span.smart-home-table__value--primary').classList.contains('smart-home-table__value--muted')).toBe(false);
             });
         });
     });

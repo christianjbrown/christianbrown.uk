@@ -10,9 +10,9 @@ javascripts:
 noindex: true
 ---
 <h2>Smart home</h2>
-                <p id="status-line">[Loading..]</p>
+                <p id="status-line" role="status" aria-live="polite">[Loading..]</p>
                 <div class="smart-home-data">
-                    <div>
+                    <div class="smart-home-data__column">
                         <table id="home-temperature-table" class="smart-home-table">
                             <tr>
                                 <td class="data-loader"><div class="data-loader"><div></div><div></div><div></div></div></td>
@@ -20,7 +20,7 @@ noindex: true
                         </table>
                         <span class="update-time" id="home-temperature-table-update-time"></span>
                     </div>
-                    <div>
+                    <div class="smart-home-data__column">
                         <table id="weather-table" class="smart-home-table">
                             <tr>
                                 <td class="data-loader"><div class="data-loader"><div></div><div></div><div></div></div></td>
@@ -32,54 +32,54 @@ noindex: true
                 <div id="rooms" class="floor-plan-section" hidden>
                     <h3>📐 Rooms</h3>
                     <div class="floor-plan">
-                        <img src="/assets/images/smart-home/floor-plan.svg" alt="Floor plan of the house, with the temperature and humidity of each room" class="floor-plan-image" />
+                        <img src="/assets/images/smart-home/floor-plan.svg" alt="Floor plan of the house, with the temperature and humidity of each room" class="floor-plan__image" />
                     </div>
                 </div>
                 <div class="faq">
                     <h3>🏗️ How it works</h3>
-                    <a href="/assets/images/smart-home/how-it-works.svg" target="_blank" title="Open diagram in new window"><img src="/assets/images/smart-home/how-it-works.svg" alt="Diagram showing how this page works" class="how-it-works" /></a>
-                    <p>This page is a static site built with <a href="https://jekyllrb.com/" target="_blank">Jekyll</a>, whose JavaScript pulls two live feeds and renders them in your browser. Here's what sits behind each one.</p>
+                    <a href="/assets/images/smart-home/how-it-works.svg" target="_blank" rel="noopener noreferrer" title="Open diagram in new window"><img src="/assets/images/smart-home/how-it-works.svg" alt="Diagram showing how this page works" class="how-it-works" /></a>
+                    <p>This page is a static site built with <a href="https://jekyllrb.com/" target="_blank" rel="noopener noreferrer">Jekyll</a>, whose JavaScript pulls two live feeds and renders them in your browser. Here's what sits behind each one.</p>
 
                     <h4>Serving the page</h4>
                     <ul>
                         <li>A static site, hosted free on GitHub Pages.</li>
-                        <li>On load, it calls two APIs through the <a href="https://www.fastly.com/" target="_blank">Fastly</a> CDN, which caches the responses and forwards any misses to a pair of <a href="https://cloud.google.com/functions" target="_blank">Google Cloud Functions</a>.</li>
-                        <li>The CDN and infrastructure are defined as code with <a href="https://www.terraform.io/" target="_blank">Terraform</a>.</li>
+                        <li>On load, it calls two APIs through the <a href="https://www.fastly.com/" target="_blank" rel="noopener noreferrer">Fastly</a> CDN, which caches the responses and forwards any misses to a pair of <a href="https://cloud.google.com/functions" target="_blank" rel="noopener noreferrer">Google Cloud Functions</a>.</li>
+                        <li>The CDN and infrastructure are defined as code with <a href="https://www.terraform.io/" target="_blank" rel="noopener noreferrer">Terraform</a>.</li>
                     </ul>
 
                     <h4>Kept fast and fresh</h4>
                     <ul>
                         <li>Each response is cached at the Fastly edge and served instantly. When it expires, Fastly refreshes it in the background - so nobody waits - and falls back to the last good copy if an upstream is briefly down.</li>
-                        <li>A fresh fetch is slow (a cold start, an OAuth handshake and a walk over every device), so a pair of <a href="https://cloud.google.com/scheduler" target="_blank">Cloud Scheduler</a> jobs quietly re-request each feed on a schedule - the indoor climate every few minutes, the slower-moving weather less often - keeping the cache warm even when nobody's around.</li>
+                        <li>A fresh fetch is slow (a cold start, an OAuth handshake and a walk over every device), so a pair of <a href="https://cloud.google.com/scheduler" target="_blank" rel="noopener noreferrer">Cloud Scheduler</a> jobs quietly re-request each feed on a schedule - the indoor climate every few minutes, the slower-moving weather less often - keeping the cache warm even when nobody's around.</li>
                         <li>Each table notes when its data was last updated.</li>
-                        <li>Access control and scheduling are Terraform-managed in a private repository, and credentials live in <a href="https://cloud.google.com/secret-manager" target="_blank">Google Secret Manager</a> rather than in any code.</li>
+                        <li>Access control and scheduling are Terraform-managed in a private repository, and credentials live in <a href="https://cloud.google.com/secret-manager" target="_blank" rel="noopener noreferrer">Google Secret Manager</a> rather than in any code.</li>
                     </ul>
 
                     <h4>Indoor climate, from Samsung SmartThings</h4>
                     <ul>
-                        <li>Walks every device in our <a href="https://www.smartthings.com/" target="_blank">Samsung SmartThings</a> account, keeps the ones reporting temperature or humidity, resolves each one's room, flags readings older than 24 hours as stale, and sorts them by name.</li>
+                        <li>Walks every device in our <a href="https://www.smartthings.com/" target="_blank" rel="noopener noreferrer">Samsung SmartThings</a> account, keeps the ones reporting temperature or humidity, resolves each one's room, flags readings older than 24 hours as stale, and sorts them by name.</li>
                         <li>Reaches SmartThings over OAuth 2.0, refreshing a short-lived access token from a long-lived refresh token it stores - and rotates - in a database, so the feed keeps working with no manual re-authentication.</li>
                         <li>This page averages the readings itself, both overall and per room.</li>
                     </ul>
 
                     <h4>Outdoor weather, from the Met Office</h4>
                     <ul>
-                        <li>Calls the <a href="https://www.metoffice.gov.uk/" target="_blank">Met Office</a> Weather DataHub (Site-Specific) API for our local forecast.</li>
+                        <li>Calls the <a href="https://www.metoffice.gov.uk/" target="_blank" rel="noopener noreferrer">Met Office</a> Weather DataHub (Site-Specific) API for our local forecast.</li>
                         <li>Normalises the response - temperature and how it feels, humidity, chance of precipitation, and wind speed, gust and direction - into the compact JSON this page renders.</li>
                     </ul>
 
                     <h4>Source code</h4>
                     <p>Each of the moving parts above lives in its own repository:</p>
                     <ul>
-                        <li><a href="https://github.com/christianjbrown/christianbrown.uk" target="_blank">christianbrown.uk</a> - the Jekyll source for this site, including the page you're reading.</li>
-                        <li><a href="https://github.com/christianjbrown/terraform-fastly-christianbrownuk" target="_blank">terraform-fastly-christianbrownuk</a> - Terraform that defines the Fastly CDN configuration in front of the Cloud Functions.</li>
-                        <li><a href="https://github.com/christianjbrown/php-gcp-function-smartthings-climate" target="_blank">php-gcp-function-smartthings-climate</a> - the Google Cloud Function that serves the indoor climate data.</li>
-                        <li><a href="https://github.com/christianjbrown/php-gcp-function-met-office-weather" target="_blank">php-gcp-function-met-office-weather</a> - the Google Cloud Function that serves the outdoor weather forecast.</li>
-                        <li><a href="https://github.com/christianjbrown/php-smartthings-api-lib" target="_blank">php-smartthings-api-lib</a> - PHP client for the Samsung SmartThings API.</li>
-                        <li><a href="https://github.com/christianjbrown/php-met-office-weather-datahub-api-lib" target="_blank">php-met-office-weather-datahub-api-lib</a> - PHP client for the Met Office Weather DataHub API.</li>
-                        <li><a href="https://github.com/christianjbrown/php-gcp-function-lib" target="_blank">php-gcp-function-lib</a> - shared helpers for running the PHP Cloud Functions.</li>
-                        <li><a href="https://github.com/christianjbrown/php-api-client-lib" target="_blank">php-api-client-lib</a> - the underlying HTTP API client library the above build on.</li>
-                        <li><a href="https://github.com/christianjbrown/php-oauth2-client-lib" target="_blank">php-oauth2-client-lib</a> - PHP OAuth 2.0 client that keeps the SmartThings access token fresh via the refresh-token grant.</li>
-                        <li><a href="https://github.com/christianjbrown/php-key-value-store-lib" target="_blank">php-key-value-store-lib</a> - PHP key-value store used to persist those OAuth tokens in the database.</li>
+                        <li><a href="https://github.com/christianjbrown/christianbrown.uk" target="_blank" rel="noopener noreferrer">christianbrown.uk</a> - the Jekyll source for this site, including the page you're reading.</li>
+                        <li><a href="https://github.com/christianjbrown/terraform-fastly-christianbrownuk" target="_blank" rel="noopener noreferrer">terraform-fastly-christianbrownuk</a> - Terraform that defines the Fastly CDN configuration in front of the Cloud Functions.</li>
+                        <li><a href="https://github.com/christianjbrown/php-gcp-function-smartthings-climate" target="_blank" rel="noopener noreferrer">php-gcp-function-smartthings-climate</a> - the Google Cloud Function that serves the indoor climate data.</li>
+                        <li><a href="https://github.com/christianjbrown/php-gcp-function-met-office-weather" target="_blank" rel="noopener noreferrer">php-gcp-function-met-office-weather</a> - the Google Cloud Function that serves the outdoor weather forecast.</li>
+                        <li><a href="https://github.com/christianjbrown/php-smartthings-api-lib" target="_blank" rel="noopener noreferrer">php-smartthings-api-lib</a> - PHP client for the Samsung SmartThings API.</li>
+                        <li><a href="https://github.com/christianjbrown/php-met-office-weather-datahub-api-lib" target="_blank" rel="noopener noreferrer">php-met-office-weather-datahub-api-lib</a> - PHP client for the Met Office Weather DataHub API.</li>
+                        <li><a href="https://github.com/christianjbrown/php-gcp-function-lib" target="_blank" rel="noopener noreferrer">php-gcp-function-lib</a> - shared helpers for running the PHP Cloud Functions.</li>
+                        <li><a href="https://github.com/christianjbrown/php-api-client-lib" target="_blank" rel="noopener noreferrer">php-api-client-lib</a> - the underlying HTTP API client library the above build on.</li>
+                        <li><a href="https://github.com/christianjbrown/php-oauth2-client-lib" target="_blank" rel="noopener noreferrer">php-oauth2-client-lib</a> - PHP OAuth 2.0 client that keeps the SmartThings access token fresh via the refresh-token grant.</li>
+                        <li><a href="https://github.com/christianjbrown/php-key-value-store-lib" target="_blank" rel="noopener noreferrer">php-key-value-store-lib</a> - PHP key-value store used to persist those OAuth tokens in the database.</li>
                     </ul>
                 </div>

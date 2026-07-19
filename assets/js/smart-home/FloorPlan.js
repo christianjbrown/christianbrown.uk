@@ -96,7 +96,7 @@ export default class FloorPlan {
      * Removes any labels from a previous render.
      */
     #clear() {
-        this.#dom.querySelectorAll('.floor-plan-label, .floor-plan-floor-label').forEach(
+        this.#dom.querySelectorAll('.floor-plan__label, .floor-plan__floor-label').forEach(
             (node) => node.remove()
         );
     }
@@ -109,7 +109,7 @@ export default class FloorPlan {
      */
     #addFloorLabel(anchor, text) {
         const label = document.createElement('div');
-        label.className = 'floor-plan-floor-label';
+        label.className = 'floor-plan__floor-label';
         label.style.left = anchor.x + '%';
         label.style.top = anchor.y + '%';
         label.textContent = text;
@@ -167,14 +167,14 @@ export default class FloorPlan {
      */
     #addLabel(anchor, name, tempC, tempStale, humidityPercent, humidityStale) {
         const label = document.createElement('div');
-        label.className = 'floor-plan-label';
+        label.className = 'floor-plan__label';
         label.style.left = anchor.x + '%';
         label.style.top = anchor.y + '%';
 
-        label.append(FloorPlan.#span(name, 'floor-plan-name'));
-        label.append(FloorPlan.#span('🌡️ ' + (new Temperature(tempC)).formatC(), tempStale ? 'floor-plan-temp muted' : 'floor-plan-temp'));
+        label.append(FloorPlan.#span(name, 'floor-plan__name'));
+        label.append(FloorPlan.#span('🌡️ ' + (new Temperature(tempC)).formatC(), tempStale ? 'floor-plan__temp floor-plan__temp--muted' : 'floor-plan__temp'));
         if (humidityPercent !== null && humidityPercent !== undefined) {
-            label.append(FloorPlan.#span('💧 ' + (new Humidity(humidityPercent)).formatPercent(), humidityStale ? 'floor-plan-humidity muted' : 'floor-plan-humidity'));
+            label.append(FloorPlan.#span('💧 ' + (new Humidity(humidityPercent)).formatPercent(), humidityStale ? 'floor-plan__humidity floor-plan__humidity--muted' : 'floor-plan__humidity'));
         }
 
         this.#dom.append(label);
