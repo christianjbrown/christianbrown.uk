@@ -3,6 +3,7 @@
 import UpdatingKeyValuePairTable from './UpdatingKeyValuePairTable.js';
 import Humidity from './Humidity.js';
 import Time from './Time.js';
+import { WEATHER_TYPES } from './weatherTypes.js';
 
 const MPH_TO_KMH = 1.609344;
 
@@ -14,8 +15,7 @@ const JSON_CONTRACT = {
     'precipitation': {'type': 'number', 'keyRequired': true, 'cannotBeEmpty': true},
     'temp': {'type': 'number', 'keyRequired': true, 'cannotBeEmpty': true},
     'temp_feels_like': {'type': 'number', 'keyRequired': false, 'cannotBeEmpty': true},
-    'type_emoji': {'type': 'string', 'keyRequired': false, 'cannotBeEmpty': true},
-    'type_string': {'type': 'string', 'keyRequired': false, 'cannotBeEmpty': true},
+    'type_name': {'type': 'string', 'keyRequired': false, 'cannotBeEmpty': true},
     'wind_direction': {'type': 'string', 'keyRequired': false, 'cannotBeEmpty': true},
     'wind_direction_degrees': {'type': 'number', 'keyRequired': false, 'cannotBeEmpty': true},
     'wind_gust': {'type': 'number', 'keyRequired': false, 'cannotBeEmpty': true},
@@ -93,8 +93,12 @@ export default class MetWeatherTable extends UpdatingKeyValuePairTable {
             this._updateDateSpan(...nodes);
         }
 
-        if ('type_string' in data && 'type_emoji' in data) {
-            this._addTableRow('Weather type', `${data.type_emoji} ${data.type_string}`);
+        // The endpoint sends a stable enum-name token (e.g. "HEAVY_RAIN"); the
+        // emoji and (future-localised) name are resolved here. An unmapped token
+        // simply omits the row.
+        if ('type_name' in data && WEATHER_TYPES[data.type_name]) {
+            const weatherType = WEATHER_TYPES[data.type_name];
+            this._addTableRow('Weather type', `${weatherType.emoji} ${weatherType.name}`);
         }
 
         this._addTempTableRow('🌡️ Temperature', ('temp' in data) ? data.temp : 'Unknown', null, false, false);
