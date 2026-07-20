@@ -4,6 +4,7 @@ import Cookie from './Cookie.js';
 import Theme from './Theme.js';
 import { applyLocale, setText, setAttr, setAttrAll } from './Locale.js';
 import { catalogueFor } from './i18n/catalogue.js';
+import { formatLocations } from './i18n/locations.js';
 import {
     COOKIES_ACCEPT_BUTTON_ID,
     COOKIES_DECLINE_BUTTON_ID,
@@ -28,7 +29,10 @@ const cookiesDeclineButtonDom = document.getElementById(COOKIES_DECLINE_BUTTON_I
 const catalogue = catalogueFor(applyLocale());
 const header = catalogue.header;
 setText('#header-job-title', header.jobTitle);
-setText('#header-location', header.location);
+const headerLocation = document.getElementById('header-location');
+if (headerLocation) {
+    headerLocation.textContent = formatLocations(catalogue, headerLocation.getAttribute('data-location'));
+}
 setAttrAll('.header-home-link', 'title', header.homeLinkTitle);
 setAttr('.header-avatar img', 'alt', header.avatarAlt);
 setAttr('.location-icon', 'alt', header.locationIconAlt);

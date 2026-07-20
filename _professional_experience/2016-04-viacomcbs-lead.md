@@ -2,7 +2,7 @@
 position: "Lead Software Engineer"
 organisation: "ViacomCBS"
 organisation_extra: "Viacom and CBS (inc. CBS Interactive), merged in 2019 to form ViacomCBS (now known as Paramount)."
-location: "London, UK"
+location: ["London, UK"]
 start: "2016-04"
 end:   "2020-10"
 organisation_logo: "viacomcbs.svg"

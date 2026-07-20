@@ -4,6 +4,6 @@ organisation_logo: "/cv/education/uwa.svg"
 organisation_logo_dark: "/cv/education/uwa-greyscale.svg"
 organisation_link: "https://www.uwa.edu.au/"
 position: "Bachelor of Computer Science (Honours)"
-location: "Perth, Australia"
+location: ["Perth, Australia"]
 ---
 - Majored in Electronic Business and IT Systems.

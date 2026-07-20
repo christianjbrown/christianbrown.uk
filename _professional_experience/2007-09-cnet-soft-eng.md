@@ -2,7 +2,7 @@
 position: "Software Engineer"
 organisation: "CNET Networks"
 organisation_extra: "International media company with multiple brands. Broadcast giant CBS acquired CNET Networks in 2008."
-location: "London, UK"
+location: ["London, UK"]
 start: "2007-09"
 end:   "2011-12"
 organisation_logo: "cnet.svg"
