@@ -28,7 +28,7 @@ export default class SmartHomeTemperatureTable extends UpdatingKeyValuePairTable
      * headings.
      */
     _renderHeader() {
-        this._addHeaderRow(['🏠 Inside climate', '🌡️', '💧']);
+        this._addHeaderRow([this._catalogue.table.insideTitle, '🌡️', '💧']);
     }
 
     /**
@@ -45,7 +45,7 @@ export default class SmartHomeTemperatureTable extends UpdatingKeyValuePairTable
         if (temperature) {
             const humidity = averageHumidity(data['devices']);
             this._addClimateTableRow(
-                'Average',
+                this._catalogue.table.average,
                 temperature.value, temperature.timestamp, temperature.stale,
                 humidity ? humidity.value : null, humidity ? humidity.timestamp : null, humidity ? humidity.stale : false,
                 true

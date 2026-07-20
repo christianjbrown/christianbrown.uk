@@ -36,14 +36,14 @@ schema:
 ---
 <div id="cv-lead">Engineering Manager with 20 years in software engineering, 15 years in technical leadership, and 9 years managing engineers. Experienced in leading distributed full-stack teams, scaling high-traffic web platforms, improving operational reliability, and delivering revenue-critical systems.</div>
                 <div class="cv-section">
-                    <h2>Professional Experience</h2>
+                    <h2 id="cv-heading-experience">Professional experience</h2>
                     <div class="cv-experiences">{% assign previous = nil %}{% for experience in site.professional_experience reversed %}
                         {% include cv-experience.html %}{% assign previous = experience %}{% endfor %}
                     </div>
                 </div>
                 {%- if site.education %}
                 <div class="cv-section" id="cv-section-education">
-                    <h2>Education</h2>
+                    <h2 id="cv-heading-education">Education</h2>
                     <div class="cv-experiences">{% assign previous = nil %}{% for experience in site.education reversed %}
                         {% include cv-experience.html %}{% assign previous = experience %}{% endfor %}
                     </div>

@@ -2,6 +2,8 @@
 
 import Cookie from './Cookie.js';
 import Theme from './Theme.js';
+import { applyLocale, setText, setAttr, setAttrAll } from './Locale.js';
+import { catalogueFor } from './i18n/catalogue.js';
 import {
     COOKIES_ACCEPT_BUTTON_ID,
     COOKIES_DECLINE_BUTTON_ID,
@@ -18,9 +20,25 @@ const cookiesDivDom = document.getElementById(COOKIES_DIV_ID);
 const cookiesAcceptButtonDom = document.getElementById(COOKIES_ACCEPT_BUTTON_ID);
 const cookiesDeclineButtonDom = document.getElementById(COOKIES_DECLINE_BUTTON_ID);
 
+// Resolve the locale once for the whole page and localise the shared header
+// chrome — the job title, location, and the hover/accessibility text (title and
+// alt) the build renders in English. Runs at module eval (the
+// <script type="module"> is deferred, so the DOM is parsed) to keep the swap
+// ahead of paint; a no-op for en-GB and for elements a given page lacks.
+const catalogue = catalogueFor(applyLocale());
+const header = catalogue.header;
+setText('#header-job-title', header.jobTitle);
+setText('#header-location', header.location);
+setAttrAll('.header-home-link', 'title', header.homeLinkTitle);
+setAttr('.header-avatar img', 'alt', header.avatarAlt);
+setAttr('.location-icon', 'alt', header.locationIconAlt);
+setAttr('#cv-home-temp', 'title', header.smartHomeLinkTitle);
+setAttr('#' + THEME_TOGGLE_ID, 'title', catalogue.theme.switchTitle);
+
 // Header colour-theme toggle (Auto → Light → Dark). Present on every page; the
 // saved choice was already applied pre-paint by theme-init.js in the <head>.
-Theme.bindToggle(document.getElementById(THEME_TOGGLE_ID));
+// Pass the locale's toggle strings so its label and accessible name localise.
+Theme.bindToggle(document.getElementById(THEME_TOGGLE_ID), catalogue.theme);
 
 cookiesAcceptButtonDom.addEventListener('click',
     () => {
