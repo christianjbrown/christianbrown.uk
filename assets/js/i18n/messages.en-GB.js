@@ -108,6 +108,9 @@ export default {
     // en-GB (which reads the English API names as-is) needs none.
     roomNames: {},
     deviceNames: {},
+    // Location display names (experience/education entries and the header),
+    // keyed by the raw value; unmapped falls back to the raw value.
+    locationNames: {},
 
     // Inside-climate table + shared table chrome.
     table: {
@@ -257,7 +260,6 @@ export default {
     // (title/alt) the build renders in English.
     header: {
         jobTitle: 'Engineering Manager',
-        location: 'London, UK',
         homeLinkTitle: 'Christian Brown homepage',
         avatarAlt: "Christian Brown's avatar",
         locationIconAlt: 'Location icon',

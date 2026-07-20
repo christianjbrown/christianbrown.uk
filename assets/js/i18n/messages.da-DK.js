@@ -101,6 +101,11 @@ export default {
         'Motion sensor': 'Bevægelsessensor',
         'Hygrometer': 'Hygrometer',
     },
+    locationNames: {
+        'London, UK': 'London, Storbritannien',
+        'Perth, Australia': 'Perth, Australien',
+        'Singapore': 'Singapore',
+    },
 
     table: {
         insideTitle: '🏠 Indeklima',
@@ -192,7 +197,6 @@ export default {
 
     header: {
         jobTitle: 'Udviklingschef',
-        location: 'London, Storbritannien',
         homeLinkTitle: 'Christian Browns hjemmeside',
         avatarAlt: 'Christian Browns avatar',
         locationIconAlt: 'Placeringsikon',

@@ -30,7 +30,7 @@ describe('global.js', () => {
             <div class="header-avatar"><img src="/avatar.jpg" alt="Christian Brown's avatar"></div>
             <img class="location-icon" alt="Location icon">
             <strong id="header-job-title">Engineering Manager</strong>
-            <span id="header-location">London, UK</span>`;
+            <span id="header-location" data-location="London, UK">London, UK</span>`;
         cookiesDiv = document.getElementById('cookies');
         acceptButton = document.getElementById('cookies-accept');
         declineButton = document.getElementById('cookies-decline');

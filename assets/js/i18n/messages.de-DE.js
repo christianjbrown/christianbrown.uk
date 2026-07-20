@@ -101,6 +101,11 @@ export default {
         'Motion sensor': 'Bewegungsmelder',
         'Hygrometer': 'Hygrometer',
     },
+    locationNames: {
+        'London, UK': 'London, Vereinigtes Königreich',
+        'Perth, Australia': 'Perth, Australien',
+        'Singapore': 'Singapur',
+    },
 
     table: {
         insideTitle: '🏠 Innenklima',
@@ -192,7 +197,6 @@ export default {
 
     header: {
         jobTitle: 'Entwicklungsleiter',
-        location: 'London, Vereinigtes Königreich',
         homeLinkTitle: 'Startseite von Christian Brown',
         avatarAlt: 'Avatar von Christian Brown',
         locationIconAlt: 'Standort-Symbol',

@@ -4,7 +4,7 @@ organisation: "iiNet"
 organisation_extra: "Australia's second-largest ISP, now a wholly-owned subsidiary of TPG Telecom."
 start: "2005-01"
 end:   "2006-06"
-location: "Perth, Australia"
+location: ["Perth, Australia"]
 organisation_logo: "iinet.svg"
 organisation_link: "https://www.iinet.net.au/"
 ---

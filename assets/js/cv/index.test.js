@@ -16,7 +16,7 @@ vi.mock('./HomeTemperatureLink.js', () => ({
     },
 }));
 
-import { initHomeTemperatureLink, localiseHeadings, localiseHomepage, localiseDateRanges } from './index.js';
+import { initHomeTemperatureLink, localiseHeadings, localiseHomepage, localiseDateRanges, localiseLocations } from './index.js';
 import DE_DE from '../i18n/messages.de-DE.js';
 
 const SMART_THINGS_PROD_URL = 'https://cdn.christianbrown.uk/get-smartthings-climate';
@@ -114,6 +114,25 @@ describe('cv/index.js', () => {
         it('does nothing when there are no date ranges', () => {
             document.body.innerHTML = '';
             expect(() => localiseDateRanges(DE_DE)).not.toThrow();
+        });
+    });
+
+    describe('localiseLocations', () => {
+        it('translates each location and joins with the locale conjunction', () => {
+            document.body.innerHTML = `
+                <span class="cv-experience-company-metadata-location-text" data-locations="Singapore|London, UK">Singapore and London, UK</span>
+                <span class="cv-experience-company-metadata-location-text" data-locations="Perth, Australia">Perth, Australia</span>`;
+
+            localiseLocations(DE_DE);
+
+            const locs = [...document.querySelectorAll('.cv-experience-company-metadata-location-text')].map((el) => el.textContent);
+            expect(locs[0]).toBe('Singapur und London, Vereinigtes Königreich');
+            expect(locs[1]).toBe('Perth, Australien');
+        });
+
+        it('does nothing when there are no locations', () => {
+            document.body.innerHTML = '';
+            expect(() => localiseLocations(DE_DE)).not.toThrow();
         });
     });
 

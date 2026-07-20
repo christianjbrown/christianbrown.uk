@@ -9,7 +9,7 @@
                                         <h3 class="cv-experience-company-metadata-name-current">{% if experience.organisation_link %}<a href="{{ experience.organisation_link }}" target="_blank" rel="noopener noreferrer" title="{{ experience.organisation }}">{% endif %}{{ experience.organisation }}{% if experience.organisation_link %}</a>{% endif %}</h3>{% if experience.organisation_extra %}
                                         <span class="cv-experience-company-metadata-name-extra">{{ experience.organisation_extra }}</span>{% endif %}
                                     </div>
-                                    {% if experience.location %}<div class="cv-experience-company-metadata-location"><img src="/assets/images/icons/icon-location.svg" alt="Location icon" class="cv-experience-company-metadata-location-icon">{{ experience.location }}</div>{% endif %}
+                                    {% if experience.location %}<div class="cv-experience-company-metadata-location"><img src="/assets/images/icons/icon-location.svg" alt="Location icon" class="cv-experience-company-metadata-location-icon"><span class="cv-experience-company-metadata-location-text" data-locations="{{ experience.location | join: '|' }}">{{ experience.location | array_to_sentence_string }}</span></div>{% endif %}
                                 </div>{% endif %}
                                 <div class="cv-experience-job">
                                     <div class="cv-experience-job-metadata">
