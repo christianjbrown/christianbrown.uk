@@ -11,12 +11,25 @@ Follow Jekyll's [installation guide](https://jekyllrb.com/docs/installation/).
 
 # :computer: Local development
 
-To run the site locally, use the following command:
+To run the site locally, use:
 
 ```shell
-bundle exec jekyll serve --host 0.0.0.0
+npm run serve:local
 ```
-then open your browser to [http://0.0.0.0:4000/](http://0.0.0.0:4000/).
+then open your browser to [http://127.0.0.1:4000/](http://127.0.0.1:4000/). This is a shortcut for `bundle exec jekyll serve`, which watches for changes and rebuilds automatically — refresh the browser to see them. To reach it from another device on your network, append a host: `npm run serve:local -- --host 0.0.0.0`.
+
+## Live data
+
+The smart-home page (and the CV's indoor-temperature link) pull from two live APIs. By default — including locally — they use the production endpoints behind the Fastly CDN, so no extra setup is needed.
+
+To point one at a function running on your own machine, flip its flag in `_config.yml` and restart the server:
+
+| Flag in `_config.yml` | API |
+| --- | --- |
+| `smart_home_smart_things_climate_use_local` | SmartThings indoor climate |
+| `smart_home_met_office_weather_use_local` | Met Office outdoor weather |
+
+The dev and production URLs live alongside the flags (`smart_home_*_url_dev` / `_url_prod`). Each flag is independent, so one API can run locally while the other stays on the CDN; when a flag is on, the layout also whitelists that dev origin in the page's `connect-src` CSP.
 
 # :test_tube: Tests
 
