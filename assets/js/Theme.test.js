@@ -162,6 +162,22 @@ describe('Theme', () => {
             expect(button.getAttribute('aria-label')).toContain('Dark');
         });
 
+        it('uses localised strings when given them', () => {
+            window.localStorage.setItem(THEME_STORAGE_KEY, THEME_DARK);
+            const button = document.createElement('button');
+            const strings = {
+                [THEME_AUTO]: 'Auto',
+                [THEME_LIGHT]: 'Hell',
+                [THEME_DARK]: 'Dunkel',
+                ariaLabelTemplate: 'Farbschema: {label}. Zum Ändern aktivieren.',
+            };
+
+            Theme.bindToggle(button, strings);
+
+            expect(button.textContent).toBe('☾ Dunkel');
+            expect(button.getAttribute('aria-label')).toBe('Farbschema: Dunkel. Zum Ändern aktivieren.');
+        });
+
         it('cycles the theme, storage and label on click (OS light)', () => {
             stubOS(false);
             // Starts at auto (nothing stored); first tap goes to the opposite

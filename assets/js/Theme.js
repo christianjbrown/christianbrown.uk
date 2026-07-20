@@ -27,6 +27,17 @@ const LABELS = {
     [THEME_DARK]: 'Dark',
 };
 
+// The default (en-GB) toggle strings. bindToggle takes an optional replacement
+// (a catalogue's `theme` object) so the labels and accessible name localise; the
+// shape is the three theme labels plus an aria-label template with a {label}
+// hole. Keeping it here means Theme.js needs no import from the i18n layer.
+const DEFAULT_THEME_STRINGS = {
+    [THEME_AUTO]: LABELS[THEME_AUTO],
+    [THEME_LIGHT]: LABELS[THEME_LIGHT],
+    [THEME_DARK]: LABELS[THEME_DARK],
+    ariaLabelTemplate: 'Colour theme: {label}. Activate to change it.',
+};
+
 // Kept as text glyphs so the toggle needs no extra icon assets: a half-filled
 // circle for auto, a sun for light, a moon for dark.
 const GLYPHS = {
@@ -149,15 +160,18 @@ export default class Theme {
      * button — pages may not render one — is a no-op.
      *
      * @param {HTMLButtonElement|null} button
+     * @param {Object}                 strings  localised toggle strings; defaults
+     *                                          to en-GB.
      */
-    static bindToggle(button) {
+    static bindToggle(button, strings = DEFAULT_THEME_STRINGS) {
         if (!button) {
             return;
         }
 
         const render = (theme) => {
-            button.textContent = `${Theme.glyph(theme)} ${Theme.label(theme)}`;
-            button.setAttribute('aria-label', `Colour theme: ${Theme.label(theme)}. Activate to change it.`);
+            const label = strings[theme];
+            button.textContent = `${Theme.glyph(theme)} ${label}`;
+            button.setAttribute('aria-label', strings.ariaLabelTemplate.replace('{label}', label));
         };
 
         render(Theme.get());
