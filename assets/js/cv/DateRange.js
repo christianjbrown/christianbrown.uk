@@ -41,8 +41,8 @@ function endpointLabel(locale, point) {
 }
 
 /**
- * A localised, long-form duration for a whole number of months, e.g.
- * "3 years 9 months" / "3 años 9 meses" / "6 years". Intl owns the unit words,
+ * A localised, short-form duration for a whole number of months, e.g.
+ * "3 yrs 9 mths" / "3 a 9 m." / "6 yrs". Intl owns the unit abbreviations,
  * plurals and joining.
  *
  * @param {String} locale
@@ -56,10 +56,10 @@ function durationText(locale, totalMonths) {
 
     const parts = [];
     if (years) {
-        parts.push(new Intl.NumberFormat(locale, { style: 'unit', unit: 'year', unitDisplay: 'long' }).format(years));
+        parts.push(new Intl.NumberFormat(locale, { style: 'unit', unit: 'year', unitDisplay: 'short' }).format(years));
     }
     if (months) {
-        parts.push(new Intl.NumberFormat(locale, { style: 'unit', unit: 'month', unitDisplay: 'long' }).format(months));
+        parts.push(new Intl.NumberFormat(locale, { style: 'unit', unit: 'month', unitDisplay: 'short' }).format(months));
     }
 
     return new Intl.ListFormat(locale, { style: 'narrow', type: 'unit' }).format(parts);

@@ -33,8 +33,9 @@ attributes, and if JS is unavailable this server-rendered text stands.
     {%- assign total = emon | minus: smon | plus: 1 -%}
     {%- assign years = total | divided_by: 12 -%}
     {%- assign months = total | modulo: 12 -%}
-    {%- capture ys -%}{%- if years > 0 -%}{{ years }} year{%- unless years == 1 -%}s{%- endunless -%}{%- endif -%}{%- endcapture -%}
-    {%- capture ms -%}{%- if months > 0 -%}{{ months }} month{%- unless months == 1 -%}s{%- endunless -%}{%- endif -%}{%- endcapture -%}
+    {%- comment -%}Short units to match Intl `short` (yr/yrs, mth/mths) on the JS side.{%- endcomment -%}
+    {%- capture ys -%}{%- if years > 0 -%}{{ years }} yr{%- unless years == 1 -%}s{%- endunless -%}{%- endif -%}{%- endcapture -%}
+    {%- capture ms -%}{%- if months > 0 -%}{{ months }} mth{%- unless months == 1 -%}s{%- endunless -%}{%- endif -%}{%- endcapture -%}
     {%- if ys != "" and ms != "" -%}{%- assign dur = ys | append: " " | append: ms -%}{%- else -%}{%- assign dur = ys | append: ms -%}{%- endif -%}
     {{- start_label }} – {{ end_label }} ({{ dur }}){%- comment -%}fixed-end{%- endcomment -%}
 {%- else -%}

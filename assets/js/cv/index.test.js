@@ -107,9 +107,8 @@ describe('cv/index.js', () => {
             localiseDateRanges(DE_DE);
 
             const dates = [...document.querySelectorAll('.cv-experience-job-metadata-dates')].map((el) => el.textContent);
-            expect(dates[0]).toContain('3 Jahre');
-            expect(dates[0]).toContain('9 Monate');
-            expect(dates[1]).toBe('2001 – 2006 (6 Jahre)');
+            expect(dates[0]).toContain('(3 J, 9 Mon.)');
+            expect(dates[1]).toBe('2001 – 2006 (6 J)');
         });
 
         it('does nothing when there are no date ranges', () => {
