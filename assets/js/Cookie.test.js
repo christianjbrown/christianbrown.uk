@@ -74,6 +74,23 @@ describe('Cookie', () => {
             expect(Cookie.get('token')).toBe('abc');
         });
 
+        it('writes a session cookie (no max-age) when days is null', () => {
+            const written = [];
+            const spy = vi.spyOn(document, 'cookie', 'set').mockImplementation((value) => {
+                written.push(value);
+            });
+
+            try {
+                Cookie.set('sess', 'v', null);
+            } finally {
+                spy.mockRestore();
+            }
+
+            expect(written[0]).toContain('sess=v');
+            expect(written[0]).not.toContain('max-age');
+            expect(written[0]).toContain('Path=/');
+        });
+
         it('returns null for a missing cookie', () => {
             expect(Cookie.get('does-not-exist')).toBeNull();
         });
