@@ -6,6 +6,8 @@ import FR_FR from './messages.fr-FR.js';
 import DA_DK from './messages.da-DK.js';
 import ES_ES from './messages.es-ES.js';
 import PT_PT from './messages.pt-PT.js';
+import ZH_CN from './messages.zh-CN.js';
+import ZH_TW from './messages.zh-TW.js';
 
 const CATALOGUES = {
     'en-GB': EN_GB,
@@ -14,6 +16,8 @@ const CATALOGUES = {
     'da-DK': DA_DK,
     'es-ES': ES_ES,
     'pt-PT': PT_PT,
+    'zh-CN': ZH_CN,
+    'zh-TW': ZH_TW,
 };
 
 /**

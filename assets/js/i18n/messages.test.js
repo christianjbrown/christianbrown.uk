@@ -5,6 +5,8 @@ import FR_FR from './messages.fr-FR.js';
 import DA_DK from './messages.da-DK.js';
 import ES_ES from './messages.es-ES.js';
 import PT_PT from './messages.pt-PT.js';
+import ZH_CN from './messages.zh-CN.js';
+import ZH_TW from './messages.zh-TW.js';
 
 // A fixed instant so the Intl date assertions are deterministic: 09:05 UTC on
 // Monday 20 November 2023.
@@ -17,6 +19,8 @@ describe('catalogueFor', () => {
         expect(catalogueFor('da-DK')).toBe(DA_DK);
         expect(catalogueFor('es-ES')).toBe(ES_ES);
         expect(catalogueFor('pt-PT')).toBe(PT_PT);
+        expect(catalogueFor('zh-CN')).toBe(ZH_CN);
+        expect(catalogueFor('zh-TW')).toBe(ZH_TW);
         expect(catalogueFor('en-GB')).toBe(EN_GB);
     });
 
@@ -358,5 +362,125 @@ describe('pt-PT catalogue', () => {
 
     it('builds the home-temperature link', () => {
         expect(cat.cv.homeTempLink('21 °C')).toBe('🏠 21 °C em casa');
+    });
+});
+
+describe('zh-CN catalogue', () => {
+    const cat = ZH_CN;
+
+    describe('climateSummary', () => {
+        it('reports warmer inside and more humid inside (no contrast)', () => {
+            expect(cat.climateSummary({
+                temperaturesMatch: false, insideTemp: '26.6°C', outsideTemp: '25°C', diffTemp: '1.6°C', warmer: true,
+                humidity: { match: false, inside: '52.8%', outside: '42.6%', diff: '10.2%', moreInside: true, contrast: false },
+            })).toBe('室内比室外暖了 1.6°C（室内 26.6°C，室外 25°C），而室内湿度高了 10.2%（室内 52.8%，室外 42.6%）。');
+        });
+
+        it('reports cooler inside and less humid inside with a contrast', () => {
+            expect(cat.climateSummary({
+                temperaturesMatch: false, insideTemp: '27°C', outsideTemp: '30°C', diffTemp: '3°C', warmer: false,
+                humidity: { match: false, inside: '40%', outside: '55%', diff: '15%', moreInside: false, contrast: true },
+            })).toBe('室内比室外凉了 3°C（室内 27°C，室外 30°C），但室内湿度低了 15%（室内 40%，室外 55%）。');
+        });
+
+        it('collapses matching temperatures and humidities', () => {
+            expect(cat.climateSummary({
+                temperaturesMatch: true, insideTemp: '26°C', outsideTemp: '26°C', diffTemp: '0°C', warmer: false,
+                humidity: { match: true, inside: '53%', outside: '53%', diff: '0%', moreInside: false, contrast: false },
+            })).toBe('室内外都是 26°C，而湿度室内外都是 53%。');
+        });
+
+        it('omits the humidity clause when it is absent', () => {
+            expect(cat.climateSummary({
+                temperaturesMatch: false, insideTemp: '26.6°C', outsideTemp: '25°C', diffTemp: '1.6°C', warmer: true, humidity: null,
+            })).toBe('室内比室外暖了 1.6°C（室内 26.6°C，室外 25°C）。');
+        });
+    });
+
+    describe('statusLine', () => {
+        it('appends the climate as a second sentence', () => {
+            expect(cat.statusLine('19:53 GMT', '11月20日周一', '室内很暖。'))
+                .toBe('现在是 19:53 GMT，11月20日周一，在我伦敦的家中。室内很暖。');
+        });
+
+        it('shows just the time when there is no climate', () => {
+            expect(cat.statusLine('19:53 GMT', '11月20日周一', null))
+                .toBe('现在是 19:53 GMT，11月20日周一，在我伦敦的家中。');
+        });
+    });
+
+    it('formats relative time with Intl', () => {
+        const label = cat.time.relativeTime(5, 'minute');
+        expect(label).toContain('5');
+        expect(label).toContain('前');
+    });
+
+    it('formats dates with Intl (year-first month)', () => {
+        expect(cat.time.formatDate(DATE, 'UTC', false)).toContain('11月');
+        expect(cat.time.formatDate(DATE, 'UTC', true)).toMatch(/11月.*20/);
+    });
+
+    it('builds the home-temperature link', () => {
+        expect(cat.cv.homeTempLink('21°C')).toBe('🏠 家中 21°C');
+    });
+});
+
+describe('zh-TW catalogue', () => {
+    const cat = ZH_TW;
+
+    describe('climateSummary', () => {
+        it('reports warmer inside and more humid inside (no contrast)', () => {
+            expect(cat.climateSummary({
+                temperaturesMatch: false, insideTemp: '26.6°C', outsideTemp: '25°C', diffTemp: '1.6°C', warmer: true,
+                humidity: { match: false, inside: '52.8%', outside: '42.6%', diff: '10.2%', moreInside: true, contrast: false },
+            })).toBe('室內比室外暖了 1.6°C（室內 26.6°C，室外 25°C），而室內濕度高了 10.2%（室內 52.8%，室外 42.6%）。');
+        });
+
+        it('reports cooler inside and less humid inside with a contrast', () => {
+            expect(cat.climateSummary({
+                temperaturesMatch: false, insideTemp: '27°C', outsideTemp: '30°C', diffTemp: '3°C', warmer: false,
+                humidity: { match: false, inside: '40%', outside: '55%', diff: '15%', moreInside: false, contrast: true },
+            })).toBe('室內比室外涼了 3°C（室內 27°C，室外 30°C），但室內濕度低了 15%（室內 40%，室外 55%）。');
+        });
+
+        it('collapses matching temperatures and humidities', () => {
+            expect(cat.climateSummary({
+                temperaturesMatch: true, insideTemp: '26°C', outsideTemp: '26°C', diffTemp: '0°C', warmer: false,
+                humidity: { match: true, inside: '53%', outside: '53%', diff: '0%', moreInside: false, contrast: false },
+            })).toBe('室內外都是 26°C，而濕度室內外都是 53%。');
+        });
+
+        it('omits the humidity clause when it is absent', () => {
+            expect(cat.climateSummary({
+                temperaturesMatch: false, insideTemp: '26.6°C', outsideTemp: '25°C', diffTemp: '1.6°C', warmer: true, humidity: null,
+            })).toBe('室內比室外暖了 1.6°C（室內 26.6°C，室外 25°C）。');
+        });
+    });
+
+    describe('statusLine', () => {
+        it('appends the climate as a second sentence', () => {
+            expect(cat.statusLine('19:53 GMT', '11月20日 週一', '室內很暖。'))
+                .toBe('現在是 19:53 GMT，11月20日 週一，在我倫敦的家中。室內很暖。');
+        });
+
+        it('shows just the time when there is no climate', () => {
+            expect(cat.statusLine('19:53 GMT', '11月20日 週一', null))
+                .toBe('現在是 19:53 GMT，11月20日 週一，在我倫敦的家中。');
+        });
+    });
+
+    it('formats relative time with Intl', () => {
+        const label = cat.time.relativeTime(5, 'minute');
+        expect(label).toContain('5');
+        expect(label).toContain('前');
+    });
+
+    it('formats dates with Intl (year-first month)', () => {
+        expect(cat.time.formatDate(DATE, 'UTC', false)).toContain('11月');
+        expect(cat.time.formatDate(DATE, 'UTC', true)).toMatch(/11月.*20/);
+    });
+
+    it('builds the home-temperature link', () => {
+        expect(cat.cv.homeTempLink('21°C')).toBe('🏠 家中 21°C');
     });
 });
