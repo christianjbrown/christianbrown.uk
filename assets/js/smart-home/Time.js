@@ -81,8 +81,11 @@ export default class Time {
         const date = new Date(this.#timestamp);
         const locale = this.#catalogue.locale;
 
-        // using all this toLocaleString stuff because it handles the timezone correctly using daylight savings
-        const hour = parseInt(Intl.DateTimeFormat(locale, {'timeZone': this.#timezone, 'hour': 'numeric'}).format(date));
+        // using all this toLocaleString stuff because it handles the timezone correctly using daylight savings.
+        // hourCycle 'h23' forces a 24-hour numeric hour (0–23): some locales
+        // (e.g. zh-TW) otherwise default to 12-hour with an AM/PM prefix like
+        // "上午12時", which parseInt reads as NaN.
+        const hour = parseInt(Intl.DateTimeFormat(locale, {'timeZone': this.#timezone, 'hour': 'numeric', 'hourCycle': 'h23'}).format(date));
         const min = parseInt(Intl.DateTimeFormat(locale, {'timeZone': this.#timezone, 'minute': 'numeric'}).format(date));
         let str;
         if (hour === 0 && min === 0) {

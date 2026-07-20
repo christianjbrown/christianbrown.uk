@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import Time from './Time.js';
+import ZH_TW from '../i18n/messages.zh-TW.js';
 
 const utc = (y, mo, d, h, mi) => Date.UTC(y, mo, d, h, mi);
 
@@ -62,6 +63,13 @@ describe('Time', () => {
 
         it('does not add a pm suffix at midday past the hour', () => {
             expect(new Time(utc(2023, 10, 20, 12, 30), 'UTC').formatUserFriendlyHour()).toBe('12:30');
+        });
+
+        it('extracts a 24-hour numeric hour for locales that default to 12-hour (zh-TW)', () => {
+            // Without hourCycle 'h23', zh-TW formats the hour as "上午12時" /
+            // "下午1時", which parseInt reads as NaN → "NaN:30".
+            expect(new Time(utc(2023, 10, 20, 14, 30), 'UTC', ZH_TW).formatUserFriendlyHour()).toBe('14:30');
+            expect(new Time(utc(2023, 10, 20, 0, 39), 'UTC', ZH_TW).formatUserFriendlyHour()).toBe('00:39');
         });
 
         describe('includeTimezone', () => {
