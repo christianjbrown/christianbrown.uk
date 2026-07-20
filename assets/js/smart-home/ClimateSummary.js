@@ -55,24 +55,29 @@ export default class ClimateSummary {
 
     /**
      * Chooses the conjunction joining the temperature and humidity clauses.
-     * When the temperature is a good thing — cooler inside while it's hot out,
-     * or warmer inside while it's cold out — but the air is more humid inside
-     * (the bad thing), the two clauses contrast, so use "but". Otherwise "and".
+     * "but" marks a contrast — exactly one of the two readings is the welcome
+     * one. The temperature is welcome only at the extremes: warmer inside while
+     * it's cold out (below 18°c), or cooler inside while it's hot out (above
+     * 25°c); on a mild day in between, neither counts. The humidity is welcome
+     * when it's less humid inside. One welcome and one not -> "but"; both or
+     * neither -> "and". Matching humidity has no contrast to draw, so "and".
      *
      * Only called when both humidities are present.
      *
      * @returns {String}
      */
     #conjunction() {
-        const temperatureGood = (this.#outsideTempC > 25 && this.#insideTempC < this.#outsideTempC)
-            || (this.#outsideTempC < 18 && this.#insideTempC > this.#outsideTempC);
-
         const inside = new Humidity(this.#insideHumidity);
         const outside = new Humidity(this.#outsideHumidity);
-        const humidityWorseInside = inside.formatPercent(1) !== outside.formatPercent(1)
-            && this.#insideHumidity > this.#outsideHumidity;
+        if (inside.formatPercent(1) === outside.formatPercent(1)) {
+            return 'and';
+        }
 
-        return (temperatureGood && humidityWorseInside) ? 'but' : 'and';
+        const temperatureGood = (this.#outsideTempC < 18 && this.#insideTempC > this.#outsideTempC)
+            || (this.#outsideTempC > 25 && this.#insideTempC < this.#outsideTempC);
+        const humidityGood = this.#insideHumidity < this.#outsideHumidity;
+
+        return (temperatureGood !== humidityGood) ? 'but' : 'and';
     }
 
     /**
