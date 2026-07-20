@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import FloorPlan from './FloorPlan.js';
+import DE_DE from '../i18n/messages.de-DE.js';
 
 const ROOM_ANCHORS = {
     'Living room': {'x': 25, 'y': 70},
@@ -12,7 +13,7 @@ const FLOOR_ANCHORS = {'Third floor': {'x': 25, 'y': 4}, 'Fourth floor': {'x': 7
 let section;
 let container;
 
-function make(roomAnchors = ROOM_ANCHORS, outsideAnchors = OUTSIDE_ANCHORS, floorAnchors = FLOOR_ANCHORS) {
+function make(roomAnchors = ROOM_ANCHORS, outsideAnchors = OUTSIDE_ANCHORS, floorAnchors = FLOOR_ANCHORS, catalogue) {
     section = document.createElement('div');
     section.className = 'floor-plan-section';
     section.hidden = true;
@@ -20,7 +21,7 @@ function make(roomAnchors = ROOM_ANCHORS, outsideAnchors = OUTSIDE_ANCHORS, floo
     container.className = 'floor-plan';
     section.append(container);
     document.body.append(section);
-    return new FloorPlan(section, roomAnchors, outsideAnchors, floorAnchors);
+    return new FloorPlan(section, roomAnchors, outsideAnchors, floorAnchors, catalogue);
 }
 
 function labels() {
@@ -182,6 +183,20 @@ describe('FloorPlan', () => {
         subject.render({ devices: [{ roomName: 'Study', temperatureValue: 20, temperatureStale: false }] }, null);
 
         expect(floorLabels().map((floor) => floor.textContent)).toEqual(['Attic']);
+    });
+
+    it('displays mapped room names for the locale (joining on the raw API name)', () => {
+        const subject = make(ROOM_ANCHORS, OUTSIDE_ANCHORS, FLOOR_ANCHORS, DE_DE);
+        subject.render({
+            devices: [
+                { roomName: 'Living room', temperatureValue: 26, temperatureStale: false },
+                { roomName: 'Study', temperatureValue: 25, temperatureStale: false },
+            ],
+        }, null);
+
+        // Joined on the raw 'Living room'/'Study' names, displayed localised.
+        expect(labelFor('Wohnzimmer')).not.toBeUndefined();
+        expect(labelFor('Arbeitszimmer')).not.toBeUndefined();
     });
 
     it('defaults to the real anchors when none are given', () => {

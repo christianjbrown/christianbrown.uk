@@ -87,7 +87,10 @@ export default class FloorPlan {
             for (const [roomName, anchor] of Object.entries(this.#roomAnchors)) {
                 const room = rooms.get(roomName);
                 if (room) {
-                    this.#addLabel(anchor, roomName, room.temp, room.tempStale, room.humidity, room.humidityStale);
+                    // Join on the raw API room name; display its mapped name,
+                    // falling back to the raw value when unmapped.
+                    const label = this.#catalogue.roomNames[roomName] ?? roomName;
+                    this.#addLabel(anchor, label, room.temp, room.tempStale, room.humidity, room.humidityStale);
                 }
             }
         }
