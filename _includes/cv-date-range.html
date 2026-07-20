@@ -1,0 +1,42 @@
+{%- comment -%}
+Renders a CV date range and its inclusive duration from `start`/`end`
+(each "YYYY" or "YYYY-MM"). A missing month means January for the start and
+December for the end; an empty/absent `end` is an ongoing role, rendered as
+"… – now" with NO duration (the duration is time-varying, so JS adds it live —
+baking it here would go stale between builds). This is the en default; the
+JS layer (cv/index.js) localises it on load from the data-start/data-end
+attributes, and if JS is unavailable this server-rendered text stands.
+{%- endcomment -%}
+{%- assign sparts = include.start | split: "-" -%}
+{%- assign sy = sparts[0] -%}
+{%- if sparts.size > 1 -%}
+    {%- assign sm = sparts[1] -%}
+    {%- capture sd -%}{{ sy }}-{{ sm }}-01{%- endcapture -%}
+    {%- assign start_label = sd | date: "%b %Y" -%}
+{%- else -%}
+    {%- assign sm = "01" -%}
+    {%- assign start_label = sy -%}
+{%- endif -%}
+{%- if include.end != blank -%}
+    {%- assign eparts = include.end | split: "-" -%}
+    {%- assign ey = eparts[0] -%}
+    {%- if eparts.size > 1 -%}
+        {%- assign em = eparts[1] -%}
+        {%- capture ed -%}{{ ey }}-{{ em }}-01{%- endcapture -%}
+        {%- assign end_label = ed | date: "%b %Y" -%}
+    {%- else -%}
+        {%- assign em = "12" -%}
+        {%- assign end_label = ey -%}
+    {%- endif -%}
+    {%- assign smon = sy | times: 12 | plus: sm -%}
+    {%- assign emon = ey | times: 12 | plus: em -%}
+    {%- assign total = emon | minus: smon | plus: 1 -%}
+    {%- assign years = total | divided_by: 12 -%}
+    {%- assign months = total | modulo: 12 -%}
+    {%- capture ys -%}{%- if years > 0 -%}{{ years }} year{%- unless years == 1 -%}s{%- endunless -%}{%- endif -%}{%- endcapture -%}
+    {%- capture ms -%}{%- if months > 0 -%}{{ months }} month{%- unless months == 1 -%}s{%- endunless -%}{%- endif -%}{%- endcapture -%}
+    {%- if ys != "" and ms != "" -%}{%- assign dur = ys | append: " " | append: ms -%}{%- else -%}{%- assign dur = ys | append: ms -%}{%- endif -%}
+    {{- start_label }} – {{ end_label }} ({{ dur }}){%- comment -%}fixed-end{%- endcomment -%}
+{%- else -%}
+    {{- start_label }} – now{%- comment -%}ongoing{%- endcomment -%}
+{%- endif -%}
