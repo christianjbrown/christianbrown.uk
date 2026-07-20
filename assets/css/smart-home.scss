@@ -121,7 +121,11 @@ main {
         color: $colour-error;
     }
 
-    &__error-cell {
+    // The error cell is a single full-width (colspan) cell, so it is also its
+    // row's last child — `td:last-child { text-align: right }` above would
+    // otherwise out-specify a bare class. Qualify with `td` to match that
+    // specificity and win on source order, instead of reaching for !important.
+    td#{&}__error-cell {
         text-align: center;
     }
 }
@@ -259,14 +263,12 @@ main {
     .how-it-works {
         display: block;
         margin: 1rem auto 0;
+        padding: 0 0 2rem;
         width: 80%;
-        // A full-colour illustration (black text, white boxes, brand logos)
-        // drawn for a light background. Inverting it would wreck those colours,
-        // so the tokens instead sit it on a light card in dark mode (a no-op in
-        // light mode).
-        background: var(--c-chip);
-        padding: var(--c-chip-pad-diagram);
-        border-radius: 0.5rem;
+        // In dark mode, invert flips the diagram's lightness (black text→white,
+        // white boxes→dark) while hue-rotate keeps the brand colours; see the
+        // token in global.scss. A no-op in light mode.
+        filter: var(--c-how-it-works-filter);
 
         @media (max-width: 600px) {
             width: 100%;
