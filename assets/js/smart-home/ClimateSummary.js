@@ -55,12 +55,13 @@ export default class ClimateSummary {
 
     /**
      * Chooses the conjunction joining the temperature and humidity clauses.
-     * "but" marks a contrast — exactly one of the two readings is the welcome
-     * one. The temperature is welcome only at the extremes: warmer inside while
-     * it's cold out (below 18°c), or cooler inside while it's hot out (above
-     * 25°c); on a mild day in between, neither counts. The humidity is welcome
-     * when it's less humid inside. One welcome and one not -> "but"; both or
-     * neither -> "and". Matching humidity has no contrast to draw, so "and".
+     * "but" marks a contrast, and only ever appears when it's cold (below 18°c)
+     * or hot (above 25°c) out — a mild day in between reads as comfortable
+     * either way, so the temperature takes no side and it's always "and". When
+     * it is cold or hot, the temperature has a stance: warmer inside is welcome
+     * in the cold, cooler inside is welcome in the heat. The humidity is welcome
+     * when it's less humid inside. "but" when exactly one is welcome; otherwise
+     * (both or neither, or matching humidity) "and".
      *
      * Only called when both humidities are present.
      *
@@ -73,8 +74,13 @@ export default class ClimateSummary {
             return 'and';
         }
 
-        const temperatureGood = (this.#outsideTempC < 18 && this.#insideTempC > this.#outsideTempC)
-            || (this.#outsideTempC > 25 && this.#insideTempC < this.#outsideTempC);
+        if (this.#outsideTempC >= 18 && this.#outsideTempC <= 25) {
+            return 'and';
+        }
+
+        const temperatureGood = this.#outsideTempC < 18
+            ? this.#insideTempC > this.#outsideTempC   // warmer inside is welcome when it's cold
+            : this.#insideTempC < this.#outsideTempC;  // cooler inside is welcome when it's hot
         const humidityGood = this.#insideHumidity < this.#outsideHumidity;
 
         return (temperatureGood !== humidityGood) ? 'but' : 'and';
