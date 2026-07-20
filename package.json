@@ -10,6 +10,7 @@
     "coverage": "vitest run --coverage",
     "lint:css": "stylelint \"assets/css/**/*.scss\" \"_sass/*.scss\"",
     "lint:css:fix": "stylelint \"assets/css/**/*.scss\" \"_sass/*.scss\" --fix",
+    "serve:local": "bundle exec jekyll serve",
     "serve:site": "http-server _site -p 8080 -s",
     "test:a11y": "pa11y-ci"
   },
