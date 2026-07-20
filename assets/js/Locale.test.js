@@ -39,6 +39,16 @@ describe('Locale', () => {
             expect(matchLocale('da-DK')).toBe('da-DK');
         });
 
+        it('maps regional Spanish and Portuguese variants to es-ES and pt-PT', () => {
+            expect(matchLocale('es-ES')).toBe('es-ES');
+            expect(matchLocale('es')).toBe('es-ES');
+            expect(matchLocale('es-MX')).toBe('es-ES');
+            expect(matchLocale('es-AR')).toBe('es-ES');
+            expect(matchLocale('pt-PT')).toBe('pt-PT');
+            expect(matchLocale('pt')).toBe('pt-PT');
+            expect(matchLocale('pt-BR')).toBe('pt-PT');
+        });
+
         it('maps any en-* regional variant to en-GB', () => {
             expect(matchLocale('en-US')).toBe('en-GB');
             expect(matchLocale('en-CA')).toBe('en-GB');
@@ -47,8 +57,9 @@ describe('Locale', () => {
         });
 
         it('returns null for an unsupported language', () => {
-            expect(matchLocale('es')).toBeNull();
+            expect(matchLocale('it')).toBeNull();
             expect(matchLocale('it-IT')).toBeNull();
+            expect(matchLocale('ja-JP')).toBeNull();
         });
     });
 
@@ -61,7 +72,7 @@ describe('Locale', () => {
         });
 
         it('ignores an unsupported ?locale and falls through to the browser', () => {
-            expect(resolveLocale('?locale=es', ['fr-FR'])).toBe('fr-FR');
+            expect(resolveLocale('?locale=it', ['fr-FR'])).toBe('fr-FR');
         });
 
         it('uses the cookie locale when there is no ?locale, ahead of the browser', () => {
@@ -78,11 +89,11 @@ describe('Locale', () => {
 
         it('matches the first supported accepted language by subtag', () => {
             expect(resolveLocale('', ['de-AT', 'en'])).toBe('de-DE');
-            expect(resolveLocale('', ['es', 'fr-CA'])).toBe('fr-FR');
+            expect(resolveLocale('', ['it', 'fr-CA'])).toBe('fr-FR');
         });
 
         it('falls back to the default when nothing matches', () => {
-            expect(resolveLocale('', ['es', 'it'])).toBe(DEFAULT_LOCALE);
+            expect(resolveLocale('', ['it', 'ja'])).toBe(DEFAULT_LOCALE);
         });
 
         it('falls back to navigator.language when the languages list is empty', () => {
