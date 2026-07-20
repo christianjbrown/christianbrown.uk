@@ -67,7 +67,8 @@ export default class Cookie {
     }
 
     /**
-     * Set a cookie.
+     * Set a cookie. Pass `days = null` for a session cookie (no Max-Age, so it
+     * expires when the browser closes).
      *
      * @param {string} key
      * @param {string} value
@@ -75,9 +76,13 @@ export default class Cookie {
      * @param {Object} opts
      */
     static set(key, value, days = 365, opts = {}) {
-        const options = { ...opts, [CONSENT_OPT_KEY_MAX_AGE]: days * 60 * 60 * 24 };
+        const options = { ...opts };
+        if (days !== null) {
+            options[CONSENT_OPT_KEY_MAX_AGE] = days * 60 * 60 * 24;
+        }
         const optionsStr = Object.entries(options).map(([k, v]) => `${k}=${v}`).join('; ');
-        document.cookie = `${key}=${encodeURIComponent(value)}; ${optionsStr}; Path=/; SameSite=Lax; Secure`;
+        const prefix = optionsStr ? `${optionsStr}; ` : '';
+        document.cookie = `${key}=${encodeURIComponent(value)}; ${prefix}Path=/; SameSite=Lax; Secure`;
     }
 
     /**
