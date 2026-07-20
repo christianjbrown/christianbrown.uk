@@ -4,7 +4,7 @@ import Cookie from './Cookie.js';
 
 // The locales the site can render. en-GB is the default and the reference the
 // others mirror. Order matters only in that the first supported match wins.
-export const SUPPORTED_LOCALES = ['en-GB', 'de-DE', 'fr-FR', 'da-DK', 'es-ES', 'pt-PT'];
+export const SUPPORTED_LOCALES = ['en-GB', 'de-DE', 'fr-FR', 'da-DK', 'es-ES', 'pt-PT', 'zh-CN', 'zh-TW'];
 export const DEFAULT_LOCALE = 'en-GB';
 
 // Session cookie remembering an explicit ?locale= choice, so it carries across
@@ -32,6 +32,14 @@ export function matchLocale(tag) {
     }
 
     const primary = lower.split('-')[0];
+
+    // Chinese shares the "zh" primary subtag across both scripts, so a bare
+    // primary-subtag match would be ambiguous; pick by script/region instead —
+    // Traditional for Hant / TW / HK / MO, Simplified otherwise.
+    if (primary === 'zh') {
+        return /(^|-)(hant|tw|hk|mo)(-|$)/.test(lower) ? 'zh-TW' : 'zh-CN';
+    }
+
     return SUPPORTED_LOCALES.find((locale) => locale.toLowerCase().split('-')[0] === primary) ?? null;
 }
 

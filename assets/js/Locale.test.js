@@ -49,6 +49,21 @@ describe('Locale', () => {
             expect(matchLocale('pt-BR')).toBe('pt-PT');
         });
 
+        it('picks the Chinese script by tag: Simplified for Hans/CN/SG/bare zh', () => {
+            expect(matchLocale('zh-CN')).toBe('zh-CN');
+            expect(matchLocale('zh')).toBe('zh-CN');
+            expect(matchLocale('zh-Hans')).toBe('zh-CN');
+            expect(matchLocale('zh-SG')).toBe('zh-CN');
+        });
+
+        it('picks Traditional Chinese for Hant/TW/HK/MO', () => {
+            expect(matchLocale('zh-TW')).toBe('zh-TW');
+            expect(matchLocale('zh-Hant')).toBe('zh-TW');
+            expect(matchLocale('zh-HK')).toBe('zh-TW');
+            expect(matchLocale('zh-MO')).toBe('zh-TW');
+            expect(matchLocale('zh-Hant-HK')).toBe('zh-TW');
+        });
+
         it('maps any en-* regional variant to en-GB', () => {
             expect(matchLocale('en-US')).toBe('en-GB');
             expect(matchLocale('en-CA')).toBe('en-GB');
