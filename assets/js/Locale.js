@@ -1,9 +1,15 @@
 'use strict';
 
+import Cookie from './Cookie.js';
+
 // The locales the site can render. en-GB is the default and the reference the
 // others mirror. Order matters only in that the first supported match wins.
 export const SUPPORTED_LOCALES = ['en-GB', 'de-DE', 'fr-FR', 'da-DK'];
 export const DEFAULT_LOCALE = 'en-GB';
+
+// Session cookie remembering an explicit ?locale= choice, so it carries across
+// pages (the homepage and the smart-home page) for the rest of the visit.
+export const LOCALE_COOKIE = 'locale';
 
 /**
  * Matches a raw BCP-47 tag (e.g. "de", "de-AT", "fr-CA", "en-US") to a supported
@@ -32,24 +38,33 @@ export function matchLocale(tag) {
 /**
  * Resolves the locale to render in, in priority order:
  *   1. a `?locale=` query parameter naming a supported locale — this overrides
- *      the browser, so a de/fr/en link works whatever the visitor's settings;
- *   2. otherwise the browser's accepted languages, matched by primary subtag;
- *   3. otherwise the en-GB default (unchanged from before locale support).
+ *      everything, so a de/fr/en/da link works whatever the visitor's settings;
+ *   2. otherwise a previously-chosen locale from the session cookie, so it
+ *      carries across pages;
+ *   3. otherwise the browser's accepted languages, matched by primary subtag;
+ *   4. otherwise the en-GB default (unchanged from before locale support).
  *
- * The two inputs are injectable so the resolution is unit-testable without
- * touching real globals.
+ * The inputs are injectable so the resolution is unit-testable without touching
+ * real globals.
  *
- * @param {String}        search     the URL query string (defaults to the page's)
- * @param {Array<String>} languages  the accepted languages (defaults to the browser's)
+ * @param {String}        search        the URL query string (defaults to the page's)
+ * @param {Array<String>} languages     the accepted languages (defaults to the browser's)
+ * @param {String|null}   cookieLocale  a previously-persisted locale, if any
  * @returns {String} one of SUPPORTED_LOCALES
  */
 export function resolveLocale(
     search = window.location.search,
     languages = navigator.languages,
+    cookieLocale = null,
 ) {
     const fromQuery = matchLocale(new URLSearchParams(search).get('locale'));
     if (fromQuery) {
         return fromQuery;
+    }
+
+    const fromCookie = matchLocale(cookieLocale);
+    if (fromCookie) {
+        return fromCookie;
     }
 
     const accepted = languages && languages.length ? languages : [navigator.language];
@@ -64,13 +79,22 @@ export function resolveLocale(
 }
 
 /**
- * Resolves the locale, records it on `<html lang>` (the layout ships a hardcoded
- * "en" it can't branch on a query param for), and returns it. Call once per page.
+ * Resolves the locale (query → session cookie → browser → default), records it
+ * on `<html lang>` (the layout ships a hardcoded "en" it can't branch on a query
+ * param for), persists an explicit `?locale=` choice to the session cookie so it
+ * carries across pages, and returns it. Call once per page.
  *
  * @returns {String}
  */
 export function applyLocale() {
-    const locale = resolveLocale();
+    const search = window.location.search;
+    const chosen = matchLocale(new URLSearchParams(search).get('locale'));
+    const locale = resolveLocale(search, navigator.languages, Cookie.get(LOCALE_COOKIE));
+
+    if (chosen) {
+        Cookie.set(LOCALE_COOKIE, chosen, null);
+    }
+
     document.documentElement.lang = locale;
 
     return locale;

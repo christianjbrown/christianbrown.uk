@@ -8,7 +8,9 @@ const { needsConsent, getConsent, setConsent, deleteAll } = vi.hoisted(() => ({
 }));
 
 vi.mock('./Cookie.js', () => ({
-    default: { needsConsent, getConsent, setConsent, deleteAll },
+    // get/set are used by Locale.js (locale cookie); stubbed so global.js's
+    // import-time locale resolution finds no cookie and writes none.
+    default: { needsConsent, getConsent, setConsent, deleteAll, get: () => null, set: () => {} },
 }));
 
 const flush = () => new Promise((resolve) => setTimeout(resolve, 0));
