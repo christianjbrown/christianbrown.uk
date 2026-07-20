@@ -86,6 +86,23 @@ export default {
         WSW: 'Ouest-sud-ouest',
     },
 
+    // Display-name maps for SmartThings room/device names, keyed by the raw API
+    // value; anything unmapped falls back to the API value.
+    roomNames: {
+        'Living room': 'Salon',
+        'Hallway': 'Couloir',
+        'Kitchen': 'Cuisine',
+        'Bathroom': 'Salle de bain',
+        'Study': 'Bureau',
+        'Bedroom': 'Chambre',
+    },
+    deviceNames: {
+        'Button': 'Bouton',
+        'Door sensor': 'Capteur de porte',
+        'Motion sensor': 'Détecteur de mouvement',
+        'Hygrometer': 'Hygromètre',
+    },
+
     table: {
         insideTitle: '🏠 Climat intérieur',
         average: 'Moyenne',

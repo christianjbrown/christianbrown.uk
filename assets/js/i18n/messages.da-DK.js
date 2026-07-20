@@ -85,6 +85,23 @@ export default {
         WSW: 'Vest-sydvestlig',
     },
 
+    // Display-name maps for SmartThings room/device names, keyed by the raw API
+    // value; anything unmapped falls back to the API value.
+    roomNames: {
+        'Living room': 'Stue',
+        'Hallway': 'Entré',
+        'Kitchen': 'Køkken',
+        'Bathroom': 'Badeværelse',
+        'Study': 'Kontor',
+        'Bedroom': 'Soveværelse',
+    },
+    deviceNames: {
+        'Button': 'Knap',
+        'Door sensor': 'Dørsensor',
+        'Motion sensor': 'Bevægelsessensor',
+        'Hygrometer': 'Hygrometer',
+    },
+
     table: {
         insideTitle: '🏠 Indeklima',
         average: 'Gennemsnit',
