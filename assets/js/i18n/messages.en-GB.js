@@ -103,6 +103,12 @@ export default {
         WSW: 'West south westerly',
     },
 
+    // Display-name maps for the room and device names SmartThings sends, keyed
+    // by the raw API value. A name with no entry falls back to the API value, so
+    // en-GB (which reads the English API names as-is) needs none.
+    roomNames: {},
+    deviceNames: {},
+
     // Inside-climate table + shared table chrome.
     table: {
         insideTitle: '🏠 Inside climate',

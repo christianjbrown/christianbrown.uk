@@ -58,7 +58,11 @@ export default class SmartHomeTemperatureTable extends UpdatingKeyValuePairTable
         devices.forEach(
              (dataPoint) => {
                 const roomName = dataPoint['roomName'];
-                const label = roomName ? roomName + ' - ' + dataPoint['name'] : dataPoint['name'];
+                // Map the raw SmartThings names to their display names, falling
+                // back to the API value when there's no mapping for this locale.
+                const device = this._catalogue.deviceNames[dataPoint['name']] ?? dataPoint['name'];
+                const room = roomName ? (this._catalogue.roomNames[roomName] ?? roomName) : null;
+                const label = room ? room + ' - ' + device : device;
                 that._addClimateTableRow(
                     label,
                     dataPoint['temperatureValue'], dataPoint['temperatureTimestamp'], dataPoint['temperatureStale'],

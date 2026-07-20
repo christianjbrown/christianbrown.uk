@@ -1,11 +1,12 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import SmartHomeTemperatureTable from './SmartHomeTemperatureTable.js';
+import DE_DE from '../i18n/messages.de-DE.js';
 
-function make() {
+function make(catalogue) {
     const table = document.createElement('table');
     const updateSpan = document.createElement('span');
     document.body.append(table, updateSpan);
-    return { table, updateSpan, subject: new SmartHomeTemperatureTable(table, updateSpan, 'url') };
+    return { table, updateSpan, subject: new SmartHomeTemperatureTable(table, updateSpan, 'url', catalogue) };
 }
 
 beforeEach(() => {
@@ -98,6 +99,22 @@ describe('SmartHomeTemperatureTable', () => {
         // No roomName -> the label is just the device name.
         expect(rows[2].textContent).toContain('Bare');
         expect(rows[2].textContent).not.toContain(' - ');
+    });
+
+    it('maps room and device names for the locale, falling back to the API value', () => {
+        const { table, subject } = make(DE_DE);
+        subject._renderHeader();
+        subject._renderUpdate({
+            devices: [
+                { name: 'Button', roomName: 'Living room', temperatureValue: 22, temperatureTimestamp: 2000, temperatureStale: false },
+                { name: 'Sensor X', roomName: 'Attic', temperatureValue: 21, temperatureTimestamp: 1000, temperatureStale: false },
+            ],
+        });
+
+        // Mapped room + device.
+        expect(table.textContent).toContain('Wohnzimmer - Taster');
+        // Unmapped room and device fall back to the raw API values.
+        expect(table.textContent).toContain('Attic - Sensor X');
     });
 
     describe('_getContract', () => {
