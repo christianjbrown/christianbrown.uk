@@ -2,7 +2,8 @@
 position: "Senior Engineering Manager"
 organisation: "eBay"
 location: "London, UK"
-date_range: "Aug 2022 - Apr 2026 (3yrs, 9mths)"
+start: "2022-08"
+end:   "2026-04"
 organisation_logo: "ebay.svg"
 organisation_link: "https://www.ebay.com/"
 ---
