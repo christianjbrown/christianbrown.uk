@@ -1,0 +1,204 @@
+'use strict';
+
+/**
+ * French (fr-FR) catalogue. Mirrors messages.en-GB.js — see that file for the
+ * shape and intent. Draft translations, pending a native proofread.
+ *
+ * French conventions applied here: a (non-breaking) space before °C / % (and
+ * before the colon in "Source :"), 24-hour time with no am/pm gloss, and Intl
+ * for the relative-time and date wording.
+ */
+
+const NBSP = String.fromCharCode(0xA0);
+
+export default {
+    locale: 'fr-FR',
+
+    units: {
+        tempC: `${NBSP}°C`,
+        tempF: `${NBSP}°F`,
+        percent: `${NBSP}%`,
+        kmh: 'km/h',
+        mph: 'mph',
+        degree: '°',
+    },
+
+    humidityDescriptions: {
+        DRY: 'Sec',
+        PLEASANT: 'Agréable',
+        COMFORTABLE: 'Confortable',
+        STICKY: 'Moite',
+        UNCOMFORTABLE: 'Inconfortable',
+        OPPRESSIVE: 'Étouffant',
+        MISERABLE: 'Pénible',
+    },
+
+    weatherTypeNames: {
+        CLEAR_NIGHT: 'Nuit claire',
+        CLOUDY: 'Nuageux',
+        DRIZZLE: 'Bruine',
+        FOG: 'Brouillard',
+        HAIL: 'Grêle',
+        HAIL_SHOWER_DAY: 'Averse de grêle (jour)',
+        HAIL_SHOWER_NIGHT: 'Averse de grêle (nuit)',
+        HEAVY_RAIN: 'Forte pluie',
+        HEAVY_RAIN_SHOWER_DAY: 'Forte averse (jour)',
+        HEAVY_RAIN_SHOWER_NIGHT: 'Forte averse (nuit)',
+        HEAVY_SNOW: 'Fortes chutes de neige',
+        HEAVY_SNOW_SHOWER_DAY: 'Forte averse de neige (jour)',
+        HEAVY_SNOW_SHOWER_NIGHT: 'Forte averse de neige (nuit)',
+        LIGHT_RAIN: 'Pluie légère',
+        LIGHT_RAIN_SHOWER_DAY: 'Légère averse (jour)',
+        LIGHT_RAIN_SHOWER_NIGHT: 'Légère averse (nuit)',
+        LIGHT_SNOW: 'Légères chutes de neige',
+        LIGHT_SNOW_SHOWER_DAY: 'Légère averse de neige (jour)',
+        LIGHT_SNOW_SHOWER_NIGHT: 'Légère averse de neige (nuit)',
+        MIST: 'Brume',
+        OVERCAST: 'Ciel couvert',
+        PARTLY_CLOUDY_DAY: 'Partiellement nuageux (jour)',
+        PARTLY_CLOUDY_NIGHT: 'Partiellement nuageux (nuit)',
+        SLEET: 'Neige fondue',
+        SLEET_SHOWER_DAY: 'Averse de neige fondue (jour)',
+        SLEET_SHOWER_NIGHT: 'Averse de neige fondue (nuit)',
+        SUNNY_DAY: 'Journée ensoleillée',
+        THUNDER: 'Orage',
+        THUNDER_SHOWER_DAY: 'Averse orageuse (jour)',
+        THUNDER_SHOWER_NIGHT: 'Averse orageuse (nuit)',
+        TRACE_RAIN: 'Pluie faible',
+    },
+
+    compassNames: {
+        E: 'Est',
+        ENE: 'Est-nord-est',
+        ESE: 'Est-sud-est',
+        N: 'Nord',
+        NE: 'Nord-est',
+        NNE: 'Nord-nord-est',
+        NNW: 'Nord-nord-ouest',
+        NW: 'Nord-ouest',
+        S: 'Sud',
+        SE: 'Sud-est',
+        SSE: 'Sud-sud-est',
+        SSW: 'Sud-sud-ouest',
+        SW: 'Sud-ouest',
+        W: 'Ouest',
+        WNW: 'Ouest-nord-ouest',
+        WSW: 'Ouest-sud-ouest',
+    },
+
+    table: {
+        insideTitle: '🏠 Climat intérieur',
+        average: 'Moyenne',
+        updatedPrefix: 'Mis à jour ',
+    },
+
+    weather: {
+        title: '🌤️ Prévisions météo extérieures',
+        weatherTypeLabel: 'Type de temps',
+        temperatureLabel: '🌡️ Température',
+        feelsLikeLabel: 'Température ressentie',
+        humidityLabel: '💧 Humidité',
+        precipitationLabel: 'Probabilité de précipitations',
+        windLabel: 'Vent',
+        unknown: 'Inconnu',
+        gusts: 'rafales',
+        sourcePrefix: 'Source : ',
+        forecastBetween: ' prévisions pour ',
+        and: ' et ',
+    },
+
+    error: {
+        line1: '⚠️ Impossible de charger ces données pour le moment.',
+        awarePrefix: 'Je suis au courant – ',
+        linkText: 'les experts',
+        awareSuffix: " s'en occupent.",
+        line3: 'Veuillez réessayer plus tard.',
+    },
+
+    floor: {
+        'Third floor': 'Troisième étage',
+        'Fourth floor': 'Quatrième étage',
+        outside: 'Extérieur',
+    },
+
+    time: {
+        midnight: 'minuit',
+        noon: 'midi',
+        twelveHourGloss: false,
+        onWord: ' le ',
+
+        relativeTime(value, unit) {
+            return new Intl.RelativeTimeFormat('fr-FR', { numeric: 'always', style: 'short' }).format(-value, unit);
+        },
+
+        formatDate(date, timeZone, long = false) {
+            return new Intl.DateTimeFormat('fr-FR', {
+                timeZone,
+                weekday: long ? 'long' : 'short',
+                day: 'numeric',
+                month: long ? 'long' : 'short',
+            }).format(date);
+        },
+    },
+
+    climateSummary(f) {
+        let s = f.temperaturesMatch
+            ? `Il fait ${f.insideTemp} à l'intérieur comme à l'extérieur`
+            : `Il fait ${f.diffTemp} de ${f.warmer ? 'plus' : 'moins'} à l'intérieur (${f.insideTemp} à l'intérieur, ${f.outsideTemp} à l'extérieur)`;
+
+        if (f.humidity) {
+            const h = f.humidity;
+            const conjunction = h.contrast ? 'mais' : 'et';
+            const clause = h.match
+                ? `l'humidité est de ${h.inside} à l'intérieur comme à l'extérieur`
+                : `il y a ${h.diff} d'humidité en ${h.moreInside ? 'plus' : 'moins'}${f.temperaturesMatch ? " à l'intérieur" : ''} (${h.inside} à l'intérieur, ${h.outside} à l'extérieur)`;
+            s += `, ${conjunction} ${clause}`;
+        }
+
+        return s + '.';
+    },
+
+    // French reads more naturally as a second, standalone sentence than spliced
+    // mid-sentence.
+    statusLine(time, date, climate) {
+        const when = `Il est actuellement ${time} le ${date} chez moi à Londres`;
+        return climate ? `${when}. ${climate}` : `${when}.`;
+    },
+
+    theme: {
+        auto: 'Auto',
+        light: 'Clair',
+        dark: 'Sombre',
+        switchTitle: 'Changer de thème de couleur',
+        ariaLabelTemplate: 'Thème de couleur : {label}. Activer pour changer.',
+    },
+
+    header: {
+        jobTitle: 'Responsable ingénierie',
+        location: 'Londres, Royaume-Uni',
+        homeLinkTitle: "Page d'accueil de Christian Brown",
+        avatarAlt: 'Avatar de Christian Brown',
+        locationIconAlt: 'Icône de localisation',
+        smartHomeLinkTitle: 'La maison connectée de Christian Brown',
+    },
+
+    page: {
+        smartHomeTitle: 'Maison connectée',
+        roomsHeading: '📐 Pièces',
+        howItWorksHeading: '🏗️ Comment ça marche',
+        floorPlanAlt: "Plan de la maison, avec la température et l'humidité de chaque pièce",
+        howItWorksAlt: 'Schéma montrant le fonctionnement de cette page',
+    },
+
+    cv: {
+        experienceHeading: 'Expérience professionnelle',
+        educationHeading: 'Formation',
+        downloadCv: 'Télécharger le CV',
+        downloadIconAlt: 'Icône de téléchargement',
+
+        homeTempLink(temperature) {
+            return `🏠 ${temperature} à la maison`;
+        },
+    },
+
+};

@@ -22,7 +22,13 @@ describe('global.js', () => {
         document.body.innerHTML = `
             <div id="cookies"></div>
             <button id="cookies-accept"></button>
-            <button id="cookies-decline"></button>`;
+            <button id="cookies-decline"></button>
+            <button id="theme-toggle" title="Switch colour theme" hidden></button>
+            <a class="header-home-link" title="Christian Brown homepage"></a>
+            <div class="header-avatar"><img src="/avatar.jpg" alt="Christian Brown's avatar"></div>
+            <img class="location-icon" alt="Location icon">
+            <strong id="header-job-title">Engineering Manager</strong>
+            <span id="header-location">London, UK</span>`;
         cookiesDiv = document.getElementById('cookies');
         acceptButton = document.getElementById('cookies-accept');
         declineButton = document.getElementById('cookies-decline');
@@ -42,6 +48,24 @@ describe('global.js', () => {
         deleteAll.mockReset();
         cookiesDiv.style.display = '';
         window.dataLayer = undefined;
+    });
+
+    describe('shared header + theme localisation', () => {
+        it('localises the header chrome and theme toggle on import (en-GB in jsdom)', () => {
+            expect(document.getElementById('header-job-title').textContent).toBe('Engineering Manager');
+            expect(document.getElementById('header-location').textContent).toBe('London, UK');
+            expect(document.documentElement.lang).toBe('en-GB');
+            // Hover/accessibility text.
+            expect(document.querySelector('.header-home-link').getAttribute('title')).toBe('Christian Brown homepage');
+            expect(document.querySelector('.header-avatar img').getAttribute('alt')).toBe("Christian Brown's avatar");
+            expect(document.querySelector('.location-icon').getAttribute('alt')).toBe('Location icon');
+            // Theme toggle: revealed, localised label and title.
+            const toggle = document.getElementById('theme-toggle');
+            expect(toggle.hidden).toBe(false);
+            expect(toggle.textContent).toContain('Auto');
+            expect(toggle.getAttribute('title')).toBe('Switch colour theme');
+            expect(toggle.getAttribute('aria-label')).toContain('Colour theme');
+        });
     });
 
     describe('cookie banner buttons', () => {

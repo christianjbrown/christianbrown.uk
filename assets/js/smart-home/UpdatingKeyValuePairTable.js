@@ -4,22 +4,28 @@ import DataFetcher from '../DataFetcher.js';
 import Temperature from './Temperature.js';
 import Humidity from './Humidity.js';
 import Time from './Time.js';
+import EN_GB from '../i18n/messages.en-GB.js';
 
 export default class UpdatingKeyValuePairTable {
     #domTable;
     #domUpdateTime;
     #dataFetcher;
     #lastData = null;
+    // Protected (not #private) so subclasses can read the catalogue when building
+    // their own labels.
+    _catalogue;
 
     /**
      * @param {HTMLTableElement} domTable
      * @param {HTMLTableElement} domUpdateTime
      * @param {String}           url
+     * @param {Object}           catalogue  message catalogue; defaults to en-GB.
      */
-    constructor(domTable, domUpdateTime, url) {
+    constructor(domTable, domUpdateTime, url, catalogue = EN_GB) {
         this.#domTable = domTable;
         this.#domUpdateTime = domUpdateTime;
         this.#dataFetcher = new DataFetcher(url, this._getContract());
+        this._catalogue = catalogue;
     }
 
     /**
@@ -80,10 +86,10 @@ export default class UpdatingKeyValuePairTable {
      * @param {Boolean}        important
      */
     _addTempTableRow(name, degreesC, timestamp = null, stale = false, important = false) {
-        const tempObj = new Temperature(degreesC);
+        const tempObj = new Temperature(degreesC, this._catalogue);
         let timeDiff = null;
         if (timestamp) {
-            const timeObj = new Time(timestamp * 1000);
+            const timeObj = new Time(timestamp * 1000, undefined, this._catalogue);
             timeDiff = timeObj.formatTimeAgo();
         }
         this._addTableRow(name, tempObj.formatC(), tempObj.formatF(), timeDiff, stale, important, true);
@@ -145,10 +151,10 @@ export default class UpdatingKeyValuePairTable {
      * @param {Boolean}        important
      */
     _addClimateTableRow(name, degreesC, tempTimestamp = null, tempStale = false, humidityPercent = null, humidityTimestamp = null, humidityStale = false, important = false) {
-        const tempObj = new Temperature(degreesC);
+        const tempObj = new Temperature(degreesC, this._catalogue);
 
         const hasHumidity = (humidityPercent !== null && humidityPercent !== undefined);
-        const humidityObj = hasHumidity ? new Humidity(humidityPercent) : null;
+        const humidityObj = hasHumidity ? new Humidity(humidityPercent, this._catalogue) : null;
         const humidityValue = hasHumidity ? humidityObj.formatPercent() : '—';
         const humidityMuted = hasHumidity ? humidityStale : true;
 
@@ -156,7 +162,7 @@ export default class UpdatingKeyValuePairTable {
         if (hasHumidity && humidityTimestamp && (!oldestTimestamp || humidityTimestamp < oldestTimestamp)) {
             oldestTimestamp = humidityTimestamp;
         }
-        const timeDiff = oldestTimestamp ? (new Time(oldestTimestamp * 1000)).formatTimeAgo() : null;
+        const timeDiff = oldestTimestamp ? (new Time(oldestTimestamp * 1000, undefined, this._catalogue)).formatTimeAgo() : null;
 
         const row = this.#domTable.insertRow();
 
@@ -229,7 +235,7 @@ export default class UpdatingKeyValuePairTable {
             return null;
         }
 
-        return `Updated ${(new Time(generatedAtUnix * 1000)).formatTimeAgo()}`;
+        return `${this._catalogue.table.updatedPrefix}${(new Time(generatedAtUnix * 1000, undefined, this._catalogue)).formatTimeAgo()}`;
     }
 
     /**
@@ -309,21 +315,22 @@ export default class UpdatingKeyValuePairTable {
      */
     #renderError(error) {
         console.error(error);
+        const errorMessages = this._catalogue.error;
         const errorSpan = document.createElement('span');
         errorSpan.setAttribute('class', 'smart-home-table__error');
         const link = document.createElement('a');
         link.setAttribute('href', 'https://www.youtube.com/watch?v=Fdjf4lMmiiI');
         link.setAttribute('target', '_blank');
         link.setAttribute('rel', 'noopener noreferrer');
-        link.append('top men');
+        link.append(errorMessages.linkText);
         errorSpan.append(
-            "⚠️ I'm having trouble loading this data right now.",
+            errorMessages.line1,
             document.createElement('br'),
-            "I'm aware - ",
+            errorMessages.awarePrefix,
             link,
-            ' are working on it.',
+            errorMessages.awareSuffix,
             document.createElement('br'),
-            'Please try again later.'
+            errorMessages.line3
         );
         const errorCell = this.#domTable.insertRow().insertCell();
         errorCell.setAttribute('class', 'smart-home-table__error-cell');

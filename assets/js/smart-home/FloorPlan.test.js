@@ -175,6 +175,15 @@ describe('FloorPlan', () => {
         expect(section.hidden).toBe(true);
     });
 
+    it('falls back to the anchor key when the catalogue has no floor label for it', () => {
+        // A floor anchor whose key isn't in any catalogue's `floor` map renders
+        // its key verbatim rather than blank.
+        const subject = make(ROOM_ANCHORS, OUTSIDE_ANCHORS, { 'Attic': { 'x': 50, 'y': 1 } });
+        subject.render({ devices: [{ roomName: 'Study', temperatureValue: 20, temperatureStale: false }] }, null);
+
+        expect(floorLabels().map((floor) => floor.textContent)).toEqual(['Attic']);
+    });
+
     it('defaults to the real anchors when none are given', () => {
         section = document.createElement('div');
         container = document.createElement('div');

@@ -127,19 +127,22 @@ describe('MetWeatherTable', () => {
     });
 
     // The JSON contract marks `temp` as required and `temp_feels_like` as
-    // non-empty, so these "Unknown" fallbacks are unreachable in production.
-    // They are also latent bugs: passing the string "Unknown" into a Temperature
-    // makes it call `"Unknown".toFixed(...)`, which throws. These tests pin that
-    // current behaviour (and keep branch coverage honest).
-    describe('unreachable "Unknown" fallbacks (latent bugs)', () => {
-        it('throws when temperature is missing', () => {
-            const { subject } = make();
-            expect(() => subject._renderUpdate({ humidity: 80, precipitation: 20 })).toThrow(TypeError);
+    // non-empty, so these "Unknown" fallbacks are unreachable in production. The
+    // "Unknown" string still reaches a Temperature, which now formats it through
+    // Intl.NumberFormat and gets a harmless "NaN" rather than throwing (the old
+    // `"Unknown".toFixed(...)` TypeError). These tests pin that (and keep branch
+    // coverage honest).
+    describe('unreachable "Unknown" fallbacks', () => {
+        it('renders a NaN temperature rather than throwing when temperature is missing', () => {
+            const { table, subject } = make();
+            expect(() => subject._renderUpdate({ humidity: 80, precipitation: 20 })).not.toThrow();
+            expect(table.textContent).toContain('NaN');
         });
 
-        it('throws when temp_feels_like is present but null', () => {
-            const { subject } = make();
-            expect(() => subject._renderUpdate({ temp: 10, temp_feels_like: null })).toThrow(TypeError);
+        it('renders a NaN feels-like rather than throwing when temp_feels_like is present but null', () => {
+            const { table, subject } = make();
+            expect(() => subject._renderUpdate({ temp: 10, temp_feels_like: null })).not.toThrow();
+            expect(table.textContent).toContain('NaN');
         });
     });
 

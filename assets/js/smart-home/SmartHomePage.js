@@ -7,6 +7,7 @@ import { averageTemperature, averageHumidity } from './averageReadings.js';
 import MetWeatherTable from './MetWeatherTable.js';
 import SmartHomeTemperatureTable from './SmartHomeTemperatureTable.js';
 import { smartThingsClimateUrl, metOfficeWeatherUrl } from '../apiConfig.js';
+import EN_GB from '../i18n/messages.en-GB.js';
 
 const MS_ONE_MIN = 60 * 1000;
 const MS_FIVE_MINS = 5 * MS_ONE_MIN;
@@ -16,6 +17,7 @@ export default class SmartHomePage {
     #floorPlan;
     #homeTemperatureTableObj;
     #weatherTableObj;
+    #catalogue;
 
     /**
      * @param {String}  statusDomSelector
@@ -24,18 +26,20 @@ export default class SmartHomePage {
      * @param {String}  homeTemperatureTableUpdateDomSelector
      * @param {String}  weatherTableDomSelector
      * @param {String}  weatherTableUpdateDomSelector
+     * @param {Object}  catalogue  message catalogue; defaults to en-GB.
      */
-    constructor(statusDomSelector, roomsSectionDomSelector, homeTemperatureTableDomSelector, homeTemperatureTableUpdateDomSelector, weatherTableDomSelector, weatherTableUpdateDomSelector) {
+    constructor(statusDomSelector, roomsSectionDomSelector, homeTemperatureTableDomSelector, homeTemperatureTableUpdateDomSelector, weatherTableDomSelector, weatherTableUpdateDomSelector, catalogue = EN_GB) {
+        this.#catalogue = catalogue;
         this.#statusDom = SmartHomePage.#find(statusDomSelector);
-        this.#floorPlan = new FloorPlan(SmartHomePage.#find(roomsSectionDomSelector));
+        this.#floorPlan = new FloorPlan(SmartHomePage.#find(roomsSectionDomSelector), undefined, undefined, undefined, catalogue);
 
         const homeTemperatureTableDom = SmartHomePage.#find(homeTemperatureTableDomSelector);
         const homeTemperatureTableUpdateDom = SmartHomePage.#find(homeTemperatureTableUpdateDomSelector);
-        this.#homeTemperatureTableObj = new SmartHomeTemperatureTable(homeTemperatureTableDom, homeTemperatureTableUpdateDom, smartThingsClimateUrl());
+        this.#homeTemperatureTableObj = new SmartHomeTemperatureTable(homeTemperatureTableDom, homeTemperatureTableUpdateDom, smartThingsClimateUrl(), catalogue);
 
         const weatherTableDom = SmartHomePage.#find(weatherTableDomSelector);
         const weatherTableUpdateDom = SmartHomePage.#find(weatherTableUpdateDomSelector);
-        this.#weatherTableObj = new MetWeatherTable(weatherTableDom, weatherTableUpdateDom, metOfficeWeatherUrl());
+        this.#weatherTableObj = new MetWeatherTable(weatherTableDom, weatherTableUpdateDom, metOfficeWeatherUrl(), catalogue);
     }
 
     /**
@@ -117,12 +121,13 @@ export default class SmartHomePage {
      * load) it falls back to the time on its own, so the line never empties.
      */
     #renderStatusLine(homeData, weatherData) {
-        const now = new Time();
-        const when = `It's currently ${now.formatUserFriendlyHour(false, true)} on ${now.formatUserFriendlyDate(true)} in my London home`;
+        const now = new Time(Date.now(), undefined, this.#catalogue);
+        const time = now.formatUserFriendlyHour(false, true);
+        const date = now.formatUserFriendlyDate(true);
 
         const insideTemp = homeData ? averageTemperature(homeData['devices'] ?? []) : null;
         if (!insideTemp || !weatherData) {
-            this.#statusDom.textContent = `${when}.`;
+            this.#statusDom.textContent = this.#catalogue.statusLine(time, date, null);
             return;
         }
 
@@ -131,17 +136,9 @@ export default class SmartHomePage {
             insideTemp.value,
             insideHumidity ? insideHumidity.value : null,
             weatherData['temp'],
-            weatherData['humidity'] ?? null
+            weatherData['humidity'] ?? null,
+            this.#catalogue
         )).format();
-        this.#statusDom.textContent = `${when}, where ${SmartHomePage.#lowercaseFirst(climate)}`;
-    }
-
-    /**
-     * @param {String} text
-     *
-     * @return {String}
-     */
-    static #lowercaseFirst(text) {
-        return text.charAt(0).toLowerCase() + text.slice(1);
+        this.#statusDom.textContent = this.#catalogue.statusLine(time, date, climate);
     }
 }

@@ -3,6 +3,7 @@
 import Temperature from './Temperature.js';
 import Humidity from './Humidity.js';
 import { averageTemperature, averageHumidity } from './averageReadings.js';
+import EN_GB from '../i18n/messages.en-GB.js';
 
 // Label anchor points as percentages of the floor-plan image, taken from the
 // centre of each red room name in floor-plan-annotated.svg.
@@ -36,6 +37,7 @@ export default class FloorPlan {
     #roomAnchors;
     #outsideAnchors;
     #floorAnchors;
+    #catalogue;
 
     /**
      * @param {HTMLElement} section The whole "Rooms" section, hidden until the
@@ -43,13 +45,16 @@ export default class FloorPlan {
      *                              descendant holds the plan and its labels.
      * @param {Object}      roomAnchors
      * @param {Array}       outsideAnchors
+     * @param {Object}      floorAnchors
+     * @param {Object}      catalogue  message catalogue; defaults to en-GB.
      */
-    constructor(section, roomAnchors = ROOM_ANCHORS, outsideAnchors = OUTSIDE_ANCHORS, floorAnchors = FLOOR_ANCHORS) {
+    constructor(section, roomAnchors = ROOM_ANCHORS, outsideAnchors = OUTSIDE_ANCHORS, floorAnchors = FLOOR_ANCHORS, catalogue = EN_GB) {
         this.#section = section;
         this.#dom = section.querySelector('.floor-plan');
         this.#roomAnchors = roomAnchors;
         this.#outsideAnchors = outsideAnchors;
         this.#floorAnchors = floorAnchors;
+        this.#catalogue = catalogue;
     }
 
     /**
@@ -71,8 +76,10 @@ export default class FloorPlan {
         }
 
         // Floor headings are part of the plan, so they show whenever it does.
+        // Their names are ours to translate (unlike room names, which come from
+        // SmartThings and double as data-join keys).
         for (const [name, anchor] of Object.entries(this.#floorAnchors)) {
-            this.#addFloorLabel(anchor, name);
+            this.#addFloorLabel(anchor, this.#catalogue.floor[name] ?? name);
         }
 
         if (Array.isArray(homeData['devices'])) {
@@ -87,7 +94,7 @@ export default class FloorPlan {
 
         if (weatherData && 'temp' in weatherData) {
             for (const anchor of this.#outsideAnchors) {
-                this.#addLabel(anchor, 'Outside', weatherData['temp'], false, weatherData['humidity'] ?? null, false);
+                this.#addLabel(anchor, this.#catalogue.floor.outside, weatherData['temp'], false, weatherData['humidity'] ?? null, false);
             }
         }
     }
@@ -172,9 +179,9 @@ export default class FloorPlan {
         label.style.top = anchor.y + '%';
 
         label.append(FloorPlan.#span(name, 'floor-plan__name'));
-        label.append(FloorPlan.#span('🌡️ ' + (new Temperature(tempC)).formatC(), tempStale ? 'floor-plan__temp floor-plan__temp--muted' : 'floor-plan__temp'));
+        label.append(FloorPlan.#span('🌡️ ' + (new Temperature(tempC, this.#catalogue)).formatC(), tempStale ? 'floor-plan__temp floor-plan__temp--muted' : 'floor-plan__temp'));
         if (humidityPercent !== null && humidityPercent !== undefined) {
-            label.append(FloorPlan.#span('💧 ' + (new Humidity(humidityPercent)).formatPercent(), humidityStale ? 'floor-plan__humidity floor-plan__humidity--muted' : 'floor-plan__humidity'));
+            label.append(FloorPlan.#span('💧 ' + (new Humidity(humidityPercent, this.#catalogue)).formatPercent(), humidityStale ? 'floor-plan__humidity floor-plan__humidity--muted' : 'floor-plan__humidity'));
         }
 
         this.#dom.append(label);

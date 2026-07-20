@@ -2,80 +2,112 @@
 
 import Temperature from './Temperature.js';
 import Humidity from './Humidity.js';
+import EN_GB from '../i18n/messages.en-GB.js';
 
 export default class ClimateSummary {
     #insideTempC;
     #insideHumidity;
     #outsideTempC;
     #outsideHumidity;
+    #catalogue;
 
     /**
      * @param {Number}      insideTempC
      * @param {Number|null} insideHumidity
      * @param {Number}      outsideTempC
      * @param {Number|null} outsideHumidity
+     * @param {Object}      catalogue  message catalogue; defaults to en-GB.
      */
-    constructor(insideTempC, insideHumidity, outsideTempC, outsideHumidity) {
+    constructor(insideTempC, insideHumidity, outsideTempC, outsideHumidity, catalogue = EN_GB) {
         this.#insideTempC = insideTempC;
         this.#insideHumidity = insideHumidity;
         this.#outsideTempC = outsideTempC;
         this.#outsideHumidity = outsideHumidity;
+        this.#catalogue = catalogue;
     }
 
     /**
      * Returns a sentence comparing the inside and outside climate, e.g.
      * "It's 1.6°c warmer inside (26.6°c inside, 25°c outside), and 10.2% more
-     * humid (52.8% inside, 42.6% outside)." Whole numbers drop their ".0".
+     * humid (52.8% inside, 42.6% outside)." All numbers are locale-formatted;
+     * this method computes the semantic facts and hands the wording to the
+     * catalogue.
      *
      * @returns {String}
      */
     format() {
-        let sentence = this.#formatTemperature();
+        const cat = this.#catalogue;
+        const inside = new Temperature(this.#insideTempC, cat);
+        const outside = new Temperature(this.#outsideTempC, cat);
+        const diff = new Temperature(Math.abs(this.#insideTempC - this.#outsideTempC), cat);
+        const temperaturesMatch = inside.formatC() === outside.formatC();
 
-        const humidity = this.#formatHumidity(this.#temperaturesMatch());
-        if (humidity !== null) {
-            sentence += `, ${this.#conjunction()} ${humidity}`;
+        const facts = {
+            temperaturesMatch,
+            insideTemp: inside.formatC(),
+            outsideTemp: outside.formatC(),
+            diffTemp: diff.formatC(),
+            warmer: this.#insideTempC > this.#outsideTempC,
+            humidity: this.#humidityFacts(temperaturesMatch),
+        };
+
+        return cat.climateSummary(facts);
+    }
+
+    /**
+     * The semantic humidity facts, or null when either humidity is absent (so
+     * the humidity clause is omitted entirely).
+     *
+     * @param {Boolean} temperaturesMatch
+     *
+     * @returns {Object|null}
+     */
+    #humidityFacts(temperaturesMatch) {
+        if (this.#insideHumidity === null || this.#insideHumidity === undefined
+            || this.#outsideHumidity === null || this.#outsideHumidity === undefined) {
+            return null;
         }
 
-        return sentence+'.';
+        const cat = this.#catalogue;
+        const inside = new Humidity(this.#insideHumidity, cat);
+        const outside = new Humidity(this.#outsideHumidity, cat);
+        const diff = new Humidity(Math.abs(this.#insideHumidity - this.#outsideHumidity), cat);
+
+        return {
+            match: inside.formatPercent(1) === outside.formatPercent(1),
+            inside: inside.formatPercent(1),
+            outside: outside.formatPercent(1),
+            diff: diff.formatPercent(1),
+            moreInside: this.#insideHumidity > this.#outsideHumidity,
+            contrast: this.#contrast(),
+        };
     }
 
     /**
-     * Whether the inside and outside temperatures round to the same display
-     * value, so the sentence collapses them to "N°c inside and outside".
+     * Whether the temperature and humidity pull in opposite directions, so the
+     * clauses read as a contrast ("but") rather than an accumulation ("and").
      *
-     * @returns {Boolean}
-     */
-    #temperaturesMatch() {
-        const inside = new Temperature(this.#insideTempC);
-        const outside = new Temperature(this.#outsideTempC);
-
-        return inside.formatC() === outside.formatC();
-    }
-
-    /**
-     * Chooses the conjunction joining the temperature and humidity clauses.
-     * "but" marks a contrast, and only ever appears when it's cold (below 18°c)
-     * or hot (above 25°c) out — a mild day in between reads as comfortable
-     * either way, so the temperature takes no side and it's always "and". When
-     * it is cold or hot, the temperature has a stance: warmer inside is welcome
-     * in the cold, cooler inside is welcome in the heat. The humidity is welcome
-     * when it's less humid inside. "but" when exactly one is welcome; otherwise
-     * (both or neither, or matching humidity) "and".
+     * "but" only ever appears when it's cold (below 18°c) or hot (above 25°c)
+     * out — a mild day in between reads as comfortable either way, so the
+     * temperature takes no side and it's always "and". When it is cold or hot,
+     * the temperature has a stance: warmer inside is welcome in the cold, cooler
+     * inside is welcome in the heat. The humidity is welcome when it's less humid
+     * inside. It's a contrast when exactly one is welcome; otherwise (both or
+     * neither, or matching humidity) it isn't.
      *
      * Only called when both humidities are present.
      *
-     * @returns {String}
+     * @returns {Boolean}
      */
-    #conjunction() {
-        const inside = new Humidity(this.#insideHumidity);
-        const outside = new Humidity(this.#outsideHumidity);
+    #contrast() {
+        const inside = new Humidity(this.#insideHumidity, this.#catalogue);
+        const outside = new Humidity(this.#outsideHumidity, this.#catalogue);
         if (inside.formatPercent(1) === outside.formatPercent(1)) {
-            return 'and';
+            return false;
         }
 
         if (this.#outsideTempC >= 18 && this.#outsideTempC <= 25) {
-            return 'and';
+            return false;
         }
 
         const temperatureGood = this.#outsideTempC < 18
@@ -83,68 +115,6 @@ export default class ClimateSummary {
             : this.#insideTempC < this.#outsideTempC;  // cooler inside is welcome when it's hot
         const humidityGood = this.#insideHumidity < this.#outsideHumidity;
 
-        return (temperatureGood !== humidityGood) ? 'but' : 'and';
-    }
-
-    /**
-     * @returns {String}
-     */
-    #formatTemperature() {
-        const inside = new Temperature(this.#insideTempC);
-        const outside = new Temperature(this.#outsideTempC);
-        const trim = ClimateSummary.#trimZero;
-
-        if (this.#temperaturesMatch()) {
-            return `It's ${trim(inside.formatC())} inside and outside`;
-        }
-
-        const diff = new Temperature(Math.abs(this.#insideTempC - this.#outsideTempC));
-        const warmerOrCooler = this.#insideTempC > this.#outsideTempC ? 'warmer' : 'cooler';
-
-        return `It's ${trim(diff.formatC())} ${warmerOrCooler} inside (${trim(inside.formatC())} inside, ${trim(outside.formatC())} outside)`;
-    }
-
-    /**
-     * @param {Boolean} temperaturesMatch
-     *
-     * @returns {String|null}
-     */
-    #formatHumidity(temperaturesMatch = false) {
-        if (this.#insideHumidity === null || this.#insideHumidity === undefined
-            || this.#outsideHumidity === null || this.#outsideHumidity === undefined) {
-            return null;
-        }
-
-        const inside = new Humidity(this.#insideHumidity);
-        const outside = new Humidity(this.#outsideHumidity);
-        const trim = ClimateSummary.#trimZero;
-
-        if (inside.formatPercent(1) === outside.formatPercent(1)) {
-            return `it's ${trim(inside.formatPercent(1))} humidity inside and outside`;
-        }
-
-        const diff = new Humidity(Math.abs(this.#insideHumidity - this.#outsideHumidity));
-        const moreOrLess = this.#insideHumidity > this.#outsideHumidity ? 'more' : 'less';
-
-        // When the temperatures match, the temperature clause reads "N°c inside
-        // and outside" and so names no side — leaving "more/less humid" with
-        // nothing to attach to. Name the side here so the comparison is clear.
-        // When they differ, the "warmer/cooler inside" clause already frames it
-        // as inside, so adding it again would be redundant.
-        const anchor = temperaturesMatch ? ' inside' : '';
-
-        return `${trim(diff.formatPercent(1))} ${moreOrLess} humid${anchor} (${trim(inside.formatPercent(1))} inside, ${trim(outside.formatPercent(1))} outside)`;
-    }
-
-    /**
-     * Drops a whole number's trailing ".0" for display, e.g. "4.0%" becomes
-     * "4%" and "25.0°c" becomes "25°c", while "3.9%" is left alone.
-     *
-     * @param {String} formatted
-     *
-     * @returns {String}
-     */
-    static #trimZero(formatted) {
-        return formatted.replace(/\.0(?=°c|%)/, '');
+        return temperatureGood !== humidityGood;
     }
 }

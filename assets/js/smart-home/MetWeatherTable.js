@@ -8,7 +8,7 @@ import { WEATHER_TYPES } from './weatherTypes.js';
 const MPH_TO_KMH = 1.609344;
 
 // A non-breaking space keeps each wind figure and its unit together on one line.
-const NBSP = ' ';
+const NBSP = String.fromCharCode(0xA0);
 
 const JSON_CONTRACT = {
     'humidity': {'type': 'number', 'keyRequired': true, 'cannotBeEmpty': true},
@@ -22,25 +22,6 @@ const JSON_CONTRACT = {
     'wind_speed': {'type': 'number', 'keyRequired': true, 'cannotBeEmpty': true},
 };
 
-const COMPASS_FRIENDLY_NAMES= {
-    'E': 'Easterly',
-    'ENE': 'East north easterly',
-    'ESE': 'East south easterly',
-    'N': 'Northerly',
-    'NE': 'North easterly',
-    'NNE': 'North north easterly',
-    'NNW': 'North north westerly',
-    'NW': 'North westerly',
-    'S': 'Southerly',
-    'SE': 'South easterly',
-    'SSE': 'South south easterly',
-    'SSW': 'South south westerly',
-    'SW': 'South westerly',
-    'W': 'Westerly',
-    'WNW': 'West north westerly',
-    'WSW': 'West south westerly',
-}
-
 export default class MetWeatherTable extends UpdatingKeyValuePairTable {
     /**
      * The title spans both columns (this table has no column headings), so it
@@ -51,7 +32,7 @@ export default class MetWeatherTable extends UpdatingKeyValuePairTable {
     _renderHeader() {
         // 🌤 (U+1F324) needs the U+FE0F variation selector to be a fully-qualified
         // emoji; without it it renders and copies inconsistently.
-        this._addHeaderRow(['🌤️ Outside weather forecast'], 2);
+        this._addHeaderRow([this._catalogue.weather.title], 2);
     }
 
     /**
@@ -59,9 +40,11 @@ export default class MetWeatherTable extends UpdatingKeyValuePairTable {
      * @param {Number|null} generatedAtUnix
      */
     _renderUpdate(data, generatedAtUnix = null) {
+        const weather = this._catalogue.weather;
+
         if ('valid_from' in data && 'valid_to' in data) {
-            const fromObj = new Time(data.valid_from * 1000);
-            const toObj = new Time(data.valid_to * 1000);
+            const fromObj = new Time(data.valid_from * 1000, undefined, this._catalogue);
+            const toObj = new Time(data.valid_to * 1000, undefined, this._catalogue);
             const timeFrom = fromObj.formatUserFriendlyHour();
             const timeTo = toObj.formatUserFriendlyHour();
 
@@ -70,11 +53,16 @@ export default class MetWeatherTable extends UpdatingKeyValuePairTable {
             // that straddles midnight (date) make them differ. Show the shared
             // "TZ on date" suffix once, after the second time, when they match;
             // otherwise show each time's own suffix.
-            const suffixFrom = `${fromObj.getTimezoneAbbreviation()} on ${fromObj.formatUserFriendlyDate()}`;
-            const suffixTo = `${toObj.getTimezoneAbbreviation()} on ${toObj.formatUserFriendlyDate()}`;
-            const range = suffixFrom === suffixTo
-                ? `${timeFrom} and ${timeTo} ${suffixTo}`
-                : `${timeFrom} ${suffixFrom} and ${timeTo} ${suffixTo}`;
+            const on = this._catalogue.time.onWord;
+            const and = weather.and;
+            const suffixFrom = `${fromObj.getTimezoneAbbreviation()}${on}${fromObj.formatUserFriendlyDate()}`;
+            const suffixTo = `${toObj.getTimezoneAbbreviation()}${on}${toObj.formatUserFriendlyDate()}`;
+            // Some locales' short month names end in a period (e.g. "juil.",
+            // "jul."); drop a trailing one so the sentence's own full stop
+            // doesn't double it up.
+            const range = (suffixFrom === suffixTo
+                ? `${timeFrom}${and}${timeTo} ${suffixTo}`
+                : `${timeFrom} ${suffixFrom}${and}${timeTo} ${suffixTo}`).replace(/\.$/, '');
 
             const metOfficeLink = document.createElement('a');
             metOfficeLink.href = 'https://www.metoffice.gov.uk/';
@@ -85,7 +73,7 @@ export default class MetWeatherTable extends UpdatingKeyValuePairTable {
             // `freshness` span is display:block), e.g.
             //   Source: Met Office forecast for between … on Fri 17th Jul.
             //   Updated 9 mins ago
-            const nodes = ['Source: ', metOfficeLink, ` forecast for between ${range}.`];
+            const nodes = [weather.sourcePrefix, metOfficeLink, `${weather.forecastBetween}${range}.`];
             const updated = this._updatedElement(generatedAtUnix);
             if (updated) {
                 nodes.push(updated);
@@ -94,24 +82,25 @@ export default class MetWeatherTable extends UpdatingKeyValuePairTable {
         }
 
         // The endpoint sends a stable enum-name token (e.g. "HEAVY_RAIN"); the
-        // emoji and (future-localised) name are resolved here. An unmapped token
-        // simply omits the row.
+        // emoji and (localised) name are resolved here. An unmapped token simply
+        // omits the row.
         if ('type_name' in data && WEATHER_TYPES[data.type_name]) {
-            const weatherType = WEATHER_TYPES[data.type_name];
-            this._addTableRow('Weather type', `${weatherType.emoji} ${weatherType.name}`);
+            const emoji = WEATHER_TYPES[data.type_name].emoji;
+            const name = this._catalogue.weatherTypeNames[data.type_name];
+            this._addTableRow(weather.weatherTypeLabel, `${emoji} ${name}`);
         }
 
-        this._addTempTableRow('🌡️ Temperature', ('temp' in data) ? data.temp : 'Unknown', null, false, false);
+        this._addTempTableRow(weather.temperatureLabel, ('temp' in data) ? data.temp : weather.unknown, null, false, false);
         if ('temp' in data && 'temp_feels_like' in data && data.temp !== data.temp_feels_like) {
-            this._addTempTableRow('Temperature feels like', data.temp_feels_like ?? 'Unknown');
+            this._addTempTableRow(weather.feelsLikeLabel, data.temp_feels_like ?? weather.unknown);
         }
 
-        const humidityDescription = ('humidity' in data) ? (new Humidity(data.humidity)).describe() : null;
-        this._addTableRow('💧 Humidity', ('humidity' in data) ? `${data.humidity}%` : 'Unknown', humidityDescription, null, false, false, true);
-        this._addTableRow('Chance of precipitation', ('precipitation' in data) ? `${data.precipitation}%` : 'Unknown');
+        const humidityDescription = ('humidity' in data) ? (new Humidity(data.humidity, this._catalogue)).describe() : null;
+        this._addTableRow(weather.humidityLabel, ('humidity' in data) ? this.#formatPercent(data.humidity) : weather.unknown, humidityDescription, null, false, false, true);
+        this._addTableRow(weather.precipitationLabel, ('precipitation' in data) ? this.#formatPercent(data.precipitation) : weather.unknown);
 
         if ('wind_speed' in data) {
-            this._addTableRow('Wind', this._formatWindSpeed(data), this._formatWindSpeedMph(data), null, false, false, true);
+            this._addTableRow(weather.windLabel, this._formatWindSpeed(data), this._formatWindSpeedMph(data), null, false, false, true);
         }
     }
 
@@ -120,20 +109,22 @@ export default class MetWeatherTable extends UpdatingKeyValuePairTable {
      * "Northerly 24.1 km/h (40.2 km/h gusts)".
      */
     _formatWindSpeed(data) {
+        const units = this._catalogue.units;
+        const weather = this._catalogue.weather;
         let wind = '';
-        if ('wind_direction' in data && COMPASS_FRIENDLY_NAMES[data.wind_direction]) {
-            wind += COMPASS_FRIENDLY_NAMES[data.wind_direction];
+        if ('wind_direction' in data && this._catalogue.compassNames[data.wind_direction]) {
+            wind += this._catalogue.compassNames[data.wind_direction];
             if ('wind_direction_degrees' in data) {
                 // Keep the direction and its degrees together on one line.
-                wind += `${NBSP}(${MetWeatherTable._round(data.wind_direction_degrees)}°)`;
+                wind += `${NBSP}(${this.#round(data.wind_direction_degrees)}${units.degree})`;
             }
             wind += ' ';
         }
         // wind_speed / wind_gust arrive as full-precision floats (converted m/s → mph);
         // convert to km/h and round to one decimal place for display.
-        wind += ('wind_speed' in data) ? `${MetWeatherTable._round(data.wind_speed * MPH_TO_KMH)}${NBSP}km/h` : '';
+        wind += ('wind_speed' in data) ? `${this.#round(data.wind_speed * MPH_TO_KMH)}${NBSP}${units.kmh}` : '';
         if ('wind_gust' in data && data.wind_gust > 0) {
-            wind += ` (${MetWeatherTable._round(data.wind_gust * MPH_TO_KMH)}${NBSP}km/h gusts)`;
+            wind += ` (${this.#round(data.wind_gust * MPH_TO_KMH)}${NBSP}${units.kmh} ${weather.gusts})`;
         }
         return wind;
     }
@@ -143,20 +134,37 @@ export default class MetWeatherTable extends UpdatingKeyValuePairTable {
      * "15 mph (25 mph gusts)".
      */
     _formatWindSpeedMph(data) {
-        let wind = ('wind_speed' in data) ? `${MetWeatherTable._round(data.wind_speed)}${NBSP}mph` : '';
+        const units = this._catalogue.units;
+        const weather = this._catalogue.weather;
+        let wind = ('wind_speed' in data) ? `${this.#round(data.wind_speed)}${NBSP}${units.mph}` : '';
         if ('wind_gust' in data && data.wind_gust > 0) {
-            wind += ` (${MetWeatherTable._round(data.wind_gust)}${NBSP}mph gusts)`;
+            wind += ` (${this.#round(data.wind_gust)}${NBSP}${units.mph} ${weather.gusts})`;
         }
         return wind;
     }
 
     /**
+     * Rounds to one decimal place and formats with the locale's decimal
+     * separator, e.g. "24.1" (en-GB) or "24,1" (de-DE/fr-FR).
+     *
      * @param {Number} value
      *
-     * @returns {Number}
+     * @returns {String}
      */
-    static _round(value) {
-        return Math.round(value * 10) / 10;
+    #round(value) {
+        return new Intl.NumberFormat(this._catalogue.locale, { maximumFractionDigits: 1 }).format(value);
+    }
+
+    /**
+     * A whole-number percentage with the locale's unit spacing, e.g. "80%" or
+     * "80 %".
+     *
+     * @param {Number} value
+     *
+     * @returns {String}
+     */
+    #formatPercent(value) {
+        return new Intl.NumberFormat(this._catalogue.locale, { maximumFractionDigits: 0 }).format(value) + this._catalogue.units.percent;
     }
 
     /**
