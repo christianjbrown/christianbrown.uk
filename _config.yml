@@ -12,6 +12,21 @@ header_location: "London, UK"
 
 google_analytics_id: "G-9Z9L9Z6QHQ"
 
+# Live-data API endpoints for the smart-home page (and the CV page's indoor-temp
+# link). Each API has a production URL (the Fastly CDN) and a dev URL (a locally
+# running Cloud Run function). The pages use production by default — even on a
+# local `jekyll serve` — so flip a `*_use_local` flag to true only while running
+# that function locally, then rebuild. Flags are per-API, so one endpoint can
+# point at localhost while the other stays on the CDN. When a flag is on, the
+# layout also whitelists that dev origin in the page's connect-src CSP.
+smart_home_smart_things_climate_url_prod: "https://cdn.christianbrown.uk/get-smartthings-climate"
+smart_home_smart_things_climate_url_dev: "http://127.0.0.1:8080"
+smart_home_smart_things_climate_use_local: false
+
+smart_home_met_office_weather_url_prod: "https://cdn.christianbrown.uk/get-met-office-weather"
+smart_home_met_office_weather_url_dev: "http://127.0.0.1:8081"
+smart_home_met_office_weather_use_local: false
+
 header_safari_tab_mask_color: "#5bbad5"
 header_theme_color: "#ffffff"
 header_msapplication_tile_color: "#ffffff"

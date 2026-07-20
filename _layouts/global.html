@@ -18,7 +18,7 @@ but maybe you're looking for an engineering manager? you've come to right place!
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.googletagmanager.com https://www.google-analytics.com; connect-src 'self' https://cdn.christianbrown.uk https://www.google-analytics.com https://region1.google-analytics.com; img-src 'self' data: https:; style-src 'self' 'unsafe-inline'; font-src 'self'; base-uri 'self'">
+        <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.googletagmanager.com https://www.google-analytics.com; connect-src 'self' https://cdn.christianbrown.uk https://www.google-analytics.com https://region1.google-analytics.com{% if site.smart_home_smart_things_climate_use_local %} {{ site.smart_home_smart_things_climate_url_dev }}{% endif %}{% if site.smart_home_met_office_weather_use_local %} {{ site.smart_home_met_office_weather_url_dev }}{% endif %}; img-src 'self' data: https:; style-src 'self' 'unsafe-inline'; font-src 'self'; base-uri 'self'">
         <!-- No frame-ancestors / X-Frame-Options here: both require an HTTP response header, which GitHub Pages can't send. Clickjacking protection would need a header-capable proxy in front of the apex. -->
         <title>{{ page.title }}</title>
         <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicon/apple-touch-icon.png">
@@ -29,6 +29,24 @@ but maybe you're looking for an engineering manager? you've come to right place!
              a flash of the wrong theme. Classic (not module) and render-blocking
              on purpose so it runs ahead of the CSS below. -->
         <script src="/assets/js/theme-init.js"></script>
+        <!-- Which live-data endpoints the page talks to, resolved at build time
+             from the smart_home_* keys in _config.yml. Inert data (not an
+             executable script), so it satisfies the strict script-src CSP; read
+             by /assets/js/apiConfig.js. -->
+        <script type="application/json" id="api-config">
+{
+    "smartThingsClimate": {
+        "urlProd": {{ site.smart_home_smart_things_climate_url_prod | jsonify }},
+        "urlDev": {{ site.smart_home_smart_things_climate_url_dev | jsonify }},
+        "useLocal": {{ site.smart_home_smart_things_climate_use_local | jsonify }}
+    },
+    "metOfficeWeather": {
+        "urlProd": {{ site.smart_home_met_office_weather_url_prod | jsonify }},
+        "urlDev": {{ site.smart_home_met_office_weather_url_dev | jsonify }},
+        "useLocal": {{ site.smart_home_met_office_weather_use_local | jsonify }}
+    }
+}
+        </script>
         {%- if layout.global.stylesheets -%}{%- for stylesheet in layout.global.stylesheets %}
         <link rel="stylesheet" href="{{ stylesheet }}">
         {%- endfor -%}{%- endif %}

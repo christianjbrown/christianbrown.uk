@@ -6,16 +6,7 @@ import FloorPlan from './FloorPlan.js';
 import { averageTemperature, averageHumidity } from './averageReadings.js';
 import MetWeatherTable from './MetWeatherTable.js';
 import SmartHomeTemperatureTable from './SmartHomeTemperatureTable.js';
-
-const isLocal = window.location.host === '127.0.0.1:4000';
-
-const API_SMART_HOME_TEMPS_URL_PROD = 'https://cdn.christianbrown.uk/get-smartthings-climate';
-const API_SMART_HOME_TEMPS_URL_DEV = 'http://127.0.0.1:8080';
-const API_SMART_HOME_TEMPS_URL = isLocal ? API_SMART_HOME_TEMPS_URL_DEV: API_SMART_HOME_TEMPS_URL_PROD;
-
-const API_MET_OFFICE_URL_PROD = 'https://cdn.christianbrown.uk/get-met-office-weather';
-const API_MET_OFFICE_URL_DEV = 'http://127.0.0.1:8081';
-const API_MET_OFFICE_URL = isLocal ? API_MET_OFFICE_URL_DEV: API_MET_OFFICE_URL_PROD;
+import { smartThingsClimateUrl, metOfficeWeatherUrl } from '../apiConfig.js';
 
 const MS_ONE_MIN = 60 * 1000;
 const MS_FIVE_MINS = 5 * MS_ONE_MIN;
@@ -40,11 +31,11 @@ export default class SmartHomePage {
 
         const homeTemperatureTableDom = SmartHomePage.#find(homeTemperatureTableDomSelector);
         const homeTemperatureTableUpdateDom = SmartHomePage.#find(homeTemperatureTableUpdateDomSelector);
-        this.#homeTemperatureTableObj = new SmartHomeTemperatureTable(homeTemperatureTableDom, homeTemperatureTableUpdateDom, API_SMART_HOME_TEMPS_URL);
+        this.#homeTemperatureTableObj = new SmartHomeTemperatureTable(homeTemperatureTableDom, homeTemperatureTableUpdateDom, smartThingsClimateUrl());
 
         const weatherTableDom = SmartHomePage.#find(weatherTableDomSelector);
         const weatherTableUpdateDom = SmartHomePage.#find(weatherTableUpdateDomSelector);
-        this.#weatherTableObj = new MetWeatherTable(weatherTableDom, weatherTableUpdateDom, API_MET_OFFICE_URL);
+        this.#weatherTableObj = new MetWeatherTable(weatherTableDom, weatherTableUpdateDom, metOfficeWeatherUrl());
     }
 
     /**

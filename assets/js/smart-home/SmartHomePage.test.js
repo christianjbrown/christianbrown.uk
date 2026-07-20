@@ -48,6 +48,26 @@ import SmartHomePage from './SmartHomePage.js';
 
 const SELECTORS = ['#status', '#rooms', '#home', '#home-u', '#weather', '#weather-u'];
 
+const SMART_THINGS_PROD_URL = 'https://cdn.christianbrown.uk/get-smartthings-climate';
+const SMART_THINGS_DEV_URL = 'http://127.0.0.1:8080';
+const MET_OFFICE_PROD_URL = 'https://cdn.christianbrown.uk/get-met-office-weather';
+const MET_OFFICE_DEV_URL = 'http://127.0.0.1:8081';
+
+// Stand in for the inert JSON config block the Jekyll layout renders into the
+// page (see apiConfig.js). Replaces any existing block so a test can flip a
+// per-api `useLocal` flag.
+function injectApiConfig({ smartThingsUseLocal = false, metOfficeUseLocal = false } = {}) {
+    document.getElementById('api-config')?.remove();
+    const el = document.createElement('script');
+    el.type = 'application/json';
+    el.id = 'api-config';
+    el.textContent = JSON.stringify({
+        smartThingsClimate: { urlProd: SMART_THINGS_PROD_URL, urlDev: SMART_THINGS_DEV_URL, useLocal: smartThingsUseLocal },
+        metOfficeWeather: { urlProd: MET_OFFICE_PROD_URL, urlDev: MET_OFFICE_DEV_URL, useLocal: metOfficeUseLocal },
+    });
+    document.body.appendChild(el);
+}
+
 function setupDom() {
     document.body.innerHTML = `
         <p id="status"></p>
@@ -56,6 +76,7 @@ function setupDom() {
         <span id="home-u"></span>
         <table id="weather"></table>
         <span id="weather-u"></span>`;
+    injectApiConfig();
 }
 
 function newPage() {
@@ -189,31 +210,28 @@ describe('SmartHomePage', () => {
     });
 
     describe('API URL selection', () => {
-        afterEach(() => {
-            vi.unstubAllGlobals();
-            vi.resetModules();
+        it('uses the prod cdn urls by default', () => {
+            // setupDom (beforeEach) injects the default config: both flags off.
+            newPage();
+
+            expect(homeTableArgs.at(-1)[2]).toBe(SMART_THINGS_PROD_URL);
+            expect(weatherTableArgs.at(-1)[2]).toBe(MET_OFFICE_PROD_URL);
         });
 
-        async function constructOn(host) {
-            vi.stubGlobal('location', { host });
-            vi.resetModules();
-            const { default: FreshSmartHomePage } = await import('./SmartHomePage.js');
-            setupDom();
-            new FreshSmartHomePage(...SELECTORS);
-        }
+        it('uses each api\'s dev url when its use-local flag is set', () => {
+            injectApiConfig({ smartThingsUseLocal: true, metOfficeUseLocal: true });
+            newPage();
 
-        it('uses the dev API urls on the local jekyll host', async () => {
-            await constructOn('127.0.0.1:4000');
-
-            expect(homeTableArgs.at(-1)[2]).toBe('http://127.0.0.1:8080');
-            expect(weatherTableArgs.at(-1)[2]).toBe('http://127.0.0.1:8081');
+            expect(homeTableArgs.at(-1)[2]).toBe(SMART_THINGS_DEV_URL);
+            expect(weatherTableArgs.at(-1)[2]).toBe(MET_OFFICE_DEV_URL);
         });
 
-        it('uses the prod cdn urls on any other host', async () => {
-            await constructOn('christianbrown.uk');
+        it('switches each api independently', () => {
+            injectApiConfig({ smartThingsUseLocal: true, metOfficeUseLocal: false });
+            newPage();
 
-            expect(homeTableArgs.at(-1)[2]).toBe('https://cdn.christianbrown.uk/get-smartthings-climate');
-            expect(weatherTableArgs.at(-1)[2]).toBe('https://cdn.christianbrown.uk/get-met-office-weather');
+            expect(homeTableArgs.at(-1)[2]).toBe(SMART_THINGS_DEV_URL);
+            expect(weatherTableArgs.at(-1)[2]).toBe(MET_OFFICE_PROD_URL);
         });
     });
 });

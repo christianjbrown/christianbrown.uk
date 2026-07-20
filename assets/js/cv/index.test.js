@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 
 const { ctor, updateMock } = vi.hoisted(() => ({
     ctor: vi.fn(),
@@ -16,10 +16,23 @@ vi.mock('./HomeTemperatureLink.js', () => ({
     },
 }));
 
-async function importOn(host) {
-    vi.stubGlobal('location', { host });
-    vi.resetModules();
-    return import('./index.js');
+import { initHomeTemperatureLink } from './index.js';
+
+const SMART_THINGS_PROD_URL = 'https://cdn.christianbrown.uk/get-smartthings-climate';
+const SMART_THINGS_DEV_URL = 'http://127.0.0.1:8080';
+
+// Stand in for the inert JSON config block the Jekyll layout renders into the
+// page (see apiConfig.js).
+function injectApiConfig({ smartThingsUseLocal = false } = {}) {
+    document.getElementById('api-config')?.remove();
+    const el = document.createElement('script');
+    el.type = 'application/json';
+    el.id = 'api-config';
+    el.textContent = JSON.stringify({
+        smartThingsClimate: { urlProd: SMART_THINGS_PROD_URL, urlDev: SMART_THINGS_DEV_URL, useLocal: smartThingsUseLocal },
+        metOfficeWeather: { urlProd: 'https://cdn.christianbrown.uk/get-met-office-weather', urlDev: 'http://127.0.0.1:8081', useLocal: false },
+    });
+    document.body.appendChild(el);
 }
 
 beforeEach(() => {
@@ -28,35 +41,30 @@ beforeEach(() => {
     document.body.innerHTML = '';
 });
 
-afterEach(() => {
-    vi.unstubAllGlobals();
-    vi.resetModules();
-});
-
 describe('cv/index.js', () => {
-    it('constructs the link with the prod url and updates it when the element exists', async () => {
+    it('constructs the link with the prod url and updates it when the element exists', () => {
         document.body.innerHTML = '<a id="cv-home-temp" hidden></a>';
-        const { initHomeTemperatureLink } = await importOn('christianbrown.uk');
+        injectApiConfig();
 
         initHomeTemperatureLink();
 
         expect(ctor).toHaveBeenCalledTimes(1);
         expect(ctor.mock.calls[0][0].id).toBe('cv-home-temp');
-        expect(ctor.mock.calls[0][1]).toBe('https://cdn.christianbrown.uk/get-smartthings-climate');
+        expect(ctor.mock.calls[0][1]).toBe(SMART_THINGS_PROD_URL);
         expect(updateMock).toHaveBeenCalledTimes(1);
     });
 
-    it('uses the dev url on the local jekyll host', async () => {
+    it('uses the dev url when the smart-things use-local flag is set', () => {
         document.body.innerHTML = '<a id="cv-home-temp" hidden></a>';
-        const { initHomeTemperatureLink } = await importOn('127.0.0.1:4000');
+        injectApiConfig({ smartThingsUseLocal: true });
 
         initHomeTemperatureLink();
 
-        expect(ctor.mock.calls[0][1]).toBe('http://127.0.0.1:8080');
+        expect(ctor.mock.calls[0][1]).toBe(SMART_THINGS_DEV_URL);
     });
 
-    it('does nothing when the element is absent', async () => {
-        const { initHomeTemperatureLink } = await importOn('christianbrown.uk');
+    it('does nothing when the element is absent', () => {
+        injectApiConfig();
 
         initHomeTemperatureLink();
 
