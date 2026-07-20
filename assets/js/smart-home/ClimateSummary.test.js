@@ -7,9 +7,11 @@ describe('ClimateSummary', () => {
             .toBe("It's 1.6°c warmer inside (26.6°c inside, 25°c outside), and 10.2% more humid (52.8% inside, 42.6% outside).");
     });
 
-    it('reports cooler inside and less humid inside', () => {
+    // Mild day (21°c out), drier inside -> the drier inside is a welcome
+    // contrast, so "but".
+    it('reports cooler inside but less humid inside on a mild day', () => {
         expect(new ClimateSummary(18, 40, 21, 55).format())
-            .toBe("It's 3°c cooler inside (18°c inside, 21°c outside), and 15% less humid (40% inside, 55% outside).");
+            .toBe("It's 3°c cooler inside (18°c inside, 21°c outside), but 15% less humid (40% inside, 55% outside).");
     });
 
     it('collapses matching temperatures and humidities', () => {
@@ -24,9 +26,10 @@ describe('ClimateSummary', () => {
             .toBe("It's 24°c inside and outside, and 4.8% more humid inside (40% inside, 35.2% outside).");
     });
 
-    it('names the side when temperatures match and it is less humid inside', () => {
+    // Mild day, drier inside -> a welcome contrast, so "but".
+    it('names the side when temperatures match but it is less humid inside', () => {
         expect(new ClimateSummary(24, 35.2, 24, 40).format())
-            .toBe("It's 24°c inside and outside, and 4.8% less humid inside (35.2% inside, 40% outside).");
+            .toBe("It's 24°c inside and outside, but 4.8% less humid inside (35.2% inside, 40% outside).");
     });
 
     it('treats values that round to the same display as matching', () => {
@@ -45,11 +48,12 @@ describe('ClimateSummary', () => {
     });
 
     describe('conjunction between the clauses', () => {
-        // "but" marks a contrast, and only on a cold (<18°c) or hot (>25°c) day
-        // — a mild day in between is always "and". When cold or hot, the
+        // "but" marks a contrast. On a cold (<18°c) or hot (>25°c) day the
         // temperature has a stance (warmer inside welcome in the cold, cooler
         // inside welcome in the heat); humidity is welcome when less humid
-        // inside. "but" when exactly one is welcome.
+        // inside; "but" when exactly one is welcome. On a mild day the
+        // temperature takes no side, but a drier inside is still a welcome
+        // contrast, so "but" when it's less humid inside, otherwise "and".
 
         // Hot out, cooler inside (welcome) + more humid inside (unwelcome) -> but.
         it('uses "but" when it is hot out, cooler inside, but more humid inside', () => {
@@ -70,11 +74,11 @@ describe('ClimateSummary', () => {
                 .toBe("It's 2°c warmer inside (32°c inside, 30°c outside), but 15% less humid (40% inside, 55% outside).");
         });
 
-        // A mild day is always "and", even when the humidity would otherwise
-        // contrast (here warmer inside + less humid inside).
-        it('uses "and" on a mild day even when the humidity would contrast', () => {
+        // Mild day, drier inside -> "but" (the drier inside is a welcome
+        // contrast even though the temperature takes no side).
+        it('uses "but" on a mild day when it is less humid inside', () => {
             expect(new ClimateSummary(24.6, 34.9, 23.6, 43).format())
-                .toBe("It's 1°c warmer inside (24.6°c inside, 23.6°c outside), and 8.1% less humid (34.9% inside, 43% outside).");
+                .toBe("It's 1°c warmer inside (24.6°c inside, 23.6°c outside), but 8.1% less humid (34.9% inside, 43% outside).");
         });
 
         // Both welcome: cooler when hot out AND less humid inside -> no contrast -> and.

@@ -87,13 +87,15 @@ export default class ClimateSummary {
      * Whether the temperature and humidity pull in opposite directions, so the
      * clauses read as a contrast ("but") rather than an accumulation ("and").
      *
-     * "but" only ever appears when it's cold (below 18°c) or hot (above 25°c)
-     * out — a mild day in between reads as comfortable either way, so the
-     * temperature takes no side and it's always "and". When it is cold or hot,
-     * the temperature has a stance: warmer inside is welcome in the cold, cooler
-     * inside is welcome in the heat. The humidity is welcome when it's less humid
-     * inside. It's a contrast when exactly one is welcome; otherwise (both or
-     * neither, or matching humidity) it isn't.
+     * On a cold (below 18°c) or hot (above 25°c) day the temperature has a
+     * stance: warmer inside is welcome in the cold, cooler inside is welcome in
+     * the heat. The humidity is welcome when it's less humid inside. It's a
+     * contrast when exactly one is welcome; otherwise (both or neither, or
+     * matching humidity) it isn't.
+     *
+     * On a mild day in between the temperature takes no side, but a drier inside
+     * is still a welcome contrast: "but" when it's less humid inside, otherwise
+     * "and".
      *
      * Only called when both humidities are present.
      *
@@ -106,14 +108,15 @@ export default class ClimateSummary {
             return false;
         }
 
+        const humidityGood = this.#insideHumidity < this.#outsideHumidity;
+
         if (this.#outsideTempC >= 18 && this.#outsideTempC <= 25) {
-            return false;
+            return humidityGood;
         }
 
         const temperatureGood = this.#outsideTempC < 18
             ? this.#insideTempC > this.#outsideTempC   // warmer inside is welcome when it's cold
             : this.#insideTempC < this.#outsideTempC;  // cooler inside is welcome when it's hot
-        const humidityGood = this.#insideHumidity < this.#outsideHumidity;
 
         return temperatureGood !== humidityGood;
     }
