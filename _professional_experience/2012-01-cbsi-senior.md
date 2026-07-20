@@ -2,7 +2,7 @@
 position: "Senior Software Engineer"
 organisation: "CBS Interactive"
 organisation_extra: "Broadcast giant CBS acquired CNET Networks in 2008 to form CBS Interactive."
-location: "Singapore and London, UK"
+location: ["Singapore", "London, UK"]
 start: "2012-01"
 end:   "2016-03"
 organisation_logo: "cbsinteractive.svg"

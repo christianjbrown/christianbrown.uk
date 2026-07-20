@@ -1,7 +1,7 @@
 ---
 position: "Senior Engineering Manager"
 organisation: "eBay"
-location: "London, UK"
+location: ["London, UK"]
 start: "2022-08"
 end:   "2026-04"
 organisation_logo: "ebay.svg"

@@ -2,7 +2,7 @@
 position: "Engineering Manager"
 organisation: "Red Ventures"
 organisation_extra: "After Red Ventures acquired some brands from ViacomCBS."
-location: "London, UK"
+location: ["London, UK"]
 start: "2021-08"
 end:   "2022-07"
 organisation_logo: "rv.svg"

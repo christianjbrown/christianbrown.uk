@@ -2,7 +2,7 @@
 position: "Associate Programmer"
 organisation: "iiNet"
 organisation_extra: "Australia's second-largest ISP, now a wholly-owned subsidiary of TPG Telecom."
-location: "Perth, Australia"
+location: ["Perth, Australia"]
 start: "2006-07"
 end:   "2007-08"
 organisation_logo: "iinet.svg"
