@@ -26,8 +26,7 @@ describe('MetWeatherTable', () => {
             valid_to: 1_700_003_600,
             temp: 10,
             temp_feels_like: 8,
-            type_string: 'Cloudy',
-            type_emoji: '☁️',
+            type_name: 'CLOUDY',
             humidity: 80,
             precipitation: 20,
             wind_speed: 15,
@@ -156,10 +155,23 @@ describe('MetWeatherTable', () => {
 
     it('renders Weather type before the temperature', () => {
         const { table, subject } = make();
-        subject._renderUpdate({ temp: 10, type_string: 'Cloudy', type_emoji: '☁️', humidity: 50, precipitation: 0, wind_speed: 5 });
+        subject._renderUpdate({ temp: 10, type_name: 'CLOUDY', humidity: 50, precipitation: 0, wind_speed: 5 });
         const text = table.textContent;
         expect(text).toContain('Weather type');
         expect(text.indexOf('Weather type')).toBeLessThan(text.indexOf('Temperature'));
+    });
+
+    it('maps a known type_name token to its emoji and name', () => {
+        const { table, subject } = make();
+        subject._renderUpdate({ temp: 10, type_name: 'HEAVY_RAIN', humidity: 50, precipitation: 0, wind_speed: 5 });
+        expect(table.textContent).toContain('Weather type');
+        expect(table.textContent).toContain('🌧 Heavy rain');
+    });
+
+    it('omits the Weather type row for an unmapped type_name token', () => {
+        const { table, subject } = make();
+        subject._renderUpdate({ temp: 10, type_name: 'NOT_USED', humidity: 50, precipitation: 0, wind_speed: 5 });
+        expect(table.textContent).not.toContain('Weather type');
     });
 
     it('shows a muted humidity description under the value', () => {
