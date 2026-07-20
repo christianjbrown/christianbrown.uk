@@ -212,6 +212,7 @@ export default {
         educationHeading: 'Uddannelse',
         downloadCv: 'Hent CV',
         downloadIconAlt: 'Downloadikon',
+        now: 'nu',
 
         homeTempLink(temperature) {
             return `🏠 ${temperature} hjemme`;

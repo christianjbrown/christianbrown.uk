@@ -14,7 +14,7 @@
                                 <div class="cv-experience-job">
                                     <div class="cv-experience-job-metadata">
                                         <div class="cv-experience-job-metadata-title"><h4>{{ experience.position }}</h4></div>
-                                        <div class="cv-experience-job-metadata-dates">{{ experience.date_range }}</div>
+                                        <div class="cv-experience-job-metadata-dates"{% if experience.start %} data-start="{{ experience.start }}" data-end="{{ experience.end }}"{% endif %}>{%- if experience.start -%}{%- include cv-date-range.html start=experience.start end=experience.end -%}{%- endif -%}</div>
                                     </div>
                                     <div class="cv-experience-job-description">
                                         {{ experience.content | replace: "

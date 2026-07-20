@@ -208,6 +208,7 @@ export default {
         educationHeading: 'Formación',
         downloadCv: 'Descargar CV',
         downloadIconAlt: 'Icono de descarga',
+        now: 'actualidad',
 
         homeTempLink(temperature) {
             return `🏠 ${temperature} en casa`;

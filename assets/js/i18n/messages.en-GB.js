@@ -281,6 +281,7 @@ export default {
         educationHeading: 'Education',
         downloadCv: 'Download CV',
         downloadIconAlt: 'Download icon',
+        now: 'now',
 
         /**
          * The header's live indoor-temperature link, e.g. "🏠 21°c at home".

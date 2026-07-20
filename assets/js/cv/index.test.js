@@ -16,7 +16,7 @@ vi.mock('./HomeTemperatureLink.js', () => ({
     },
 }));
 
-import { initHomeTemperatureLink, localiseHeadings, localiseHomepage } from './index.js';
+import { initHomeTemperatureLink, localiseHeadings, localiseHomepage, localiseDateRanges } from './index.js';
 import DE_DE from '../i18n/messages.de-DE.js';
 
 const SMART_THINGS_PROD_URL = 'https://cdn.christianbrown.uk/get-smartthings-climate';
@@ -95,6 +95,26 @@ describe('cv/index.js', () => {
 
         it('does nothing when the headings are absent', () => {
             expect(() => localiseHeadings(DE_DE)).not.toThrow();
+        });
+    });
+
+    describe('localiseDateRanges', () => {
+        it('localises each date range from its data-start/data-end', () => {
+            document.body.innerHTML = `
+                <div class="cv-experience-job-metadata-dates" data-start="2022-08" data-end="2026-04">Aug 2022 – Apr 2026 (3 years 9 months)</div>
+                <div class="cv-experience-job-metadata-dates" data-start="2001" data-end="2006">2001 – 2006 (6 years)</div>`;
+
+            localiseDateRanges(DE_DE);
+
+            const dates = [...document.querySelectorAll('.cv-experience-job-metadata-dates')].map((el) => el.textContent);
+            expect(dates[0]).toContain('3 Jahre');
+            expect(dates[0]).toContain('9 Monate');
+            expect(dates[1]).toBe('2001 – 2006 (6 Jahre)');
+        });
+
+        it('does nothing when there are no date ranges', () => {
+            document.body.innerHTML = '';
+            expect(() => localiseDateRanges(DE_DE)).not.toThrow();
         });
     });
 
