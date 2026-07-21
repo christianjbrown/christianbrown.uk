@@ -4,7 +4,7 @@ import Cookie from './Cookie.js';
 
 // The locales the site can render. en-GB is the default and the reference the
 // others mirror. Order matters only in that the first supported match wins.
-export const SUPPORTED_LOCALES = ['en-GB', 'de-DE', 'fr-FR', 'da-DK', 'es-ES', 'pt-PT', 'zh-CN', 'zh-TW'];
+export const SUPPORTED_LOCALES = ['en-GB', 'de-DE', 'fr-FR', 'nl-NL', 'da-DK', 'es-ES', 'pt-PT', 'zh-CN', 'zh-TW'];
 export const DEFAULT_LOCALE = 'en-GB';
 
 // Session cookie remembering an explicit ?locale= choice, so it carries across

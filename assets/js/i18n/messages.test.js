@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { catalogueFor, EN_GB } from './catalogue.js';
 import DE_DE from './messages.de-DE.js';
 import FR_FR from './messages.fr-FR.js';
+import NL_NL from './messages.nl-NL.js';
 import DA_DK from './messages.da-DK.js';
 import ES_ES from './messages.es-ES.js';
 import PT_PT from './messages.pt-PT.js';
@@ -16,6 +17,7 @@ describe('catalogueFor', () => {
     it('returns the catalogue for a supported locale', () => {
         expect(catalogueFor('de-DE')).toBe(DE_DE);
         expect(catalogueFor('fr-FR')).toBe(FR_FR);
+        expect(catalogueFor('nl-NL')).toBe(NL_NL);
         expect(catalogueFor('da-DK')).toBe(DA_DK);
         expect(catalogueFor('es-ES')).toBe(ES_ES);
         expect(catalogueFor('pt-PT')).toBe(PT_PT);
@@ -161,6 +163,73 @@ describe('fr-FR catalogue', () => {
 
     it('builds the home-temperature link', () => {
         expect(cat.cv.homeTempLink('21 °C')).toBe('🏠 21 °C à la maison');
+    });
+});
+
+describe('nl-NL catalogue', () => {
+    const cat = NL_NL;
+
+    describe('climateSummary', () => {
+        it('reports warmer inside and more humid inside (no contrast)', () => {
+            expect(cat.climateSummary({
+                temperaturesMatch: false, insideTemp: '26,6 °C', outsideTemp: '25 °C', diffTemp: '1,6 °C', warmer: true,
+                humidity: { match: false, inside: '52,8 %', outside: '42,6 %', diff: '10,2 %', moreInside: true, contrast: false },
+            })).toBe('Binnen is het 1,6 °C warmer (26,6 °C binnen, 25 °C buiten), en het is 10,2 % vochtiger (52,8 % binnen, 42,6 % buiten).');
+        });
+
+        it('reports cooler inside and less humid inside with a contrast', () => {
+            expect(cat.climateSummary({
+                temperaturesMatch: false, insideTemp: '27 °C', outsideTemp: '30 °C', diffTemp: '3 °C', warmer: false,
+                humidity: { match: false, inside: '40 %', outside: '55 %', diff: '15 %', moreInside: false, contrast: true },
+            })).toBe('Binnen is het 3 °C kouder (27 °C binnen, 30 °C buiten), maar het is 15 % droger (40 % binnen, 55 % buiten).');
+        });
+
+        it('collapses matching temperatures and humidities', () => {
+            expect(cat.climateSummary({
+                temperaturesMatch: true, insideTemp: '26 °C', outsideTemp: '26 °C', diffTemp: '0 °C', warmer: false,
+                humidity: { match: true, inside: '53 %', outside: '53 %', diff: '0 %', moreInside: false, contrast: false },
+            })).toBe('Binnen en buiten is het 26 °C, en de luchtvochtigheid is binnen en buiten 53 %.');
+        });
+
+        it('names the inside side when temperatures match but humidity differs', () => {
+            expect(cat.climateSummary({
+                temperaturesMatch: true, insideTemp: '24 °C', outsideTemp: '24 °C', diffTemp: '0 °C', warmer: false,
+                humidity: { match: false, inside: '40 %', outside: '35,2 %', diff: '4,8 %', moreInside: true, contrast: false },
+            })).toBe('Binnen en buiten is het 24 °C, en het is 4,8 % vochtiger binnen (40 % binnen, 35,2 % buiten).');
+        });
+
+        it('omits the humidity clause when it is absent', () => {
+            expect(cat.climateSummary({
+                temperaturesMatch: false, insideTemp: '26,6 °C', outsideTemp: '25 °C', diffTemp: '1,6 °C', warmer: true, humidity: null,
+            })).toBe('Binnen is het 1,6 °C warmer (26,6 °C binnen, 25 °C buiten).');
+        });
+    });
+
+    describe('statusLine', () => {
+        it('appends the climate as a second sentence', () => {
+            expect(cat.statusLine('21:55 GMT+1', 'maandag 20 juli', 'Binnen is het warm.'))
+                .toBe('Het is nu 21:55 GMT+1 op maandag 20 juli in mijn huis in Londen. Binnen is het warm.');
+        });
+
+        it('shows just the time when there is no climate', () => {
+            expect(cat.statusLine('21:55 GMT+1', 'maandag 20 juli', null))
+                .toBe('Het is nu 21:55 GMT+1 op maandag 20 juli in mijn huis in Londen.');
+        });
+    });
+
+    it('formats relative time with Intl', () => {
+        const label = cat.time.relativeTime(5, 'minute');
+        expect(label).toContain('5');
+        expect(label.toLowerCase()).toContain('geleden');
+    });
+
+    it('formats dates with Intl', () => {
+        expect(cat.time.formatDate(DATE, 'UTC', false)).toMatch(/20.*nov/);
+        expect(cat.time.formatDate(DATE, 'UTC', true)).toMatch(/maandag.*20.*november/);
+    });
+
+    it('builds the home-temperature link', () => {
+        expect(cat.cv.homeTempLink('21 °C')).toBe('🏠 21 °C thuis');
     });
 });
 
