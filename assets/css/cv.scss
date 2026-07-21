@@ -245,6 +245,8 @@ div.container {
             width: 64rem;
         }
     }
-    max-width: 65rem;
+    // Container max-width is shared with every page via global.scss
+    // (div.container { max-width: 1140px }); the CV inherits it rather than
+    // capping narrower. Print width stays pinned by `main` above (64rem).
     width: 100%;
 }

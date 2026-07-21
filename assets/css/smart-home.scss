@@ -12,6 +12,18 @@
     color: $colour-grayscale-1;
 }
 
+// The homepage header is taller than this page's because it carries a nav row
+// (live home-temp / Download CV / LinkedIn) that this page has no equivalent of.
+// The avatar is vertically centred in the header (global.scss), so against this
+// page's shorter header it sits ~10px higher and appears to jump when navigating
+// between the two pages via the avatar home-link. Reserve the same header height
+// the homepage uses so the shared avatar sits identically on both. The selector
+// mirrors global.scss's own high-specificity `.header-data` rule so this wins by
+// loading after global.css; only min-height is overridden (flex-grow is kept).
+html body div.container header div.header-data {
+    min-height: 9.75rem;
+}
+
 main {
     p {
         font-size: 1.1rem;
