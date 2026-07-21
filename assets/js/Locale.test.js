@@ -35,6 +35,8 @@ describe('Locale', () => {
             expect(matchLocale('de')).toBe('de-DE');
             expect(matchLocale('de-AT')).toBe('de-DE');
             expect(matchLocale('fr-CA')).toBe('fr-FR');
+            expect(matchLocale('nl')).toBe('nl-NL');
+            expect(matchLocale('nl-BE')).toBe('nl-NL');
             expect(matchLocale('da')).toBe('da-DK');
             expect(matchLocale('da-DK')).toBe('da-DK');
         });

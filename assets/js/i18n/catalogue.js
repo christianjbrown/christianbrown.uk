@@ -3,6 +3,7 @@
 import EN_GB from './messages.en-GB.js';
 import DE_DE from './messages.de-DE.js';
 import FR_FR from './messages.fr-FR.js';
+import NL_NL from './messages.nl-NL.js';
 import DA_DK from './messages.da-DK.js';
 import ES_ES from './messages.es-ES.js';
 import PT_PT from './messages.pt-PT.js';
@@ -13,6 +14,7 @@ const CATALOGUES = {
     'en-GB': EN_GB,
     'de-DE': DE_DE,
     'fr-FR': FR_FR,
+    'nl-NL': NL_NL,
     'da-DK': DA_DK,
     'es-ES': ES_ES,
     'pt-PT': PT_PT,
