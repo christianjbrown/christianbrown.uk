@@ -244,6 +244,11 @@ html {
             display: flex;
             flex-direction: column;
             margin: auto;
+            // Desktop content width (matches Bootstrap's lg container). Shared by
+            // every page using the global layout (CV + smart-home); fluid below
+            // the cap. Overrides Bootstrap's responsive `.container` steps via the
+            // higher `div.container` specificity.
+            max-width: 960px;
             padding-bottom: 10rem;
             padding-top: 3rem;
             row-gap: 0.625rem;
