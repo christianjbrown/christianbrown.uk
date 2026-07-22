@@ -125,24 +125,26 @@ export default class MetWeatherTable extends UpdatingKeyValuePairTable {
         this._addTableRow(weather.humidityLabel, ('humidity' in data) ? this.#formatPercent(data.humidity) : weather.unknown, humidityDescription, null, false, false, true, LABEL_EMOJI.humidity);
         this._addTableRow(weather.precipitationLabel, ('precipitation' in data) ? this.#formatPercent(data.precipitation) : weather.unknown, null, null, false, false, false, LABEL_EMOJI.precipitation);
 
-        // UV index and visibility are only sent when the Met Office reports them
-        // for the hour (the key is absent, not null), so both rows are optional.
+        if ('wind_speed' in data) {
+            this._addTableRow(weather.windLabel, this._formatWindSpeed(data), this._formatWindSpeedMph(data), null, false, false, true, LABEL_EMOJI.wind);
+        }
+
+        // Dew point, pressure, UV index and visibility are only sent when the Met
+        // Office reports them for the hour (the key is absent, not null), so each
+        // row is optional. They trail the felt-conditions rows as a block of
+        // secondary instrument readings.
+        if ('dew_point' in data) {
+            this._addTableRow(weather.dewPointLabel, (new Temperature(data.dew_point, this._catalogue)).formatC(), null, null, false, false, false, LABEL_EMOJI.dewPoint);
+        }
+        if ('pressure' in data) {
+            this._addTableRow(weather.pressureLabel, this.#formatPressure(data.pressure), null, null, false, false, false, LABEL_EMOJI.pressure);
+        }
         if ('uv_index' in data) {
             const uv = new UvIndex(data.uv_index, this._catalogue);
             this._addTableRow(weather.uvIndexLabel, uv.format(), uv.describe(), null, false, false, true, LABEL_EMOJI.uvIndex);
         }
         if ('visibility' in data) {
             this._addTableRow(weather.visibilityLabel, new Visibility(data.visibility, this._catalogue).format(), null, null, false, false, false, LABEL_EMOJI.visibility);
-        }
-        if ('pressure' in data) {
-            this._addTableRow(weather.pressureLabel, this.#formatPressure(data.pressure), null, null, false, false, false, LABEL_EMOJI.pressure);
-        }
-        if ('dew_point' in data) {
-            this._addTableRow(weather.dewPointLabel, (new Temperature(data.dew_point, this._catalogue)).formatC(), null, null, false, false, false, LABEL_EMOJI.dewPoint);
-        }
-
-        if ('wind_speed' in data) {
-            this._addTableRow(weather.windLabel, this._formatWindSpeed(data), this._formatWindSpeedMph(data), null, false, false, true, LABEL_EMOJI.wind);
         }
     }
 
