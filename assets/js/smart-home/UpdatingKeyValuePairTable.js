@@ -84,15 +84,16 @@ export default class UpdatingKeyValuePairTable {
      * @param {Number}         timestamp
      * @param {Boolean}        stale
      * @param {Boolean}        important
+     * @param {String|null}    icon  a decorative emoji rendered before the name.
      */
-    _addTempTableRow(name, degreesC, timestamp = null, stale = false, important = false) {
+    _addTempTableRow(name, degreesC, timestamp = null, stale = false, important = false, icon = null) {
         const tempObj = new Temperature(degreesC, this._catalogue);
         let timeDiff = null;
         if (timestamp) {
             const timeObj = new Time(timestamp * 1000, undefined, this._catalogue);
             timeDiff = timeObj.formatTimeAgo();
         }
-        this._addTableRow(name, tempObj.formatC(), tempObj.formatF(), timeDiff, stale, important, true);
+        this._addTableRow(name, tempObj.formatC(), tempObj.formatF(), timeDiff, stale, important, true, icon);
     }
 
     /**
@@ -193,12 +194,15 @@ export default class UpdatingKeyValuePairTable {
      * @param {Boolean} muted
      * @param {Boolean} importantPrimary
      * @param {Boolean} secondaryMuted
+     * @param {String|null} primaryIcon  a decorative emoji rendered before the
+     *                                   primary key, styled as a theme-aware
+     *                                   monochrome glyph.
      */
-    _addTableRow(primaryKey, primaryValue, secondaryValue = null, secondaryKey = null, muted = false, importantPrimary = false, secondaryMuted = muted) {
+    _addTableRow(primaryKey, primaryValue, secondaryValue = null, secondaryKey = null, muted = false, importantPrimary = false, secondaryMuted = muted, primaryIcon = null) {
         const row = this.#domTable.insertRow();
 
         const columnLeft = row.insertCell();
-        columnLeft.append(UpdatingKeyValuePairTable.#getTableCellSpan(primaryKey, 'primary', muted, importantPrimary));
+        columnLeft.append(UpdatingKeyValuePairTable.#getTableCellSpan(primaryKey, 'primary', muted, importantPrimary, false, primaryIcon));
         if (secondaryKey) {
             columnLeft.append(UpdatingKeyValuePairTable.#getTableCellSpan(secondaryKey, 'secondary', secondaryMuted, false));
         }
@@ -284,10 +288,14 @@ export default class UpdatingKeyValuePairTable {
      * @param {Boolean} muted
      * @param {Boolean} important
      * @param {Boolean} title
+     * @param {String|null} icon  a decorative emoji rendered before the text in
+     *                            its own span, so CSS can render it as a
+     *                            theme-aware monochrome glyph. Marked
+     *                            aria-hidden — the adjacent text is the label.
      *
      * @returns {HTMLSpanElement}
      */
-    static #getTableCellSpan(text, variant, muted, important, title = false) {
+    static #getTableCellSpan(text, variant, muted, important, title = false, icon = null) {
         const base = 'smart-home-table__value';
         const classes = [base, `${base}--${variant}`];
         if (title) {
@@ -301,6 +309,13 @@ export default class UpdatingKeyValuePairTable {
 
         const span = document.createElement('span');
         span.setAttribute('class', classes.join(' '));
+        if (icon) {
+            const iconSpan = document.createElement('span');
+            iconSpan.setAttribute('class', `${base}-icon`);
+            iconSpan.setAttribute('aria-hidden', 'true');
+            iconSpan.append(icon);
+            span.append(iconSpan);
+        }
         span.append(text);
 
         return span;

@@ -12,6 +12,17 @@ const MPH_TO_KMH = 1.609344;
 // A non-breaking space keeps each wind figure and its unit together on one line.
 const NBSP = String.fromCharCode(0xA0);
 
+// Decorative row-label emoji live here, not in the message catalogues — they're
+// the same in every locale and are rendered as theme-aware monochrome glyphs
+// (see `.smart-home-table__value-icon` in smart-home.scss). The table title's
+// 🌤 emoji stays a full-colour catalogue string, so it isn't listed here.
+const LABEL_EMOJI = {
+    temperature: '🌡️',
+    humidity: '💧',
+    uvIndex: '☀️',
+    visibility: '👁️',
+};
+
 const JSON_CONTRACT = {
     'humidity': {'type': 'number', 'keyRequired': true, 'cannotBeEmpty': true},
     'precipitation': {'type': 'number', 'keyRequired': true, 'cannotBeEmpty': true},
@@ -34,8 +45,10 @@ export default class MetWeatherTable extends UpdatingKeyValuePairTable {
      * inside table's.
      */
     _renderHeader() {
-        // 🌤 (U+1F324) needs the U+FE0F variation selector to be a fully-qualified
-        // emoji; without it it renders and copies inconsistently.
+        // The title keeps its full-colour 🌤 emoji as part of the catalogue
+        // string (🌤 U+1F324 needs its U+FE0F variation selector to be
+        // fully-qualified, or it renders and copies inconsistently). Only the
+        // row labels below are monochrome.
         this._addHeaderRow([this._catalogue.weather.title], 2);
     }
 
@@ -94,23 +107,23 @@ export default class MetWeatherTable extends UpdatingKeyValuePairTable {
             this._addTableRow(weather.weatherTypeLabel, `${emoji} ${name}`);
         }
 
-        this._addTempTableRow(weather.temperatureLabel, ('temp' in data) ? data.temp : weather.unknown, null, false, false);
+        this._addTempTableRow(weather.temperatureLabel, ('temp' in data) ? data.temp : weather.unknown, null, false, false, LABEL_EMOJI.temperature);
         if ('temp' in data && 'temp_feels_like' in data && data.temp !== data.temp_feels_like) {
             this._addTempTableRow(weather.feelsLikeLabel, data.temp_feels_like ?? weather.unknown);
         }
 
         const humidityDescription = ('humidity' in data) ? (new Humidity(data.humidity, this._catalogue)).describe() : null;
-        this._addTableRow(weather.humidityLabel, ('humidity' in data) ? this.#formatPercent(data.humidity) : weather.unknown, humidityDescription, null, false, false, true);
+        this._addTableRow(weather.humidityLabel, ('humidity' in data) ? this.#formatPercent(data.humidity) : weather.unknown, humidityDescription, null, false, false, true, LABEL_EMOJI.humidity);
         this._addTableRow(weather.precipitationLabel, ('precipitation' in data) ? this.#formatPercent(data.precipitation) : weather.unknown);
 
         // UV index and visibility are only sent when the Met Office reports them
         // for the hour (the key is absent, not null), so both rows are optional.
         if ('uv_index' in data) {
             const uv = new UvIndex(data.uv_index, this._catalogue);
-            this._addTableRow(weather.uvIndexLabel, uv.format(), uv.describe(), null, false, false, true);
+            this._addTableRow(weather.uvIndexLabel, uv.format(), uv.describe(), null, false, false, true, LABEL_EMOJI.uvIndex);
         }
         if ('visibility' in data) {
-            this._addTableRow(weather.visibilityLabel, new Visibility(data.visibility, this._catalogue).format());
+            this._addTableRow(weather.visibilityLabel, new Visibility(data.visibility, this._catalogue).format(), null, null, false, false, false, LABEL_EMOJI.visibility);
         }
 
         if ('wind_speed' in data) {

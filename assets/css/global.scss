@@ -56,6 +56,10 @@ $danger: $colour-error-fixed;
     // (black text→white, white boxes→dark) while hue-rotate(180deg) spins the
     // hues back so the brand blues/reds/greens survive. A no-op in light mode.
     --c-how-it-works-filter: none;
+    // Decorative row-label emoji in the weather table are flattened to a
+    // monochrome glyph that follows the theme: brightness(0) makes a silhouette,
+    // invert lifts it to a soft dark grey on light / soft white on dark.
+    --c-table-icon-filter: brightness(0) invert(0.25);
 }
 
 @mixin theme-dark {
@@ -77,6 +81,7 @@ $danger: $colour-error-fixed;
     --c-location-icon-filter: grayscale(100%) brightness(1.9);
     --c-floorplan-filter: invert(0.88);
     --c-how-it-works-filter: invert(1) hue-rotate(180deg);
+    --c-table-icon-filter: brightness(0) invert(0.9);
 }
 
 // Light by default. Dark applies when the OS prefers it — unless the visitor

@@ -129,6 +129,16 @@ main {
         }
     }
 
+    // Decorative emoji rendered before a row label (aria-hidden). Flattened to a
+    // theme-aware monochrome glyph — soft dark grey on light, soft white on dark
+    // — so the labels read as quiet icons rather than full-colour emoji. The
+    // margin restores the gap the old literal "emoji " prefix provided.
+    &__value-icon {
+        display: inline-block;
+        margin-right: 0.4em;
+        filter: var(--c-table-icon-filter);
+    }
+
     &__error {
         color: $colour-error;
     }
