@@ -33,6 +33,8 @@ export default {
         kmh: 'km/h',
         mph: 'mph',
         degree: '°',
+        km: 'km',
+        metre: 'm',
     },
 
     // Subjective one-word humidity descriptors, keyed by the stable token
@@ -45,6 +47,16 @@ export default {
         UNCOMFORTABLE: 'Uncomfortable',
         OPPRESSIVE: 'Oppressive',
         MISERABLE: 'Miserable',
+    },
+
+    // UV-index exposure-risk bands, keyed by the stable token UvIndex.describe()
+    // derives from the index (WHO / Met Office scale).
+    uvDescriptions: {
+        LOW: 'Low',
+        MODERATE: 'Moderate',
+        HIGH: 'High',
+        VERY_HIGH: 'Very high',
+        EXTREME: 'Extreme',
     },
 
     // Met Office weather-type display names, keyed by the stable enum-name token
@@ -127,6 +139,8 @@ export default {
         feelsLikeLabel: 'Temperature feels like',
         humidityLabel: '💧 Humidity',
         precipitationLabel: 'Chance of precipitation',
+        uvIndexLabel: '☀️ UV index',
+        visibilityLabel: '👁️ Visibility',
         windLabel: 'Wind',
         unknown: 'Unknown',
         gusts: 'gusts',
