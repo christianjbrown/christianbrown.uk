@@ -189,6 +189,35 @@ describe('MetWeatherTable', () => {
         }
     });
 
+    it('shows the UV index with a muted band description when present', () => {
+        const { table, subject } = make();
+        subject._renderUpdate({ temp: 10, humidity: 50, precipitation: 0, uv_index: 7, wind_speed: 5 });
+        expect(table.textContent).toContain('UV index');
+        expect(table.textContent).toContain('7');
+        // UV 7 falls in the "high" band.
+        expect(table.textContent).toContain('High');
+    });
+
+    it('shows visibility, switching to kilometres above a kilometre', () => {
+        const { table, subject } = make();
+        subject._renderUpdate({ temp: 10, humidity: 50, precipitation: 0, visibility: 12000, wind_speed: 5 });
+        expect(table.textContent).toContain('Visibility');
+        expect(stripNbsp(table.textContent)).toContain('12 km');
+    });
+
+    it('shows visibility in metres below a kilometre', () => {
+        const { table, subject } = make();
+        subject._renderUpdate({ temp: 10, humidity: 50, precipitation: 0, visibility: 800, wind_speed: 5 });
+        expect(stripNbsp(table.textContent)).toContain('800 m');
+    });
+
+    it('omits the UV and visibility rows when their keys are absent', () => {
+        const { table, subject } = make();
+        subject._renderUpdate({ temp: 10, humidity: 50, precipitation: 0, wind_speed: 5 });
+        expect(table.textContent).not.toContain('UV index');
+        expect(table.textContent).not.toContain('Visibility');
+    });
+
     it('shows the timezone on each time when the window spans a clock change', () => {
         const { updateSpan, subject } = make();
         // 00:30–01:30 UTC on 26 Oct 2025 straddles the BST→GMT fall-back, so the

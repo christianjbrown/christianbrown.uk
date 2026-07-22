@@ -20,6 +20,8 @@ export default {
         kmh: 'km/t',
         mph: 'mph',
         degree: '°',
+        km: 'km',
+        metre: 'm',
     },
 
     humidityDescriptions: {
@@ -30,6 +32,14 @@ export default {
         UNCOMFORTABLE: 'Ubehagelig',
         OPPRESSIVE: 'Trykkende',
         MISERABLE: 'Ulidelig',
+    },
+
+    uvDescriptions: {
+        LOW: 'Lav',
+        MODERATE: 'Moderat',
+        HIGH: 'Høj',
+        VERY_HIGH: 'Meget høj',
+        EXTREME: 'Ekstrem',
     },
 
     weatherTypeNames: {
@@ -120,6 +130,8 @@ export default {
         feelsLikeLabel: 'Føles som',
         humidityLabel: '💧 Luftfugtighed',
         precipitationLabel: 'Nedbørssandsynlighed',
+        uvIndexLabel: '☀️ UV-indeks',
+        visibilityLabel: '👁️ Sigtbarhed',
         windLabel: 'Vind',
         unknown: 'Ukendt',
         gusts: 'vindstød',

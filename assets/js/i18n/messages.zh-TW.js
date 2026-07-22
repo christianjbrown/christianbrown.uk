@@ -21,6 +21,8 @@ export default {
         kmh: 'km/h',
         mph: 'mph',
         degree: '°',
+        km: 'km',
+        metre: 'm',
     },
 
     humidityDescriptions: {
@@ -31,6 +33,14 @@ export default {
         UNCOMFORTABLE: '不適',
         OPPRESSIVE: '悶熱',
         MISERABLE: '難受',
+    },
+
+    uvDescriptions: {
+        LOW: '低',
+        MODERATE: '中等',
+        HIGH: '高',
+        VERY_HIGH: '很高',
+        EXTREME: '極高',
     },
 
     weatherTypeNames: {
@@ -119,6 +129,8 @@ export default {
         feelsLikeLabel: '體感溫度',
         humidityLabel: '💧 濕度',
         precipitationLabel: '降水機率',
+        uvIndexLabel: '☀️ 紫外線指數',
+        visibilityLabel: '👁️ 能見度',
         windLabel: '風',
         unknown: '未知',
         gusts: '陣風',
