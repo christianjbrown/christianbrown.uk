@@ -199,9 +199,9 @@ describe('MetWeatherTable', () => {
 
         const icons = [...table.querySelectorAll('.smart-home-table__value-icon')];
         // Every labelled row carries one icon, in render order: weather type,
-        // temperature, feels-like, humidity, precipitation, UV, visibility,
-        // pressure, dew point, wind.
-        expect(icons.map((el) => el.textContent)).toEqual(['🗂️', '🌡️', '🥵', '💧', '☔', '☀️', '👁️', '⏲️', '💦', '💨']);
+        // temperature, feels-like, humidity, precipitation, wind, then the
+        // secondary instrument block — dew point, pressure, UV, visibility.
+        expect(icons.map((el) => el.textContent)).toEqual(['🗂️', '🌡️', '🥵', '💧', '☔', '💨', '💦', '⏲️', '☀️', '👁️']);
         for (const icon of icons) {
             expect(icon.getAttribute('aria-hidden')).toBe('true');
         }
