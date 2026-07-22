@@ -22,6 +22,7 @@ export default {
         degree: '°',
         km: 'km',
         metre: 'm',
+        hpa: 'hPa',
     },
 
     humidityDescriptions: {
@@ -130,6 +131,8 @@ export default {
         precipitationLabel: '降水概率',
         uvIndexLabel: '紫外线指数',
         visibilityLabel: '能见度',
+        pressureLabel: '气压',
+        dewPointLabel: '露点',
         windLabel: '风',
         unknown: '未知',
         gusts: '阵风',

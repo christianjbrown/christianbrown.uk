@@ -193,13 +193,15 @@ describe('MetWeatherTable', () => {
         const { table, subject } = make();
         subject._renderUpdate({
             type_name: 'CLOUDY', temp: 10, temp_feels_like: 8, humidity: 50,
-            precipitation: 20, uv_index: 7, visibility: 12000, wind_speed: 5,
+            precipitation: 20, uv_index: 7, visibility: 12000, pressure: 1013.2,
+            dew_point: 12.5, wind_speed: 5,
         });
 
         const icons = [...table.querySelectorAll('.smart-home-table__value-icon')];
         // Every labelled row carries one icon, in render order: weather type,
-        // temperature, feels-like, humidity, precipitation, UV, visibility, wind.
-        expect(icons.map((el) => el.textContent)).toEqual(['🗂️', '🌡️', '🥵', '💧', '☔', '☀️', '👁️', '💨']);
+        // temperature, feels-like, humidity, precipitation, UV, visibility,
+        // pressure, dew point, wind.
+        expect(icons.map((el) => el.textContent)).toEqual(['🗂️', '🌡️', '🥵', '💧', '☔', '☀️', '👁️', '⏲️', '💦', '💨']);
         for (const icon of icons) {
             expect(icon.getAttribute('aria-hidden')).toBe('true');
         }
@@ -243,6 +245,24 @@ describe('MetWeatherTable', () => {
         subject._renderUpdate({ temp: 10, humidity: 50, precipitation: 0, wind_speed: 5 });
         expect(table.textContent).not.toContain('UV index');
         expect(table.textContent).not.toContain('Visibility');
+    });
+
+    it('shows pressure in whole hectopascals and dew point in °C when present', () => {
+        const { table, subject } = make();
+        subject._renderUpdate({ temp: 10, humidity: 50, precipitation: 0, pressure: 1013.2, dew_point: 12.47, wind_speed: 5 });
+        expect(table.textContent).toContain('Pressure');
+        // Rounded to a whole hPa.
+        expect(stripNbsp(table.textContent)).toContain('1013 hPa');
+        expect(table.textContent).toContain('Dew point');
+        // Dew point formats through Temperature (one decimal place).
+        expect(table.textContent).toContain('12.5°c');
+    });
+
+    it('omits the pressure and dew-point rows when their keys are absent', () => {
+        const { table, subject } = make();
+        subject._renderUpdate({ temp: 10, humidity: 50, precipitation: 0, wind_speed: 5 });
+        expect(table.textContent).not.toContain('Pressure');
+        expect(table.textContent).not.toContain('Dew point');
     });
 
     it('shows the timezone on each time when the window spans a clock change', () => {

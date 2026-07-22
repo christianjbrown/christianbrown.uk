@@ -2,6 +2,7 @@
 
 import UpdatingKeyValuePairTable from './UpdatingKeyValuePairTable.js';
 import Humidity from './Humidity.js';
+import Temperature from './Temperature.js';
 import Time from './Time.js';
 import UvIndex from './UvIndex.js';
 import Visibility from './Visibility.js';
@@ -24,12 +25,16 @@ const LABEL_EMOJI = {
     precipitation: '☔',
     uvIndex: '☀️',
     visibility: '👁️',
+    pressure: '⏲️',
+    dewPoint: '💦',
     wind: '💨',
 };
 
 const JSON_CONTRACT = {
+    'dew_point': {'type': 'number', 'keyRequired': false, 'cannotBeEmpty': true},
     'humidity': {'type': 'number', 'keyRequired': true, 'cannotBeEmpty': true},
     'precipitation': {'type': 'number', 'keyRequired': true, 'cannotBeEmpty': true},
+    'pressure': {'type': 'number', 'keyRequired': false, 'cannotBeEmpty': true},
     'temp': {'type': 'number', 'keyRequired': true, 'cannotBeEmpty': true},
     'temp_feels_like': {'type': 'number', 'keyRequired': false, 'cannotBeEmpty': true},
     'type_name': {'type': 'string', 'keyRequired': false, 'cannotBeEmpty': true},
@@ -129,6 +134,12 @@ export default class MetWeatherTable extends UpdatingKeyValuePairTable {
         if ('visibility' in data) {
             this._addTableRow(weather.visibilityLabel, new Visibility(data.visibility, this._catalogue).format(), null, null, false, false, false, LABEL_EMOJI.visibility);
         }
+        if ('pressure' in data) {
+            this._addTableRow(weather.pressureLabel, this.#formatPressure(data.pressure), null, null, false, false, false, LABEL_EMOJI.pressure);
+        }
+        if ('dew_point' in data) {
+            this._addTableRow(weather.dewPointLabel, (new Temperature(data.dew_point, this._catalogue)).formatC(), null, null, false, false, false, LABEL_EMOJI.dewPoint);
+        }
 
         if ('wind_speed' in data) {
             this._addTableRow(weather.windLabel, this._formatWindSpeed(data), this._formatWindSpeedMph(data), null, false, false, true, LABEL_EMOJI.wind);
@@ -196,6 +207,19 @@ export default class MetWeatherTable extends UpdatingKeyValuePairTable {
      */
     #formatPercent(value) {
         return new Intl.NumberFormat(this._catalogue.locale, { maximumFractionDigits: 0 }).format(value) + this._catalogue.units.percent;
+    }
+
+    /**
+     * A whole-hectopascal pressure with a non-breaking space before its unit,
+     * e.g. "1013 hPa".
+     *
+     * @param {Number} value
+     *
+     * @returns {String}
+     */
+    #formatPressure(value) {
+        // No thousands separator — pressure reads as "1013 hPa", not "1,013 hPa".
+        return new Intl.NumberFormat(this._catalogue.locale, { maximumFractionDigits: 0, useGrouping: false }).format(value) + NBSP + this._catalogue.units.hpa;
     }
 
     /**
