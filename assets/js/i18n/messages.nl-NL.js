@@ -20,6 +20,8 @@ export default {
         kmh: 'km/h',
         mph: 'mph',
         degree: '°',
+        km: 'km',
+        metre: 'm',
     },
 
     humidityDescriptions: {
@@ -30,6 +32,14 @@ export default {
         UNCOMFORTABLE: 'Oncomfortabel',
         OPPRESSIVE: 'Drukkend',
         MISERABLE: 'Ondraaglijk',
+    },
+
+    uvDescriptions: {
+        LOW: 'Laag',
+        MODERATE: 'Matig',
+        HIGH: 'Hoog',
+        VERY_HIGH: 'Zeer hoog',
+        EXTREME: 'Extreem',
     },
 
     weatherTypeNames: {
@@ -120,6 +130,8 @@ export default {
         feelsLikeLabel: 'Gevoelstemperatuur',
         humidityLabel: '💧 Luchtvochtigheid',
         precipitationLabel: 'Kans op neerslag',
+        uvIndexLabel: '☀️ UV-index',
+        visibilityLabel: '👁️ Zicht',
         windLabel: 'Wind',
         unknown: 'Onbekend',
         gusts: 'windstoten',

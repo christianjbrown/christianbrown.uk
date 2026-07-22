@@ -20,6 +20,8 @@ export default {
         kmh: 'km/h',
         mph: 'mph',
         degree: '°',
+        km: 'km',
+        metre: 'm',
     },
 
     humidityDescriptions: {
@@ -30,6 +32,14 @@ export default {
         UNCOMFORTABLE: 'Unangenehm',
         OPPRESSIVE: 'Drückend',
         MISERABLE: 'Unerträglich',
+    },
+
+    uvDescriptions: {
+        LOW: 'Niedrig',
+        MODERATE: 'Mäßig',
+        HIGH: 'Hoch',
+        VERY_HIGH: 'Sehr hoch',
+        EXTREME: 'Extrem',
     },
 
     weatherTypeNames: {
@@ -120,6 +130,8 @@ export default {
         feelsLikeLabel: 'Gefühlte Temperatur',
         humidityLabel: '💧 Luftfeuchtigkeit',
         precipitationLabel: 'Niederschlagswahrscheinlichkeit',
+        uvIndexLabel: '☀️ UV-Index',
+        visibilityLabel: '👁️ Sichtweite',
         windLabel: 'Wind',
         unknown: 'Unbekannt',
         gusts: 'Böen',
