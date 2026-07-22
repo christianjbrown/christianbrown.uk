@@ -35,6 +35,7 @@ export default {
         degree: '°',
         km: 'km',
         metre: 'm',
+        hpa: 'hPa',
     },
 
     // Subjective one-word humidity descriptors, keyed by the stable token
@@ -141,6 +142,8 @@ export default {
         precipitationLabel: 'Chance of precipitation',
         uvIndexLabel: 'UV index',
         visibilityLabel: 'Visibility',
+        pressureLabel: 'Pressure',
+        dewPointLabel: 'Dew point',
         windLabel: 'Wind',
         unknown: 'Unknown',
         gusts: 'gusts',

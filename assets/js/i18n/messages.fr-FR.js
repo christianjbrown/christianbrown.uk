@@ -23,6 +23,7 @@ export default {
         degree: '°',
         km: 'km',
         metre: 'm',
+        hpa: 'hPa',
     },
 
     humidityDescriptions: {
@@ -133,6 +134,8 @@ export default {
         precipitationLabel: 'Probabilité de précipitations',
         uvIndexLabel: 'Indice UV',
         visibilityLabel: 'Visibilité',
+        pressureLabel: 'Pression',
+        dewPointLabel: 'Point de rosée',
         windLabel: 'Vent',
         unknown: 'Inconnu',
         gusts: 'rafales',

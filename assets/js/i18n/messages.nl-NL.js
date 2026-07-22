@@ -22,6 +22,7 @@ export default {
         degree: '°',
         km: 'km',
         metre: 'm',
+        hpa: 'hPa',
     },
 
     humidityDescriptions: {
@@ -132,6 +133,8 @@ export default {
         precipitationLabel: 'Kans op neerslag',
         uvIndexLabel: 'UV-index',
         visibilityLabel: 'Zicht',
+        pressureLabel: 'Luchtdruk',
+        dewPointLabel: 'Dauwpunt',
         windLabel: 'Wind',
         unknown: 'Onbekend',
         gusts: 'windstoten',
