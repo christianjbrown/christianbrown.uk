@@ -13,23 +13,6 @@ const MPH_TO_KMH = 1.609344;
 // A non-breaking space keeps each wind figure and its unit together on one line.
 const NBSP = String.fromCharCode(0xA0);
 
-// Decorative row-label emoji live here, not in the message catalogues — they're
-// the same in every locale and are rendered as theme-aware monochrome glyphs
-// (see `.smart-home-table__value-icon` in smart-home.scss). The table title's
-// 🌤 emoji stays a full-colour catalogue string, so it isn't listed here.
-const LABEL_EMOJI = {
-    weatherType: '🗂️',
-    temperature: '🌡️',
-    feelsLike: '🥵',
-    humidity: '💧',
-    precipitation: '☔',
-    uvIndex: '☀️',
-    visibility: '👁️',
-    pressure: '⏲️',
-    dewPoint: '💦',
-    wind: '💨',
-};
-
 const JSON_CONTRACT = {
     'dew_point': {'type': 'number', 'keyRequired': false, 'cannotBeEmpty': true},
     'humidity': {'type': 'number', 'keyRequired': true, 'cannotBeEmpty': true},
@@ -56,8 +39,7 @@ export default class MetWeatherTable extends UpdatingKeyValuePairTable {
     _renderHeader() {
         // The title keeps its full-colour 🌤 emoji as part of the catalogue
         // string (🌤 U+1F324 needs its U+FE0F variation selector to be
-        // fully-qualified, or it renders and copies inconsistently). Only the
-        // row labels below are monochrome.
+        // fully-qualified, or it renders and copies inconsistently).
         this._addHeaderRow([this._catalogue.weather.title], 2);
     }
 
@@ -113,20 +95,20 @@ export default class MetWeatherTable extends UpdatingKeyValuePairTable {
         if ('type_name' in data && WEATHER_TYPES[data.type_name]) {
             const emoji = WEATHER_TYPES[data.type_name].emoji;
             const name = this._catalogue.weatherTypeNames[data.type_name];
-            this._addTableRow(weather.weatherTypeLabel, `${emoji} ${name}`, null, null, false, false, false, LABEL_EMOJI.weatherType);
+            this._addTableRow(weather.weatherTypeLabel, `${emoji} ${name}`, null, null, false, false, false);
         }
 
-        this._addTempTableRow(weather.temperatureLabel, ('temp' in data) ? data.temp : weather.unknown, null, false, false, LABEL_EMOJI.temperature);
+        this._addTempTableRow(weather.temperatureLabel, ('temp' in data) ? data.temp : weather.unknown, null, false, false);
         if ('temp' in data && 'temp_feels_like' in data && data.temp !== data.temp_feels_like) {
-            this._addTempTableRow(weather.feelsLikeLabel, data.temp_feels_like ?? weather.unknown, null, false, false, LABEL_EMOJI.feelsLike);
+            this._addTempTableRow(weather.feelsLikeLabel, data.temp_feels_like ?? weather.unknown, null, false, false);
         }
 
         const humidityDescription = ('humidity' in data) ? (new Humidity(data.humidity, this._catalogue)).describe() : null;
-        this._addTableRow(weather.humidityLabel, ('humidity' in data) ? this.#formatPercent(data.humidity) : weather.unknown, humidityDescription, null, false, false, true, LABEL_EMOJI.humidity);
-        this._addTableRow(weather.precipitationLabel, ('precipitation' in data) ? this.#formatPercent(data.precipitation) : weather.unknown, null, null, false, false, false, LABEL_EMOJI.precipitation);
+        this._addTableRow(weather.humidityLabel, ('humidity' in data) ? this.#formatPercent(data.humidity) : weather.unknown, humidityDescription, null, false, false, true);
+        this._addTableRow(weather.precipitationLabel, ('precipitation' in data) ? this.#formatPercent(data.precipitation) : weather.unknown, null, null, false, false, false);
 
         if ('wind_speed' in data) {
-            this._addTableRow(weather.windLabel, this._formatWindSpeed(data), this._formatWindSpeedMph(data), null, false, false, true, LABEL_EMOJI.wind);
+            this._addTableRow(weather.windLabel, this._formatWindSpeed(data), this._formatWindSpeedMph(data), null, false, false, true);
         }
 
         // Dew point, pressure, UV index and visibility are only sent when the Met
@@ -134,17 +116,17 @@ export default class MetWeatherTable extends UpdatingKeyValuePairTable {
         // row is optional. They trail the felt-conditions rows as a block of
         // secondary instrument readings.
         if ('dew_point' in data) {
-            this._addTableRow(weather.dewPointLabel, (new Temperature(data.dew_point, this._catalogue)).formatC(), null, null, false, false, false, LABEL_EMOJI.dewPoint);
+            this._addTableRow(weather.dewPointLabel, (new Temperature(data.dew_point, this._catalogue)).formatC(), null, null, false, false, false);
         }
         if ('pressure' in data) {
-            this._addTableRow(weather.pressureLabel, this.#formatPressure(data.pressure), null, null, false, false, false, LABEL_EMOJI.pressure);
+            this._addTableRow(weather.pressureLabel, this.#formatPressure(data.pressure), null, null, false, false, false);
         }
         if ('uv_index' in data) {
             const uv = new UvIndex(data.uv_index, this._catalogue);
-            this._addTableRow(weather.uvIndexLabel, uv.format(), uv.describe(), null, false, false, true, LABEL_EMOJI.uvIndex);
+            this._addTableRow(weather.uvIndexLabel, uv.format(), uv.describe(), null, false, false, true);
         }
         if ('visibility' in data) {
-            this._addTableRow(weather.visibilityLabel, new Visibility(data.visibility, this._catalogue).format(), null, null, false, false, false, LABEL_EMOJI.visibility);
+            this._addTableRow(weather.visibilityLabel, new Visibility(data.visibility, this._catalogue).format(), null, null, false, false, false);
         }
     }
 
