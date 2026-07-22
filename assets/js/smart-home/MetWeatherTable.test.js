@@ -189,7 +189,7 @@ describe('MetWeatherTable', () => {
         }
     });
 
-    it('renders each row label with its aria-hidden monochrome icon span, in order', () => {
+    it('gives every row label plain text with no icon span', () => {
         const { table, subject } = make();
         subject._renderUpdate({
             type_name: 'CLOUDY', temp: 10, temp_feels_like: 8, humidity: 50,
@@ -197,17 +197,12 @@ describe('MetWeatherTable', () => {
             dew_point: 12.5, wind_speed: 5,
         });
 
-        const icons = [...table.querySelectorAll('.smart-home-table__value-icon')];
-        // Every labelled row carries one icon, in render order: weather type,
-        // temperature, feels-like, humidity, precipitation, wind, then the
-        // secondary instrument block — dew point, pressure, UV, visibility.
-        expect(icons.map((el) => el.textContent)).toEqual(['🗂️', '🌡️', '🥵', '💧', '☔', '💨', '💦', '⏲️', '☀️', '👁️']);
-        for (const icon of icons) {
-            expect(icon.getAttribute('aria-hidden')).toBe('true');
-        }
-        // The emoji is a sibling span, not part of the label text node.
-        const humidityIcon = icons.find((el) => el.textContent === '💧');
-        expect(humidityIcon.parentElement.textContent).toBe('💧Humidity');
+        // Row labels no longer carry a decorative icon span.
+        expect(table.querySelectorAll('.smart-home-table__value-icon')).toHaveLength(0);
+        // The label is just its text, with no leading emoji.
+        const humidityLabel = [...table.querySelectorAll('.smart-home-table__value--primary')]
+            .find((el) => el.textContent === 'Humidity');
+        expect(humidityLabel).toBeDefined();
     });
 
     it('keeps the title emoji as full-colour inline text (no icon span)', () => {

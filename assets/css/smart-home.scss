@@ -129,16 +129,6 @@ main {
         }
     }
 
-    // Decorative emoji rendered before a row label (aria-hidden). Desaturated to
-    // greyscale (see --c-table-icon-filter) so the labels read as quiet icons
-    // rather than full-colour emoji, while keeping their internal detail. The
-    // margin restores the gap the old literal "emoji " prefix provided.
-    &__value-icon {
-        display: inline-block;
-        margin-right: 0.4em;
-        filter: var(--c-table-icon-filter);
-    }
-
     &__error {
         color: $colour-error;
     }
