@@ -46,11 +46,11 @@ describe('MetWeatherTable', () => {
         // "TZ on date" suffix is shown once, after the second time, and the
         // source line ends with a full stop.
         expect(updateSpan.textContent).toMatch(/ and .* GMT on \w{3} \d+\w{2} \w{3}\.$/);
-        expect(table.textContent).toContain('🌡️ Temperature');
+        expect(table.textContent).toContain('Temperature');
         expect(table.textContent).toContain('Temperature feels like');
         expect(table.textContent).toContain('Weather type');
         expect(table.textContent).toContain('☁️ Cloudy');
-        expect(table.textContent).toContain('💧 Humidity');
+        expect(table.textContent).toContain('Humidity');
         expect(table.textContent).toContain('80%');
         // Humidity of 80% reads as "Miserable".
         expect(table.textContent).toContain('Miserable');
@@ -187,6 +187,30 @@ describe('MetWeatherTable', () => {
             subject._renderUpdate({ temp: 10, humidity, precipitation: 0, wind_speed: 5 });
             expect(table.textContent).toContain(label);
         }
+    });
+
+    it('renders the row-label emoji as aria-hidden monochrome icon spans, not inline text', () => {
+        const { table, subject } = make();
+        subject._renderUpdate({ temp: 10, humidity: 50, precipitation: 0, uv_index: 7, visibility: 12000, wind_speed: 5 });
+
+        const icons = [...table.querySelectorAll('.smart-home-table__value-icon')];
+        // temperature, humidity, UV and visibility carry an icon; feels-like,
+        // precipitation and wind do not.
+        expect(icons.map((el) => el.textContent)).toEqual(['🌡️', '💧', '☀️', '👁️']);
+        for (const icon of icons) {
+            expect(icon.getAttribute('aria-hidden')).toBe('true');
+        }
+        // The emoji is a sibling span, not part of the label text node.
+        const tempLabel = table.querySelector('.smart-home-table__value-icon').parentElement;
+        expect(tempLabel.textContent).toBe('🌡️Temperature');
+    });
+
+    it('keeps the title emoji as full-colour inline text (no icon span)', () => {
+        const { table, subject } = make();
+        subject._renderHeader();
+        const titleCell = table.querySelector('th');
+        expect(titleCell.querySelector('.smart-home-table__value-icon')).toBeNull();
+        expect(titleCell.textContent).toContain('🌤️ Outside weather forecast');
     });
 
     it('shows the UV index with a muted band description when present', () => {
