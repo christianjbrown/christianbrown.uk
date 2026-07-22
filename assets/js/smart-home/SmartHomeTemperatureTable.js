@@ -3,6 +3,19 @@
 import UpdatingKeyValuePairTable from './UpdatingKeyValuePairTable.js';
 import { averageTemperature, averageHumidity } from './averageReadings.js';
 
+// Decorative row emoji live here, not in the message catalogues — they're the
+// same in every locale and are rendered as theme-aware greyscale glyphs (see
+// `.smart-home-table__value-icon`). ROOM_EMOJI is keyed by the raw SmartThings
+// room name (the same key roomNames uses); a room with no entry simply gets no
+// icon. The house-wide average row gets its own summary glyph.
+const AVERAGE_EMOJI = '📊';
+const ROOM_EMOJI = {
+    'Bedroom': '🛏️',
+    'Living room': '🛋️',
+    'Hallway': '🚪',
+    'Study': '📚',
+};
+
 const JSON_CONTRACT = {
     'devices': {
         'type': 'array',
@@ -48,7 +61,7 @@ export default class SmartHomeTemperatureTable extends UpdatingKeyValuePairTable
                 this._catalogue.table.average,
                 temperature.value, temperature.timestamp, temperature.stale,
                 humidity ? humidity.value : null, humidity ? humidity.timestamp : null, humidity ? humidity.stale : false,
-                true
+                true, AVERAGE_EMOJI
             );
         }
         const that = this;
@@ -63,10 +76,14 @@ export default class SmartHomeTemperatureTable extends UpdatingKeyValuePairTable
                 const device = this._catalogue.deviceNames[dataPoint['name']] ?? dataPoint['name'];
                 const room = roomName ? (this._catalogue.roomNames[roomName] ?? roomName) : null;
                 const label = room ? room + ' - ' + device : device;
+                // Keyed by the raw (untranslated) room name; unmapped rooms get
+                // no icon.
+                const roomEmoji = roomName ? ROOM_EMOJI[roomName] : null;
                 that._addClimateTableRow(
                     label,
                     dataPoint['temperatureValue'], dataPoint['temperatureTimestamp'], dataPoint['temperatureStale'],
-                    dataPoint['humidityValue'] ?? null, dataPoint['humidityTimestamp'] ?? null, dataPoint['humidityStale'] ?? false
+                    dataPoint['humidityValue'] ?? null, dataPoint['humidityTimestamp'] ?? null, dataPoint['humidityStale'] ?? false,
+                    false, roomEmoji
                 );
             }
         );

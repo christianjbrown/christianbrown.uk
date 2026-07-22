@@ -117,6 +117,29 @@ describe('SmartHomeTemperatureTable', () => {
         expect(table.textContent).toContain('Attic - Sensor X');
     });
 
+    it('prefixes the average and known rooms with aria-hidden greyscale icon spans', () => {
+        const { table, subject } = make();
+        subject._renderUpdate({
+            devices: [
+                { name: 'Button', roomName: 'Living room', temperatureValue: 22, temperatureTimestamp: 5000, temperatureStale: false },
+                { name: 'Hygrometer', roomName: 'Bedroom', temperatureValue: 21, temperatureTimestamp: 4000, temperatureStale: false },
+                { name: 'Motion sensor', roomName: 'Hallway', temperatureValue: 20, temperatureTimestamp: 3000, temperatureStale: false },
+                { name: 'Button', roomName: 'Study', temperatureValue: 23, temperatureTimestamp: 2000, temperatureStale: false },
+                { name: 'Sensor', roomName: 'Kitchen', temperatureValue: 19, temperatureTimestamp: 1000, temperatureStale: false },
+            ],
+        });
+
+        const icons = [...table.querySelectorAll('.smart-home-table__value-icon')];
+        // Average, then rooms newest-first; Kitchen has no mapping, so no icon.
+        expect(icons.map((el) => el.textContent)).toEqual(['📊', '🛋️', '🛏️', '🚪', '📚']);
+        for (const icon of icons) {
+            expect(icon.getAttribute('aria-hidden')).toBe('true');
+        }
+        // The emoji is a sibling span, not part of the label text node.
+        const livingRoomIcon = icons.find((el) => el.textContent === '🛋️');
+        expect(livingRoomIcon.parentElement.textContent).toBe('🛋️Living room - Button');
+    });
+
     describe('_getContract', () => {
         it('requires the devices array and no longer any server-computed averages', () => {
             const { subject } = make();

@@ -150,8 +150,9 @@ export default class UpdatingKeyValuePairTable {
      * @param {Number|null}    humidityTimestamp
      * @param {Boolean}        humidityStale
      * @param {Boolean}        important
+     * @param {String|null}    icon  a decorative emoji rendered before the name.
      */
-    _addClimateTableRow(name, degreesC, tempTimestamp = null, tempStale = false, humidityPercent = null, humidityTimestamp = null, humidityStale = false, important = false) {
+    _addClimateTableRow(name, degreesC, tempTimestamp = null, tempStale = false, humidityPercent = null, humidityTimestamp = null, humidityStale = false, important = false, icon = null) {
         const tempObj = new Temperature(degreesC, this._catalogue);
 
         const hasHumidity = (humidityPercent !== null && humidityPercent !== undefined);
@@ -168,7 +169,7 @@ export default class UpdatingKeyValuePairTable {
         const row = this.#domTable.insertRow();
 
         const columnName = row.insertCell();
-        columnName.append(UpdatingKeyValuePairTable.#getTableCellSpan(name, 'primary', tempStale, important));
+        columnName.append(UpdatingKeyValuePairTable.#getTableCellSpan(name, 'primary', tempStale, important, false, icon));
         if (timeDiff) {
             columnName.append(UpdatingKeyValuePairTable.#getTableCellSpan(timeDiff, 'secondary', true, false));
         }
