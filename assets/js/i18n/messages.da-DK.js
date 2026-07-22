@@ -22,6 +22,7 @@ export default {
         degree: '°',
         km: 'km',
         metre: 'm',
+        hpa: 'hPa',
     },
 
     humidityDescriptions: {
@@ -132,6 +133,8 @@ export default {
         precipitationLabel: 'Nedbørssandsynlighed',
         uvIndexLabel: 'UV-indeks',
         visibilityLabel: 'Sigtbarhed',
+        pressureLabel: 'Lufttryk',
+        dewPointLabel: 'Dugpunkt',
         windLabel: 'Vind',
         unknown: 'Ukendt',
         gusts: 'vindstød',
