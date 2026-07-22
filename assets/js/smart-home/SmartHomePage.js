@@ -132,13 +132,18 @@ export default class SmartHomePage {
         }
 
         const insideHumidity = averageHumidity(homeData['devices']);
-        const climate = (new ClimateSummary(
+        const summary = new ClimateSummary(
             insideTemp.value,
             insideHumidity ? insideHumidity.value : null,
             weatherData['temp'],
             weatherData['humidity'] ?? null,
+            weatherData['dew_point'] ?? null,
             this.#catalogue
-        )).format();
-        this.#statusDom.textContent = this.#catalogue.statusLine(time, date, climate);
+        );
+        let statusLine = this.#catalogue.statusLine(time, date, summary.format());
+        if (summary.shouldOpenWindow()) {
+            statusLine += ' ' + this.#catalogue.windowAdvice;
+        }
+        this.#statusDom.textContent = statusLine;
     }
 }

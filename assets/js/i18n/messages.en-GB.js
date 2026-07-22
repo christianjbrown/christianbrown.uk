@@ -265,6 +265,9 @@ export default {
 
     // Colour-theme toggle. `ariaLabelTemplate`'s {label} hole is filled with the
     // active theme label (see Theme.bindToggle).
+    // Appended to the status line when the climate favours opening a window.
+    windowAdvice: 'Probably best to open a window.',
+
     theme: {
         auto: 'Auto',
         light: 'Light',

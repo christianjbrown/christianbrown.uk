@@ -147,6 +147,26 @@ describe('SmartHomePage', () => {
             expect(statusText()).toContain("where it's 1.6°c warmer inside (26.6°c inside, 25°c outside), and 10.2% more humid (52.8% inside, 42.6% outside).");
         });
 
+        it('appends the open-a-window advice when the climate favours it', async () => {
+            // Warm and humid inside (dew point ~17°C), markedly drier air outside
+            // and mild -> the muggy-inside rule fires.
+            lastData.home = homeWith(24, 65);
+            lastData.weather = { temp: 20, humidity: 50, dew_point: 14 };
+
+            await newPage().runAll();
+
+            expect(statusText()).toContain('Probably best to open a window.');
+        });
+
+        it('adds no advice when the outdoor air is no drier than inside', async () => {
+            lastData.home = homeWith(24, 65);
+            lastData.weather = { temp: 20, humidity: 50, dew_point: 17 };
+
+            await newPage().runAll();
+
+            expect(statusText()).not.toContain('open a window');
+        });
+
         it('falls back to just the time when the weather fetch failed', async () => {
             lastData.home = homeWith(26.6, 52.8);
             lastData.weather = null;

@@ -198,6 +198,9 @@ export default {
         return climate ? `${when}。${climate}` : `${when}。`;
     },
 
+    // Appended to the status line when the climate favours opening a window.
+    windowAdvice: '也許最好開窗通風。',
+
     theme: {
         auto: '自動',
         light: '淺色',
