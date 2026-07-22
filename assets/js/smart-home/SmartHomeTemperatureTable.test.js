@@ -117,7 +117,7 @@ describe('SmartHomeTemperatureTable', () => {
         expect(table.textContent).toContain('Attic - Sensor X');
     });
 
-    it('prefixes the average and known rooms with aria-hidden greyscale icon spans', () => {
+    it('gives the average and room rows plain labels with no icon span', () => {
         const { table, subject } = make();
         subject._renderUpdate({
             devices: [
@@ -129,15 +129,11 @@ describe('SmartHomeTemperatureTable', () => {
             ],
         });
 
-        const icons = [...table.querySelectorAll('.smart-home-table__value-icon')];
-        // Average, then rooms newest-first; Kitchen has no mapping, so no icon.
-        expect(icons.map((el) => el.textContent)).toEqual(['📊', '🛋️', '🛏️', '🚪', '📚']);
-        for (const icon of icons) {
-            expect(icon.getAttribute('aria-hidden')).toBe('true');
-        }
-        // The emoji is a sibling span, not part of the label text node.
-        const livingRoomIcon = icons.find((el) => el.textContent === '🛋️');
-        expect(livingRoomIcon.parentElement.textContent).toBe('🛋️Living room - Button');
+        // Row labels no longer carry a decorative icon span.
+        expect(table.querySelectorAll('.smart-home-table__value-icon')).toHaveLength(0);
+        // The label is just its text, with no leading emoji.
+        expect(table.textContent).toContain('Living room - Button');
+        expect(table.textContent).not.toContain('🛋️');
     });
 
     describe('_getContract', () => {
