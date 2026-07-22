@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import ClimateSummary from './ClimateSummary.js';
+import { dewPoint } from './dewPoint.js';
 
 describe('ClimateSummary', () => {
     it('reports warmer inside and more humid inside', () => {
@@ -97,6 +98,80 @@ describe('ClimateSummary', () => {
         it('uses "and" when humidity matches even if the temperature is welcome', () => {
             expect(new ClimateSummary(27, 50, 30, 50).format())
                 .toBe("It's 3°c cooler inside (27°c inside, 30°c outside), and it's 50% humidity inside and outside.");
+        });
+    });
+
+    describe('shouldOpenWindow', () => {
+        // Outside humidity (4th arg) plays no part in the decision, so it's a
+        // constant here; the outdoor dew point is set relative to the calculated
+        // indoor dew point so each threshold is exact and readable.
+        const decide = (insideTemp, insideHumidity, outsideTemp, outsideDewPoint) =>
+            new ClimateSummary(insideTemp, insideHumidity, outsideTemp, 50, outsideDewPoint).shouldOpenWindow();
+        const indoorDewPoint = (temp, humidity) => dewPoint(temp, humidity);
+
+        it('is false when the indoor humidity is unknown', () => {
+            expect(new ClimateSummary(24, null, 15, 50, 10).shouldOpenWindow()).toBe(false);
+        });
+
+        it('is false when the outdoor dew point is unknown', () => {
+            expect(new ClimateSummary(24, 65, 15, 50, null).shouldOpenWindow()).toBe(false);
+        });
+
+        describe('rule 1 - muggy inside (RH >= 60%)', () => {
+            it('opens when the outdoor dew point is >= 2°C lower and it is >= 8°C out', () => {
+                expect(decide(24, 65, 10, indoorDewPoint(24, 65) - 2)).toBe(true);
+            });
+            it('stays shut when the dew-point drop is under 2°C', () => {
+                expect(decide(24, 65, 10, indoorDewPoint(24, 65) - 1)).toBe(false);
+            });
+            it('stays shut when it is colder than 8°C out', () => {
+                expect(decide(24, 65, 5, indoorDewPoint(24, 65) - 5)).toBe(false);
+            });
+        });
+
+        describe('rule 2 - getting muggy (55% <= RH < 60%)', () => {
+            it('opens when the drop is >= 3°C and it is >= 12°C out', () => {
+                expect(decide(24, 57, 14, indoorDewPoint(24, 57) - 3)).toBe(true);
+            });
+            it('stays shut when the drop is under 3°C', () => {
+                expect(decide(24, 57, 14, indoorDewPoint(24, 57) - 2)).toBe(false);
+            });
+            it('stays shut when it is colder than 12°C out', () => {
+                expect(decide(24, 57, 10, indoorDewPoint(24, 57) - 5)).toBe(false);
+            });
+        });
+
+        describe('rule 3 - pleasant outside (18-25°C)', () => {
+            it('opens when indoor >= 18°C, RH >= 45% and the drop is >= 1°C', () => {
+                expect(decide(20, 50, 22, indoorDewPoint(20, 50) - 1)).toBe(true);
+            });
+            it('stays shut below 18°C outside', () => {
+                expect(decide(20, 50, 17, indoorDewPoint(20, 50) - 5)).toBe(false);
+            });
+            it('stays shut above 25°C outside', () => {
+                expect(decide(20, 50, 26, indoorDewPoint(20, 50) - 5)).toBe(false);
+            });
+            it('stays shut when indoor is below 18°C', () => {
+                expect(decide(17, 50, 22, indoorDewPoint(17, 50) - 5)).toBe(false);
+            });
+            it('stays shut when indoor humidity is below 45%', () => {
+                expect(decide(20, 40, 22, indoorDewPoint(20, 40) - 5)).toBe(false);
+            });
+            it('stays shut when the drop is under 1°C', () => {
+                expect(decide(20, 50, 22, indoorDewPoint(20, 50) - 0.5)).toBe(false);
+            });
+        });
+
+        describe('rule 4 - hot inside (> 25°C)', () => {
+            it('opens when outside is >= 2°C cooler and not much muggier', () => {
+                expect(decide(27, 40, 24, indoorDewPoint(27, 40) + 1)).toBe(true);
+            });
+            it('stays shut when outside is less than 2°C cooler', () => {
+                expect(decide(27, 40, 26, indoorDewPoint(27, 40) - 5)).toBe(false);
+            });
+            it('stays shut when the outdoor air is more than 1°C muggier', () => {
+                expect(decide(27, 40, 24, indoorDewPoint(27, 40) + 2)).toBe(false);
+            });
         });
     });
 });

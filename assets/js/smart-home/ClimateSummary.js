@@ -2,6 +2,7 @@
 
 import Temperature from './Temperature.js';
 import Humidity from './Humidity.js';
+import { dewPoint } from './dewPoint.js';
 import EN_GB from '../i18n/messages.en-GB.js';
 
 export default class ClimateSummary {
@@ -9,6 +10,7 @@ export default class ClimateSummary {
     #insideHumidity;
     #outsideTempC;
     #outsideHumidity;
+    #outsideDewPointC;
     #catalogue;
 
     /**
@@ -16,13 +18,16 @@ export default class ClimateSummary {
      * @param {Number|null} insideHumidity
      * @param {Number}      outsideTempC
      * @param {Number|null} outsideHumidity
+     * @param {Number|null} outsideDewPointC  the reported outdoor dew point (°C);
+     *                                        only used by shouldOpenWindow().
      * @param {Object}      catalogue  message catalogue; defaults to en-GB.
      */
-    constructor(insideTempC, insideHumidity, outsideTempC, outsideHumidity, catalogue = EN_GB) {
+    constructor(insideTempC, insideHumidity, outsideTempC, outsideHumidity, outsideDewPointC = null, catalogue = EN_GB) {
         this.#insideTempC = insideTempC;
         this.#insideHumidity = insideHumidity;
         this.#outsideTempC = outsideTempC;
         this.#outsideHumidity = outsideHumidity;
+        this.#outsideDewPointC = outsideDewPointC;
         this.#catalogue = catalogue;
     }
 
@@ -52,6 +57,48 @@ export default class ClimateSummary {
         };
 
         return cat.climateSummary(facts);
+    }
+
+    /**
+     * Whether opening a window would freshen the air — a nudge appended to the
+     * status line. It compares the outdoor dew point against the dew point
+     * calculated from the indoor temperature and humidity, gated by a few
+     * comfort bands, and returns true when any band is satisfied. Rain is not
+     * considered. Returns false when the indoor humidity or the outdoor dew
+     * point is unknown (nothing to compare).
+     *
+     * @returns {Boolean}
+     */
+    shouldOpenWindow() {
+        if (this.#insideHumidity == null || this.#outsideDewPointC == null) {
+            return false;
+        }
+
+        const insideTemp = this.#insideTempC;
+        const insideHumidity = this.#insideHumidity;
+        const outsideTemp = this.#outsideTempC;
+        const outsideDewPoint = this.#outsideDewPointC;
+        const insideDewPoint = dewPoint(insideTemp, insideHumidity);
+        const dewPointDrop = insideDewPoint - outsideDewPoint;
+
+        // Muggy inside: drier outdoor air clearly helps, as long as it isn't cold.
+        if (insideHumidity >= 60 && dewPointDrop >= 2 && outsideTemp >= 8) {
+            return true;
+        }
+        // Getting muggy: needs a bigger dew-point gap and a milder day.
+        if (insideHumidity >= 55 && insideHumidity < 60 && dewPointDrop >= 3 && outsideTemp >= 12) {
+            return true;
+        }
+        // Pleasant outside: even a small drop in dew point is worth it.
+        if (outsideTemp >= 18 && outsideTemp <= 25 && insideTemp >= 18 && insideHumidity >= 45 && dewPointDrop >= 1) {
+            return true;
+        }
+        // Hot inside: open to cool down, unless the outdoor air is noticeably muggier.
+        if (insideTemp > 25 && outsideTemp <= insideTemp - 2 && outsideDewPoint - insideDewPoint <= 1) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
