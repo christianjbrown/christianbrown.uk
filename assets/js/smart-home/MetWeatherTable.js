@@ -17,10 +17,14 @@ const NBSP = String.fromCharCode(0xA0);
 // (see `.smart-home-table__value-icon` in smart-home.scss). The table title's
 // 🌤 emoji stays a full-colour catalogue string, so it isn't listed here.
 const LABEL_EMOJI = {
+    weatherType: '🗂️',
     temperature: '🌡️',
+    feelsLike: '🥵',
     humidity: '💧',
+    precipitation: '☔',
     uvIndex: '☀️',
     visibility: '👁️',
+    wind: '💨',
 };
 
 const JSON_CONTRACT = {
@@ -104,17 +108,17 @@ export default class MetWeatherTable extends UpdatingKeyValuePairTable {
         if ('type_name' in data && WEATHER_TYPES[data.type_name]) {
             const emoji = WEATHER_TYPES[data.type_name].emoji;
             const name = this._catalogue.weatherTypeNames[data.type_name];
-            this._addTableRow(weather.weatherTypeLabel, `${emoji} ${name}`);
+            this._addTableRow(weather.weatherTypeLabel, `${emoji} ${name}`, null, null, false, false, false, LABEL_EMOJI.weatherType);
         }
 
         this._addTempTableRow(weather.temperatureLabel, ('temp' in data) ? data.temp : weather.unknown, null, false, false, LABEL_EMOJI.temperature);
         if ('temp' in data && 'temp_feels_like' in data && data.temp !== data.temp_feels_like) {
-            this._addTempTableRow(weather.feelsLikeLabel, data.temp_feels_like ?? weather.unknown);
+            this._addTempTableRow(weather.feelsLikeLabel, data.temp_feels_like ?? weather.unknown, null, false, false, LABEL_EMOJI.feelsLike);
         }
 
         const humidityDescription = ('humidity' in data) ? (new Humidity(data.humidity, this._catalogue)).describe() : null;
         this._addTableRow(weather.humidityLabel, ('humidity' in data) ? this.#formatPercent(data.humidity) : weather.unknown, humidityDescription, null, false, false, true, LABEL_EMOJI.humidity);
-        this._addTableRow(weather.precipitationLabel, ('precipitation' in data) ? this.#formatPercent(data.precipitation) : weather.unknown);
+        this._addTableRow(weather.precipitationLabel, ('precipitation' in data) ? this.#formatPercent(data.precipitation) : weather.unknown, null, null, false, false, false, LABEL_EMOJI.precipitation);
 
         // UV index and visibility are only sent when the Met Office reports them
         // for the hour (the key is absent, not null), so both rows are optional.
@@ -127,7 +131,7 @@ export default class MetWeatherTable extends UpdatingKeyValuePairTable {
         }
 
         if ('wind_speed' in data) {
-            this._addTableRow(weather.windLabel, this._formatWindSpeed(data), this._formatWindSpeedMph(data), null, false, false, true);
+            this._addTableRow(weather.windLabel, this._formatWindSpeed(data), this._formatWindSpeedMph(data), null, false, false, true, LABEL_EMOJI.wind);
         }
     }
 
