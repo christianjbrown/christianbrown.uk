@@ -2,9 +2,9 @@
 
 import DataFetcher from '../DataFetcher.js';
 import { historicalClimateUrl } from '../apiConfig.js';
-import { DEFAULT_LOCALE } from '../Locale.js';
+import EN_GB from '../i18n/messages.en-GB.js';
 import { HISTORICAL_CONTRACT } from './contract.js';
-import { DEFAULT_INDEX, clampIndex, routeAt, labelAt, isHourly, canZoomIn, canZoomOut } from './resolutions.js';
+import { DEFAULT_INDEX, clampIndex, routeAt, isHourly, canZoomIn, canZoomOut } from './resolutions.js';
 import { bucketsToSeries } from './chartData.js';
 import { readChartColors } from './chartColors.js';
 import { tempAxisValues, tempSeriesValue } from './chartFormat.js';
@@ -13,8 +13,6 @@ import { makeAxisValues, makePointValue, DAY_INCRS } from './chartTime.js';
 const CHART_HEIGHT = 380;
 const FALLBACK_WIDTH = 640;
 const LINE_WIDTH = 2;
-const LOADING_TEXT = 'Loading climate history…';
-const ERROR_TEXT = 'Couldn\'t load the climate history right now.';
 
 /**
  * Drives the historical-climate line chart: fetches the current resolution,
@@ -28,6 +26,7 @@ export default class ClimateHistoryChart {
     #els;
     #uPlotCtor;
     #createFetcher;
+    #strings;
     #locale;
     #index;
     #plot;
@@ -37,13 +36,16 @@ export default class ClimateHistoryChart {
      * @param {{chart: HTMLElement, status: HTMLElement, zoomIn: HTMLButtonElement, zoomOut: HTMLButtonElement, resolution: HTMLElement}} els
      * @param {Function} uPlotCtor      the uPlot constructor.
      * @param {Function} createFetcher  url → an object with a `fetch()` promise.
-     * @param {String}   locale         a supported locale, for date formatting.
+     * @param {Object}   catalogue      a message catalogue (defaults to en-GB); its
+     *                                  `climateHistory` block supplies the labels and
+     *                                  its `locale` drives the date formatting.
      */
-    constructor(els, uPlotCtor, createFetcher = (url) => new DataFetcher(url, HISTORICAL_CONTRACT), locale = DEFAULT_LOCALE) {
+    constructor(els, uPlotCtor, createFetcher = (url) => new DataFetcher(url, HISTORICAL_CONTRACT), catalogue = EN_GB) {
         this.#els = els;
         this.#uPlotCtor = uPlotCtor;
         this.#createFetcher = createFetcher;
-        this.#locale = locale;
+        this.#strings = catalogue.climateHistory;
+        this.#locale = catalogue.locale;
         this.#index = DEFAULT_INDEX;
         this.#plot = null;
         this.#data = null;
@@ -55,6 +57,8 @@ export default class ClimateHistoryChart {
      * @return {Promise}
      */
     async start() {
+        this.#els.zoomIn.setAttribute('aria-label', this.#strings.zoomInLabel);
+        this.#els.zoomOut.setAttribute('aria-label', this.#strings.zoomOutLabel);
         this.#els.zoomIn.addEventListener('click', () => { void this.#step(-1); });
         this.#els.zoomOut.addEventListener('click', () => { void this.#step(1); });
         this.#watchTheme();
@@ -74,7 +78,7 @@ export default class ClimateHistoryChart {
 
     async #load() {
         this.#updateControls();
-        this.#setStatus(LOADING_TEXT);
+        this.#setStatus(this.#strings.loading);
 
         let buckets;
         try {
@@ -82,7 +86,7 @@ export default class ClimateHistoryChart {
         } catch {
             this.#destroyPlot();
             this.#data = null;
-            this.#setStatus(ERROR_TEXT);
+            this.#setStatus(this.#strings.error);
             return;
         }
 
@@ -97,7 +101,7 @@ export default class ClimateHistoryChart {
     #updateControls() {
         this.#els.zoomIn.disabled = !canZoomIn(this.#index);
         this.#els.zoomOut.disabled = !canZoomOut(this.#index);
-        this.#els.resolution.textContent = labelAt(this.#index);
+        this.#els.resolution.textContent = this.#strings.resolutions[routeAt(this.#index)];
     }
 
     #setStatus(text) {
@@ -107,7 +111,9 @@ export default class ClimateHistoryChart {
 
     #render(buckets) {
         const series = bucketsToSeries(buckets);
-        this.#data = [series.x, series.insideMax, series.insideMin, series.outsideMax];
+        // Column order matches the series/legend order below: outside, then the
+        // inside min/max that form the band.
+        this.#data = [series.x, series.outsideMax, series.insideMin, series.insideMax];
         this.#draw();
     }
 
@@ -140,12 +146,14 @@ export default class ClimateHistoryChart {
             ],
             'series': [
                 { 'value': makePointValue(this.#locale) },
-                { 'label': 'Inside max temperature', 'stroke': colors.inside, 'width': LINE_WIDTH, 'value': tempSeriesValue },
-                { 'label': 'Inside min temperature', 'stroke': colors.inside, 'width': LINE_WIDTH, 'value': tempSeriesValue },
-                { 'label': 'Outside temperature', 'stroke': colors.outside, 'width': LINE_WIDTH, 'value': tempSeriesValue },
+                { 'label': this.#strings.series.outside, 'stroke': colors.outside, 'width': LINE_WIDTH, 'value': tempSeriesValue },
+                { 'label': this.#strings.series.insideMin, 'stroke': colors.inside, 'width': LINE_WIDTH, 'value': tempSeriesValue },
+                { 'label': this.#strings.series.insideMax, 'stroke': colors.inside, 'width': LINE_WIDTH, 'value': tempSeriesValue },
             ],
+            // Fill the band between inside max (upper, series 3) and inside min
+            // (lower, series 2).
             'bands': [
-                { 'series': [1, 2], 'fill': colors.insideFill },
+                { 'series': [3, 2], 'fill': colors.insideFill },
             ],
         };
     }

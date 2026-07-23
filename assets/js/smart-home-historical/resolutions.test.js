@@ -4,7 +4,6 @@ import {
     DEFAULT_INDEX,
     clampIndex,
     routeAt,
-    labelAt,
     isHourly,
     canZoomIn,
     canZoomOut,
@@ -12,7 +11,7 @@ import {
 
 describe('resolutions', () => {
     it('orders the ladder from most zoomed-in to most zoomed-out', () => {
-        expect(RESOLUTIONS.map((r) => r.route)).toEqual([
+        expect(RESOLUTIONS).toEqual([
             'hourly-day',
             'hourly-1-month',
             'daily-1-month',
@@ -23,7 +22,7 @@ describe('resolutions', () => {
     });
 
     it('defaults to a month of hourly readings', () => {
-        expect(RESOLUTIONS[DEFAULT_INDEX].route).toBe('hourly-1-month');
+        expect(RESOLUTIONS[DEFAULT_INDEX]).toBe('hourly-1-month');
     });
 
     it('clamps an index into the ladder bounds', () => {
@@ -33,11 +32,9 @@ describe('resolutions', () => {
         expect(clampIndex(99)).toBe(RESOLUTIONS.length - 1);
     });
 
-    it('returns the route and label at a clamped position', () => {
+    it('returns the route at a clamped position', () => {
         expect(routeAt(0)).toBe('hourly-day');
         expect(routeAt(99)).toBe('daily-12-month');
-        expect(labelAt(0)).toBe('Last day · hourly');
-        expect(labelAt(99)).toBe('Last 12 months · daily');
     });
 
     it('knows which ladder positions are hourly', () => {

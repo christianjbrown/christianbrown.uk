@@ -241,4 +241,24 @@ export default {
         },
     },
 
+    climateHistory: {
+        title: 'Klimaatgeschiedenis',
+        loading: 'Klimaatgeschiedenis laden…',
+        error: 'Kan de klimaatgeschiedenis op dit moment niet laden.',
+        zoomInLabel: 'Inzoomen – fijnere resolutie, kortere periode',
+        zoomOutLabel: 'Uitzoomen – grovere resolutie, langere periode',
+        series: {
+            outside: 'Buitentemperatuur',
+            insideMin: 'Binnentemperatuur (min.)',
+            insideMax: 'Binnentemperatuur (max.)',
+        },
+        resolutions: {
+            'hourly-day': 'Laatste dag · per uur',
+            'hourly-1-month': 'Laatste maand · per uur',
+            'daily-1-month': 'Laatste maand · per dag',
+            'daily-3-month': 'Laatste 3 maanden · per dag',
+            'daily-6-month': 'Laatste 6 maanden · per dag',
+            'daily-12-month': 'Laatste 12 maanden · per dag',
+        },
+    },
 };
