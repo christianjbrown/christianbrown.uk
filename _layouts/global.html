@@ -18,7 +18,7 @@ but maybe you're looking for an engineering manager? you've come to right place!
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.googletagmanager.com https://www.google-analytics.com; connect-src 'self' https://cdn.christianbrown.uk https://www.google-analytics.com https://region1.google-analytics.com{% if site.smart_home_smart_things_climate_use_local %} {{ site.smart_home_smart_things_climate_url_dev }}{% endif %}{% if site.smart_home_met_office_weather_use_local %} {{ site.smart_home_met_office_weather_url_dev }}{% endif %}; img-src 'self' data: https:; style-src 'self' 'unsafe-inline'; font-src 'self'; base-uri 'self'">
+        <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.googletagmanager.com https://www.google-analytics.com; connect-src 'self' https://cdn.christianbrown.uk https://www.google-analytics.com https://region1.google-analytics.com{% if site.smart_home_smart_things_climate_use_local %} {{ site.smart_home_smart_things_climate_url_dev }}{% endif %}{% if site.smart_home_met_office_weather_use_local %} {{ site.smart_home_met_office_weather_url_dev }}{% endif %}{% if site.smart_home_historical_climate_use_local %} {{ site.smart_home_historical_climate_url_dev }}{% endif %}; img-src 'self' data: https:; style-src 'self' 'unsafe-inline'; font-src 'self'; base-uri 'self'">
         <!-- No frame-ancestors / X-Frame-Options here: both require an HTTP response header, which GitHub Pages can't send. Clickjacking protection would need a header-capable proxy in front of the apex. -->
         <title>{{ page.title }}</title>
         <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicon/apple-touch-icon.png">
@@ -44,6 +44,11 @@ but maybe you're looking for an engineering manager? you've come to right place!
         "urlProd": {{ site.smart_home_met_office_weather_url_prod | jsonify }},
         "urlDev": {{ site.smart_home_met_office_weather_url_dev | jsonify }},
         "useLocal": {{ site.smart_home_met_office_weather_use_local | jsonify }}
+    },
+    "historicalClimate": {
+        "urlProd": {{ site.smart_home_historical_climate_url_prod | jsonify }},
+        "urlDev": {{ site.smart_home_historical_climate_url_dev | jsonify }},
+        "useLocal": {{ site.smart_home_historical_climate_use_local | jsonify }}
     }
 }
         </script>
