@@ -20,7 +20,7 @@ export default class JsonPayloadContractValidator {
 
         for (const key of Object.keys(contract)) {
             const params = contract[key];
-            let newPath = path + (path ? '.' : '') + key;
+            const newPath = path + (path ? '.' : '') + key;
             const dataValue = data[key];
 
             if (params.keyRequired && dataValue === undefined) {
@@ -32,25 +32,42 @@ export default class JsonPayloadContractValidator {
             }
 
             if (dataValue !== undefined && dataValue !== null) {
-                if (params.type === 'array') {
-                    if (Array.isArray(dataValue)) {
-                        newPath += '[]';
-                        if (params['contract'] && typeof params['contract'] === 'object') {
-                            for (let i = 0; i < dataValue.length; ++i) {
-                                await this.validateContract(dataValue[i], params['contract'], newPath);
-                            }
-                        }
-                    } else {
-                        throw new JsonPayloadContractViolation(newPath, 'type', dataValue, params.type);
-                    }
-                } else if (typeof dataValue !== params.type) {
-                    throw new JsonPayloadContractViolation(newPath, 'type', dataValue, params.type);
-                }
+                await this.validateValue(dataValue, params, newPath);
+            }
+        }
+    }
 
-                if (params.type === 'object' && params['contract'] && typeof params['contract'] === 'object') {
-                    await this.validateContract(dataValue, params['contract'], newPath);
+    /**
+     * Validate a single value against a descriptor (`{type, contract}`). This is
+     * the per-value half of the contract: it checks the value's type and, when
+     * the descriptor carries a nested `contract`, recurses into it. It works the
+     * same whether the value is a field inside an object or the top-level payload
+     * itself, so a contract can describe `data` as an array or an object.
+     *
+     * @param {*}      value  - The value to validate.
+     * @param {Object} params - The descriptor to validate against.
+     * @param {String} path   - The current path in the JSON object (used for error messages).
+     */
+    async validateValue(value, params, path) {
+        if (params.type === 'array') {
+            if (!Array.isArray(value)) {
+                throw new JsonPayloadContractViolation(path, 'type', value, params.type);
+            }
+            if (params['contract'] && typeof params['contract'] === 'object') {
+                const elementPath = path + '[]';
+                for (let i = 0; i < value.length; ++i) {
+                    await this.validateContract(value[i], params['contract'], elementPath);
                 }
             }
+            return;
+        }
+
+        if (typeof value !== params.type) {
+            throw new JsonPayloadContractViolation(path, 'type', value, params.type);
+        }
+
+        if (params.type === 'object' && params['contract'] && typeof params['contract'] === 'object') {
+            await this.validateContract(value, params['contract'], path);
         }
     }
 }

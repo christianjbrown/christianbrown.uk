@@ -76,7 +76,13 @@ export default class DataFetcher {
         } else if (!response.ok) {
             throw new Error('Fetching data, got '+response.status+' '+response.statusText+' from the server');
         }
-        await jsonPayloadContractValidator.validateContract(data['data'], this.#dataContract, 'data');
+        // The per-endpoint contract is a descriptor for the `data` value itself,
+        // so `data` may be an array or an object (any depth) — whatever the
+        // endpoint declares. A contract with no `type` means "no payload
+        // validation" (the default), so it is skipped.
+        if (this.#dataContract && this.#dataContract.type) {
+            await jsonPayloadContractValidator.validateValue(data['data'], this.#dataContract, 'data');
+        }
 
         // The envelope timestamp records when the origin generated this payload.
         // Surfacing it lets callers show honest freshness — an edge that serves a

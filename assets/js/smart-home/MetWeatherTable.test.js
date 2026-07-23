@@ -303,10 +303,11 @@ describe('MetWeatherTable', () => {
     });
 
     describe('_getContract', () => {
-        it('returns the weather contract', () => {
+        it('returns the weather contract as an object descriptor for data', () => {
             const { subject } = make();
-            expect(subject._getContract()).toHaveProperty('humidity');
-            expect(subject._getContract()).toHaveProperty('wind_speed');
+            expect(subject._getContract()).toHaveProperty('type', 'object');
+            expect(subject._getContract().contract).toHaveProperty('humidity');
+            expect(subject._getContract().contract).toHaveProperty('wind_speed');
         });
     });
 });

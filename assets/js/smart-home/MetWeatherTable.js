@@ -14,19 +14,24 @@ const MPH_TO_KMH = 1.609344;
 const NBSP = String.fromCharCode(0xA0);
 
 const JSON_CONTRACT = {
-    'dew_point': {'type': 'number', 'keyRequired': false, 'cannotBeEmpty': true},
-    'humidity': {'type': 'number', 'keyRequired': true, 'cannotBeEmpty': true},
-    'precipitation': {'type': 'number', 'keyRequired': true, 'cannotBeEmpty': true},
-    'pressure': {'type': 'number', 'keyRequired': false, 'cannotBeEmpty': true},
-    'temp': {'type': 'number', 'keyRequired': true, 'cannotBeEmpty': true},
-    'temp_feels_like': {'type': 'number', 'keyRequired': false, 'cannotBeEmpty': true},
-    'type_name': {'type': 'string', 'keyRequired': false, 'cannotBeEmpty': true},
-    'uv_index': {'type': 'number', 'keyRequired': false, 'cannotBeEmpty': true},
-    'visibility': {'type': 'number', 'keyRequired': false, 'cannotBeEmpty': true},
-    'wind_direction': {'type': 'string', 'keyRequired': false, 'cannotBeEmpty': true},
-    'wind_direction_degrees': {'type': 'number', 'keyRequired': false, 'cannotBeEmpty': true},
-    'wind_gust': {'type': 'number', 'keyRequired': false, 'cannotBeEmpty': true},
-    'wind_speed': {'type': 'number', 'keyRequired': true, 'cannotBeEmpty': true},
+    'type': 'object',
+    'keyRequired': true,
+    'cannotBeEmpty': true,
+    'contract': {
+        'dew_point': {'type': 'number', 'keyRequired': false, 'cannotBeEmpty': true},
+        'humidity': {'type': 'number', 'keyRequired': true, 'cannotBeEmpty': true},
+        'precipitation': {'type': 'number', 'keyRequired': true, 'cannotBeEmpty': true},
+        'pressure': {'type': 'number', 'keyRequired': false, 'cannotBeEmpty': true},
+        'temp': {'type': 'number', 'keyRequired': true, 'cannotBeEmpty': true},
+        'temp_feels_like': {'type': 'number', 'keyRequired': false, 'cannotBeEmpty': true},
+        'type_name': {'type': 'string', 'keyRequired': false, 'cannotBeEmpty': true},
+        'uv_index': {'type': 'number', 'keyRequired': false, 'cannotBeEmpty': true},
+        'visibility': {'type': 'number', 'keyRequired': false, 'cannotBeEmpty': true},
+        'wind_direction': {'type': 'string', 'keyRequired': false, 'cannotBeEmpty': true},
+        'wind_direction_degrees': {'type': 'number', 'keyRequired': false, 'cannotBeEmpty': true},
+        'wind_gust': {'type': 'number', 'keyRequired': false, 'cannotBeEmpty': true},
+        'wind_speed': {'type': 'number', 'keyRequired': true, 'cannotBeEmpty': true},
+    },
 };
 
 export default class MetWeatherTable extends UpdatingKeyValuePairTable {

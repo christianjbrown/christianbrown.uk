@@ -139,8 +139,9 @@ describe('SmartHomeTemperatureTable', () => {
     describe('_getContract', () => {
         it('requires the devices array and no longer any server-computed averages', () => {
             const { subject } = make();
-            expect(subject._getContract()).toHaveProperty('devices');
-            expect(subject._getContract()).not.toHaveProperty('averageTempDegrees');
+            expect(subject._getContract()).toHaveProperty('type', 'object');
+            expect(subject._getContract().contract).toHaveProperty('devices');
+            expect(subject._getContract().contract).not.toHaveProperty('averageTempDegrees');
         });
     });
 });
