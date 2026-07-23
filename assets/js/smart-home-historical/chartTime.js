@@ -1,13 +1,18 @@
 'use strict';
 
-// Locale-aware, UTC date/time formatters for the chart's x-axis and legend.
-// Buckets are UTC, so we format in UTC to keep labels aligned to them; the
-// locale comes from the site's resolver (SUPPORTED_LOCALES), so dates follow the
-// visitor's locale and are never American month/day/year. Kept as named
-// functions (the closures are exercised here, not inside an uPlot callback that
-// jsdom can't run) so coverage holds.
+// Locale-aware date/time formatters for the chart's x-axis and legend. The
+// buckets are UTC, but the readings are from a UK home, so we display them in UK
+// wall-clock time (Europe/London handles the BST/GMT switch): a 10:00 UTC bucket
+// reads 11:00 during BST. The locale comes from the site's resolver
+// (SUPPORTED_LOCALES), so dates follow the visitor's locale and are never
+// American month/day/year. Kept as named functions (the closures are exercised
+// here, not inside an uPlot callback that jsdom can't run) so coverage holds.
 
 const DAY_SECONDS = 86400;
+
+// The home's timezone; fixed (not the viewer's) so the readings always read in
+// the wall-clock time they were taken at.
+const TIME_ZONE = 'Europe/London';
 
 // Restricts the daily view's x-axis to day-or-longer tick spacings, so a short
 // daily range doesn't get sub-day ticks (which would read as hours). uPlot picks
@@ -25,8 +30,8 @@ export const DAY_INCRS = [1, 2, 5, 7, 14, 30, 60, 90, 180, 365].map((days) => da
  */
 export function formatAxisTick(locale, timestampSecs, showTime) {
     const options = showTime
-        ? { hour: '2-digit', minute: '2-digit', timeZone: 'UTC' }
-        : { day: 'numeric', month: 'short', timeZone: 'UTC' };
+        ? { hour: '2-digit', minute: '2-digit', timeZone: TIME_ZONE }
+        : { day: 'numeric', month: 'short', timeZone: TIME_ZONE };
 
     return new Intl.DateTimeFormat(locale, options).format(new Date(timestampSecs * 1000));
 }
@@ -45,7 +50,7 @@ export function formatPoint(locale, timestampSecs) {
         year: 'numeric',
         hour: '2-digit',
         minute: '2-digit',
-        timeZone: 'UTC',
+        timeZone: TIME_ZONE,
     }).format(new Date(timestampSecs * 1000));
 }
 
