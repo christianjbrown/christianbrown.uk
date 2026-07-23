@@ -131,12 +131,33 @@ describe('ClimateHistoryChart', () => {
         ]);
         expect(plot.opts.series[1].stroke).toBe('#75923c');
         expect(plot.opts.series[3].stroke).toBe('#555');
+        expect(plot.opts.series[1].label).toBe('Inside max temperature');
+        expect(plot.opts.series[2].label).toBe('Inside min temperature');
+        expect(plot.opts.series[3].label).toBe('Outside temperature');
         expect(plot.opts.bands[0]).toEqual({ series: [1, 2], fill: 'rgba(117,146,60,.18)' });
+        // Locale-aware date formatters are wired onto the x axis and its readout.
+        expect(plot.opts.axes[0].values).toBeTypeOf('function');
+        expect(plot.opts.series[0].value).toBeTypeOf('function');
+        // The default (hourly) view does not pin the ticks to whole days.
+        expect(plot.opts.axes[0].incrs).toBeUndefined();
 
         expect(els.status.hidden).toBe(true);
         expect(els.resolution.textContent).toBe('Last month · hourly');
         expect(els.zoomIn.disabled).toBe(false);
         expect(els.zoomOut.disabled).toBe(false);
+    });
+
+    it('pins the x-axis to whole-day ticks on the daily resolutions', async () => {
+        const els = makeEls();
+        const uPlot = fakeUplot();
+        await new ClimateHistoryChart(els, uPlot, resolvingFetcher()).start();
+
+        // Step from hourly-1-month (index 1) to daily-1-month (index 2).
+        els.zoomOut.dispatchEvent(new Event('click'));
+        await flush();
+
+        expect(els.resolution.textContent).toBe('Last month · daily');
+        expect(uPlot.instances.at(-1).opts.axes[0].incrs[0]).toBe(86400);
     });
 
     it('falls back to a fixed width when the container has no measured width', async () => {
