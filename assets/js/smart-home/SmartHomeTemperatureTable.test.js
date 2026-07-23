@@ -17,20 +17,18 @@ describe('SmartHomeTemperatureTable', () => {
     it('renders the title header, the computed average and each device sorted newest-first', () => {
         const { table, subject } = make();
         subject._renderHeader();
-        subject._renderUpdate({
-            devices: [
-                {
-                    name: 'Sensor A', roomName: 'Kitchen',
-                    temperatureValue: 22, temperatureTimestamp: 2000, temperatureStale: false,
-                    humidityValue: 50, humidityTimestamp: 1900, humidityStale: false,
-                },
-                {
-                    name: 'Sensor B',
-                    temperatureValue: 24, temperatureTimestamp: 3000, temperatureStale: false,
-                    humidityValue: 60, humidityTimestamp: 1800, humidityStale: false,
-                },
-            ],
-        });
+        subject._renderUpdate([
+            {
+                name: 'Sensor A', roomName: 'Kitchen',
+                temperatureValue: 22, temperatureTimestamp: 2000, temperatureStale: false,
+                humidityValue: 50, humidityTimestamp: 1900, humidityStale: false,
+            },
+            {
+                name: 'Sensor B',
+                temperatureValue: 24, temperatureTimestamp: 3000, temperatureStale: false,
+                humidityValue: 60, humidityTimestamp: 1800, humidityStale: false,
+            },
+        ]);
 
         const rows = table.querySelectorAll('tr');
         // header + average + 2 devices
@@ -52,11 +50,9 @@ describe('SmartHomeTemperatureTable', () => {
         const { updateSpan, subject } = make();
         subject._renderHeader();
         subject._renderUpdate(
-            {
-                devices: [
-                    { name: 'Sensor', temperatureValue: 21, temperatureTimestamp: 2000, temperatureStale: false },
-                ],
-            },
+            [
+                { name: 'Sensor', temperatureValue: 21, temperatureTimestamp: 2000, temperatureStale: false },
+            ],
             Math.floor(Date.now() / 1000) - 120,
         );
 
@@ -68,11 +64,9 @@ describe('SmartHomeTemperatureTable', () => {
     it('leaves the update span empty when no envelope timestamp is given', () => {
         const { updateSpan, subject } = make();
         subject._renderHeader();
-        subject._renderUpdate({
-            devices: [
-                { name: 'Sensor', temperatureValue: 21, temperatureTimestamp: 2000, temperatureStale: false },
-            ],
-        });
+        subject._renderUpdate([
+            { name: 'Sensor', temperatureValue: 21, temperatureTimestamp: 2000, temperatureStale: false },
+        ]);
 
         expect(updateSpan.textContent).toBe('');
     });
@@ -86,11 +80,9 @@ describe('SmartHomeTemperatureTable', () => {
     it('handles a missing average humidity and devices without a room or humidity', () => {
         const { table, subject } = make();
         subject._renderHeader();
-        subject._renderUpdate({
-            devices: [
-                { name: 'Bare', temperatureValue: 21, temperatureTimestamp: 2000, temperatureStale: false },
-            ],
-        });
+        subject._renderUpdate([
+            { name: 'Bare', temperatureValue: 21, temperatureTimestamp: 2000, temperatureStale: false },
+        ]);
 
         const rows = table.querySelectorAll('tr');
         expect(rows[1].textContent).toContain('Average');
@@ -104,12 +96,10 @@ describe('SmartHomeTemperatureTable', () => {
     it('maps room and device names for the locale, falling back to the API value', () => {
         const { table, subject } = make(DE_DE);
         subject._renderHeader();
-        subject._renderUpdate({
-            devices: [
-                { name: 'Button', roomName: 'Living room', temperatureValue: 22, temperatureTimestamp: 2000, temperatureStale: false },
-                { name: 'Sensor X', roomName: 'Attic', temperatureValue: 21, temperatureTimestamp: 1000, temperatureStale: false },
-            ],
-        });
+        subject._renderUpdate([
+            { name: 'Button', roomName: 'Living room', temperatureValue: 22, temperatureTimestamp: 2000, temperatureStale: false },
+            { name: 'Sensor X', roomName: 'Attic', temperatureValue: 21, temperatureTimestamp: 1000, temperatureStale: false },
+        ]);
 
         // Mapped room + device.
         expect(table.textContent).toContain('Wohnzimmer - Taster');
@@ -119,15 +109,13 @@ describe('SmartHomeTemperatureTable', () => {
 
     it('gives the average and room rows plain labels with no icon span', () => {
         const { table, subject } = make();
-        subject._renderUpdate({
-            devices: [
-                { name: 'Button', roomName: 'Living room', temperatureValue: 22, temperatureTimestamp: 5000, temperatureStale: false },
-                { name: 'Hygrometer', roomName: 'Bedroom', temperatureValue: 21, temperatureTimestamp: 4000, temperatureStale: false },
-                { name: 'Motion sensor', roomName: 'Hallway', temperatureValue: 20, temperatureTimestamp: 3000, temperatureStale: false },
-                { name: 'Button', roomName: 'Study', temperatureValue: 23, temperatureTimestamp: 2000, temperatureStale: false },
-                { name: 'Sensor', roomName: 'Kitchen', temperatureValue: 19, temperatureTimestamp: 1000, temperatureStale: false },
-            ],
-        });
+        subject._renderUpdate([
+            { name: 'Button', roomName: 'Living room', temperatureValue: 22, temperatureTimestamp: 5000, temperatureStale: false },
+            { name: 'Hygrometer', roomName: 'Bedroom', temperatureValue: 21, temperatureTimestamp: 4000, temperatureStale: false },
+            { name: 'Motion sensor', roomName: 'Hallway', temperatureValue: 20, temperatureTimestamp: 3000, temperatureStale: false },
+            { name: 'Button', roomName: 'Study', temperatureValue: 23, temperatureTimestamp: 2000, temperatureStale: false },
+            { name: 'Sensor', roomName: 'Kitchen', temperatureValue: 19, temperatureTimestamp: 1000, temperatureStale: false },
+        ]);
 
         // Row labels no longer carry a decorative icon span.
         expect(table.querySelectorAll('.smart-home-table__value-icon')).toHaveLength(0);
@@ -137,10 +125,10 @@ describe('SmartHomeTemperatureTable', () => {
     });
 
     describe('_getContract', () => {
-        it('requires the devices array and no longer any server-computed averages', () => {
+        it('is a per-device readings array and no longer carries any server-computed averages', () => {
             const { subject } = make();
-            expect(subject._getContract()).toHaveProperty('type', 'object');
-            expect(subject._getContract().contract).toHaveProperty('devices');
+            expect(subject._getContract()).toHaveProperty('type', 'array');
+            expect(subject._getContract().contract).toHaveProperty('name');
             expect(subject._getContract().contract).not.toHaveProperty('averageTempDegrees');
         });
     });

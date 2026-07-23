@@ -117,7 +117,7 @@ describe('SmartHomePage', () => {
         });
 
         it('renders the floor plan with the latest data', async () => {
-            lastData.home = { averageTempDegrees: 26.6, devices: [] };
+            lastData.home = [];
             lastData.weather = { temp: 25 };
 
             await newPage().runAll();
@@ -130,12 +130,10 @@ describe('SmartHomePage', () => {
         const statusText = () => document.querySelector('#status').textContent;
 
         // A single indoor device the front-end averages into the given readings.
-        const homeWith = (temperatureValue, humidityValue) => ({
-            devices: [{
-                temperatureValue, temperatureStale: false, temperatureTimestamp: 1,
-                ...(humidityValue === undefined ? {} : { humidityValue, humidityStale: false, humidityTimestamp: 1 }),
-            }],
-        });
+        const homeWith = (temperatureValue, humidityValue) => ([{
+            temperatureValue, temperatureStale: false, temperatureTimestamp: 1,
+            ...(humidityValue === undefined ? {} : { humidityValue, humidityStale: false, humidityTimestamp: 1 }),
+        }]);
 
         it('weaves the climate comparison into the time once both tables have loaded', async () => {
             lastData.home = homeWith(26.6, 52.8);
@@ -198,7 +196,7 @@ describe('SmartHomePage', () => {
         });
 
         it('falls back to just the time when the indoor data carries no usable readings', async () => {
-            lastData.home = {};
+            lastData.home = [];
             lastData.weather = { temp: 25, humidity: 42.6 };
 
             await newPage().runAll();
