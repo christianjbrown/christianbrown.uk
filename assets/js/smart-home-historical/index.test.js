@@ -26,8 +26,9 @@ describe('smart-home-historical/index.js', () => {
         await import('./index.js');
     });
 
-    it('wires up the ClimateHistoryChart on window load', () => {
+    it('localises the title and wires up the ClimateHistoryChart on window load', () => {
         document.body.innerHTML = `
+            <h2 id="smart-home-historical-title">Climate history</h2>
             <div id="climate-chart"></div>
             <p id="chart-status"></p>
             <button id="chart-zoom-in"></button>
@@ -36,17 +37,20 @@ describe('smart-home-historical/index.js', () => {
 
         window.dispatchEvent(new Event('load'));
 
+        // In jsdom the locale resolves to the en-GB default.
+        expect(document.getElementById('smart-home-historical-title').textContent).toBe('Climate history');
+
         expect(ctor).toHaveBeenCalledTimes(1);
-        const [els, uPlot, createFetcher, locale] = ctor.mock.calls[0];
+        const [els, uPlot, createFetcher, catalogue] = ctor.mock.calls[0];
         expect(els.chart).toBe(document.getElementById('climate-chart'));
         expect(els.status).toBe(document.getElementById('chart-status'));
         expect(els.zoomIn).toBe(document.getElementById('chart-zoom-in'));
         expect(els.zoomOut).toBe(document.getElementById('chart-zoom-out'));
         expect(els.resolution).toBe(document.getElementById('chart-resolution'));
         expect(uPlot).toBeDefined();
-        // The default fetcher is left in place; a resolved locale is threaded in.
+        // The default fetcher is left in place; a resolved catalogue is threaded in.
         expect(createFetcher).toBeUndefined();
-        expect(typeof locale).toBe('string');
+        expect(catalogue.climateHistory).toBeDefined();
         expect(start).toHaveBeenCalledTimes(1);
     });
 });

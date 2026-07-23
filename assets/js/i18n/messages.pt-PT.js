@@ -236,4 +236,25 @@ export default {
             return `🏠 ${temperature} em casa`;
         },
     },
+
+    climateHistory: {
+        title: 'Histórico do clima',
+        loading: 'A carregar o histórico do clima…',
+        error: 'Não foi possível carregar o histórico do clima neste momento.',
+        zoomInLabel: 'Aumentar – resolução mais fina, período mais curto',
+        zoomOutLabel: 'Diminuir – resolução mais grosseira, período mais longo',
+        series: {
+            outside: 'Temperatura exterior',
+            insideMin: 'Temperatura interior (mín.)',
+            insideMax: 'Temperatura interior (máx.)',
+        },
+        resolutions: {
+            'hourly-day': 'Último dia · por hora',
+            'hourly-1-month': 'Último mês · por hora',
+            'daily-1-month': 'Último mês · diário',
+            'daily-3-month': 'Últimos 3 meses · diário',
+            'daily-6-month': 'Últimos 6 meses · diário',
+            'daily-12-month': 'Últimos 12 meses · diário',
+        },
+    },
 };
