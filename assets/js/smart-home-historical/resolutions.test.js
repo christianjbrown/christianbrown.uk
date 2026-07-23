@@ -5,6 +5,7 @@ import {
     clampIndex,
     routeAt,
     labelAt,
+    isHourly,
     canZoomIn,
     canZoomOut,
 } from './resolutions.js';
@@ -37,6 +38,13 @@ describe('resolutions', () => {
         expect(routeAt(99)).toBe('daily-12-month');
         expect(labelAt(0)).toBe('Last day · hourly');
         expect(labelAt(99)).toBe('Last 12 months · daily');
+    });
+
+    it('knows which ladder positions are hourly', () => {
+        expect(isHourly(0)).toBe(true);
+        expect(isHourly(1)).toBe(true);
+        expect(isHourly(2)).toBe(false);
+        expect(isHourly(RESOLUTIONS.length - 1)).toBe(false);
     });
 
     it('knows when it can zoom in (toward finer) and out (toward longer)', () => {

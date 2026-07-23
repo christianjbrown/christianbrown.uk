@@ -2,11 +2,13 @@
 
 import DataFetcher from '../DataFetcher.js';
 import { historicalClimateUrl } from '../apiConfig.js';
+import { DEFAULT_LOCALE } from '../Locale.js';
 import { HISTORICAL_CONTRACT } from './contract.js';
-import { DEFAULT_INDEX, clampIndex, routeAt, labelAt, canZoomIn, canZoomOut } from './resolutions.js';
+import { DEFAULT_INDEX, clampIndex, routeAt, labelAt, isHourly, canZoomIn, canZoomOut } from './resolutions.js';
 import { bucketsToSeries } from './chartData.js';
 import { readChartColors } from './chartColors.js';
 import { tempAxisValues, tempSeriesValue } from './chartFormat.js';
+import { makeAxisValues, makePointValue, DAY_INCRS } from './chartTime.js';
 
 const CHART_HEIGHT = 380;
 const FALLBACK_WIDTH = 640;
@@ -26,6 +28,7 @@ export default class ClimateHistoryChart {
     #els;
     #uPlotCtor;
     #createFetcher;
+    #locale;
     #index;
     #plot;
     #data;
@@ -34,11 +37,13 @@ export default class ClimateHistoryChart {
      * @param {{chart: HTMLElement, status: HTMLElement, zoomIn: HTMLButtonElement, zoomOut: HTMLButtonElement, resolution: HTMLElement}} els
      * @param {Function} uPlotCtor      the uPlot constructor.
      * @param {Function} createFetcher  url → an object with a `fetch()` promise.
+     * @param {String}   locale         a supported locale, for date formatting.
      */
-    constructor(els, uPlotCtor, createFetcher = (url) => new DataFetcher(url, HISTORICAL_CONTRACT)) {
+    constructor(els, uPlotCtor, createFetcher = (url) => new DataFetcher(url, HISTORICAL_CONTRACT), locale = DEFAULT_LOCALE) {
         this.#els = els;
         this.#uPlotCtor = uPlotCtor;
         this.#createFetcher = createFetcher;
+        this.#locale = locale;
         this.#index = DEFAULT_INDEX;
         this.#plot = null;
         this.#data = null;
@@ -112,19 +117,32 @@ export default class ClimateHistoryChart {
     }
 
     #options(colors) {
+        const hourly = isHourly(this.#index);
+        const timeAxis = {
+            'stroke': colors.axis,
+            'grid': { 'stroke': colors.grid },
+            'ticks': { 'stroke': colors.grid },
+            'values': makeAxisValues(this.#locale, hourly),
+        };
+        // Daily view: pin ticks to whole days (or longer) so a short range never
+        // shows sub-day (hour) ticks.
+        if (!hourly) {
+            timeAxis.incrs = DAY_INCRS;
+        }
+
         return {
             'width': this.#width(),
             'height': CHART_HEIGHT,
             'scales': { 'x': { 'time': true } },
             'axes': [
-                { 'stroke': colors.axis, 'grid': { 'stroke': colors.grid }, 'ticks': { 'stroke': colors.grid } },
+                timeAxis,
                 { 'stroke': colors.axis, 'grid': { 'stroke': colors.grid }, 'ticks': { 'stroke': colors.grid }, 'values': tempAxisValues },
             ],
             'series': [
-                {},
-                { 'label': 'Inside max', 'stroke': colors.inside, 'width': LINE_WIDTH, 'value': tempSeriesValue },
-                { 'label': 'Inside min', 'stroke': colors.inside, 'width': LINE_WIDTH, 'value': tempSeriesValue },
-                { 'label': 'Outside max', 'stroke': colors.outside, 'width': LINE_WIDTH, 'value': tempSeriesValue },
+                { 'value': makePointValue(this.#locale) },
+                { 'label': 'Inside max temperature', 'stroke': colors.inside, 'width': LINE_WIDTH, 'value': tempSeriesValue },
+                { 'label': 'Inside min temperature', 'stroke': colors.inside, 'width': LINE_WIDTH, 'value': tempSeriesValue },
+                { 'label': 'Outside temperature', 'stroke': colors.outside, 'width': LINE_WIDTH, 'value': tempSeriesValue },
             ],
             'bands': [
                 { 'series': [1, 2], 'fill': colors.insideFill },

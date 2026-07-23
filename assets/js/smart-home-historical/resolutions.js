@@ -42,6 +42,14 @@ export function labelAt(index) {
 
 /**
  * @param {Number} index
+ * @return {Boolean} whether that ladder position is an hourly resolution.
+ */
+export function isHourly(index) {
+    return routeAt(index).startsWith('hourly');
+}
+
+/**
+ * @param {Number} index
  * @return {Boolean} whether there is a finer resolution to zoom into.
  */
 export function canZoomIn(index) {
