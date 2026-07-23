@@ -117,16 +117,42 @@ describe('DataFetcher', () => {
             await expect(new DataFetcher('u').fetch()).resolves.toEqual({ temp: 21 });
         });
 
-        it('validates the inner data against a supplied data contract', async () => {
-            const contract = { temp: { type: 'number', keyRequired: true } };
+        it('validates the inner data against a supplied object data contract', async () => {
+            const contract = { type: 'object', contract: { temp: { type: 'number', keyRequired: true } } };
             stubFetch(async () => response({ json: async () => validEnvelope({ data: { temp: 21 } }) }));
             await expect(new DataFetcher('u', contract).fetch()).resolves.toEqual({ temp: 21 });
         });
 
-        it('rejects when the inner data violates the supplied data contract', async () => {
-            const contract = { temp: { type: 'string', keyRequired: true } };
+        it('rejects when the inner data violates the supplied object data contract', async () => {
+            const contract = { type: 'object', contract: { temp: { type: 'string', keyRequired: true } } };
             stubFetch(async () => response({ json: async () => validEnvelope({ data: { temp: 21 } }) }));
             await expect(new DataFetcher('u', contract).fetch()).rejects.toThrow(/must be of type "string"/);
+        });
+
+        it('validates and returns an array directly under data', async () => {
+            const contract = {
+                type: 'array',
+                cannotBeEmpty: true,
+                contract: { hour: { type: 'number', keyRequired: true } },
+            };
+            const rows = [{ hour: 0 }, { hour: 1 }];
+            stubFetch(async () => response({ json: async () => validEnvelope({ data: rows }) }));
+            await expect(new DataFetcher('u', contract).fetch()).resolves.toEqual(rows);
+        });
+
+        it('rejects when an element of an array payload violates the contract', async () => {
+            const contract = {
+                type: 'array',
+                contract: { hour: { type: 'number', keyRequired: true } },
+            };
+            stubFetch(async () => response({ json: async () => validEnvelope({ data: [{ hour: '0' }] }) }));
+            await expect(new DataFetcher('u', contract).fetch()).rejects.toThrow(/data\[\].hour.*must be of type "number"/);
+        });
+
+        it('rejects when an array contract meets an object payload', async () => {
+            const contract = { type: 'array', contract: {} };
+            stubFetch(async () => response({ json: async () => validEnvelope({ data: { hour: 0 } }) }));
+            await expect(new DataFetcher('u', contract).fetch()).rejects.toThrow(/must be of type "array"/);
         });
     });
 

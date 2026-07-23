@@ -14,6 +14,16 @@ const detailsOf = async (data, contract, path) => {
     throw new Error('Expected validateContract to throw');
 };
 
+const detailsOfValue = async (value, params, path = 'data') => {
+    try {
+        await validator().validateValue(value, params, path);
+    } catch (err) {
+        expect(err).toBeInstanceOf(JsonPayloadContractViolation);
+        return err.getFieldDetails();
+    }
+    throw new Error('Expected validateValue to throw');
+};
+
 describe('JsonPayloadContractValidator', () => {
     it('rejects data that is not an object', async () => {
         const details = await detailsOf('not-an-object', {});
@@ -109,6 +119,47 @@ describe('JsonPayloadContractValidator', () => {
         it('accepts an object with no nested contract', async () => {
             await expect(validator().validateContract({ a: { anything: 1 } }, { a: { type: 'object' } }))
                 .resolves.toBeUndefined();
+        });
+    });
+
+    // validateValue applies a descriptor to a value directly (rather than to a
+    // named field), so a payload's top-level `data` can itself be an array or an
+    // object of any depth.
+    describe('validateValue (top-level descriptors)', () => {
+        it('validates a bare array against an element contract', async () => {
+            const params = { type: 'array', contract: { hour: { type: 'number', keyRequired: true } } };
+            await expect(validator().validateValue([{ hour: 0 }, { hour: 1 }], params, 'data'))
+                .resolves.toBeUndefined();
+        });
+
+        it('reports a failing array element with an indexed path from the root', async () => {
+            const params = { type: 'array', contract: { hour: { type: 'number', keyRequired: true } } };
+            const details = await detailsOfValue([{ hour: '0' }], params);
+            expect(details).toMatchObject({ fieldPath: 'data[].hour', fieldProblem: 'type', fieldCorrection: 'number' });
+        });
+
+        it('throws when an array is expected but an object is given', async () => {
+            const details = await detailsOfValue({ hour: 0 }, { type: 'array' });
+            expect(details).toMatchObject({ fieldPath: 'data', fieldProblem: 'type', fieldCorrection: 'array' });
+        });
+
+        it('validates a bare object against a field contract', async () => {
+            const params = { type: 'object', contract: { temp: { type: 'number', keyRequired: true } } };
+            await expect(validator().validateValue({ temp: 21 }, params, 'data')).resolves.toBeUndefined();
+        });
+
+        it('validates an object of several sub-payloads, each object or array', async () => {
+            const params = {
+                type: 'object',
+                contract: {
+                    subdata1: { type: 'object', contract: { a: { type: 'number', keyRequired: true } } },
+                    subdata2: { type: 'array', contract: { b: { type: 'string', keyRequired: true } } },
+                },
+            };
+            await expect(validator().validateValue({ subdata1: { a: 1 }, subdata2: [{ b: 'x' }] }, params, 'data'))
+                .resolves.toBeUndefined();
+            const details = await detailsOfValue({ subdata1: { a: 1 }, subdata2: [{}] }, params);
+            expect(details).toMatchObject({ fieldPath: 'data.subdata2[].b', fieldProblem: 'required' });
         });
     });
 });
