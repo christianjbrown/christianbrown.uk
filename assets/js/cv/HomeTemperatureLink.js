@@ -8,14 +8,19 @@ import EN_GB from '../i18n/messages.en-GB.js';
 // The endpoint returns per-device readings under `devices`; the header link
 // only needs to average their temperatures, so it validates just those fields.
 const JSON_CONTRACT = {
-    'devices': {
-        'type': 'array',
-        'cannotBeEmpty': true,
-        'keyRequired': true,
-        'contract': {
-            'temperatureValue': {'type': 'number', 'keyRequired': true, 'cannotBeEmpty': true},
-            'temperatureTimestamp': {'type': 'number', 'keyRequired': true, 'cannotBeEmpty': true},
-            'temperatureStale': {'type': 'boolean', 'keyRequired': true, 'cannotBeEmpty': true},
+    'type': 'object',
+    'keyRequired': true,
+    'cannotBeEmpty': true,
+    'contract': {
+        'devices': {
+            'type': 'array',
+            'cannotBeEmpty': true,
+            'keyRequired': true,
+            'contract': {
+                'temperatureValue': {'type': 'number', 'keyRequired': true, 'cannotBeEmpty': true},
+                'temperatureTimestamp': {'type': 'number', 'keyRequired': true, 'cannotBeEmpty': true},
+                'temperatureStale': {'type': 'boolean', 'keyRequired': true, 'cannotBeEmpty': true},
+            },
         },
     },
 };
