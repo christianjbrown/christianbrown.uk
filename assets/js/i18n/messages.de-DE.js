@@ -241,4 +241,24 @@ export default {
         },
     },
 
+    climateHistory: {
+        title: 'Klimaverlauf',
+        loading: 'Klimaverlauf wird geladen …',
+        error: 'Der Klimaverlauf konnte gerade nicht geladen werden.',
+        zoomInLabel: 'Vergrößern – feinere Auflösung, kürzerer Zeitraum',
+        zoomOutLabel: 'Verkleinern – gröbere Auflösung, längerer Zeitraum',
+        series: {
+            outside: 'Außentemperatur',
+            insideMin: 'Innentemperatur (Min.)',
+            insideMax: 'Innentemperatur (Max.)',
+        },
+        resolutions: {
+            'hourly-day': 'Letzter Tag · stündlich',
+            'hourly-1-month': 'Letzter Monat · stündlich',
+            'daily-1-month': 'Letzter Monat · täglich',
+            'daily-3-month': 'Letzte 3 Monate · täglich',
+            'daily-6-month': 'Letzte 6 Monate · täglich',
+            'daily-12-month': 'Letzte 12 Monate · täglich',
+        },
+    },
 };

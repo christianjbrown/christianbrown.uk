@@ -235,4 +235,25 @@ export default {
             return `🏠 家中 ${temperature}`;
         },
     },
+
+    climateHistory: {
+        title: '气候历史',
+        loading: '正在加载气候历史…',
+        error: '暂时无法加载气候历史。',
+        zoomInLabel: '放大 — 更精细的分辨率、更短的时间范围',
+        zoomOutLabel: '缩小 — 更粗的分辨率、更长的时间范围',
+        series: {
+            outside: '室外温度',
+            insideMin: '室内最低温度',
+            insideMax: '室内最高温度',
+        },
+        resolutions: {
+            'hourly-day': '最近一天 · 每小时',
+            'hourly-1-month': '最近一个月 · 每小时',
+            'daily-1-month': '最近一个月 · 每天',
+            'daily-3-month': '最近 3 个月 · 每天',
+            'daily-6-month': '最近 6 个月 · 每天',
+            'daily-12-month': '最近 12 个月 · 每天',
+        },
+    },
 };

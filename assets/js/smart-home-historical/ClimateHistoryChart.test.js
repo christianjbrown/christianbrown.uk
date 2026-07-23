@@ -122,19 +122,22 @@ describe('ClimateHistoryChart', () => {
 
         const plot = uPlot.instances[0];
         expect(plot.target).toBe(els.chart);
-        // [x, insideMax, insideMin, outsideMax] — the null outside reading is a gap.
+        // Legend order (left→right): outside, inside min, inside max — so the data
+        // columns are [x, outsideMax, insideMin, insideMax]; the null outside is a gap.
         expect(plot.data).toEqual([
             [Date.UTC(2026, 6, 19) / 1000, Date.UTC(2026, 6, 20) / 1000],
-            [24.1, 25.0],
-            [19.3, 20.1],
             [22.6, null],
+            [19.3, 20.1],
+            [24.1, 25.0],
         ]);
-        expect(plot.opts.series[1].stroke).toBe('#75923c');
-        expect(plot.opts.series[3].stroke).toBe('#555');
-        expect(plot.opts.series[1].label).toBe('Inside max temperature');
+        expect(plot.opts.series[1].stroke).toBe('#555');
+        expect(plot.opts.series[2].stroke).toBe('#75923c');
+        expect(plot.opts.series[3].stroke).toBe('#75923c');
+        expect(plot.opts.series[1].label).toBe('Outside temperature');
         expect(plot.opts.series[2].label).toBe('Inside min temperature');
-        expect(plot.opts.series[3].label).toBe('Outside temperature');
-        expect(plot.opts.bands[0]).toEqual({ series: [1, 2], fill: 'rgba(117,146,60,.18)' });
+        expect(plot.opts.series[3].label).toBe('Inside max temperature');
+        // Band between inside max (series 3, upper) and inside min (series 2, lower).
+        expect(plot.opts.bands[0]).toEqual({ series: [3, 2], fill: 'rgba(117,146,60,.18)' });
         // Locale-aware date formatters are wired onto the x axis and its readout.
         expect(plot.opts.axes[0].values).toBeTypeOf('function');
         expect(plot.opts.series[0].value).toBeTypeOf('function');
@@ -145,6 +148,33 @@ describe('ClimateHistoryChart', () => {
         expect(els.resolution.textContent).toBe('Last month · hourly');
         expect(els.zoomIn.disabled).toBe(false);
         expect(els.zoomOut.disabled).toBe(false);
+        // Localised aria-labels come from the catalogue (en-GB by default).
+        expect(els.zoomIn.getAttribute('aria-label')).toBe('Zoom in — finer resolution, shorter range');
+        expect(els.zoomOut.getAttribute('aria-label')).toBe('Zoom out — coarser resolution, longer range');
+    });
+
+    it('uses the provided catalogue for the series, resolution and status text', async () => {
+        const els = makeEls();
+        const uPlot = fakeUplot();
+        const catalogue = {
+            locale: 'de-DE',
+            climateHistory: {
+                title: 'Klimaverlauf',
+                loading: 'Wird geladen …',
+                error: 'Fehler.',
+                zoomInLabel: 'Vergrößern',
+                zoomOutLabel: 'Verkleinern',
+                series: { outside: 'Außentemperatur', insideMin: 'Innen (Min.)', insideMax: 'Innen (Max.)' },
+                resolutions: { 'hourly-1-month': 'Letzter Monat · stündlich' },
+            },
+        };
+
+        await new ClimateHistoryChart(els, uPlot, resolvingFetcher(), catalogue).start();
+
+        expect(els.resolution.textContent).toBe('Letzter Monat · stündlich');
+        expect(els.zoomIn.getAttribute('aria-label')).toBe('Vergrößern');
+        expect(uPlot.instances[0].opts.series[1].label).toBe('Außentemperatur');
+        expect(uPlot.instances[0].opts.series[3].label).toBe('Innen (Max.)');
     });
 
     it('pins the x-axis to whole-day ticks on the daily resolutions', async () => {

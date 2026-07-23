@@ -241,4 +241,24 @@ export default {
         },
     },
 
+    climateHistory: {
+        title: 'Historique du climat',
+        loading: 'Chargement de l’historique du climat…',
+        error: 'Impossible de charger l’historique du climat pour le moment.',
+        zoomInLabel: 'Zoom avant – résolution plus fine, période plus courte',
+        zoomOutLabel: 'Zoom arrière – résolution plus grossière, période plus longue',
+        series: {
+            outside: 'Température extérieure',
+            insideMin: 'Température intérieure (min.)',
+            insideMax: 'Température intérieure (max.)',
+        },
+        resolutions: {
+            'hourly-day': 'Dernier jour · horaire',
+            'hourly-1-month': 'Dernier mois · horaire',
+            'daily-1-month': 'Dernier mois · quotidien',
+            'daily-3-month': 'Les 3 derniers mois · quotidien',
+            'daily-6-month': 'Les 6 derniers mois · quotidien',
+            'daily-12-month': 'Les 12 derniers mois · quotidien',
+        },
+    },
 };

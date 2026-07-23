@@ -240,4 +240,25 @@ export default {
             return `🏠 ${temperature} hjemme`;
         },
     },
+
+    climateHistory: {
+        title: 'Klimahistorik',
+        loading: 'Indlæser klimahistorik…',
+        error: 'Kunne ikke indlæse klimahistorikken lige nu.',
+        zoomInLabel: 'Zoom ind – finere opløsning, kortere periode',
+        zoomOutLabel: 'Zoom ud – grovere opløsning, længere periode',
+        series: {
+            outside: 'Udetemperatur',
+            insideMin: 'Indetemperatur (min.)',
+            insideMax: 'Indetemperatur (maks.)',
+        },
+        resolutions: {
+            'hourly-day': 'Sidste dag · pr. time',
+            'hourly-1-month': 'Sidste måned · pr. time',
+            'daily-1-month': 'Sidste måned · dagligt',
+            'daily-3-month': 'Sidste 3 måneder · dagligt',
+            'daily-6-month': 'Sidste 6 måneder · dagligt',
+            'daily-12-month': 'Sidste 12 måneder · dagligt',
+        },
+    },
 };

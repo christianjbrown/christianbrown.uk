@@ -315,4 +315,27 @@ export default {
             return `🏠 ${temperature} at home`;
         },
     },
+
+    // Climate-history page: chart series labels, zoom-control text, the
+    // resolution labels (keyed by endpoint route) and load/error status.
+    climateHistory: {
+        title: 'Climate history',
+        loading: 'Loading climate history…',
+        error: "Couldn't load the climate history right now.",
+        zoomInLabel: 'Zoom in — finer resolution, shorter range',
+        zoomOutLabel: 'Zoom out — coarser resolution, longer range',
+        series: {
+            outside: 'Outside temperature',
+            insideMin: 'Inside min temperature',
+            insideMax: 'Inside max temperature',
+        },
+        resolutions: {
+            'hourly-day': 'Last day · hourly',
+            'hourly-1-month': 'Last month · hourly',
+            'daily-1-month': 'Last month · daily',
+            'daily-3-month': 'Last 3 months · daily',
+            'daily-6-month': 'Last 6 months · daily',
+            'daily-12-month': 'Last 12 months · daily',
+        },
+    },
 };

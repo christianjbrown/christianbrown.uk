@@ -236,4 +236,25 @@ export default {
             return `🏠 家中 ${temperature}`;
         },
     },
+
+    climateHistory: {
+        title: '氣候歷史',
+        loading: '正在載入氣候歷史…',
+        error: '暫時無法載入氣候歷史。',
+        zoomInLabel: '放大 — 更精細的解析度、更短的時間範圍',
+        zoomOutLabel: '縮小 — 更粗略的解析度、更長的時間範圍',
+        series: {
+            outside: '室外溫度',
+            insideMin: '室內最低溫度',
+            insideMax: '室內最高溫度',
+        },
+        resolutions: {
+            'hourly-day': '最近一天 · 每小時',
+            'hourly-1-month': '最近一個月 · 每小時',
+            'daily-1-month': '最近一個月 · 每天',
+            'daily-3-month': '最近 3 個月 · 每天',
+            'daily-6-month': '最近 6 個月 · 每天',
+            'daily-12-month': '最近 12 個月 · 每天',
+        },
+    },
 };
