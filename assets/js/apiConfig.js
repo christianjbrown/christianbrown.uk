@@ -39,3 +39,13 @@ export function smartThingsClimateUrl() {
 export function metOfficeWeatherUrl() {
     return resolveUrl('metOfficeWeather');
 }
+
+/**
+ * The historical-climate endpoint base. A resolution route (e.g. `/hourly-1-month`)
+ * is appended to this by the caller.
+ *
+ * @return {String} the historical-climate endpoint base URL.
+ */
+export function historicalClimateUrl() {
+    return resolveUrl('historicalClimate');
+}

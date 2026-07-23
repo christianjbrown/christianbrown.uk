@@ -5,5 +5,9 @@
 .idea/
 _site/
 vendor/
+# Third-party front-end assets are vendored into the site under assets/**/vendor/
+# and must be committed (the `vendor/` rule above is for the Ruby bundle only).
+!assets/js/vendor/
+!assets/css/vendor/
 node_modules/
 coverage/

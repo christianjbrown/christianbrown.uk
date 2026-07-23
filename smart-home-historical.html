@@ -1,0 +1,23 @@
+---
+layout: "global"
+title: "Christian Brown's smart home — history"
+description: "Historical indoor and outdoor climate."
+stylesheets:
+    - "/assets/css/vendor/uPlot.min.css"
+    - "/assets/css/smart-home-historical.css"
+javascripts:
+    - "/assets/js/smart-home-historical/index.js"
+
+noindex: true
+---
+<h2 id="smart-home-historical-title">Climate history</h2>
+                <p id="smart-home-historical-intro">Indoor temperature range (green band: daily/hourly min–max) against the outdoor high (grey). A temporary page while the history builds up; it will fold into the <a href="/smart-home">smart home</a> page later.</p>
+                <div class="climate-chart-section">
+                    <div class="climate-chart__toolbar">
+                        <span class="climate-chart__resolution" id="chart-resolution" aria-live="polite"></span>
+                        <button type="button" id="chart-zoom-in" class="climate-chart__zoom" aria-label="Zoom in — finer resolution, shorter range">＋</button>
+                        <button type="button" id="chart-zoom-out" class="climate-chart__zoom" aria-label="Zoom out — coarser resolution, longer range">－</button>
+                    </div>
+                    <div id="climate-chart" class="climate-chart__canvas"></div>
+                    <p id="chart-status" class="climate-chart__status" role="status" aria-live="polite">Loading climate history…</p>
+                </div>

@@ -27,6 +27,10 @@ smart_home_met_office_weather_url_prod: "https://cdn.christianbrown.uk/get-met-o
 smart_home_met_office_weather_url_dev: "http://127.0.0.1:8081"
 smart_home_met_office_weather_use_local: false
 
+smart_home_historical_climate_url_prod: "https://cdn.christianbrown.uk/get-historical-climate-data"
+smart_home_historical_climate_url_dev: "http://127.0.0.1:8082"
+smart_home_historical_climate_use_local: false
+
 header_safari_tab_mask_color: "#5bbad5"
 header_theme_color: "#ffffff"
 header_msapplication_tile_color: "#ffffff"
