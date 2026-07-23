@@ -125,13 +125,13 @@ export default class SmartHomePage {
         const time = now.formatUserFriendlyHour(false, true);
         const date = now.formatUserFriendlyDate(true);
 
-        const insideTemp = homeData ? averageTemperature(homeData['devices'] ?? []) : null;
+        const insideTemp = homeData ? averageTemperature(homeData) : null;
         if (!insideTemp || !weatherData) {
             this.#statusDom.textContent = this.#catalogue.statusLine(time, date, null);
             return;
         }
 
-        const insideHumidity = averageHumidity(homeData['devices']);
+        const insideHumidity = averageHumidity(homeData);
         const summary = new ClimateSummary(
             insideTemp.value,
             insideHumidity ? insideHumidity.value : null,

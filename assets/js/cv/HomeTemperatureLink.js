@@ -5,23 +5,16 @@ import Temperature from '../smart-home/Temperature.js';
 import { averageTemperature } from '../smart-home/averageReadings.js';
 import EN_GB from '../i18n/messages.en-GB.js';
 
-// The endpoint returns per-device readings under `devices`; the header link
-// only needs to average their temperatures, so it validates just those fields.
+// The endpoint returns a per-device readings array; the header link only needs
+// to average their temperatures, so it validates just those fields.
 const JSON_CONTRACT = {
-    'type': 'object',
+    'type': 'array',
     'keyRequired': true,
     'cannotBeEmpty': true,
     'contract': {
-        'devices': {
-            'type': 'array',
-            'cannotBeEmpty': true,
-            'keyRequired': true,
-            'contract': {
-                'temperatureValue': {'type': 'number', 'keyRequired': true, 'cannotBeEmpty': true},
-                'temperatureTimestamp': {'type': 'number', 'keyRequired': true, 'cannotBeEmpty': true},
-                'temperatureStale': {'type': 'boolean', 'keyRequired': true, 'cannotBeEmpty': true},
-            },
-        },
+        'temperatureValue': {'type': 'number', 'keyRequired': true, 'cannotBeEmpty': true},
+        'temperatureTimestamp': {'type': 'number', 'keyRequired': true, 'cannotBeEmpty': true},
+        'temperatureStale': {'type': 'boolean', 'keyRequired': true, 'cannotBeEmpty': true},
     },
 };
 
@@ -57,7 +50,7 @@ export default class HomeTemperatureLink {
             return;
         }
 
-        const average = averageTemperature(data.devices);
+        const average = averageTemperature(data);
         if (!average) {
             return;
         }

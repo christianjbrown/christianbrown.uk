@@ -32,10 +32,10 @@ beforeEach(() => {
 describe('HomeTemperatureLink', () => {
     it('averages the device temperatures, then fills in and reveals the link on success', async () => {
         const dom = makeDom();
-        fetchMock.mockResolvedValue({ devices: [
+        fetchMock.mockResolvedValue([
             { temperatureValue: 26.0, temperatureTimestamp: 100, temperatureStale: false },
             { temperatureValue: 27.2, temperatureTimestamp: 200, temperatureStale: false },
-        ] });
+        ]);
 
         await new HomeTemperatureLink(dom, 'url').update();
 
@@ -55,9 +55,9 @@ describe('HomeTemperatureLink', () => {
 
     it('leaves the link hidden when no device has a usable temperature', async () => {
         const dom = makeDom();
-        fetchMock.mockResolvedValue({ devices: [
+        fetchMock.mockResolvedValue([
             { temperatureValue: null, temperatureTimestamp: 100, temperatureStale: false },
-        ] });
+        ]);
 
         await new HomeTemperatureLink(dom, 'url').update();
 
