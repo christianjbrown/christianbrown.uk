@@ -43,16 +43,14 @@ beforeEach(() => {
 describe('FloorPlan', () => {
     it('reveals the section and labels only rooms present in the data, averaging their devices', () => {
         const subject = make();
-        subject.render({
-            devices: [
-                {roomName: 'Living room', temperatureValue: 26.6, temperatureStale: false, humidityValue: 53, humidityStale: false},
-                {roomName: 'Living room', temperatureValue: 27.0, temperatureStale: false, humidityValue: 51, humidityStale: false},
-                {roomName: 'Study', temperatureValue: 26.9, temperatureStale: false},
-                {roomName: 'Kitchen', temperatureValue: 24.5, temperatureStale: false, humidityValue: 48, humidityStale: false},
-                {temperatureValue: 22, temperatureStale: false},
-                {roomName: 'Empty', temperatureValue: null, humidityValue: null},
-            ],
-        }, null);
+        subject.render([
+            {roomName: 'Living room', temperatureValue: 26.6, temperatureStale: false, humidityValue: 53, humidityStale: false},
+            {roomName: 'Living room', temperatureValue: 27.0, temperatureStale: false, humidityValue: 51, humidityStale: false},
+            {roomName: 'Study', temperatureValue: 26.9, temperatureStale: false},
+            {roomName: 'Kitchen', temperatureValue: 24.5, temperatureStale: false, humidityValue: 48, humidityStale: false},
+            {temperatureValue: 22, temperatureStale: false},
+            {roomName: 'Empty', temperatureValue: null, humidityValue: null},
+        ], null);
 
         expect(section.hidden).toBe(false);
         // Living room + Study only: Kitchen has no anchor, Bathroom no data,
@@ -73,7 +71,7 @@ describe('FloorPlan', () => {
 
     it('draws the floor headings at their anchors whenever the plan is shown', () => {
         const subject = make();
-        subject.render({devices: [{roomName: 'Study', temperatureValue: 20, temperatureStale: false}]}, null);
+        subject.render([{roomName: 'Study', temperatureValue: 20, temperatureStale: false}], null);
 
         const floors = floorLabels();
         expect(floors.map((floor) => floor.textContent)).toEqual(['Third floor', 'Fourth floor']);
@@ -84,7 +82,7 @@ describe('FloorPlan', () => {
 
     it('clears the floor headings on re-render and omits them while the plan is hidden', () => {
         const subject = make();
-        subject.render({devices: []}, null);
+        subject.render([], null);
         expect(floorLabels()).toHaveLength(2);
 
         subject.render(null, null);
@@ -105,18 +103,16 @@ describe('FloorPlan', () => {
         expect(section.hidden).toBe(true);
 
         // Indoor data arrives -> revealed.
-        subject.render({devices: [{roomName: 'Study', temperatureValue: 20, temperatureStale: false}]}, null);
+        subject.render([{roomName: 'Study', temperatureValue: 20, temperatureStale: false}], null);
         expect(section.hidden).toBe(false);
         expect(labelFor('Study')).not.toBeUndefined();
     });
 
     it('mutes a room whose readings are all stale', () => {
         const subject = make();
-        subject.render({
-            devices: [
-                {roomName: 'Living room', temperatureValue: 27.3, temperatureStale: true, humidityValue: 50, humidityStale: true},
-            ],
-        }, null);
+        subject.render([
+            {roomName: 'Living room', temperatureValue: 27.3, temperatureStale: true, humidityValue: 50, humidityStale: true},
+        ], null);
 
         const livingRoom = labelFor('Living room');
         expect(livingRoom.querySelector('.floor-plan__temp').classList.contains('floor-plan__temp--muted')).toBe(true);
@@ -125,12 +121,10 @@ describe('FloorPlan', () => {
 
     it('keeps a room fresh when only some of its devices are stale', () => {
         const subject = make();
-        subject.render({
-            devices: [
-                {roomName: 'Living room', temperatureValue: 27.3, temperatureStale: true, humidityValue: 50, humidityStale: true},
-                {roomName: 'Living room', temperatureValue: 26.0, temperatureStale: false, humidityValue: 52, humidityStale: false},
-            ],
-        }, null);
+        subject.render([
+            {roomName: 'Living room', temperatureValue: 27.3, temperatureStale: true, humidityValue: 50, humidityStale: true},
+            {roomName: 'Living room', temperatureValue: 26.0, temperatureStale: false, humidityValue: 52, humidityStale: false},
+        ], null);
 
         const livingRoom = labelFor('Living room');
         expect(livingRoom.querySelector('.floor-plan__temp').classList.contains('floor-plan__temp--muted')).toBe(false);
@@ -139,7 +133,7 @@ describe('FloorPlan', () => {
 
     it('adds an outside label at each anchor once the indoor data is present', () => {
         const subject = make();
-        subject.render({devices: []}, {temp: 26.7, humidity: 39.3});
+        subject.render([], {temp: 26.7, humidity: 39.3});
 
         const outside = labels();
         expect(outside).toHaveLength(2);
@@ -152,7 +146,7 @@ describe('FloorPlan', () => {
 
     it('shows the outside temperature even when its humidity is missing', () => {
         const subject = make();
-        subject.render({devices: []}, {temp: 26.7});
+        subject.render([], {temp: 26.7});
 
         const outside = labelFor('Outside');
         expect(outside.querySelector('.floor-plan__temp').textContent).toContain('26.7°c');
@@ -161,14 +155,14 @@ describe('FloorPlan', () => {
 
     it('renders no labels for indoor data with no devices or weather with no temp', () => {
         const subject = make();
-        subject.render({}, {});
+        subject.render([], {});
         expect(section.hidden).toBe(false);
         expect(labels()).toHaveLength(0);
     });
 
     it('clears previous labels and re-hides on losing the indoor data', () => {
         const subject = make();
-        subject.render({devices: [{roomName: 'Living room', temperatureValue: 26, temperatureStale: false}]}, {temp: 20});
+        subject.render([{roomName: 'Living room', temperatureValue: 26, temperatureStale: false}], {temp: 20});
         expect(labels()).toHaveLength(3);
 
         subject.render(null, null);
@@ -180,19 +174,17 @@ describe('FloorPlan', () => {
         // A floor anchor whose key isn't in any catalogue's `floor` map renders
         // its key verbatim rather than blank.
         const subject = make(ROOM_ANCHORS, OUTSIDE_ANCHORS, { 'Attic': { 'x': 50, 'y': 1 } });
-        subject.render({ devices: [{ roomName: 'Study', temperatureValue: 20, temperatureStale: false }] }, null);
+        subject.render([{ roomName: 'Study', temperatureValue: 20, temperatureStale: false }], null);
 
         expect(floorLabels().map((floor) => floor.textContent)).toEqual(['Attic']);
     });
 
     it('displays mapped room names for the locale (joining on the raw API name)', () => {
         const subject = make(ROOM_ANCHORS, OUTSIDE_ANCHORS, FLOOR_ANCHORS, DE_DE);
-        subject.render({
-            devices: [
-                { roomName: 'Living room', temperatureValue: 26, temperatureStale: false },
-                { roomName: 'Study', temperatureValue: 25, temperatureStale: false },
-            ],
-        }, null);
+        subject.render([
+            { roomName: 'Living room', temperatureValue: 26, temperatureStale: false },
+            { roomName: 'Study', temperatureValue: 25, temperatureStale: false },
+        ], null);
 
         // Joined on the raw 'Living room'/'Study' names, displayed localised.
         expect(labelFor('Wohnzimmer')).not.toBeUndefined();
@@ -206,7 +198,7 @@ describe('FloorPlan', () => {
         section.append(container);
         document.body.append(section);
         const subject = new FloorPlan(section);
-        subject.render({devices: [{roomName: 'Kitchen', temperatureValue: 24, temperatureStale: false}]}, {temp: 20});
+        subject.render([{roomName: 'Kitchen', temperatureValue: 24, temperatureStale: false}], {temp: 20});
 
         // Kitchen is one of the real room anchors, plus two outside labels.
         expect(labels()).toHaveLength(3);

@@ -82,8 +82,8 @@ export default class FloorPlan {
             this.#addFloorLabel(anchor, this.#catalogue.floor[name] ?? name);
         }
 
-        if (Array.isArray(homeData['devices'])) {
-            const rooms = FloorPlan.#averageByRoom(homeData['devices']);
+        if (Array.isArray(homeData)) {
+            const rooms = FloorPlan.#averageByRoom(homeData);
             for (const [roomName, anchor] of Object.entries(this.#roomAnchors)) {
                 const room = rooms.get(roomName);
                 if (room) {
