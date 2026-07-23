@@ -25,12 +25,16 @@
     :root:not([data-theme="light"]) {
         --cc-outside: #9aa0a6;
         --cc-inside-fill: rgba(163, 199, 109, 0.22);
+        // A shade darker than the muted grey the axis labels use, so the
+        // gridlines recede on the dark ground (light mode keeps --c-muted).
+        --cc-grid: #383b42;
     }
 }
 
 :root[data-theme="dark"] {
     --cc-outside: #9aa0a6;
     --cc-inside-fill: rgba(163, 199, 109, 0.22);
+    --cc-grid: #383b42;
 }
 
 // The homepage/smart-home header is taller than this page's (it carries a nav
