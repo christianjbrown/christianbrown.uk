@@ -41,7 +41,7 @@ export default defineConfig({
             // theme-init.js is a classic (non-module) pre-paint shim loaded
             // directly by the page <head>; it can't be imported, so it's tested
             // via Theme.js (which it mirrors) rather than in isolation.
-            exclude: ['**/*.test.js', 'assets/data/**', 'assets/js/theme-init.js'],
+            exclude: ['**/*.test.js', 'assets/data/**', 'assets/js/theme-init.js', 'assets/js/vendor/**'],
             reporter: ['text', 'html'],
             reportsDirectory: 'coverage',
             thresholds: {
