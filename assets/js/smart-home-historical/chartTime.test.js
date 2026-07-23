@@ -17,6 +17,13 @@ describe('chartTime', () => {
         expect(formatAxisTick('en-GB', AFTERNOON, true)).toBe('15:00');
     });
 
+    it('switches to GMT (no offset) for a winter reading', () => {
+        // Same 14:00 UTC wall time, but in January the UK is on GMT, so it reads
+        // 14:00 rather than 15:00 — Europe/London applies DST per-timestamp.
+        const winterAfternoon = Date.UTC(2026, 0, 15, 14, 0) / 1000; // 2026-01-15 14:00 UTC
+        expect(formatAxisTick('en-GB', winterAfternoon, true)).toBe('14:00');
+    });
+
     it('respects a non-English locale', () => {
         expect(formatAxisTick('de-DE', MIDNIGHT, false)).not.toBe(formatAxisTick('en-GB', MIDNIGHT, false));
     });
