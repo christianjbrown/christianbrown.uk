@@ -37,13 +37,16 @@ describe('smart-home-historical/index.js', () => {
         window.dispatchEvent(new Event('load'));
 
         expect(ctor).toHaveBeenCalledTimes(1);
-        const [els, uPlot] = ctor.mock.calls[0];
+        const [els, uPlot, createFetcher, locale] = ctor.mock.calls[0];
         expect(els.chart).toBe(document.getElementById('climate-chart'));
         expect(els.status).toBe(document.getElementById('chart-status'));
         expect(els.zoomIn).toBe(document.getElementById('chart-zoom-in'));
         expect(els.zoomOut).toBe(document.getElementById('chart-zoom-out'));
         expect(els.resolution).toBe(document.getElementById('chart-resolution'));
         expect(uPlot).toBeDefined();
+        // The default fetcher is left in place; a resolved locale is threaded in.
+        expect(createFetcher).toBeUndefined();
+        expect(typeof locale).toBe('string');
         expect(start).toHaveBeenCalledTimes(1);
     });
 });

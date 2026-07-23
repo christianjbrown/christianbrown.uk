@@ -1,6 +1,7 @@
 'use strict';
 
 import uPlot from '../vendor/uPlot.esm.js';
+import { applyLocale } from '../Locale.js';
 import ClimateHistoryChart from './ClimateHistoryChart.js';
 import {
     CHART_SELECTOR,
@@ -12,6 +13,7 @@ import {
 
 window.addEventListener('load',
     () => {
+        const locale = applyLocale();
         const els = {
             chart: document.querySelector(CHART_SELECTOR),
             status: document.querySelector(STATUS_SELECTOR),
@@ -20,6 +22,6 @@ window.addEventListener('load',
             resolution: document.querySelector(RESOLUTION_SELECTOR),
         };
 
-        void new ClimateHistoryChart(els, uPlot).start();
+        void new ClimateHistoryChart(els, uPlot, undefined, locale).start();
     }
 );

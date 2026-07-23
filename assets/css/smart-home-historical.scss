@@ -33,10 +33,14 @@
     --cc-inside-fill: rgba(163, 199, 109, 0.22);
 }
 
-#smart-home-historical-intro {
-    max-width: 42rem;
-    color: $colour-grayscale-1;
-    font-size: 0.95rem;
+// The homepage/smart-home header is taller than this page's (it carries a nav
+// row this page has no equivalent of). The avatar is vertically centred in the
+// header, so against a shorter header it sits higher and appears to jump when
+// navigating between the pages via the avatar home-link. Reserve the same header
+// height so the shared avatar sits identically on all three (mirrors the rule in
+// smart-home.scss / global.scss's high-specificity `.header-data` selector).
+html body div.container header div.header-data {
+    min-height: 9.75rem;
 }
 
 .climate-chart-section {
@@ -88,6 +92,11 @@
     .u-legend {
         color: $colour-grayscale-2;
         font-family: $font-sans-serif;
+        // The first legend row is the x (time) series; the axis already shows
+        // the dates, so drop it from the key.
+        .u-series:first-child {
+            display: none;
+        }
     }
 }
 
