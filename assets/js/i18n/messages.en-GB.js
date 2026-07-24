@@ -330,6 +330,15 @@ export default {
             insideMin: 'Inside min temperature',
             insideMax: 'Inside max temperature',
         },
+        humiditySeries: {
+            outside: 'Outside humidity',
+            insideMin: 'Inside min humidity',
+            insideMax: 'Inside max humidity',
+        },
+        metricToggle: {
+            temperature: 'Show temperature',
+            humidity: 'Show humidity',
+        },
         resolutions: {
             'hourly-day': 'Last day · hourly',
             'hourly-1-month': 'Last month · hourly',

@@ -33,7 +33,9 @@ describe('smart-home-historical/index.js', () => {
             <p id="chart-status"></p>
             <button id="chart-zoom-in"></button>
             <button id="chart-zoom-out"></button>
-            <span id="chart-resolution"></span>`;
+            <span id="chart-resolution"></span>
+            <button id="chart-metric-temp"></button>
+            <button id="chart-metric-humidity"></button>`;
 
         window.dispatchEvent(new Event('load'));
 
@@ -47,6 +49,8 @@ describe('smart-home-historical/index.js', () => {
         expect(els.zoomIn).toBe(document.getElementById('chart-zoom-in'));
         expect(els.zoomOut).toBe(document.getElementById('chart-zoom-out'));
         expect(els.resolution).toBe(document.getElementById('chart-resolution'));
+        expect(els.metricTemp).toBe(document.getElementById('chart-metric-temp'));
+        expect(els.metricHumidity).toBe(document.getElementById('chart-metric-humidity'));
         expect(uPlot).toBeDefined();
         // The default fetcher is left in place; a resolved catalogue is threaded in.
         expect(createFetcher).toBeUndefined();

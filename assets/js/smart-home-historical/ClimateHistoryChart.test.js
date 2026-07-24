@@ -26,8 +26,16 @@ import { HISTORICAL_CONTRACT } from './contract.js';
 
 const BASE = 'https://api.test/get-historical-climate-data';
 const BUCKETS = [
-    { date: '2026-07-19', insideMaxTemp: 24.1, insideMinTemp: 19.3, outsideMaxTemp: 22.6 },
-    { date: '2026-07-20', insideMaxTemp: 25.0, insideMinTemp: 20.1, outsideMaxTemp: null },
+    {
+        date: '2026-07-19',
+        insideMaxTemp: 24.1, insideMinTemp: 19.3, outsideMaxTemp: 22.6,
+        insideMaxHumidity: 58, insideMinHumidity: 41, outsideMaxHumidity: 73,
+    },
+    {
+        date: '2026-07-20',
+        insideMaxTemp: 25.0, insideMinTemp: 20.1, outsideMaxTemp: null,
+        insideMaxHumidity: 60, insideMinHumidity: 44, outsideMaxHumidity: null,
+    },
 ];
 
 const COLOR_VARS = {
@@ -76,8 +84,10 @@ function makeEls() {
     const zoomIn = document.createElement('button');
     const zoomOut = document.createElement('button');
     const resolution = document.createElement('span');
-    document.body.append(chart, status, zoomIn, zoomOut, resolution);
-    return { chart, status, zoomIn, zoomOut, resolution };
+    const metricTemp = document.createElement('button');
+    const metricHumidity = document.createElement('button');
+    document.body.append(chart, status, zoomIn, zoomOut, resolution, metricTemp, metricHumidity);
+    return { chart, status, zoomIn, zoomOut, resolution, metricTemp, metricHumidity };
 }
 
 const flush = () => new Promise((resolve) => setTimeout(resolve, 0));
@@ -151,6 +161,57 @@ describe('ClimateHistoryChart', () => {
         // Localised aria-labels come from the catalogue (en-GB by default).
         expect(els.zoomIn.getAttribute('aria-label')).toBe('Zoom in — finer resolution, shorter range');
         expect(els.zoomOut.getAttribute('aria-label')).toBe('Zoom out — coarser resolution, longer range');
+        // The metric toggle defaults to temperature (pressed) with humidity off.
+        expect(els.metricTemp.getAttribute('aria-pressed')).toBe('true');
+        expect(els.metricHumidity.getAttribute('aria-pressed')).toBe('false');
+        expect(els.metricTemp.getAttribute('aria-label')).toBe('Show temperature');
+        expect(els.metricHumidity.getAttribute('aria-label')).toBe('Show humidity');
+    });
+
+    it('switches to the humidity metric on toggle — no re-fetch, new labels and % readout', async () => {
+        const els = makeEls();
+        const uPlot = fakeUplot();
+        const fetcher = resolvingFetcher();
+        await new ClimateHistoryChart(els, uPlot, fetcher).start();
+
+        const fetchesBefore = fetcher.urls.length;
+        els.metricHumidity.dispatchEvent(new Event('click'));
+        await flush();
+
+        // A metric switch re-draws from the data already in hand — no new fetch.
+        expect(fetcher.urls.length).toBe(fetchesBefore);
+        expect(uPlot.instances).toHaveLength(2);
+
+        const plot = uPlot.instances.at(-1);
+        // Humidity columns: outside = outsideMaxHumidity (null → gap), then the
+        // inside min/max that form the band.
+        expect(plot.data).toEqual([
+            [Date.UTC(2026, 6, 19) / 1000, Date.UTC(2026, 6, 20) / 1000],
+            [73, null],
+            [41, 44],
+            [58, 60],
+        ]);
+        expect(plot.opts.series[1].label).toBe('Outside humidity');
+        expect(plot.opts.series[2].label).toBe('Inside min humidity');
+        expect(plot.opts.series[3].label).toBe('Inside max humidity');
+        // The y-axis and legend now read in percent.
+        expect(plot.opts.axes[1].values({}, [30, 60])).toEqual(['30%', '60%']);
+        expect(plot.opts.series[1].value({}, 73)).toBe('73%');
+
+        // aria-pressed follows the active metric.
+        expect(els.metricTemp.getAttribute('aria-pressed')).toBe('false');
+        expect(els.metricHumidity.getAttribute('aria-pressed')).toBe('true');
+    });
+
+    it('ignores a click on the already-active metric', async () => {
+        const els = makeEls();
+        const uPlot = fakeUplot();
+        await new ClimateHistoryChart(els, uPlot, resolvingFetcher()).start();
+
+        // Already on temperature: clicking it again is a no-op (no redraw).
+        els.metricTemp.dispatchEvent(new Event('click'));
+        await flush();
+        expect(uPlot.instances).toHaveLength(1);
     });
 
     it('uses the provided catalogue for the series, resolution and status text', async () => {
@@ -165,6 +226,8 @@ describe('ClimateHistoryChart', () => {
                 zoomInLabel: 'Vergrößern',
                 zoomOutLabel: 'Verkleinern',
                 series: { outside: 'Außentemperatur', insideMin: 'Innen (Min.)', insideMax: 'Innen (Max.)' },
+                humiditySeries: { outside: 'Außenluftfeuchte', insideMin: 'Innen (Min.)', insideMax: 'Innen (Max.)' },
+                metricToggle: { temperature: 'Temperatur anzeigen', humidity: 'Luftfeuchte anzeigen' },
                 resolutions: { 'hourly-1-month': 'Letzter Monat · stündlich' },
             },
         };
@@ -173,6 +236,8 @@ describe('ClimateHistoryChart', () => {
 
         expect(els.resolution.textContent).toBe('Letzter Monat · stündlich');
         expect(els.zoomIn.getAttribute('aria-label')).toBe('Vergrößern');
+        expect(els.metricTemp.getAttribute('aria-label')).toBe('Temperatur anzeigen');
+        expect(els.metricHumidity.getAttribute('aria-label')).toBe('Luftfeuchte anzeigen');
         expect(uPlot.instances[0].opts.series[1].label).toBe('Außentemperatur');
         expect(uPlot.instances[0].opts.series[3].label).toBe('Innen (Max.)');
     });

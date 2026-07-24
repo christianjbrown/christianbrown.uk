@@ -4,7 +4,10 @@
 // arrays uPlot expects. Each bucket carries a UTC `date` (YYYY-MM-DD) and, for
 // the hourly resolutions, an `hour` (0-23); the eight metric fields are always
 // present but may be null for a side that reported nothing in that bucket. We
-// plot only the three temperature series; a null becomes a gap in the line.
+// build both a temperature and a humidity trio (each: an outside line plus an
+// inside min/max band); the chart plots one metric at a time. Each side mirrors
+// the temperature choice of using the *max* outside field. A null becomes a gap
+// in the line.
 
 /**
  * The bucket's UTC start as Unix seconds (uPlot's x unit). Daily buckets have no
@@ -29,21 +32,30 @@ function orNull(value) {
 }
 
 /**
+ * One metric's three columns: an outside line and the inside min/max that form
+ * the band.
+ *
+ * @typedef {{outside: Array, insideMin: Array, insideMax: Array}} MetricColumns
+ */
+
+/**
  * @param {Object[]} buckets  the endpoint's `data` array, earliest first.
- * @return {{x: Number[], insideMax: Array, insideMin: Array, outsideMax: Array}}
+ * @return {{x: Number[], temp: MetricColumns, humidity: MetricColumns}}
  */
 export function bucketsToSeries(buckets) {
     const x = [];
-    const insideMax = [];
-    const insideMin = [];
-    const outsideMax = [];
+    const temp = { outside: [], insideMin: [], insideMax: [] };
+    const humidity = { outside: [], insideMin: [], insideMax: [] };
 
     for (const bucket of buckets) {
         x.push(bucketToTimestamp(bucket));
-        insideMax.push(orNull(bucket.insideMaxTemp));
-        insideMin.push(orNull(bucket.insideMinTemp));
-        outsideMax.push(orNull(bucket.outsideMaxTemp));
+        temp.outside.push(orNull(bucket.outsideMaxTemp));
+        temp.insideMin.push(orNull(bucket.insideMinTemp));
+        temp.insideMax.push(orNull(bucket.insideMaxTemp));
+        humidity.outside.push(orNull(bucket.outsideMaxHumidity));
+        humidity.insideMin.push(orNull(bucket.insideMinHumidity));
+        humidity.insideMax.push(orNull(bucket.insideMaxHumidity));
     }
 
-    return { x, insideMax, insideMin, outsideMax };
+    return { x, temp, humidity };
 }

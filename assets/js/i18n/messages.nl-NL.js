@@ -253,6 +253,15 @@ export default {
             insideMin: 'Binnentemperatuur (min.)',
             insideMax: 'Binnentemperatuur (max.)',
         },
+        humiditySeries: {
+            outside: 'Buitenluchtvochtigheid',
+            insideMin: 'Binnenluchtvochtigheid (min.)',
+            insideMax: 'Binnenluchtvochtigheid (max.)',
+        },
+        metricToggle: {
+            temperature: 'Temperatuur tonen',
+            humidity: 'Luchtvochtigheid tonen',
+        },
         resolutions: {
             'hourly-day': 'Laatste dag · per uur',
             'hourly-1-month': 'Laatste maand · per uur',
