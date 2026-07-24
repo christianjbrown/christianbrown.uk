@@ -220,7 +220,8 @@ export default {
 
     page: {
         smartHomeTitle: '智慧家庭',
-        roomsHeading: '📐 房間',
+        roomsHeading: '📐 平面圖',
+        historicalHeading: '📜 歷史',
         howItWorksHeading: '🏗️ 運作原理',
         floorPlanAlt: '房屋平面圖，標註各房間的溫度與濕度',
         howItWorksAlt: '顯示此頁面運作原理的示意圖',

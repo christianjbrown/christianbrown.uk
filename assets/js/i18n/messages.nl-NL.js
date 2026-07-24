@@ -224,7 +224,8 @@ export default {
 
     page: {
         smartHomeTitle: 'Smarthome',
-        roomsHeading: '📐 Kamers',
+        roomsHeading: '📐 Plattegrond',
+        historicalHeading: '📜 Geschiedenis',
         howItWorksHeading: '🏗️ Hoe het werkt',
         floorPlanAlt: 'Plattegrond van het huis, met de temperatuur en luchtvochtigheid van elke kamer',
         howItWorksAlt: 'Diagram dat laat zien hoe deze pagina werkt',

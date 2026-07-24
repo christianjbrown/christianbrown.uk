@@ -3,11 +3,10 @@ layout: "global"
 title: "Christian Brown's smart home"
 description: "What's the temperature in my home?"
 stylesheets:
+    - "/assets/css/vendor/uPlot.min.css"
     - "/assets/css/smart-home.css"
 javascripts:
     - "/assets/js/smart-home/index.js"
-
-noindex: true
 ---
 <h2 id="smart-home-title">Smart home</h2>
                 <p id="status-line" role="status" aria-live="polite">[Loading..]</p>
@@ -30,10 +29,24 @@ noindex: true
                     </div>
                 </div>
                 <div id="rooms" class="floor-plan-section" hidden>
-                    <h3 id="rooms-heading">📐 Rooms</h3>
+                    <h3 id="rooms-heading">📐 Floor plan</h3>
                     <div class="floor-plan">
                         <img src="/assets/images/smart-home/floor-plan.svg" alt="Floor plan of the house, with the temperature and humidity of each room" class="floor-plan__image" />
                     </div>
+                </div>
+                <div class="historical-section">
+                    <h3 id="historical-heading">📜 Historical</h3>
+                    <div class="historical-chart__toolbar">
+                        <span class="historical-chart__resolution" id="chart-resolution" aria-live="polite"></span>
+                        <div class="historical-chart__metric" id="chart-metric" role="group" aria-label="Metric">
+                            <button type="button" id="chart-metric-temp" class="historical-chart__metric-btn" aria-pressed="true" aria-label="Show temperature">🌡</button>
+                            <button type="button" id="chart-metric-humidity" class="historical-chart__metric-btn" aria-pressed="false" aria-label="Show humidity">💧</button>
+                        </div>
+                        <button type="button" id="chart-zoom-in" class="historical-chart__zoom" aria-label="Zoom in — finer resolution, shorter range">＋</button>
+                        <button type="button" id="chart-zoom-out" class="historical-chart__zoom" aria-label="Zoom out — coarser resolution, longer range">－</button>
+                    </div>
+                    <div id="historical-chart" class="historical-chart__canvas"></div>
+                    <p id="chart-status" class="historical-chart__status" role="status" aria-live="polite">Loading climate history…</p>
                 </div>
                 <div class="faq">
                     <h3 id="how-it-works-heading">🏗️ How it works</h3>
