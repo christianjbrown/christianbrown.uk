@@ -1,0 +1,17 @@
+version: 2
+snapshot:
+  # Mobile, tablet and desktop. Percy re-renders the captured DOM at each width,
+  # so these exercise the responsive CSS (the media-query breakpoint is 600px).
+  widths: [390, 768, 1280]
+  min-height: 1024
+  percy-css: |
+    /* The cookie-consent prompt is a one-time overlay; hide it so snapshots
+       reflect the steady state and never depend on consent timing. */
+    #cookies { display: none !important; }
+
+    /* The "Historical" chart is a time-series <canvas>; its data (and pixels)
+       change every run. Mask it from visual diffs while keeping its layout box
+       so everything below it stays in the same place. */
+    #historical-chart,
+    .historical-chart__canvas,
+    #chart-status { visibility: hidden !important; }

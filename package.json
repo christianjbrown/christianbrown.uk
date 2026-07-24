@@ -12,7 +12,8 @@
     "lint:css:fix": "stylelint \"assets/css/**/*.scss\" \"_sass/*.scss\" --fix",
     "serve:local": "bundle exec jekyll serve",
     "serve:site": "http-server _site -p 8080 -s",
-    "test:a11y": "pa11y-ci"
+    "test:a11y": "pa11y-ci",
+    "test:visual": "percy exec -- node percy/snapshot.mjs"
   },
   "repository": {
     "type": "git",
@@ -20,16 +21,19 @@
   },
   "keywords": [],
   "author": "Christian Brown",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/christianjbrown/christianbrown.uk/issues"
   },
   "homepage": "https://github.com/christianjbrown/christianbrown.uk#readme",
   "devDependencies": {
+    "@percy/cli": "^1.32.4",
+    "@percy/playwright": "^1.1.1",
     "@vitest/coverage-v8": "^3.2.7",
     "http-server": "^14.1.1",
     "jsdom": "^25.0.1",
     "pa11y-ci": "^4.1.1",
+    "playwright": "^1.61.1",
     "stylelint": "^17.14.0",
     "stylelint-config-standard-scss": "^17.0.0",
     "vitest": "^3.2.7"
