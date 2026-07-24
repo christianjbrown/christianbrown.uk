@@ -82,3 +82,90 @@ jobs:
           npm run serve:site &
           for i in $(seq 1 30); do curl -sf http://localhost:8080/ >/dev/null && break; sleep 1; done
           npm run test:a11y || echo "::notice::pa11y reported accessibility findings — advisory, not failing the build"
+
+  visual:
+    name: Visual regression (Percy)
+    runs-on: ubuntu-latest
+
+    # The visual-regression gate. Make this a required status check to have it
+    # block merges. It fails ONLY on a genuine, unreviewed visual change; every
+    # Percy-side problem — no token (fork PRs), network/API error, or an
+    # exhausted free-tier screenshot budget — exits 0 with a warning, so an
+    # unavailable Percy never blocks a merge. See the gate step for the logic.
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+
+      # Same non-frozen install rationale as the `site` job above.
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: false
+
+      - name: Install gems
+        run: bundle install --jobs 4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install Node dependencies
+        run: npm ci
+
+      # Percy renders the captured DOM, so it needs the same production build the
+      # site job checks — the snapshot driver serves this _site directory.
+      - name: Build site (strict)
+        run: bundle exec jekyll build --strict_front_matter
+        env:
+          JEKYLL_ENV: production
+
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Percy visual regression gate
+        env:
+          PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
+        run: |
+          set -o pipefail
+
+          # No token (e.g. a pull request from a fork): nothing to compare, don't block.
+          if [ -z "$PERCY_TOKEN" ]; then
+            echo "::notice::PERCY_TOKEN not set — skipping visual regression (not blocking)"
+            exit 0
+          fi
+
+          # Upload the snapshots. A non-zero here is a Percy/infra problem
+          # (network, config, quota) — warn but do not block the merge.
+          if ! npm run test:visual | tee percy-run.log; then
+            echo "::warning::Percy run failed (network/quota/config) — not blocking the merge"
+            exit 0
+          fi
+
+          BUILD_ID=$(grep -aoE 'builds/[0-9]+' percy-run.log | head -1 | cut -d/ -f2)
+          if [ -z "$BUILD_ID" ]; then
+            echo "::warning::No Percy build was created (skipped / over quota) — not blocking"
+            exit 0
+          fi
+
+          # Wait for Percy to finish diffing this exact build. --fail-on-changes
+          # exits 1 when there are unreviewed changes, but note that Percy errors
+          # (403, timeout, network, quota) also exit non-zero — so we only treat a
+          # result that positively reports changes AND carries no error as a
+          # blocking regression. Everything else is "unavailable → don't block".
+          set +e
+          npx percy build:wait --build "$BUILD_ID" --fail-on-changes | tee percy-wait.log
+          WAIT_CODE=${PIPESTATUS[0]}
+          set -e
+
+          if [ "$WAIT_CODE" -eq 1 ] && grep -qiE 'found [0-9]+ change' percy-wait.log && ! grep -qi 'error' percy-wait.log; then
+            echo "::error::Percy found unreviewed visual changes — review/approve them at the build URL above to unblock this merge."
+            exit 1
+          fi
+
+          if [ "$WAIT_CODE" -ne 0 ]; then
+            echo "::warning::Percy could not confirm the result (exit $WAIT_CODE) — treating as unavailable, not blocking"
+          fi
+          exit 0
