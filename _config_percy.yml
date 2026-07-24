@@ -1,0 +1,20 @@
+# Overlay config for the real-device (Percy on Automate) build. Layer it on top
+# of the main config:
+#
+#   bundle exec jekyll build --config _config.yml,_config_percy.yml
+#
+# It points the three live-data feeds at a local mock (percy/mock-server.mjs)
+# reached over the BrowserStack Local tunnel, so real devices load fixed,
+# deterministic data instead of the live CDN. The host `bs-local.com` is
+# BrowserStack's tunnel alias for the machine running the tests; port 9000 is
+# where the mock server (and the static site itself) are served. Turning each
+# feed's `use_local` flag on also whitelists these dev origins in the page CSP
+# (see _layouts/global.html), so the fetches are allowed.
+smart_home_smart_things_climate_use_local: true
+smart_home_smart_things_climate_url_dev: "http://bs-local.com:9000/api/climate"
+
+smart_home_met_office_weather_use_local: true
+smart_home_met_office_weather_url_dev: "http://bs-local.com:9000/api/weather"
+
+smart_home_historical_climate_use_local: true
+smart_home_historical_climate_url_dev: "http://bs-local.com:9000/api/historical"
