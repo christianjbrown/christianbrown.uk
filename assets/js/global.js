@@ -79,7 +79,13 @@ window.addEventListener('load',
     }
 );
 
+// Turn on the consented telemetry: Google Analytics and Sentry. Skipped
+// entirely on local dev hosts so a `jekyll serve` session never pollutes the
+// production Analytics property or Sentry project — even with consent granted.
 function setCookies() {
+    if (isLocalhost()) {
+        return;
+    }
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
@@ -87,10 +93,21 @@ function setCookies() {
     initSentry();
 }
 
-// Bring up Sentry error + session-replay reporting. Gated behind cookie
-// consent (called only from setCookies), so it never runs for visitors who
-// decline. The vendored SDK in the <head> defines window.Sentry; guard against
-// it being absent (e.g. blocked/failed load, or jsdom in tests) and against
+// True for local development hosts — the localhost variants and the IPv4/IPv6
+// loopback addresses — so local dev telemetry never reaches production.
+function isLocalhost() {
+    const host = window.location.hostname;
+    return host === 'localhost'
+        || host.endsWith('.localhost')
+        || host === '0.0.0.0'
+        || host === '[::1]' // location.hostname brackets IPv6 loopback (never bare ::1)
+        || /^127(?:\.\d{1,3}){3}$/.test(host);
+}
+
+// Bring up Sentry error + session-replay reporting. Called from setCookies
+// (so it's gated behind both cookie consent and the local-dev-host check). The
+// vendored SDK in the <head> defines window.Sentry; guard against it being
+// absent (e.g. blocked/failed load, or jsdom in tests) and against
 // double-initialisation. Replay is recorded only when an error occurs
 // (replaysSessionSampleRate 0), with the SDK's default text/input masking on.
 function initSentry() {

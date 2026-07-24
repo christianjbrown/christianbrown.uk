@@ -31,10 +31,13 @@ html {
                         color: white;
                     }
 
+                    // Muted grey (subordinate to the green "Yes") but with white
+                    // text for a readable ~4.6:1 contrast — the old #222 fill with
+                    // black text was effectively illegible.
                     &#cookies-decline {
-                        background-color: $colour-ink-fixed;
-                        border: 1px solid black;
-                        color: black;
+                        background-color: $colour-muted-fixed;
+                        border: 1px solid white;
+                        color: white;
                     }
 
                     cursor: pointer;
