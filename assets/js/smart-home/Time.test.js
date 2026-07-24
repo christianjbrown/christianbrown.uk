@@ -19,7 +19,7 @@ describe('Time', () => {
         const ago = (seconds) => new Time(Date.now() - seconds * 1000).formatTimeAgo();
 
         it('reports seconds, pluralising when not exactly one', () => {
-            expect(ago(0)).toBe('0 secs ago');
+            expect(ago(0)).toBe('just now');
             expect(ago(1)).toBe('1 sec ago');
             expect(ago(30)).toBe('30 secs ago');
             expect(ago(59)).toBe('59 secs ago');
@@ -144,8 +144,8 @@ describe('Time', () => {
         it('defaults the timestamp to now', () => {
             vi.useFakeTimers();
             vi.setSystemTime(new Date(utc(2023, 10, 20, 12, 0)));
-            // No timestamp -> uses Date.now(); "now" formatted is 0 secs ago.
-            expect(new Time().formatTimeAgo()).toBe('0 secs ago');
+            // No timestamp -> uses Date.now(); "now" formatted is "just now".
+            expect(new Time().formatTimeAgo()).toBe('just now');
             vi.useRealTimers();
         });
     });

@@ -51,6 +51,12 @@ export default class Time {
             unit = 'day';
         }
 
+        // A just-refreshed value (under a second old) reads as "just now" rather
+        // than the nonsensical "0 secs ago".
+        if (unit === 'second' && value === 0) {
+            return this.#catalogue.time.justNow;
+        }
+
         return this.#catalogue.time.relativeTime(value, unit);
     };
 
