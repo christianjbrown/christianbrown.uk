@@ -263,6 +263,10 @@ export default {
             temperature: 'Temperatuur tonen',
             humidity: 'Luchtvochtigheid tonen',
         },
+        metricTitle: {
+            temperature: 'Temperatuur',
+            humidity: 'Luchtvochtigheid',
+        },
         resolutions: {
             'hourly-day': 'Laatste dag · per uur',
             'hourly-1-month': 'Laatste maand · per uur',

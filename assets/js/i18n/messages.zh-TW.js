@@ -259,6 +259,10 @@ export default {
             temperature: '顯示溫度',
             humidity: '顯示濕度',
         },
+        metricTitle: {
+            temperature: '溫度',
+            humidity: '濕度',
+        },
         resolutions: {
             'hourly-day': '最近一天 · 每小時',
             'hourly-1-month': '最近一個月 · 每小時',

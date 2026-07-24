@@ -259,6 +259,10 @@ export default {
             temperature: 'Mostrar temperatura',
             humidity: 'Mostrar humidade',
         },
+        metricTitle: {
+            temperature: 'Temperatura',
+            humidity: 'Humidade',
+        },
         resolutions: {
             'hourly-day': 'Último dia · por hora',
             'hourly-1-month': 'Último mês · por hora',

@@ -166,6 +166,11 @@ describe('ClimateHistoryChart', () => {
         expect(els.metricHumidity.getAttribute('aria-pressed')).toBe('false');
         expect(els.metricTemp.getAttribute('aria-label')).toBe('Show temperature');
         expect(els.metricHumidity.getAttribute('aria-label')).toBe('Show humidity');
+        // Hover tooltips (title) name the metric plainly and describe the zoom.
+        expect(els.metricTemp.getAttribute('title')).toBe('Temperature');
+        expect(els.metricHumidity.getAttribute('title')).toBe('Humidity');
+        expect(els.zoomIn.getAttribute('title')).toBe('Zoom in — finer resolution, shorter range');
+        expect(els.zoomOut.getAttribute('title')).toBe('Zoom out — coarser resolution, longer range');
     });
 
     it('switches to the humidity metric on toggle — no re-fetch, new labels and % readout', async () => {
@@ -228,6 +233,7 @@ describe('ClimateHistoryChart', () => {
                 series: { outside: 'Außentemperatur', insideMin: 'Innen (Min.)', insideMax: 'Innen (Max.)' },
                 humiditySeries: { outside: 'Außenluftfeuchte', insideMin: 'Innen (Min.)', insideMax: 'Innen (Max.)' },
                 metricToggle: { temperature: 'Temperatur anzeigen', humidity: 'Luftfeuchte anzeigen' },
+                metricTitle: { temperature: 'Temperatur', humidity: 'Luftfeuchtigkeit' },
                 resolutions: { 'hourly-1-month': 'Letzter Monat · stündlich' },
             },
         };
@@ -238,6 +244,10 @@ describe('ClimateHistoryChart', () => {
         expect(els.zoomIn.getAttribute('aria-label')).toBe('Vergrößern');
         expect(els.metricTemp.getAttribute('aria-label')).toBe('Temperatur anzeigen');
         expect(els.metricHumidity.getAttribute('aria-label')).toBe('Luftfeuchte anzeigen');
+        // Tooltips localise with the catalogue too.
+        expect(els.metricTemp.getAttribute('title')).toBe('Temperatur');
+        expect(els.metricHumidity.getAttribute('title')).toBe('Luftfeuchtigkeit');
+        expect(els.zoomIn.getAttribute('title')).toBe('Vergrößern');
         expect(uPlot.instances[0].opts.series[1].label).toBe('Außentemperatur');
         expect(uPlot.instances[0].opts.series[3].label).toBe('Innen (Max.)');
     });
