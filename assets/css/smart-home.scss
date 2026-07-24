@@ -257,6 +257,52 @@ main {
         font-weight: bold;
     }
 
+    // Each subsection is a collapsible <details>, collapsed by default: the
+    // <summary> carries the h4 heading and a chevron marker (a "›" that rotates
+    // to point down, ⌄, when open) and toggles the content beneath it.
+    details {
+        max-width: 45rem;
+        margin: 1.25rem auto 0;
+    }
+
+    summary {
+        cursor: pointer;
+        list-style: none;               // Firefox: drop the native triangle
+        &::-webkit-details-marker {     // Safari/Chrome: drop it too
+            display: none;
+        }
+        &:focus:not(:focus-visible) {
+            outline: none;
+        }
+
+        // The heading now sits inline beside the marker; its former block
+        // spacing lives on the parent <details>.
+        h4 {
+            display: inline;
+            margin: 0;
+        }
+
+        &::before {
+            content: "›";
+            display: inline-block;
+            width: 1.1rem;
+            color: $colour-grayscale-1;
+            font-weight: bold;
+            transition: transform 0.15s ease;
+        }
+
+        &:hover {
+            h4,
+            &::before {
+                color: $colour-accent;
+            }
+        }
+    }
+
+    details[open] summary::before {
+        transform: rotate(90deg);
+    }
+
     p,
     ul {
         max-width: 45rem;
