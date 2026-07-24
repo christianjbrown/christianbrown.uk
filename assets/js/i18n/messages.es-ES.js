@@ -159,6 +159,7 @@ export default {
     time: {
         midnight: 'medianoche',
         noon: 'mediodía',
+        justNow: 'ahora mismo',
         twelveHourGloss: false,
         onWord: ' el ',
 

@@ -159,6 +159,7 @@ export default {
     time: {
         midnight: '午夜',
         noon: '正午',
+        justNow: '剛剛',
         twelveHourGloss: false,
         onWord: ' ',
 

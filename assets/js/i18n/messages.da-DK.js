@@ -160,6 +160,7 @@ export default {
     time: {
         midnight: 'midnat',
         noon: 'middag',
+        justNow: 'lige nu',
         twelveHourGloss: false,
         onWord: ' den ',
 

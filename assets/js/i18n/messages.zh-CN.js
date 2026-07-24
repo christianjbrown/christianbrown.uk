@@ -158,6 +158,7 @@ export default {
     time: {
         midnight: '午夜',
         noon: '正午',
+        justNow: '刚刚',
         twelveHourGloss: false,
         onWord: ' ',
 
