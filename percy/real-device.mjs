@@ -41,8 +41,14 @@ const PERCY_CSS = [
     '#status-line { visibility: hidden !important; }',
     '.update-time__freshness { visibility: hidden !important; }',
     '#home-temperature-table td:first-child .smart-home-table__value--secondary { visibility: hidden !important; }',
-    '#historical-chart, .historical-chart__canvas, #chart-status { visibility: hidden !important; }',
     '.cv-experience-job-metadata-dates { visibility: hidden !important; }',
+    // Drop the tall history-chart and FAQ sections from the capture entirely.
+    // Real iOS Safari 500s on very tall full-page screenshots, and the smart-home
+    // page (profile + tables + floor plan + history + FAQ) exceeds that. The
+    // tables and floor plan — the visual content that matters — sit above these,
+    // so nothing important is lost. (display:none removes their height, unlike the
+    // history canvas being merely masked.)
+    '.historical-section, .faq { display: none !important; }',
 ].join('\n');
 
 const DEVICES = [
