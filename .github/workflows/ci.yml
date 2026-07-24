@@ -128,6 +128,11 @@ jobs:
       - name: Percy visual regression gate
         env:
           PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
+          # Baseline a PR against the branch it targets (main), not its own head
+          # branch — otherwise Percy finds no prior build on the head branch and
+          # reports every snapshot as "new". Empty on push events (Percy then
+          # auto-detects the current branch), set to e.g. "main" on pull_request.
+          PERCY_TARGET_BRANCH: ${{ github.base_ref }}
         run: |
           set -o pipefail
 

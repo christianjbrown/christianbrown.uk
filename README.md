@@ -54,4 +54,6 @@ Percy re-renders a captured DOM without running the page's JavaScript, so a smal
 
 The CI gate **blocks a merge on a genuine, unreviewed visual change** — you review and approve (or reject) the diff in Percy to unblock it. It deliberately does **not** block when Percy itself is the problem: a Percy/network error, an exhausted free-tier screenshot budget, or a missing `PERCY_TOKEN` (e.g. pull requests from forks) all pass with a warning, since our own CI job always runs and controls its own exit code. This project is tested with BrowserStack.
 
+Baselines are owned by CI, never seeded from a laptop: each `main` build (rendered on the CI runner) is auto-approved and becomes the baseline, so pull-request builds — rendered on the same runner — diff against a like-for-like reference and only a real change stands out.
+
 
