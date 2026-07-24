@@ -41,7 +41,7 @@ beforeEach(() => {
 });
 
 describe('FloorPlan', () => {
-    it('reveals the section and labels only rooms present in the data, averaging their devices', () => {
+    it('reveals the section, labels every anchored room, and averages the readings for those in the data', () => {
         const subject = make();
         subject.render([
             {roomName: 'Living room', temperatureValue: 26.6, temperatureStale: false, humidityValue: 53, humidityStale: false},
@@ -53,9 +53,10 @@ describe('FloorPlan', () => {
         ], null);
 
         expect(section.hidden).toBe(false);
-        // Living room + Study only: Kitchen has no anchor, Bathroom no data,
-        // Empty has no reading, and the device with no room is skipped.
-        expect(labels()).toHaveLength(2);
+        // All three anchored rooms are labelled: Living room and Study carry
+        // readings; Bathroom has no sensor, so it shows its name only. Kitchen
+        // and Empty aren't anchored, and the device with no room is skipped.
+        expect(labels()).toHaveLength(3);
 
         const livingRoom = labelFor('Living room');
         expect(livingRoom.querySelector('.floor-plan__temp').textContent).toContain('26.8°c');
@@ -67,6 +68,12 @@ describe('FloorPlan', () => {
         expect(study.querySelector('.floor-plan__temp').textContent).toContain('26.9°c');
         // No humidity reported -> no humidity line.
         expect(study.querySelector('.floor-plan__humidity')).toBeNull();
+
+        // Bathroom has no sensor: its name shows, with neither reading.
+        const bathroom = labelFor('Bathroom');
+        expect(bathroom.querySelector('.floor-plan__name').textContent).toBe('Bathroom');
+        expect(bathroom.querySelector('.floor-plan__temp')).toBeNull();
+        expect(bathroom.querySelector('.floor-plan__humidity')).toBeNull();
     });
 
     it('draws the floor headings at their anchors whenever the plan is shown', () => {
@@ -135,9 +142,8 @@ describe('FloorPlan', () => {
         const subject = make();
         subject.render([], {temp: 26.7, humidity: 39.3});
 
-        const outside = labels();
+        const outside = labels().filter((label) => label.textContent.startsWith('Outside'));
         expect(outside).toHaveLength(2);
-        expect(outside[0].textContent).toContain('Outside');
         expect(outside[0].querySelector('.floor-plan__temp').textContent).toContain('26.7°c');
         expect(outside[0].querySelector('.floor-plan__humidity').textContent).toContain('39%');
         expect(outside[0].style.top).toBe('3%');
@@ -153,17 +159,24 @@ describe('FloorPlan', () => {
         expect(outside.querySelector('.floor-plan__humidity')).toBeNull();
     });
 
-    it('renders no labels for indoor data with no devices or weather with no temp', () => {
+    it('labels every anchored room by name when there are no readings at all', () => {
         const subject = make();
         subject.render([], {});
         expect(section.hidden).toBe(false);
-        expect(labels()).toHaveLength(0);
+        // No devices and weather with no temp: each anchored room still shows
+        // its name, with no readings and no outside label.
+        expect(labels()).toHaveLength(3);
+        labels().forEach((label) => {
+            expect(label.querySelector('.floor-plan__temp')).toBeNull();
+            expect(label.querySelector('.floor-plan__humidity')).toBeNull();
+        });
     });
 
     it('clears previous labels and re-hides on losing the indoor data', () => {
         const subject = make();
         subject.render([{roomName: 'Living room', temperatureValue: 26, temperatureStale: false}], {temp: 20});
-        expect(labels()).toHaveLength(3);
+        // Living room (with readings) + Study + Bathroom (name only) + 2 outside.
+        expect(labels()).toHaveLength(5);
 
         subject.render(null, null);
         expect(labels()).toHaveLength(0);
@@ -200,8 +213,9 @@ describe('FloorPlan', () => {
         const subject = new FloorPlan(section);
         subject.render([{roomName: 'Kitchen', temperatureValue: 24, temperatureStale: false}], {temp: 20});
 
-        // Kitchen is one of the real room anchors, plus two outside labels.
-        expect(labels()).toHaveLength(3);
+        // All six real room anchors are labelled (Kitchen with its reading, the
+        // rest name-only), plus two outside labels.
+        expect(labels()).toHaveLength(8);
         expect(labels().some((l) => l.textContent.startsWith('Kitchen'))).toBe(true);
     });
 });
