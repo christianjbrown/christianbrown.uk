@@ -16,3 +16,4 @@ export const DEV_CONSOLE_LINE_1_STYLE = 'color: purple; font-weight: bold;';
 export const DEV_CONSOLE_LINE_2 = 'but maybe you\'re looking for an engineering manager? you\'ve come to right place!';
 export const DEV_CONSOLE_LINE_2_STYLE = 'color: #75923C; font-weight: bold;';
 export const GOOGLE_ANALYTICS_ID = '{{ site.google_analytics_id }}';
+export const SENTRY_DSN = '{{ site.sentry_dsn }}';

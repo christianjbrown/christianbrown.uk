@@ -12,6 +12,11 @@ header_location: "London, UK"
 
 google_analytics_id: "G-9Z9L9Z6QHQ"
 
+# Public (non-secret) Sentry DSN for front-end error + session-replay reporting.
+# Templated into config/global.const.js at build time and used by global.js,
+# which only initialises Sentry once the visitor accepts cookies.
+sentry_dsn: "https://ece1cf551796dd8721878a83df1c4091@o4511762267111424.ingest.de.sentry.io/4511791309062224"
+
 # Live-data API endpoints for the smart-home page (and the CV page's indoor-temp
 # link). Each API has a production URL (the Fastly CDN) and a dev URL (a locally
 # running Cloud Run function). The pages use production by default — even on a
