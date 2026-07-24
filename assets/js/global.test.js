@@ -16,6 +16,18 @@ vi.mock('./Cookie.js', () => ({
 
 const flush = () => new Promise((resolve) => setTimeout(resolve, 0));
 
+// setCookies() (Google Analytics + Sentry) skips local dev hosts, but jsdom
+// serves from localhost. Default the suite to a production-like hostname so the
+// consented telemetry paths actually run; the local-dev-host tests override via
+// setHostname. jsdom forbids redefining location.hostname alone, so swap the
+// whole window.location object (restored after each test).
+let originalLocation;
+function setHostname(hostname) {
+    Object.defineProperty(window, 'location', {
+        configurable: true, writable: true, value: { hostname },
+    });
+}
+
 let cookiesDiv;
 let acceptButton;
 let declineButton;
@@ -36,6 +48,7 @@ describe('global.js', () => {
         acceptButton = document.getElementById('cookies-accept');
         declineButton = document.getElementById('cookies-decline');
         vi.spyOn(console, 'log').mockImplementation(() => {});
+        originalLocation = window.location;
         // DOM is in place, so the module's top-level lookups succeed.
         await import('./global.js');
     });
@@ -51,6 +64,13 @@ describe('global.js', () => {
         deleteAll.mockReset();
         cookiesDiv.style.display = '';
         window.dataLayer = undefined;
+        setHostname('christianbrown.uk'); // production by default; telemetry runs
+    });
+
+    afterEach(() => {
+        Object.defineProperty(window, 'location', {
+            configurable: true, writable: true, value: originalLocation,
+        });
     });
 
     describe('shared header + theme localisation', () => {
@@ -137,7 +157,8 @@ describe('global.js', () => {
 
     // Sentry init is gated behind consent (called from setCookies), so it fires
     // on exactly the same paths as analytics. The vendored SDK sets window.Sentry
-    // in the real <head>; jsdom has none, so each test stubs it as needed.
+    // in the real <head>; jsdom has none, so each test stubs it as needed. The
+    // suite's default hostname is production (see top-level beforeEach).
     describe('Sentry error reporting', () => {
         let sentry;
         let replayIntegration;
@@ -193,6 +214,38 @@ describe('global.js', () => {
             // window.Sentry is absent (deleted in afterEach); accepting cookies
             // must still succeed without a reporter present.
             expect(() => acceptButton.dispatchEvent(new Event('click'))).not.toThrow();
+        });
+    });
+
+    // Neither Google Analytics nor Sentry may fire on a local `jekyll serve`
+    // session — even with consent — whichever loopback/localhost form the
+    // address takes. setCookies() short-circuits before both.
+    describe('local dev host guard', () => {
+        let sentry;
+
+        beforeEach(() => {
+            sentry = { init: vi.fn(), getClient: vi.fn().mockReturnValue(undefined), replayIntegration: vi.fn() };
+            window.Sentry = sentry;
+        });
+
+        afterEach(() => {
+            delete window.Sentry;
+        });
+
+        it.each([
+            'localhost',
+            'app.localhost',
+            '0.0.0.0',
+            '[::1]',       // location.hostname brackets IPv6 loopback
+            '127.0.0.1',
+            '127.255.255.254',
+        ])('skips analytics and Sentry on the local dev host %s', (hostname) => {
+            setHostname(hostname);
+
+            acceptButton.dispatchEvent(new Event('click'));
+
+            expect(window.dataLayer).toBeUndefined(); // no GA
+            expect(sentry.init).not.toHaveBeenCalled(); // no Sentry
         });
     });
 });
