@@ -14,6 +14,7 @@ import {
     DEV_CONSOLE_LINE_2,
     DEV_CONSOLE_LINE_2_STYLE,
     GOOGLE_ANALYTICS_ID,
+    SENTRY_DSN,
     THEME_TOGGLE_ID
 } from '/config/global.const.js';
 
@@ -83,4 +84,24 @@ function setCookies() {
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
     gtag('config', GOOGLE_ANALYTICS_ID);
+    initSentry();
+}
+
+// Bring up Sentry error + session-replay reporting. Gated behind cookie
+// consent (called only from setCookies), so it never runs for visitors who
+// decline. The vendored SDK in the <head> defines window.Sentry; guard against
+// it being absent (e.g. blocked/failed load, or jsdom in tests) and against
+// double-initialisation. Replay is recorded only when an error occurs
+// (replaysSessionSampleRate 0), with the SDK's default text/input masking on.
+function initSentry() {
+    if (!window.Sentry || window.Sentry.getClient()) {
+        return;
+    }
+    window.Sentry.init({
+        dsn: SENTRY_DSN,
+        integrations: [window.Sentry.replayIntegration()],
+        replaysSessionSampleRate: 0,
+        replaysOnErrorSampleRate: 1.0,
+        environment: 'production',
+    });
 }
