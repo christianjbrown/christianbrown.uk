@@ -14,6 +14,10 @@ noindex: true
                 <div class="climate-chart-section">
                     <div class="climate-chart__toolbar">
                         <span class="climate-chart__resolution" id="chart-resolution" aria-live="polite"></span>
+                        <div class="climate-chart__metric" id="chart-metric" role="group" aria-label="Metric">
+                            <button type="button" id="chart-metric-temp" class="climate-chart__metric-btn" aria-pressed="true" aria-label="Show temperature">🌡</button>
+                            <button type="button" id="chart-metric-humidity" class="climate-chart__metric-btn" aria-pressed="false" aria-label="Show humidity">💧</button>
+                        </div>
                         <button type="button" id="chart-zoom-in" class="climate-chart__zoom" aria-label="Zoom in — finer resolution, shorter range">＋</button>
                         <button type="button" id="chart-zoom-out" class="climate-chart__zoom" aria-label="Zoom out — coarser resolution, longer range">－</button>
                     </div>

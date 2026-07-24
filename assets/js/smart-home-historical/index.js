@@ -11,6 +11,8 @@ import {
     ZOOM_IN_SELECTOR,
     ZOOM_OUT_SELECTOR,
     RESOLUTION_SELECTOR,
+    METRIC_TEMP_SELECTOR,
+    METRIC_HUMIDITY_SELECTOR,
 } from './index.const.js';
 
 window.addEventListener('load',
@@ -26,6 +28,8 @@ window.addEventListener('load',
             zoomIn: document.querySelector(ZOOM_IN_SELECTOR),
             zoomOut: document.querySelector(ZOOM_OUT_SELECTOR),
             resolution: document.querySelector(RESOLUTION_SELECTOR),
+            metricTemp: document.querySelector(METRIC_TEMP_SELECTOR),
+            metricHumidity: document.querySelector(METRIC_HUMIDITY_SELECTOR),
         };
 
         void new ClimateHistoryChart(els, uPlot, undefined, catalogue).start();

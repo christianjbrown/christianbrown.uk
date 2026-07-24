@@ -7,17 +7,20 @@ import { HISTORICAL_CONTRACT } from './contract.js';
 import { DEFAULT_INDEX, clampIndex, routeAt, isHourly, canZoomIn, canZoomOut } from './resolutions.js';
 import { bucketsToSeries } from './chartData.js';
 import { readChartColors } from './chartColors.js';
-import { tempAxisValues, tempSeriesValue } from './chartFormat.js';
+import { tempAxisValues, tempSeriesValue, humidityAxisValues, humiditySeriesValue } from './chartFormat.js';
 import { makeAxisValues, makePointValue, DAY_INCRS } from './chartTime.js';
 
 const CHART_HEIGHT = 380;
 const FALLBACK_WIDTH = 640;
 const LINE_WIDTH = 2;
+const DEFAULT_METRIC = 'temp';
 
 /**
  * Drives the historical-climate line chart: fetches the current resolution,
  * renders it with uPlot, steps the zoom control through the resolution ladder,
- * and re-renders on theme change (so the canvas follows light/dark) and resize.
+ * toggles between the temperature and humidity metric (both arrive in every
+ * fetch, so switching only re-draws — no re-fetch), and re-renders on theme
+ * change (so the canvas follows light/dark) and resize.
  *
  * The uPlot constructor and the DataFetcher factory are injected so the whole
  * controller is unit-testable without a real canvas (jsdom has none).
@@ -29,11 +32,12 @@ export default class ClimateHistoryChart {
     #strings;
     #locale;
     #index;
+    #metric;
     #plot;
-    #data;
+    #series;
 
     /**
-     * @param {{chart: HTMLElement, status: HTMLElement, zoomIn: HTMLButtonElement, zoomOut: HTMLButtonElement, resolution: HTMLElement}} els
+     * @param {{chart: HTMLElement, status: HTMLElement, zoomIn: HTMLButtonElement, zoomOut: HTMLButtonElement, resolution: HTMLElement, metricTemp: HTMLButtonElement, metricHumidity: HTMLButtonElement}} els
      * @param {Function} uPlotCtor      the uPlot constructor.
      * @param {Function} createFetcher  url → an object with a `fetch()` promise.
      * @param {Object}   catalogue      a message catalogue (defaults to en-GB); its
@@ -47,8 +51,9 @@ export default class ClimateHistoryChart {
         this.#strings = catalogue.climateHistory;
         this.#locale = catalogue.locale;
         this.#index = DEFAULT_INDEX;
+        this.#metric = DEFAULT_METRIC;
         this.#plot = null;
-        this.#data = null;
+        this.#series = null;
     }
 
     /**
@@ -61,10 +66,33 @@ export default class ClimateHistoryChart {
         this.#els.zoomOut.setAttribute('aria-label', this.#strings.zoomOutLabel);
         this.#els.zoomIn.addEventListener('click', () => { void this.#step(-1); });
         this.#els.zoomOut.addEventListener('click', () => { void this.#step(1); });
+        this.#els.metricTemp.setAttribute('aria-label', this.#strings.metricToggle.temperature);
+        this.#els.metricHumidity.setAttribute('aria-label', this.#strings.metricToggle.humidity);
+        this.#els.metricTemp.addEventListener('click', () => { this.#setMetric('temp'); });
+        this.#els.metricHumidity.addEventListener('click', () => { this.#setMetric('humidity'); });
+        this.#updateMetricControls();
         this.#watchTheme();
         this.#watchResize();
 
         return this.#load();
+    }
+
+    // Both metrics arrive in every fetch, so a switch only re-draws the series
+    // already in hand.
+    #setMetric(metric) {
+        if (metric === this.#metric) {
+            return;
+        }
+        this.#metric = metric;
+        this.#updateMetricControls();
+        if (this.#series) {
+            this.#draw();
+        }
+    }
+
+    #updateMetricControls() {
+        this.#els.metricTemp.setAttribute('aria-pressed', String(this.#metric === 'temp'));
+        this.#els.metricHumidity.setAttribute('aria-pressed', String(this.#metric === 'humidity'));
     }
 
     async #step(delta) {
@@ -85,7 +113,7 @@ export default class ClimateHistoryChart {
             buckets = await this.#createFetcher(this.#url()).fetch();
         } catch {
             this.#destroyPlot();
-            this.#data = null;
+            this.#series = null;
             this.#setStatus(this.#strings.error);
             return;
         }
@@ -110,20 +138,32 @@ export default class ClimateHistoryChart {
     }
 
     #render(buckets) {
-        const series = bucketsToSeries(buckets);
-        // Column order matches the series/legend order below: outside, then the
-        // inside min/max that form the band.
-        this.#data = [series.x, series.outsideMax, series.insideMin, series.insideMax];
+        // Keep both metric trios so the toggle can re-draw without re-fetching.
+        this.#series = bucketsToSeries(buckets);
         this.#draw();
     }
 
     #draw() {
+        const cols = this.#series[this.#metric];
+        // Column order matches the series/legend order below: outside, then the
+        // inside min/max that form the band.
+        const data = [this.#series.x, cols.outside, cols.insideMin, cols.insideMax];
         this.#destroyPlot();
-        this.#plot = new this.#uPlotCtor(this.#options(readChartColors()), this.#data, this.#els.chart);
+        this.#plot = new this.#uPlotCtor(this.#options(readChartColors()), data, this.#els.chart);
+    }
+
+    // The per-metric labels and y-axis/legend formatters: temperature reads in
+    // °C, humidity in %. The colours and the inside min/max band are shared.
+    #metricFormat() {
+        if (this.#metric === 'humidity') {
+            return { labels: this.#strings.humiditySeries, axisValues: humidityAxisValues, seriesValue: humiditySeriesValue };
+        }
+        return { labels: this.#strings.series, axisValues: tempAxisValues, seriesValue: tempSeriesValue };
     }
 
     #options(colors) {
         const hourly = isHourly(this.#index);
+        const { labels, axisValues, seriesValue } = this.#metricFormat();
         const timeAxis = {
             'stroke': colors.axis,
             'grid': { 'stroke': colors.grid },
@@ -142,13 +182,13 @@ export default class ClimateHistoryChart {
             'scales': { 'x': { 'time': true } },
             'axes': [
                 timeAxis,
-                { 'stroke': colors.axis, 'grid': { 'stroke': colors.grid }, 'ticks': { 'stroke': colors.grid }, 'values': tempAxisValues },
+                { 'stroke': colors.axis, 'grid': { 'stroke': colors.grid }, 'ticks': { 'stroke': colors.grid }, 'values': axisValues },
             ],
             'series': [
                 { 'value': makePointValue(this.#locale) },
-                { 'label': this.#strings.series.outside, 'stroke': colors.outside, 'width': LINE_WIDTH, 'value': tempSeriesValue },
-                { 'label': this.#strings.series.insideMin, 'stroke': colors.inside, 'width': LINE_WIDTH, 'value': tempSeriesValue },
-                { 'label': this.#strings.series.insideMax, 'stroke': colors.inside, 'width': LINE_WIDTH, 'value': tempSeriesValue },
+                { 'label': labels.outside, 'stroke': colors.outside, 'width': LINE_WIDTH, 'value': seriesValue },
+                { 'label': labels.insideMin, 'stroke': colors.inside, 'width': LINE_WIDTH, 'value': seriesValue },
+                { 'label': labels.insideMax, 'stroke': colors.inside, 'width': LINE_WIDTH, 'value': seriesValue },
             ],
             // Fill the band between inside max (upper, series 3) and inside min
             // (lower, series 2).
@@ -179,7 +219,7 @@ export default class ClimateHistoryChart {
     }
 
     #onThemeChange() {
-        if (this.#data) {
+        if (this.#series) {
             this.#draw();
         }
     }

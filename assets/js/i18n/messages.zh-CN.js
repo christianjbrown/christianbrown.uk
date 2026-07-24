@@ -248,6 +248,15 @@ export default {
             insideMin: '室内最低温度',
             insideMax: '室内最高温度',
         },
+        humiditySeries: {
+            outside: '室外湿度',
+            insideMin: '室内最低湿度',
+            insideMax: '室内最高湿度',
+        },
+        metricToggle: {
+            temperature: '显示温度',
+            humidity: '显示湿度',
+        },
         resolutions: {
             'hourly-day': '最近一天 · 每小时',
             'hourly-1-month': '最近一个月 · 每小时',
