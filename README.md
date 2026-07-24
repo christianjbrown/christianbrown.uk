@@ -56,4 +56,8 @@ The CI gate **blocks a merge on a genuine, unreviewed visual change** — you re
 
 Baselines are owned by CI, never seeded from a laptop: each `main` build (rendered on the CI runner) is auto-approved and becomes the baseline, so pull-request builds — rendered on the same runner — diff against a like-for-like reference and only a real change stands out.
 
+### Real-device snapshots (advisory)
+
+In addition to the engine-rendered web gate above, a second job photographs the pages on **real iPhone/iPad Safari and Android Chrome** via [Percy on Automate](https://www.browserstack.com/docs/percy/integrate/functional-and-visual) (BrowserStack Automate). A [Selenium](https://www.selenium.dev) driver (`percy/real-device.mjs`) loads the fixture-built site — served to the devices over a BrowserStack Local tunnel by a dependency-free mock server (`percy/mock-server.mjs`, see `_config_percy.yml`) — and captures `percyScreenshot` on each device, hiding time-based text via `percyCSS`. These upload to a separate Automate-mode Percy project for review. This job is **advisory** (it never blocks a merge): real-device rendering varies enough that gating on it is unreliable, so the deterministic web gate remains the blocking check. (Smart home doesn't full-page-capture on real iOS Safari — a Percy-on-Automate limitation — so that page's Safari coverage comes from the web gate's Safari engine.)
+
 

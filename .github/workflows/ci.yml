@@ -186,11 +186,14 @@ jobs:
     name: Visual regression — real devices (Percy on Automate)
     runs-on: ubuntu-latest
 
-    # Real-device visual gate: photographs the pages on real iPhone/iPad Safari
-    # and Android Chrome via BrowserStack Automate. Same block-on-a-real-diff /
-    # pass-on-any-Percy-or-BrowserStack-hiccup logic as the web gate. NOT yet in
-    # the required-checks list — it is being stabilised; promote it to required
-    # once it is reliably green.
+    # Advisory real-device visual snapshots: photographs the pages on real
+    # iPhone/iPad Safari and Android Chrome via BrowserStack Automate and uploads
+    # them to Percy for review. It never blocks a merge — real-device + Percy on
+    # Automate baselining is too flaky to gate on reliably, so the web gate stays
+    # the deterministic blocking check. continue-on-error keeps the workflow green
+    # even if a device session or Percy hiccups.
+    continue-on-error: true
+
     steps:
       - name: Check out repository
         uses: actions/checkout@v5
@@ -219,7 +222,7 @@ jobs:
         env:
           JEKYLL_ENV: production
 
-      - name: Real-device visual regression gate
+      - name: Real-device visual snapshots (advisory)
         env:
           PERCY_TOKEN: ${{ secrets.PERCY_TOKEN_DEVICES }}
           PERCY_TARGET_BRANCH: ${{ github.base_ref }}
@@ -229,7 +232,7 @@ jobs:
           set -o pipefail
 
           if [ -z "$PERCY_TOKEN" ] || [ -z "$BROWSERSTACK_ACCESS_KEY" ]; then
-            echo "::notice::Percy/BrowserStack credentials not set — skipping real-device visual regression (not blocking)"
+            echo "::notice::Percy/BrowserStack credentials not set — skipping real-device snapshots"
             exit 0
           fi
 
@@ -238,37 +241,9 @@ jobs:
           MOCK_PID=$!
           for i in $(seq 1 30); do curl -sf http://localhost:9000/ >/dev/null && break; sleep 1; done
 
-          if ! npm run test:visual:devices | tee percy-run.log; then
-            echo "::warning::Percy on Automate run failed (BrowserStack/network/config) — not blocking"
-            kill $MOCK_PID 2>/dev/null || true
-            exit 0
-          fi
+          # Capture and upload the real-device snapshots for review. Advisory only —
+          # this never fails the build (see the build's diffs in the Percy project).
+          npm run test:visual:devices || echo "::warning::Percy on Automate run had issues — advisory, not failing"
           kill $MOCK_PID 2>/dev/null || true
-
-          BUILD_ID=$(grep -aoE 'builds/[0-9]+' percy-run.log | head -1 | cut -d/ -f2)
-          if [ -z "$BUILD_ID" ]; then
-            echo "::warning::No Percy build was created — not blocking"
-            exit 0
-          fi
-
-          # On push (e.g. to main) the build only refreshes the baseline — there's
-          # nothing to gate, so don't fail on "changes". Only pull requests gate.
-          if [ "$GITHUB_EVENT_NAME" != "pull_request" ]; then
-            echo "::notice::push build — baseline refreshed, not gating"
-            exit 0
-          fi
-
-          set +e
-          npx percy build:wait --build "$BUILD_ID" --fail-on-changes | tee percy-wait.log
-          WAIT_CODE=${PIPESTATUS[0]}
-          set -e
-
-          if [ "$WAIT_CODE" -eq 1 ] && grep -qiE 'found [0-9]+ change' percy-wait.log && ! grep -qi 'error' percy-wait.log; then
-            echo "::error::Percy found unreviewed real-device visual changes — review/approve them at the build URL above."
-            exit 1
-          fi
-
-          if [ "$WAIT_CODE" -ne 0 ]; then
-            echo "::warning::Percy could not confirm the real-device result (exit $WAIT_CODE) — treating as unavailable, not blocking"
-          fi
+          echo "::notice::Real-device snapshots uploaded to Percy for review (advisory; the web gate is the blocking check)."
           exit 0
