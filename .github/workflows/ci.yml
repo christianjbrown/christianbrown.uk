@@ -82,3 +82,56 @@ jobs:
           npm run serve:site &
           for i in $(seq 1 30); do curl -sf http://localhost:8080/ >/dev/null && break; sleep 1; done
           npm run test:a11y || echo "::notice::pa11y reported accessibility findings — advisory, not failing the build"
+
+  visual:
+    name: Visual regression (Percy)
+    runs-on: ubuntu-latest
+
+    # Advisory only — this job must never block a merge. It is deliberately left
+    # out of the branch-protection required-checks list, and `continue-on-error`
+    # keeps the run green even when Percy fails or the free-tier screenshot
+    # budget for the month is exhausted. The step also self-skips when there is
+    # no PERCY_TOKEN (e.g. pull requests from forks), so it stays green there too.
+    continue-on-error: true
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+
+      # Same non-frozen install rationale as the `site` job above.
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: false
+
+      - name: Install gems
+        run: bundle install --jobs 4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install Node dependencies
+        run: npm ci
+
+      # Percy renders the captured DOM, so it needs the same production build the
+      # site job checks — the snapshot driver serves this _site directory.
+      - name: Build site (strict)
+        run: bundle exec jekyll build --strict_front_matter
+        env:
+          JEKYLL_ENV: production
+
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Percy snapshots
+        env:
+          PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
+        run: |
+          if [ -z "$PERCY_TOKEN" ]; then
+            echo "::notice::PERCY_TOKEN not set — skipping Percy visual regression"
+            exit 0
+          fi
+          npm run test:visual

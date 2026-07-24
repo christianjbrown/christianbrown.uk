@@ -31,7 +31,7 @@ To point one at a function running on your own machine, flip its flag in `_confi
 
 The dev and production URLs live alongside the flags (`smart_home_*_url_dev` / `_url_prod`). Each flag is independent, so one API can run locally while the other stays on the CDN; when a flag is on, the layout also whitelists that dev origin in the page's `connect-src` CSP.
 
-# :test_tube: Tests
+# :test_tube: Testing
 
 CI runs on every push and pull request (see the badge above). To run the checks locally:
 
@@ -42,7 +42,16 @@ CI runs on every push and pull request (see the badge above). To run the checks 
 | `bundle exec jekyll build --strict_front_matter` | The site builds with no Liquid/front-matter/SCSS errors |
 | `bundle exec htmlproofer ./_site --disable-external --checks Links,Images,Scripts --allow-hash-href` | Rendered HTML: internal links, images and scripts (run after a build) |
 | `npm run serve:site` + `npm run test:a11y` | Accessibility (pa11y, WCAG2AA) against the built site; advisory only |
+| `npm run test:visual` | Percy visual regression across browsers/widths (needs `PERCY_TOKEN`); advisory only |
 
 Install dependencies first with `bundle install` and `npm ci`.
+
+## Visual regression
+
+Cross-browser visual snapshots of the homepage and the smart-home page are captured with [Percy](https://percy.io) (BrowserStack) on every push and pull request, so CSS and layout changes are diffed against a baseline before they ship. Each page is rendered in **Chrome, Firefox, Edge and Safari** at **mobile, tablet and desktop widths** (390 / 768 / 1280px).
+
+Percy re-renders a captured DOM without running the page's JavaScript, so a small [Playwright](https://playwright.dev) driver (`percy/snapshot.mjs`) first makes each page deterministic — it stubs the live climate/weather feeds with fixtures, pins the clock and timezone, and hides the one-time cookie prompt and the time-series history canvas — then hands the finished DOM to Percy.
+
+The check is **advisory**: it is not a required status check, it never blocks a merge, and it no-ops when the monthly free-tier screenshot budget is exhausted or when `PERCY_TOKEN` is unset (so forks and local runs stay green). This project is tested with BrowserStack.
 
 
