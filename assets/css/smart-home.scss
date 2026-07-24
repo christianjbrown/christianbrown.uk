@@ -42,7 +42,15 @@ main {
     &__column {
         flex: 1;
         margin-bottom: 1rem;
+        // 25rem keeps the two tables side by side until they no longer fit, then
+        // they wrap to a stack. That floor itself overflows a phone narrower than
+        // 25rem, so drop it once stacked (well below the ~848px wrap point) and
+        // let flex-grow fill the row instead.
         min-width: 25rem;
+
+        @media (max-width: 600px) {
+            min-width: 0;
+        }
     }
 }
 
@@ -73,6 +81,15 @@ main {
         min-width: 13rem;
         padding: 1rem 0.5rem;
         vertical-align: text-top;
+
+        // Three columns × 13rem is ~39rem of forced minimum width, wider than a
+        // phone. Blink relaxes cell min-width when the table can't fit, but some
+        // engines honour it and the table overflows the viewport. Drop the floor
+        // on small screens so the columns shrink to fit; the name column wraps as
+        // needed.
+        @media (max-width: 600px) {
+            min-width: 0;
+        }
     }
 
     th {
