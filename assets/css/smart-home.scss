@@ -43,13 +43,17 @@ main {
         flex: 1;
         margin-bottom: 1rem;
         // 25rem keeps the two tables side by side until they no longer fit, then
-        // they wrap to a stack. That floor itself overflows a phone narrower than
-        // 25rem, so drop it once stacked (well below the ~848px wrap point) and
-        // let flex-grow fill the row instead.
+        // they wrap to a stack (~848px, given 25rem + 25rem + the 3rem gap).
         min-width: 25rem;
 
+        // With flex-basis:0 (from `flex: 1`), that 25rem floor is the only thing
+        // forcing the columns onto separate lines. That fixed floor overflows a
+        // phone narrower than 25rem, but simply zeroing it lets both columns share
+        // one line again (they un-stack and overlap). Give each column a full-row
+        // basis instead: 100% is relative to the container so it never overflows,
+        // and two of them can't share a line, so they always stack.
         @media (max-width: 600px) {
-            min-width: 0;
+            flex-basis: 100%;
         }
     }
 }
