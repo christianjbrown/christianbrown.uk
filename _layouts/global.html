@@ -18,7 +18,7 @@ but maybe you're looking for an engineering manager? you've come to right place!
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.googletagmanager.com https://www.google-analytics.com; connect-src 'self' https://cdn.christianbrown.uk https://www.google-analytics.com https://region1.google-analytics.com{% if site.smart_home_smart_things_climate_use_local %} {{ site.smart_home_smart_things_climate_url_dev }}{% endif %}{% if site.smart_home_met_office_weather_use_local %} {{ site.smart_home_met_office_weather_url_dev }}{% endif %}{% if site.smart_home_historical_climate_use_local %} {{ site.smart_home_historical_climate_url_dev }}{% endif %}; img-src 'self' data: https:; style-src 'self' 'unsafe-inline'; font-src 'self'; base-uri 'self'">
+        <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.googletagmanager.com https://www.google-analytics.com; connect-src 'self' https://cdn.christianbrown.uk https://www.google-analytics.com https://region1.google-analytics.com https://o4511762267111424.ingest.de.sentry.io{% if site.smart_home_smart_things_climate_use_local %} {{ site.smart_home_smart_things_climate_url_dev }}{% endif %}{% if site.smart_home_met_office_weather_use_local %} {{ site.smart_home_met_office_weather_url_dev }}{% endif %}{% if site.smart_home_historical_climate_use_local %} {{ site.smart_home_historical_climate_url_dev }}{% endif %}; worker-src blob:; img-src 'self' data: https:; style-src 'self' 'unsafe-inline'; font-src 'self'; base-uri 'self'">
         <!-- No frame-ancestors / X-Frame-Options here: both require an HTTP response header, which GitHub Pages can't send. Clickjacking protection would need a header-capable proxy in front of the apex. -->
         <title>{{ page.title }}</title>
         <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicon/apple-touch-icon.png">
@@ -29,6 +29,12 @@ but maybe you're looking for an engineering manager? you've come to right place!
              a flash of the wrong theme. Classic (not module) and render-blocking
              on purpose so it runs ahead of the CSS below. -->
         <script src="/assets/js/theme-init.js"></script>
+        <!-- Vendored Sentry browser SDK (errors + session replay). Loaded on
+             every page but inert until global.js calls Sentry.init, which only
+             happens once the visitor accepts cookies. `defer` keeps it off the
+             critical path yet defines window.Sentry before the deferred module
+             scripts below run. Served from 'self' to satisfy the strict CSP. -->
+        <script defer src="/assets/js/vendor/sentry.min.js"></script>
         <!-- Which live-data endpoints the page talks to, resolved at build time
              from the smart_home_* keys in _config.yml. Inert data (not an
              executable script), so it satisfies the strict script-src CSP; read

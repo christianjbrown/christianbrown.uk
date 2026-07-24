@@ -1,4 +1,5 @@
-import { describe, it, expect, beforeAll, beforeEach, afterAll, vi } from 'vitest';
+import { describe, it, expect, beforeAll, beforeEach, afterEach, afterAll, vi } from 'vitest';
+import { SENTRY_DSN } from '/config/global.const.js';
 
 const { needsConsent, getConsent, setConsent, deleteAll } = vi.hoisted(() => ({
     needsConsent: vi.fn(),
@@ -131,6 +132,67 @@ describe('global.js', () => {
 
             expect(getConsent).not.toHaveBeenCalled();
             expect(window.dataLayer).toHaveLength(2);
+        });
+    });
+
+    // Sentry init is gated behind consent (called from setCookies), so it fires
+    // on exactly the same paths as analytics. The vendored SDK sets window.Sentry
+    // in the real <head>; jsdom has none, so each test stubs it as needed.
+    describe('Sentry error reporting', () => {
+        let sentry;
+        let replayIntegration;
+
+        beforeEach(() => {
+            replayIntegration = { name: 'Replay' };
+            sentry = {
+                init: vi.fn(),
+                getClient: vi.fn().mockReturnValue(undefined),
+                replayIntegration: vi.fn().mockReturnValue(replayIntegration),
+            };
+        });
+
+        afterEach(() => {
+            delete window.Sentry;
+        });
+
+        it('initialises Sentry with the replay integration once consent is accepted', () => {
+            window.Sentry = sentry;
+
+            acceptButton.dispatchEvent(new Event('click'));
+
+            expect(sentry.replayIntegration).toHaveBeenCalledTimes(1);
+            expect(sentry.init).toHaveBeenCalledTimes(1);
+            const config = sentry.init.mock.calls[0][0];
+            expect(config.dsn).toBe(SENTRY_DSN);
+            expect(config.integrations).toContain(replayIntegration);
+            expect(config.replaysSessionSampleRate).toBe(0);
+            expect(config.replaysOnErrorSampleRate).toBe(1.0);
+        });
+
+        it('initialises Sentry on the consent-granted window load path', async () => {
+            needsConsent.mockResolvedValue(true);
+            getConsent.mockReturnValue(true);
+            window.Sentry = sentry;
+
+            window.dispatchEvent(new Event('load'));
+            await flush();
+
+            expect(sentry.init).toHaveBeenCalledTimes(1);
+        });
+
+        it('does not re-initialise when a Sentry client already exists', () => {
+            sentry.getClient.mockReturnValue({});
+            window.Sentry = sentry;
+
+            acceptButton.dispatchEvent(new Event('click'));
+
+            expect(sentry.init).not.toHaveBeenCalled();
+        });
+
+        it('is a no-op (no throw) when the Sentry SDK failed to load', () => {
+            // window.Sentry is absent (deleted in afterEach); accepting cookies
+            // must still succeed without a reporter present.
+            expect(() => acceptButton.dispatchEvent(new Event('click'))).not.toThrow();
         });
     });
 });
