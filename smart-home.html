@@ -53,30 +53,37 @@ javascripts:
                     <img src="/assets/images/smart-home/how-it-works.svg" alt="Diagram showing how this page works" class="how-it-works" />
                     <p>This page is a static site built with <a href="https://jekyllrb.com/" target="_blank" rel="noopener noreferrer">Jekyll</a>, whose JavaScript pulls two live feeds - indoor climate and outdoor weather - and renders them in your browser. Here's what sits behind each.</p>
 
-                    <h4>Delivery and caching</h4>
-                    <ul>
-                        <li>A static site, hosted free on GitHub Pages. On load it fetches both feeds through the <a href="https://www.fastly.com/" target="_blank" rel="noopener noreferrer">Fastly</a> CDN, which caches each response at the edge and forwards only misses to a pair of <a href="https://cloud.google.com/run" target="_blank" rel="noopener noreferrer">Cloud Run functions</a>.</li>
-                        <li>Fastly serves the cached copy instantly; when it expires it refreshes in the background - so nobody waits - and falls back to the last good copy if an upstream is briefly down.</li>
-                        <li>A fresh fetch is slow (a cold start, an OAuth handshake and a walk over every device), so a pair of <a href="https://cloud.google.com/scheduler" target="_blank" rel="noopener noreferrer">Cloud Scheduler</a> jobs re-request each feed on a schedule - the indoor climate every few minutes, the slower-moving weather less often - keeping the cache warm even when nobody's around. Each table notes when its data was last updated.</li>
-                        <li>The CDN, scheduling and access control are all defined as code with <a href="https://www.terraform.io/" target="_blank" rel="noopener noreferrer">Terraform</a>, and credentials live in <a href="https://cloud.google.com/secret-manager" target="_blank" rel="noopener noreferrer">Google Secret Manager</a> rather than in any code.</li>
-                    </ul>
+                    <details class="faq-section">
+                        <summary><h4>Delivery and caching</h4></summary>
+                        <ul>
+                            <li>A static site, hosted free on GitHub Pages. On load it fetches both feeds through the <a href="https://www.fastly.com/" target="_blank" rel="noopener noreferrer">Fastly</a> CDN, which caches each response at the edge and forwards only misses to a pair of <a href="https://cloud.google.com/run" target="_blank" rel="noopener noreferrer">Cloud Run functions</a>.</li>
+                            <li>Fastly serves the cached copy instantly; when it expires it refreshes in the background - so nobody waits - and falls back to the last good copy if an upstream is briefly down.</li>
+                            <li>A fresh fetch is slow (a cold start, an OAuth handshake and a walk over every device), so a pair of <a href="https://cloud.google.com/scheduler" target="_blank" rel="noopener noreferrer">Cloud Scheduler</a> jobs re-request each feed on a schedule - the indoor climate every few minutes, the slower-moving weather less often - keeping the cache warm even when nobody's around. Each table notes when its data was last updated.</li>
+                            <li>The CDN, scheduling and access control are all defined as code with <a href="https://www.terraform.io/" target="_blank" rel="noopener noreferrer">Terraform</a>, and credentials live in <a href="https://cloud.google.com/secret-manager" target="_blank" rel="noopener noreferrer">Google Secret Manager</a> rather than in any code.</li>
+                        </ul>
+                    </details>
 
-                    <h4>Indoor climate, from Samsung SmartThings</h4>
-                    <ul>
-                        <li>Walks every device in our <a href="https://www.smartthings.com/" target="_blank" rel="noopener noreferrer">Samsung SmartThings</a> account, keeps the ones reporting temperature or humidity, resolves each one's room, flags readings older than 24 hours as stale, and sorts them by name.</li>
-                        <li>Reaches SmartThings over OAuth 2.0, refreshing a short-lived access token from a long-lived refresh token it stores - and rotates - in a database, so the feed keeps working with no manual re-authentication.</li>
-                        <li>This page averages the readings itself, both overall and per room.</li>
-                    </ul>
+                    <details class="faq-section">
+                        <summary><h4>Indoor climate, from Samsung SmartThings</h4></summary>
+                        <ul>
+                            <li>Walks every device in our <a href="https://www.smartthings.com/" target="_blank" rel="noopener noreferrer">Samsung SmartThings</a> account, keeps the ones reporting temperature or humidity, resolves each one's room, flags readings older than 24 hours as stale, and sorts them by name.</li>
+                            <li>Reaches SmartThings over OAuth 2.0, refreshing a short-lived access token from a long-lived refresh token it stores - and rotates - in a database, so the feed keeps working with no manual re-authentication.</li>
+                            <li>This page averages the readings itself, both overall and per room.</li>
+                        </ul>
+                    </details>
 
-                    <h4>Outdoor weather, from the Met Office</h4>
-                    <ul>
-                        <li>Calls the <a href="https://www.metoffice.gov.uk/" target="_blank" rel="noopener noreferrer">Met Office</a> Weather DataHub (Site-Specific) API for our local forecast.</li>
-                        <li>Normalises the response - the weather type, temperature and how it feels, humidity, chance of precipitation, wind speed, gust and direction, dew point, pressure, UV index and visibility - into the compact JSON this page renders.</li>
-                    </ul>
+                    <details class="faq-section">
+                        <summary><h4>Outdoor weather, from the Met Office</h4></summary>
+                        <ul>
+                            <li>Calls the <a href="https://www.metoffice.gov.uk/" target="_blank" rel="noopener noreferrer">Met Office</a> Weather DataHub (Site-Specific) API for our local forecast.</li>
+                            <li>Normalises the response - the weather type, temperature and how it feels, humidity, chance of precipitation, wind speed, gust and direction, dew point, pressure, UV index and visibility - into the compact JSON this page renders.</li>
+                        </ul>
+                    </details>
 
-                    <h4>Source code</h4>
-                    <p>Each of the moving parts above lives in its own repository:</p>
-                    <ul>
+                    <details class="faq-section">
+                        <summary><h4>Source code</h4></summary>
+                        <p>Each of the moving parts above lives in its own repository:</p>
+                        <ul>
                         <li><a href="https://github.com/christianjbrown/christianbrown.uk" target="_blank" rel="noopener noreferrer">christianbrown.uk</a> - the Jekyll source for this site, including the page you're reading.</li>
                         <li><a href="https://github.com/christianjbrown/terraform-fastly-christianbrownuk" target="_blank" rel="noopener noreferrer">terraform-fastly-christianbrownuk</a> - Terraform that defines the Fastly CDN configuration in front of the Cloud Run functions.</li>
                         <li><a href="https://github.com/christianjbrown/cloud-run-function-smartthings-climate-php" target="_blank" rel="noopener noreferrer">cloud-run-function-smartthings-climate-php</a> - the Cloud Run function that serves the indoor climate data.</li>
@@ -87,5 +94,6 @@ javascripts:
                         <li><a href="https://github.com/christianjbrown/api-client-php" target="_blank" rel="noopener noreferrer">api-client-php</a> - the underlying HTTP API client library the above build on.</li>
                         <li><a href="https://github.com/christianjbrown/oauth2-client-php" target="_blank" rel="noopener noreferrer">oauth2-client-php</a> - PHP OAuth 2.0 client that keeps the SmartThings access token fresh via the refresh-token grant.</li>
                         <li><a href="https://github.com/christianjbrown/key-value-store-php" target="_blank" rel="noopener noreferrer">key-value-store-php</a> - PHP key-value store used to persist those OAuth tokens in the database.</li>
-                    </ul>
+                        </ul>
+                    </details>
                 </div>
