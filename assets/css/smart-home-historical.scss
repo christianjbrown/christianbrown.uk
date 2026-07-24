@@ -88,6 +88,45 @@ html body div.container header div.header-data {
     }
 }
 
+// A two-segment toggle (temperature / humidity) sharing the zoom buttons' look.
+// The segments butt together as one control: only the outer corners round, and
+// the shared inner edge collapses to a single border.
+.climate-chart__metric {
+    display: flex;
+}
+
+.climate-chart__metric-btn {
+    padding: 0.15rem 0.45rem;
+    border: 1px solid $colour-grayscale-1;
+    background: none;
+    font-family: $font-sans-serif;
+    font-size: 1rem;
+    line-height: 1;
+    cursor: pointer;
+    &:first-child {
+        border-radius: 4px 0 0 4px;
+    }
+    &:last-child {
+        border-radius: 0 4px 4px 0;
+        border-left: none;
+    }
+    &:hover:not([aria-pressed="true"]) {
+        border-color: $colour-accent;
+    }
+    // The active segment reads highlighted; the other is a plain outline.
+    &[aria-pressed="true"] {
+        border-color: $colour-accent;
+        background: $colour-accent;
+        cursor: default;
+    }
+    &:last-child[aria-pressed="true"] {
+        border-left: 1px solid $colour-accent;
+    }
+    &:focus:not(:focus-visible) {
+        outline: none;
+    }
+}
+
 .climate-chart__canvas {
     width: 100%;
     min-height: 380px;

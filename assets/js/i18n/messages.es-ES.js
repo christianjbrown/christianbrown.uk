@@ -249,6 +249,15 @@ export default {
             insideMin: 'Temperatura interior (mín.)',
             insideMax: 'Temperatura interior (máx.)',
         },
+        humiditySeries: {
+            outside: 'Humedad exterior',
+            insideMin: 'Humedad interior (mín.)',
+            insideMax: 'Humedad interior (máx.)',
+        },
+        metricToggle: {
+            temperature: 'Mostrar temperatura',
+            humidity: 'Mostrar humedad',
+        },
         resolutions: {
             'hourly-day': 'Último día · cada hora',
             'hourly-1-month': 'Último mes · cada hora',

@@ -253,6 +253,15 @@ export default {
             insideMin: 'Indetemperatur (min.)',
             insideMax: 'Indetemperatur (maks.)',
         },
+        humiditySeries: {
+            outside: 'Udeluftfugtighed',
+            insideMin: 'Indeluftfugtighed (min.)',
+            insideMax: 'Indeluftfugtighed (maks.)',
+        },
+        metricToggle: {
+            temperature: 'Vis temperatur',
+            humidity: 'Vis luftfugtighed',
+        },
         resolutions: {
             'hourly-day': 'Sidste dag · pr. time',
             'hourly-1-month': 'Sidste måned · pr. time',
