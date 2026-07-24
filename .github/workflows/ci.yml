@@ -155,6 +155,13 @@ jobs:
             exit 0
           fi
 
+          # On push (e.g. to main) the build only refreshes the baseline — there's
+          # nothing to gate, so don't fail on "changes". Only pull requests gate.
+          if [ "$GITHUB_EVENT_NAME" != "pull_request" ]; then
+            echo "::notice::push build — baseline refreshed, not gating"
+            exit 0
+          fi
+
           # Wait for Percy to finish diffing this exact build. --fail-on-changes
           # exits 1 when there are unreviewed changes, but note that Percy errors
           # (403, timeout, network, quota) also exit non-zero — so we only treat a
@@ -241,6 +248,13 @@ jobs:
           BUILD_ID=$(grep -aoE 'builds/[0-9]+' percy-run.log | head -1 | cut -d/ -f2)
           if [ -z "$BUILD_ID" ]; then
             echo "::warning::No Percy build was created — not blocking"
+            exit 0
+          fi
+
+          # On push (e.g. to main) the build only refreshes the baseline — there's
+          # nothing to gate, so don't fail on "changes". Only pull requests gate.
+          if [ "$GITHUB_EVENT_NAME" != "pull_request" ]; then
+            echo "::notice::push build — baseline refreshed, not gating"
             exit 0
           fi
 
