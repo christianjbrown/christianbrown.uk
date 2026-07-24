@@ -224,7 +224,8 @@ export default {
 
     page: {
         smartHomeTitle: 'Smart home',
-        roomsHeading: '📐 Rum',
+        roomsHeading: '📐 Plantegning',
+        historicalHeading: '📜 Historik',
         howItWorksHeading: '🏗️ Sådan virker det',
         floorPlanAlt: 'Plantegning af huset med temperatur og luftfugtighed i hvert rum',
         howItWorksAlt: 'Diagram, der viser, hvordan denne side fungerer',

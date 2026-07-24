@@ -219,7 +219,8 @@ export default {
 
     page: {
         smartHomeTitle: '智能家居',
-        roomsHeading: '📐 房间',
+        roomsHeading: '📐 平面图',
+        historicalHeading: '📜 历史',
         howItWorksHeading: '🏗️ 工作原理',
         floorPlanAlt: '房屋平面图，标注各房间的温度和湿度',
         howItWorksAlt: '展示此页面工作原理的示意图',

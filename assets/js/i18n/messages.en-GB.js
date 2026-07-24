@@ -290,7 +290,8 @@ export default {
     // Page-level section headings and the smart-home page's image alt text.
     page: {
         smartHomeTitle: 'Smart home',
-        roomsHeading: '📐 Rooms',
+        roomsHeading: '📐 Floor plan',
+        historicalHeading: '📜 Historical',
         howItWorksHeading: '🏗️ How it works',
         floorPlanAlt: 'Floor plan of the house, with the temperature and humidity of each room',
         howItWorksAlt: 'Diagram showing how this page works',

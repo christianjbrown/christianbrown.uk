@@ -220,7 +220,8 @@ export default {
 
     page: {
         smartHomeTitle: 'Casa inteligente',
-        roomsHeading: '📐 Habitaciones',
+        roomsHeading: '📐 Plano',
+        historicalHeading: '📜 Histórico',
         howItWorksHeading: '🏗️ Cómo funciona',
         floorPlanAlt: 'Plano de la casa, con la temperatura y la humedad de cada habitación',
         howItWorksAlt: 'Diagrama que muestra cómo funciona esta página',
