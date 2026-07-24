@@ -1,3 +1,4 @@
 ---
 ---
 {{ site.url }}/
+{{ site.url }}/smart-home

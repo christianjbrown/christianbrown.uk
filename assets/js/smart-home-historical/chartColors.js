@@ -1,7 +1,7 @@
 'use strict';
 
 // The chart's colours live as CSS custom properties (defined per-theme in
-// smart-home-historical.scss), so the canvas — coloured in JS — follows the
+// smart-home.scss), so the canvas — coloured in JS — follows the
 // site's light/dark themes. We read the resolved values off the document root
 // and hand them to uPlot; on a theme change the chart re-reads them and rebuilds.
 

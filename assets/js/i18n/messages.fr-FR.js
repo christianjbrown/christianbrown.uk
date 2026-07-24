@@ -224,7 +224,8 @@ export default {
 
     page: {
         smartHomeTitle: 'Maison connectée',
-        roomsHeading: '📐 Pièces',
+        roomsHeading: '📐 Plan',
+        historicalHeading: '📜 Historique',
         howItWorksHeading: '🏗️ Comment ça marche',
         floorPlanAlt: "Plan de la maison, avec la température et l'humidité de chaque pièce",
         howItWorksAlt: 'Schéma montrant le fonctionnement de cette page',

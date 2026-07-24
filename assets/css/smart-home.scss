@@ -324,3 +324,140 @@ main {
         }
     }
 }
+
+// Historical climate chart (the "📜 Historical" section). The chart is drawn on
+// a canvas by uPlot, coloured in JS from these custom properties — so it must
+// follow the site's light/dark themes the same way the rest of the page does.
+// Most tokens simply reuse the themeable site tokens (the accent green already
+// lightens for dark; muted/fg already flip), so they need defining only once.
+// The exceptions get explicit light/dark values:
+//   - the outdoor line is a neutral grey that must read on *both* grounds (a
+//     literally dark-grey line would vanish on the dark background), and
+//   - the indoor band fill is a translucent green tuned per theme.
+:root {
+    --cc-inside: #{$colour-accent};
+    --cc-grid: #{$colour-grayscale-1};
+    --cc-axis: #{$colour-grayscale-1};
+    --cc-text: #{$colour-grayscale-2};
+    --cc-outside: #555;
+    --cc-inside-fill: rgba(117, 146, 60, 0.18);
+}
+
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+        --cc-outside: #9aa0a6;
+        --cc-inside-fill: rgba(163, 199, 109, 0.22);
+        // A shade darker than the muted grey the axis labels use, so the
+        // gridlines recede on the dark ground (light mode keeps --c-muted).
+        --cc-grid: #383b42;
+    }
+}
+
+:root[data-theme="dark"] {
+    --cc-outside: #9aa0a6;
+    --cc-inside-fill: rgba(163, 199, 109, 0.22);
+    --cc-grid: #383b42;
+}
+
+.historical-section {
+    margin-bottom: 2rem;
+}
+
+.historical-chart__toolbar {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-bottom: 0.5rem;
+}
+
+.historical-chart__resolution {
+    margin-right: auto;
+    color: $colour-grayscale-1;
+    font-size: 0.9rem;
+}
+
+.historical-chart__zoom {
+    padding: 0.15rem 0.55rem;
+    border: 1px solid $colour-grayscale-1;
+    border-radius: 4px;
+    background: none;
+    font-family: $font-sans-serif;
+    font-size: 1rem;
+    font-weight: bold;
+    line-height: 1;
+    color: $colour-grayscale-3;
+    cursor: pointer;
+    &:hover:not(:disabled) {
+        color: $colour-accent;
+        border-color: $colour-accent;
+    }
+    &:disabled {
+        opacity: 0.35;
+        cursor: default;
+    }
+    &:focus:not(:focus-visible) {
+        outline: none;
+    }
+}
+
+// A two-segment toggle (temperature / humidity) sharing the zoom buttons' look.
+// The segments butt together as one control: only the outer corners round, and
+// the shared inner edge collapses to a single border.
+.historical-chart__metric {
+    display: flex;
+}
+
+.historical-chart__metric-btn {
+    padding: 0.15rem 0.45rem;
+    border: 1px solid $colour-grayscale-1;
+    background: none;
+    font-family: $font-sans-serif;
+    font-size: 1rem;
+    line-height: 1;
+    cursor: pointer;
+    &:first-child {
+        border-radius: 4px 0 0 4px;
+    }
+    &:last-child {
+        border-radius: 0 4px 4px 0;
+        border-left: none;
+    }
+    &:hover:not([aria-pressed="true"]) {
+        border-color: $colour-accent;
+    }
+    // The active segment reads highlighted; the other is a plain outline.
+    &[aria-pressed="true"] {
+        border-color: $colour-accent;
+        background: $colour-accent;
+        cursor: default;
+    }
+    &:last-child[aria-pressed="true"] {
+        border-left: 1px solid $colour-accent;
+    }
+    &:focus:not(:focus-visible) {
+        outline: none;
+    }
+}
+
+.historical-chart__canvas {
+    width: 100%;
+    min-height: 380px;
+    // uPlot's legend colour swatches carry their own stroke; keep the legend
+    // text itself in step with the page foreground for both themes.
+    .u-legend {
+        color: $colour-grayscale-2;
+        font-family: $font-sans-serif;
+        // The first legend row is the x (time) series; the axis already shows
+        // the dates, so drop it from the key.
+        .u-series:first-child {
+            display: none;
+        }
+    }
+}
+
+.historical-chart__status {
+    margin-top: 0.75rem;
+    color: $colour-grayscale-1;
+    font-size: 0.9rem;
+    text-align: center;
+}

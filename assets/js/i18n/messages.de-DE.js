@@ -224,7 +224,8 @@ export default {
 
     page: {
         smartHomeTitle: 'Smart Home',
-        roomsHeading: '📐 Räume',
+        roomsHeading: '📐 Grundriss',
+        historicalHeading: '📜 Verlauf',
         howItWorksHeading: '🏗️ Wie es funktioniert',
         floorPlanAlt: 'Grundriss des Hauses mit Temperatur und Luftfeuchtigkeit jedes Raums',
         howItWorksAlt: 'Diagramm, das zeigt, wie diese Seite funktioniert',
