@@ -340,6 +340,10 @@ export default {
             temperature: 'Show temperature',
             humidity: 'Show humidity',
         },
+        metricTitle: {
+            temperature: 'Temperature',
+            humidity: 'Humidity',
+        },
         resolutions: {
             'hourly-day': 'Last day · hourly',
             'hourly-1-month': 'Last month · hourly',

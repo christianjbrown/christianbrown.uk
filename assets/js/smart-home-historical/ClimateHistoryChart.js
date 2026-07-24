@@ -64,10 +64,14 @@ export default class ClimateHistoryChart {
     async start() {
         this.#els.zoomIn.setAttribute('aria-label', this.#strings.zoomInLabel);
         this.#els.zoomOut.setAttribute('aria-label', this.#strings.zoomOutLabel);
+        this.#els.zoomIn.setAttribute('title', this.#strings.zoomInLabel);
+        this.#els.zoomOut.setAttribute('title', this.#strings.zoomOutLabel);
         this.#els.zoomIn.addEventListener('click', () => { void this.#step(-1); });
         this.#els.zoomOut.addEventListener('click', () => { void this.#step(1); });
         this.#els.metricTemp.setAttribute('aria-label', this.#strings.metricToggle.temperature);
         this.#els.metricHumidity.setAttribute('aria-label', this.#strings.metricToggle.humidity);
+        this.#els.metricTemp.setAttribute('title', this.#strings.metricTitle.temperature);
+        this.#els.metricHumidity.setAttribute('title', this.#strings.metricTitle.humidity);
         this.#els.metricTemp.addEventListener('click', () => { this.#setMetric('temp'); });
         this.#els.metricHumidity.addEventListener('click', () => { this.#setMetric('humidity'); });
         this.#updateMetricControls();
