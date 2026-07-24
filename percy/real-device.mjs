@@ -17,7 +17,9 @@
 // Automate-mode project token), BROWSERSTACK_USERNAME and BROWSERSTACK_ACCESS_KEY.
 
 import { Builder } from 'selenium-webdriver';
-import percyScreenshot from '@percy/selenium-webdriver';
+// The DEFAULT export is percySnapshot (DOM-based, for the web project); Percy on
+// Automate needs the named percyScreenshot, which photographs the real device.
+import { percyScreenshot } from '@percy/selenium-webdriver';
 import browserstack from 'browserstack-local';
 
 const USERNAME = process.env.BROWSERSTACK_USERNAME;
