@@ -61,8 +61,10 @@ export default class FloorPlan {
      * Renders the room and outside labels onto the plan. The whole section
      * stays hidden until the indoor (SmartThings) data has loaded — it is never
      * shown for weather data alone, or when the indoor data has failed to load.
-     * Once shown, a room is only labelled when it appears in the indoor data,
-     * and the outside reading is added as soon as the weather data arrives.
+     * Once shown, every room on the plan is labelled with its name so sensorless
+     * rooms (e.g. the kitchen and bathroom) aren't left blank; temperature and
+     * humidity are added for the rooms the indoor data covers, and the outside
+     * reading is added as soon as the weather data arrives.
      *
      * @param {Object|null} homeData
      * @param {Object|null} weatherData
@@ -86,12 +88,19 @@ export default class FloorPlan {
             const rooms = FloorPlan.#averageByRoom(homeData);
             for (const [roomName, anchor] of Object.entries(this.#roomAnchors)) {
                 const room = rooms.get(roomName);
-                if (room) {
-                    // Join on the raw API room name; display its mapped name,
-                    // falling back to the raw value when unmapped.
-                    const label = this.#catalogue.roomNames[roomName] ?? roomName;
-                    this.#addLabel(anchor, label, room.temp, room.tempStale, room.humidity, room.humidityStale);
-                }
+                // Join on the raw API room name; display its mapped name,
+                // falling back to the raw value when unmapped. Every room is
+                // labelled with its name; a room the data doesn't cover (no
+                // sensor) shows the name alone, with no readings.
+                const label = this.#catalogue.roomNames[roomName] ?? roomName;
+                this.#addLabel(
+                    anchor,
+                    label,
+                    room ? room.temp : null,
+                    room ? room.tempStale : false,
+                    room ? room.humidity : null,
+                    room ? room.humidityStale : false,
+                );
             }
         }
 
@@ -170,7 +179,7 @@ export default class FloorPlan {
     /**
      * @param {Object}      anchor
      * @param {String}      name
-     * @param {Number}      tempC
+     * @param {Number|null} tempC             null for a sensorless, name-only room
      * @param {Boolean}     tempStale
      * @param {Number|null} humidityPercent
      * @param {Boolean}     humidityStale
@@ -182,7 +191,9 @@ export default class FloorPlan {
         label.style.top = anchor.y + '%';
 
         label.append(FloorPlan.#span(name, 'floor-plan__name'));
-        label.append(FloorPlan.#span('🌡️ ' + (new Temperature(tempC, this.#catalogue)).formatC(), tempStale ? 'floor-plan__temp floor-plan__temp--muted' : 'floor-plan__temp'));
+        if (tempC !== null && tempC !== undefined) {
+            label.append(FloorPlan.#span('🌡️ ' + (new Temperature(tempC, this.#catalogue)).formatC(), tempStale ? 'floor-plan__temp floor-plan__temp--muted' : 'floor-plan__temp'));
+        }
         if (humidityPercent !== null && humidityPercent !== undefined) {
             label.append(FloorPlan.#span('💧 ' + (new Humidity(humidityPercent, this.#catalogue)).formatPercent(), humidityStale ? 'floor-plan__humidity floor-plan__humidity--muted' : 'floor-plan__humidity'));
         }
