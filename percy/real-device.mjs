@@ -48,7 +48,7 @@ const PERCY_CSS = [
     // tables and floor plan — the visual content that matters — sit above these,
     // so nothing important is lost. (display:none removes their height, unlike the
     // history canvas being merely masked.)
-    '.historical-section, .faq { display: none !important; }',
+    '.floor-plan-section, .historical-section, .faq { display: none !important; }',
 ].join('\n');
 
 const DEVICES = [
