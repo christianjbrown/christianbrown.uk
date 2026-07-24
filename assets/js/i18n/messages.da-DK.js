@@ -263,6 +263,10 @@ export default {
             temperature: 'Vis temperatur',
             humidity: 'Vis luftfugtighed',
         },
+        metricTitle: {
+            temperature: 'Temperatur',
+            humidity: 'Luftfugtighed',
+        },
         resolutions: {
             'hourly-day': 'Sidste dag · pr. time',
             'hourly-1-month': 'Sidste måned · pr. time',
