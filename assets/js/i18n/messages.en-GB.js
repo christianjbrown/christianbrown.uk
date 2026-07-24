@@ -176,6 +176,7 @@ export default {
     time: {
         midnight: 'midnight',
         noon: 'noon',
+        justNow: 'just now',
         // en-GB shows a friendly 12-hour gloss after the 24-hour time, e.g.
         // "14:30 (2:30pm)". de-DE and fr-FR are 24-hour only and switch this off.
         twelveHourGloss: true,

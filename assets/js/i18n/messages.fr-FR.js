@@ -161,6 +161,7 @@ export default {
     time: {
         midnight: 'minuit',
         noon: 'midi',
+        justNow: "à l'instant",
         twelveHourGloss: false,
         onWord: ' le ',
 

@@ -160,6 +160,7 @@ export default {
     time: {
         midnight: 'Mitternacht',
         noon: 'Mittag',
+        justNow: 'gerade eben',
         twelveHourGloss: false,
         onWord: ' am ',
 

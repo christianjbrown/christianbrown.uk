@@ -160,6 +160,7 @@ export default {
     time: {
         midnight: 'middernacht',
         noon: "twaalf uur 's middags",
+        justNow: 'zojuist',
         twelveHourGloss: false,
         onWord: ' op ',
 
