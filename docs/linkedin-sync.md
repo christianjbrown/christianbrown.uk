@@ -11,7 +11,7 @@ Source files:
 
 | Path | Feeds |
 | --- | --- |
-| `_professional_experience/*.md` | Experience (10 roles) |
+| `_professional_experience/*.md` | Experience (11 roles) |
 | `_education/*.md` | Education (1 entry) |
 | `_config.yml` → `header_job_title` | Headline |
 | `index.html` → the `#cv-lead` paragraph | About |
@@ -83,9 +83,9 @@ in one place.
 ## 3. What a sync must never do
 
 - **Never delete or overwrite a LinkedIn position with no md file behind it.** The sync
-  is additive and per-role. ITV (Engineering Manager - Data, Aug 2026 – present) exists
-  only on LinkedIn. Leave it untouched, and say out loud that it is being skipped rather
-  than silently omitting it.
+  is additive and per-role. If LinkedIn carries a position this repo has no file for,
+  leave it untouched and say out loud that it is being skipped, rather than silently
+  omitting it. (ITV was such a role until it was added here in Aug 2026.)
 - **Never merge the roles at a company that appears twice.** iiNet (×2) and Red Ventures
   (×2) are separate LinkedIn positions grouped under one company block. The site groups
   them the same way, via the `previous.organisation != experience.organisation`
@@ -106,11 +106,7 @@ There is no automated trigger, by design. Run it after any change to:
 Verified against the live profile on 2026-08-24. Reconcile deliberately — decide
 which side is right, fix the md, then paste.
 
-**Header fields.** One outstanding, and it is deliberate:
-
-| Site (source of truth) | LinkedIn (live) |
-| --- | --- |
-| No ITV entry; the most recent role is eBay, `end: "2026-04"`, so the site shows no current role | ITV, Engineering Manager - Data, Aug 2026 – present |
+**Header fields.** None outstanding — every role's title, company and dates match.
 
 `2007-09-cnet-soft-eng.md` was reconciled to LinkedIn — `position` is now
 "Software Engineer / Web Developer" and `organisation` is "CNET". Its
@@ -120,6 +116,10 @@ historically correct company name and is site-only, so it is left as written.
 Titles and companies must be read from the file, not from a summary of it: an
 earlier pass reported `2002-01-mets-it.md` as saying `"METS"` when it has always
 read `"Mineral Engineering Technical Services (METS)"` and already matched.
+
+**Ongoing roles.** A current role omits `end` entirely. `_includes/cv-date-range.html`
+then renders "– now" with no duration, and the JS layer adds the live duration on load.
+Only one role should be ongoing at a time.
 
 **Filenames.** The collections carry no `date:` front matter, so Jekyll orders them by
 path — the `YYYY-MM-` prefix drives both the CV sequence and the company grouping in
@@ -169,7 +169,7 @@ Do **not** report as drift:
 - location strings — `["London, UK"]` against `Greater London, England, United
   Kingdom` is expected, per §2
 - durations, employment type, location type, or skills — LinkedIn's own, per §2
-- a LinkedIn position with no md file (ITV), which §3 protects
+- a LinkedIn position with no md file, which §3 protects
 
 Report each role as in-sync or differing; for a differing one, show the exact
 character delta and the paste-ready replacement. Invisible differences are the
@@ -191,6 +191,7 @@ done
 
 Expected bullet counts, confirmed against the live profile: clix 1, mets 1,
 iinet-scsr 2, iinet-associate 1, cnet 2, cbsi 4, viacomcbs 2, rv-lead 3, rv-eng-mgr 3,
+itv 4,
 ebay 6, uwa 1. Every character count must be under 2,000.
 
 Rendered output should contain no `{:`, no `](`, and no occurrence of `Tech stack`.
