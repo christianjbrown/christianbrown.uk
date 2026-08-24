@@ -37,6 +37,17 @@ The CV markdown in this repo is the source of truth; the [LinkedIn profile](http
 
 After changing anything under `_professional_experience/` or `_education/`, `header_job_title` in `_config.yml`, or the `#cv-lead` paragraph in `index.html`, follow [`docs/linkedin-sync.md`](docs/linkedin-sync.md) to render the paste-ready text, or to diff the live profile against this repo and report what has drifted. It normalises bullets to `-`, drops the `_Tech stack: …_` trailer, and strips the markdown links, so the profile stays free of the stack lists the site carries.
 
+# :page_facing_up: Downloadable CV
+
+`assets/docs/christian-brown-cv.pdf` is generated from the CV page itself, so the two cannot disagree. After a content change, rebuild and reprint it:
+
+```shell
+bundle exec jekyll build
+npm run cv:pdf
+```
+
+`bin/generate-cv-pdf.mjs` serves `_site`, waits for the JS layer to localise the date ranges (it is the only thing that knows a current role's live duration), rewrites every root-relative link to an absolute `christianbrown.uk` URL so links followed out of the PDF do not point at the localhost it was printed from, and prints with Chrome. Page size, margins and the "page N of M" footer all come from the `@page` rules in `assets/css/cv.scss`.
+
 # :test_tube: Testing
 
 CI runs on every push and pull request (see the badge above). To run the checks locally:
