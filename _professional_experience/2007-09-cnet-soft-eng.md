@@ -1,6 +1,6 @@
 ---
-position: "Software Engineer"
-organisation: "CNET Networks"
+position: "Software Engineer / Web Developer"
+organisation: "CNET"
 organisation_extra: "International media company with multiple brands. Broadcast giant CBS acquired CNET Networks in 2008."
 location: ["London, UK"]
 start: "2007-09"
