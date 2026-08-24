@@ -53,6 +53,7 @@ liquid:
 # coverage report used to leak to christianbrown.uk/coverage/ because it isn't
 # excluded by default). Co-located *.test.js files are excluded via a glob.
 exclude:
+  - "bin"
   - "docs"
   - "coverage"
   - "node_modules"
