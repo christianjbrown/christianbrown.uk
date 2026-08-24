@@ -106,13 +106,20 @@ There is no automated trigger, by design. Run it after any change to:
 Verified against the live profile on 2026-08-24. Reconcile deliberately — decide
 which side is right, fix the md, then paste.
 
-**Header fields**
+**Header fields.** One outstanding, and it is deliberate:
 
 | Site (source of truth) | LinkedIn (live) |
 | --- | --- |
-| `2007-09-cnet-soft-eng.md`: `position: "Software Engineer"`, `organisation: "CNET Networks"` | "Software Engineer / Web Developer" at "CNET" |
-| `2002-01-mets-it.md`: `organisation: "METS"` | "Mineral Engineering Technical Services (METS)" |
 | No ITV entry; the most recent role is eBay, `end: "2026-04"`, so the site shows no current role | ITV, Engineering Manager - Data, Aug 2026 – present |
+
+`2007-09-cnet-soft-eng.md` was reconciled to LinkedIn — `position` is now
+"Software Engineer / Web Developer" and `organisation` is "CNET". Its
+`organisation_extra` still says "CBS acquired CNET Networks in 2008", which is the
+historically correct company name and is site-only, so it is left as written.
+
+Titles and companies must be read from the file, not from a summary of it: an
+earlier pass reported `2002-01-mets-it.md` as saying `"METS"` when it has always
+read `"Mineral Engineering Technical Services (METS)"` and already matched.
 
 **Filenames.** The collections carry no `date:` front matter, so Jekyll orders them by
 path — the `YYYY-MM-` prefix drives both the CV sequence and the company grouping in
