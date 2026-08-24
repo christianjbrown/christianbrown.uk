@@ -17,7 +17,7 @@ attributes, and if JS is unavailable this server-rendered text stands.
     {%- assign sm = "01" -%}
     {%- assign start_label = sy -%}
 {%- endif -%}
-{%- if include.end != blank -%}
+{%- if include.end and include.end != "" -%}
     {%- assign eparts = include.end | split: "-" -%}
     {%- assign ey = eparts[0] -%}
     {%- if eparts.size > 1 -%}
