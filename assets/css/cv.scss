@@ -231,7 +231,10 @@ div.container {
                 border-bottom: 1px solid $colour-grayscale-1;
                 color: $colour-accent;
                 font-family: $font-serif;
-                margin-bottom: 0.5rem;
+                // Matches div.cv-experiences' row-gap, so the first experience
+                // sits as far below the heading's rule as every later one does
+                // below the dashed rule that separates it from the one above.
+                margin-bottom: 1rem;
                 padding-bottom: 0.2rem;
                 width: 100%;
             }
