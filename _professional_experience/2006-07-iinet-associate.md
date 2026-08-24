@@ -8,4 +8,4 @@ end:   "2007-08"
 organisation_logo: "iinet.svg"
 organisation_link: "https://www.iinet.net.au/"
 ---
-* Built and maintained CRM, billing, HR, and B2B ordering systems. Led the integration of tools developed in a previous role into the official CRM application. Awarded "Hardest Worker of the Year" in 2006.
+* Built and maintained CRM, billing, HR, and B2B ordering systems. Led the integration of tools developed in a previous role into the official CRM application. Awarded “Hardest Worker of the Year” in 2006.

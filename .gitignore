@@ -11,3 +11,7 @@ vendor/
 !assets/css/vendor/
 node_modules/
 coverage/
+
+# Local Claude Code config and skills — machine-local, never committed.
+# The LinkedIn sync rules the skill points at live in docs/linkedin-sync.md.
+.claude/

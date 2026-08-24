@@ -162,24 +162,49 @@ jobs:
             exit 0
           fi
 
-          # Wait for Percy to finish diffing this exact build. --fail-on-changes
-          # exits 1 when there are unreviewed changes, but note that Percy errors
-          # (403, timeout, network, quota) also exit non-zero — so we only treat a
-          # result that positively reports changes AND carries no error as a
-          # blocking regression. Everything else is "unavailable → don't block".
+          # Wait for Percy to finish diffing this exact build. Deliberately NOT
+          # --fail-on-changes: despite the name it exits 1 on any diff against
+          # the baseline, approved or not. Approval is per-build and every re-run
+          # uploads a NEW build, so approving could never satisfy it — the job
+          # re-failed on a freshly approved build while Percy's own status on the
+          # same build read "No visual changes since last approval".
           set +e
-          npx percy build:wait --build "$BUILD_ID" --fail-on-changes | tee percy-wait.log
+          npx percy build:wait --build "$BUILD_ID" | tee percy-wait.log
           WAIT_CODE=${PIPESTATUS[0]}
           set -e
 
-          if [ "$WAIT_CODE" -eq 1 ] && grep -qiE 'found [0-9]+ change' percy-wait.log && ! grep -qi 'error' percy-wait.log; then
-            echo "::error::Percy found unreviewed visual changes — review/approve them at the build URL above to unblock this merge."
-            exit 1
-          fi
-
+          # Percy errors (403, timeout, network, quota) also exit non-zero, and
+          # those mean "unavailable", not "regression" — so never block on them.
           if [ "$WAIT_CODE" -ne 0 ]; then
             echo "::warning::Percy could not confirm the result (exit $WAIT_CODE) — treating as unavailable, not blocking"
+            exit 0
           fi
+
+          # Gate on the build's review state instead. It reads "approved" both
+          # when there are no diffs at all and when every diff has been approved —
+          # including Percy auto-approving snapshots identical to an already
+          # approved build, which is what makes review → re-run actually converge.
+          curl -sS --max-time 30 \
+            -H "Authorization: Token token=$PERCY_TOKEN" \
+            "https://percy.io/api/v1/builds/$BUILD_ID" > percy-build.json || true
+          REVIEW_STATE=$(jq -r '.data.attributes["review-state"] // empty' percy-build.json 2>/dev/null || true)
+
+          # Documented values: unreviewed, approved, changes_requested, merged,
+          # rejected. Anything unrecognised means we could not read the state —
+          # log the payload so it is diagnosable, and fall through to not blocking.
+          case "$REVIEW_STATE" in
+            approved|merged)
+              echo "::notice::Percy build $BUILD_ID review state: $REVIEW_STATE"
+              ;;
+            unreviewed|changes_requested|rejected)
+              echo "::error::Percy build $BUILD_ID review state: $REVIEW_STATE — review/approve the changes at the build URL above, then re-run this job."
+              exit 1
+              ;;
+            *)
+              echo "::warning::Could not read Percy review state (got '${REVIEW_STATE:-none}') — treating as unavailable, not blocking"
+              head -c 500 percy-build.json || true
+              ;;
+          esac
           exit 0
 
   real-device:
