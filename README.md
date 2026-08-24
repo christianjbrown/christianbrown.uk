@@ -31,6 +31,12 @@ To point one at a function running on your own machine, flip its flag in `_confi
 
 The dev and production URLs live alongside the flags (`smart_home_*_url_dev` / `_url_prod`). Each flag is independent, so one API can run locally while the other stays on the CDN; when a flag is on, the layout also whitelists that dev origin in the page's `connect-src` CSP.
 
+# :busts_in_silhouette: LinkedIn
+
+The CV markdown in this repo is the source of truth; the [LinkedIn profile](https://www.linkedin.com/in/christianjbrown/) is a downstream copy that has to be updated by hand — LinkedIn has no public write API for profile experience.
+
+After changing anything under `_professional_experience/` or `_education/`, `header_job_title` in `_config.yml`, or the `#cv-lead` paragraph in `index.html`, follow [`docs/linkedin-sync.md`](docs/linkedin-sync.md) to render the paste-ready text, or to diff the live profile against this repo and report what has drifted. It normalises bullets to `-`, drops the `_Tech stack: …_` trailer, and strips the markdown links, so the profile stays free of the stack lists the site carries.
+
 # :test_tube: Testing
 
 CI runs on every push and pull request (see the badge above). To run the checks locally:
