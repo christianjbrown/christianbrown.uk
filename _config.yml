@@ -15,7 +15,7 @@ header_location: "London, UK"
 # in _layouts/global.html and DEV_CONSOLE_LINE_2 in config/global.const.js,
 # so it is written once here. Must not contain "--" (it would close the HTML
 # comment) or a backtick (it lands in a JS template literal).
-console_tagline: "but maybe you're looking for an engineering manager? you've come to the right place!"
+console_tagline: "looking for an engineering manager? you've come to the right place!"
 
 google_analytics_id: "G-9Z9L9Z6QHQ"
 
