@@ -1,0 +1,84 @@
+name: Pages
+
+# Builds and publishes the site with Actions instead of letting GitHub Pages
+# build it server-side.
+#
+# On the legacy build type GitHub ran its own Jekyll with its own pinned gems
+# and an allowlist of plugins, so the committed Gemfile was not what actually
+# produced christianbrown.uk. CI therefore verified a build that was not the
+# one being published. Building here makes the Gemfile authoritative and
+# removes that split.
+#
+# No Node step: the Jekyll build does not need it. npm here is only vitest,
+# stylelint, pa11y and Percy, and the CV PDF is committed rather than generated.
+# Verified by building with node_modules absent.
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - '**.md'
+      - 'LICENSE'
+      - '.gitignore'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Never let two publishes race. Not cancel-in-progress: a half-finished deploy
+# losing to a newer one would leave the live site mid-swap.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Build and deploy to Pages
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+
+      # bundler-cache: true installs frozen, which needs x86_64-linux in
+      # Gemfile.lock. The committed lock is arm64-darwin only, for the reasons
+      # ci.yml sets out at length. Install non-frozen, same as CI.
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: false
+
+      - name: Install gems
+        run: bundle install --jobs 4
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      # --strict_front_matter fails the build rather than publishing a broken
+      # page. JEKYLL_ENV=production is what switches analytics and Sentry on.
+      - name: Build site
+        env:
+          JEKYLL_ENV: production
+        run: bundle exec jekyll build --strict_front_matter
+
+      # CNAME lives in the repo root and is not excluded, so Jekyll copies it
+      # into _site and the custom domain survives. Assert it, because losing it
+      # silently drops christianbrown.uk back to the github.io address.
+      - name: Verify the custom domain survived the build
+        run: |
+          test -f _site/CNAME || { echo "::error::_site/CNAME missing - the custom domain would be dropped"; exit 1; }
+          diff <(tr -d '[:space:]' < CNAME) <(tr -d '[:space:]' < _site/CNAME)
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
