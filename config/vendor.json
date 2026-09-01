@@ -1,0 +1,21 @@
+{
+  "$comment": "Third-party front-end assets vendored into assets/**/vendor/ and served from 'self' so the strict script-src CSP holds. Every entry pins an exact version and the SHA-256 of the file as committed. `npm run vendor:check` re-hashes the committed files against this manifest (offline, so CI can gate on it); `npm run vendor:sync` re-fetches them from `source` when a version here changes. Bump a version by editing `version` and `source`, running vendor:sync, then pasting the printed sha256 back in.",
+  "files": [
+    {
+      "name": "sentry",
+      "version": "10.68.0",
+      "note": "The replay bundle, not the plain one: this site reports session replays as well as errors, so bundle.replay.min.js is the variant to keep. The CDN build rather than the npm package, because @sentry/browser ships no pre-built browser bundle. Loaded by _layouts/global.html only when site.sentry_dsn is set.",
+      "source": "https://browser.sentry-cdn.com/10.68.0/bundle.replay.min.js",
+      "target": "assets/js/vendor/sentry.min.js",
+      "sha256": "28bfc7aa91b3be68230a47552fa8dc3bba21a00285fc8709aedf6e3355e8e2d4"
+    },
+    {
+      "name": "uplot",
+      "version": "1.6.32",
+      "note": "Draws the climate charts. The ESM build, imported directly by the chart modules.",
+      "source": "https://unpkg.com/uplot@1.6.32/dist/uPlot.esm.js",
+      "target": "assets/js/vendor/uPlot.esm.js",
+      "sha256": "5dd9b3281aa64b461b42d9945f6adb2649d346502b12281a9ae0d46599a80eba"
+    }
+  ]
+}
