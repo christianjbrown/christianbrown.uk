@@ -26,7 +26,7 @@ gem "wdm", "~> 0.1.1", :platforms => [:mingw, :x64_mingw, :mswin]
 # do not have a Java counterpart.
 gem "http_parser.rb", "~> 0.6.0", :platforms => [:jruby]
 
-gem "webrick", "~> 1.7"
+gem "webrick", "~> 1.8"
 
 # Validate the rendered site (broken links, missing images, invalid HTML) as a
 # test step. Only needed for local/CI testing, never at site-build time.
