@@ -18,3 +18,7 @@ export const DEV_CONSOLE_LINE_2 = `{{ site.console_tagline }}`;
 export const DEV_CONSOLE_LINE_2_STYLE = 'color: #75923C; font-weight: bold;';
 export const GOOGLE_ANALYTICS_ID = '{{ site.google_analytics_id }}';
 export const SENTRY_DSN = '{{ site.sentry_dsn }}';
+// Vendored Sentry browser SDK, injected on demand by global.js once cookie
+// consent is granted. Same-origin so the strict script-src CSP allows it; kept
+// in step with bin/sync-vendor.mjs, which writes the file this points at.
+export const SENTRY_SDK_URL = '/assets/js/vendor/sentry.min.js';

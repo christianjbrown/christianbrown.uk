@@ -15,6 +15,7 @@ import {
     DEV_CONSOLE_LINE_2_STYLE,
     GOOGLE_ANALYTICS_ID,
     SENTRY_DSN,
+    SENTRY_SDK_URL,
     THEME_TOGGLE_ID
 } from '/config/global.const.js';
 
@@ -90,12 +91,35 @@ function setCookies() {
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
     gtag('config', GOOGLE_ANALYTICS_ID);
+    loadGoogleAnalytics();
     initSentry();
+}
+
+export const GTAG_SCRIPT_ID = 'gtag-js';
+
+// Fetch gtag.js, which drains whatever setCookies already queued on dataLayer.
+// Loaded here rather than from a <script> in the layout so nothing is requested
+// from Google until the visitor has actually consented — the tag sets no cookies
+// before `config`, but the request alone would still hand Google their IP
+// address on a page they hadn't agreed to be measured on. A classic script, not
+// a module: gtag.js reads document.currentScript, which is null in a module.
+export function loadGoogleAnalytics() {
+    if (!GOOGLE_ANALYTICS_ID) {
+        return;
+    }
+    if (document.getElementById(GTAG_SCRIPT_ID)) {
+        return;
+    }
+    const script = document.createElement('script');
+    script.id = GTAG_SCRIPT_ID;
+    script.async = true;
+    script.src = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(GOOGLE_ANALYTICS_ID)}`;
+    document.head.appendChild(script);
 }
 
 // True for local development hosts — the localhost variants and the IPv4/IPv6
 // loopback addresses — so local dev telemetry never reaches production.
-function isLocalhost() {
+export function isLocalhost() {
     const host = window.location.hostname;
     return host === 'localhost'
         || host.endsWith('.localhost')
@@ -104,14 +128,46 @@ function isLocalhost() {
         || /^127(?:\.\d{1,3}){3}$/.test(host);
 }
 
-// Bring up Sentry error + session-replay reporting. Called from setCookies
-// (so it's gated behind both cookie consent and the local-dev-host check). The
-// vendored SDK in the <head> defines window.Sentry; guard against it being
-// absent (e.g. blocked/failed load, or jsdom in tests) and against
-// double-initialisation. Replay is recorded only when an error occurs
+// Fetch the vendored Sentry SDK, resolving true once window.Sentry is defined
+// and false if the script could not be loaded. Injected rather than sitting in
+// the <head> so the bundle is only ever downloaded by a visitor who has
+// consented: it is ~70 KB gzipped, and previously every visitor paid for it
+// including those who declined. No memoisation, because setCookies runs at most
+// once per page view (the banner is hidden as soon as it is answered).
+export function loadSentrySdk() {
+    if (window.Sentry) {
+        return Promise.resolve(true);
+    }
+    return new Promise((resolve) => {
+        const script = document.createElement('script');
+        script.src = SENTRY_SDK_URL;
+        script.addEventListener('load', () => resolve(true));
+        script.addEventListener('error', () => resolve(false));
+        document.head.appendChild(script);
+    });
+}
+
+// Bring up Sentry error + session-replay reporting. Called from setCookies (so
+// it's gated behind both cookie consent and the local-dev-host check), which
+// does not await it: reporting arrives when it arrives, and nothing downstream
+// depends on it. Guards against double-initialisation and against the SDK not
+// being there afterwards (blocked load, or jsdom in tests) — telemetry must
+// never break the page. Replay is recorded only when an error occurs
 // (replaysSessionSampleRate 0), with the SDK's default text/input masking on.
-function initSentry() {
-    if (!window.Sentry || window.Sentry.getClient()) {
+export async function initSentry() {
+    if (!SENTRY_DSN) {
+        return;
+    }
+    if (window.Sentry) {
+        if (window.Sentry.getClient()) {
+            return;
+        }
+    }
+    const loaded = await loadSentrySdk();
+    if (!loaded) {
+        return;
+    }
+    if (!window.Sentry) {
         return;
     }
     window.Sentry.init({

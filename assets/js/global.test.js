@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeAll, beforeEach, afterEach, afterAll, vi } from 'vitest';
-import { SENTRY_DSN } from '/config/global.const.js';
+import { GOOGLE_ANALYTICS_ID, SENTRY_DSN, SENTRY_SDK_URL } from '/config/global.const.js';
 
 const { needsConsent, getConsent, setConsent, deleteAll } = vi.hoisted(() => ({
     needsConsent: vi.fn(),
@@ -31,6 +31,7 @@ function setHostname(hostname) {
 let cookiesDiv;
 let acceptButton;
 let declineButton;
+let globalModule;
 
 describe('global.js', () => {
     beforeAll(async () => {
@@ -50,7 +51,7 @@ describe('global.js', () => {
         vi.spyOn(console, 'log').mockImplementation(() => {});
         originalLocation = window.location;
         // DOM is in place, so the module's top-level lookups succeed.
-        await import('./global.js');
+        globalModule = await import('./global.js');
     });
 
     afterAll(() => {
@@ -63,6 +64,8 @@ describe('global.js', () => {
         setConsent.mockReset();
         deleteAll.mockReset();
         cookiesDiv.style.display = '';
+        document.getElementById(globalModule.GTAG_SCRIPT_ID)?.remove();
+        document.querySelector(`script[src="${SENTRY_SDK_URL}"]`)?.remove();
         window.dataLayer = undefined;
         setHostname('christianbrown.uk'); // production by default; telemetry runs
     });
@@ -155,69 +158,178 @@ describe('global.js', () => {
         });
     });
 
-    // Sentry init is gated behind consent (called from setCookies), so it fires
-    // on exactly the same paths as analytics. The vendored SDK sets window.Sentry
-    // in the real <head>; jsdom has none, so each test stubs it as needed. The
-    // suite's default hostname is production (see top-level beforeEach).
-    describe('Sentry error reporting', () => {
-        let sentry;
-        let replayIntegration;
+    // gtag.js is injected on consent rather than sitting in the layout, so a
+// visitor who declines never sends Google a request at all.
+describe('Google Analytics tag', () => {
+    const gtagScript = () => document.getElementById(globalModule.GTAG_SCRIPT_ID);
 
-        beforeEach(() => {
-            replayIntegration = { name: 'Replay' };
-            sentry = {
-                init: vi.fn(),
-                getClient: vi.fn().mockReturnValue(undefined),
-                replayIntegration: vi.fn().mockReturnValue(replayIntegration),
-            };
-        });
-
-        afterEach(() => {
-            delete window.Sentry;
-        });
-
-        it('initialises Sentry with the replay integration once consent is accepted', () => {
-            window.Sentry = sentry;
-
-            acceptButton.dispatchEvent(new Event('click'));
-
-            expect(sentry.replayIntegration).toHaveBeenCalledTimes(1);
-            expect(sentry.init).toHaveBeenCalledTimes(1);
-            const config = sentry.init.mock.calls[0][0];
-            expect(config.dsn).toBe(SENTRY_DSN);
-            expect(config.integrations).toContain(replayIntegration);
-            expect(config.replaysSessionSampleRate).toBe(0);
-            expect(config.replaysOnErrorSampleRate).toBe(1.0);
-        });
-
-        it('initialises Sentry on the consent-granted window load path', async () => {
-            needsConsent.mockResolvedValue(true);
-            getConsent.mockReturnValue(true);
-            window.Sentry = sentry;
-
-            window.dispatchEvent(new Event('load'));
-            await flush();
-
-            expect(sentry.init).toHaveBeenCalledTimes(1);
-        });
-
-        it('does not re-initialise when a Sentry client already exists', () => {
-            sentry.getClient.mockReturnValue({});
-            window.Sentry = sentry;
-
-            acceptButton.dispatchEvent(new Event('click'));
-
-            expect(sentry.init).not.toHaveBeenCalled();
-        });
-
-        it('is a no-op (no throw) when the Sentry SDK failed to load', () => {
-            // window.Sentry is absent (deleted in afterEach); accepting cookies
-            // must still succeed without a reporter present.
-            expect(() => acceptButton.dispatchEvent(new Event('click'))).not.toThrow();
-        });
+    it('fetches no tag before the visitor has answered the banner', () => {
+        expect(gtagScript()).toBeNull();
     });
 
-    // Neither Google Analytics nor Sentry may fire on a local `jekyll serve`
+    it('fetches no tag when the visitor declines', () => {
+        declineButton.dispatchEvent(new Event('click'));
+
+        expect(gtagScript()).toBeNull();
+    });
+
+    it('injects the tag once consent is accepted', () => {
+        acceptButton.dispatchEvent(new Event('click'));
+
+        const script = gtagScript();
+        expect(script).not.toBeNull();
+        expect(script.src).toBe(`https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(GOOGLE_ANALYTICS_ID)}`);
+        expect(script.async).toBe(true);
+    });
+
+    // gtag.js reads document.currentScript, which is null in a module, so the
+    // injected element must stay a classic script.
+    it('injects a classic script, not a module', () => {
+        acceptButton.dispatchEvent(new Event('click'));
+
+        expect(gtagScript().type).toBe('');
+    });
+
+    it('queues the config command on dataLayer before the tag arrives', () => {
+        acceptButton.dispatchEvent(new Event('click'));
+
+        const commands = window.dataLayer.map((args) => Array.from(args));
+        expect(commands).toContainEqual(['config', GOOGLE_ANALYTICS_ID]);
+    });
+
+    it('does not inject the tag twice', () => {
+        globalModule.loadGoogleAnalytics();
+        globalModule.loadGoogleAnalytics();
+
+        expect(document.querySelectorAll(`#${globalModule.GTAG_SCRIPT_ID}`)).toHaveLength(1);
+    });
+});
+
+// Sentry init is gated behind consent (called from setCookies), so it fires
+// on exactly the same paths as analytics. The SDK is no longer in the <head>:
+// initSentry injects a <script> and waits for it, so these tests either stub
+// window.Sentry up front (the loader then short-circuits) or drive the injected
+// element's load/error events by hand — jsdom does not fetch it. The suite's
+// default hostname is production (see top-level beforeEach).
+describe('Sentry error reporting', () => {
+    let sentry;
+    let replayIntegration;
+
+    const injectedScript = () => document.head.querySelector(`script[src="${SENTRY_SDK_URL}"]`);
+
+    beforeEach(() => {
+        replayIntegration = { name: 'Replay' };
+        sentry = {
+            init: vi.fn(),
+            getClient: vi.fn().mockReturnValue(undefined),
+            replayIntegration: vi.fn().mockReturnValue(replayIntegration),
+        };
+    });
+
+    afterEach(() => {
+        delete window.Sentry;
+        injectedScript()?.remove();
+    });
+
+    it('initialises Sentry with the replay integration once consent is accepted', async () => {
+        window.Sentry = sentry;
+
+        acceptButton.dispatchEvent(new Event('click'));
+        await flush();
+
+        expect(sentry.replayIntegration).toHaveBeenCalledTimes(1);
+        expect(sentry.init).toHaveBeenCalledTimes(1);
+        const config = sentry.init.mock.calls[0][0];
+        expect(config.dsn).toBe(SENTRY_DSN);
+        expect(config.integrations).toContain(replayIntegration);
+        expect(config.replaysSessionSampleRate).toBe(0);
+        expect(config.replaysOnErrorSampleRate).toBe(1.0);
+    });
+
+    it('initialises Sentry on the consent-granted window load path', async () => {
+        needsConsent.mockResolvedValue(true);
+        getConsent.mockReturnValue(true);
+        window.Sentry = sentry;
+
+        window.dispatchEvent(new Event('load'));
+        await flush();
+
+        expect(sentry.init).toHaveBeenCalledTimes(1);
+    });
+
+    it('does not re-initialise when a Sentry client already exists', async () => {
+        sentry.getClient.mockReturnValue({});
+        window.Sentry = sentry;
+
+        acceptButton.dispatchEvent(new Event('click'));
+        await flush();
+
+        expect(sentry.init).not.toHaveBeenCalled();
+    });
+
+    it('does not fetch the SDK again when it is already on the page', async () => {
+        window.Sentry = sentry;
+
+        acceptButton.dispatchEvent(new Event('click'));
+        await flush();
+
+        expect(injectedScript()).toBeNull();
+    });
+
+    // The point of the lazy load: nothing is requested until consent is given,
+    // so a visitor who declines never downloads the bundle at all.
+    it('requests the SDK only once consent is accepted', async () => {
+        expect(injectedScript()).toBeNull();
+
+        declineButton.dispatchEvent(new Event('click'));
+        await flush();
+
+        expect(injectedScript()).toBeNull();
+
+        acceptButton.dispatchEvent(new Event('click'));
+        await flush();
+
+        expect(injectedScript()).not.toBeNull();
+    });
+
+    it('initialises Sentry once the injected SDK has loaded', async () => {
+        acceptButton.dispatchEvent(new Event('click'));
+        await flush();
+
+        const script = injectedScript();
+        expect(script).not.toBeNull();
+        expect(sentry.init).not.toHaveBeenCalled();
+
+        window.Sentry = sentry;
+        script.dispatchEvent(new Event('load'));
+        await flush();
+
+        expect(sentry.init).toHaveBeenCalledTimes(1);
+    });
+
+    it('is a no-op (no throw) when the SDK script fails to load', async () => {
+        acceptButton.dispatchEvent(new Event('click'));
+        await flush();
+
+        injectedScript().dispatchEvent(new Event('error'));
+        await flush();
+
+        expect(sentry.init).not.toHaveBeenCalled();
+    });
+
+    it('is a no-op (no throw) when the script loads without defining window.Sentry', async () => {
+        acceptButton.dispatchEvent(new Event('click'));
+        await flush();
+
+        // Loaded, but window.Sentry absent: a stubbed or truncated bundle.
+        injectedScript().dispatchEvent(new Event('load'));
+        await flush();
+
+        expect(sentry.init).not.toHaveBeenCalled();
+    });
+});
+
+// Neither Google Analytics nor Sentry may fire on a local `jekyll serve`
     // session — even with consent — whichever loopback/localhost form the
     // address takes. setCookies() short-circuits before both.
     describe('local dev host guard', () => {
@@ -245,7 +357,58 @@ describe('global.js', () => {
             acceptButton.dispatchEvent(new Event('click'));
 
             expect(window.dataLayer).toBeUndefined(); // no GA
+            expect(document.getElementById(globalModule.GTAG_SCRIPT_ID)).toBeNull(); // no tag fetched
             expect(sentry.init).not.toHaveBeenCalled(); // no Sentry
         });
+    });
+});
+
+// Both integrations are configuration-driven: clearing google_analytics_id or
+// sentry_dsn in _config.yml has to actually switch them off, rather than fetch
+// a bundle that then does nothing. Loaded through a fresh module registry so
+// the build-time constants can be forced empty. Last in the file: the re-import
+// re-runs global.js's top-level DOM work and re-binds its button listeners.
+describe('global.js with telemetry switched off in config', () => {
+    afterEach(() => {
+        delete window.Sentry;
+        document.getElementById('gtag-js')?.remove();
+        vi.doUnmock('/config/global.const.js');
+        vi.resetModules();
+    });
+
+    async function importWith({ GOOGLE_ANALYTICS_ID = 'G-TEST', SENTRY_DSN = '' } = {}) {
+        vi.resetModules();
+        vi.doMock('/config/global.const.js', () => ({
+            COOKIES_ACCEPT_BUTTON_ID: 'cookies-accept',
+            COOKIES_DECLINE_BUTTON_ID: 'cookies-decline',
+            COOKIES_DIV_ID: 'cookies',
+            DEV_CONSOLE_LINE_1: '',
+            DEV_CONSOLE_LINE_1_STYLE: '',
+            DEV_CONSOLE_LINE_2: '',
+            DEV_CONSOLE_LINE_2_STYLE: '',
+            GOOGLE_ANALYTICS_ID,
+            SENTRY_DSN,
+            SENTRY_SDK_URL: '/assets/js/vendor/sentry.min.js',
+            THEME_TOGGLE_ID: 'theme-toggle',
+        }));
+
+        return import('./global.js');
+    }
+
+    it('loads no analytics tag when no measurement id is configured', async () => {
+        const { loadGoogleAnalytics, GTAG_SCRIPT_ID } = await importWith({ GOOGLE_ANALYTICS_ID: '' });
+        loadGoogleAnalytics();
+
+        expect(document.getElementById(GTAG_SCRIPT_ID)).toBeNull();
+    });
+
+    it('neither fetches nor initialises Sentry when no DSN is configured', async () => {
+        const sentry = { init: vi.fn(), getClient: vi.fn().mockReturnValue(undefined) };
+        window.Sentry = sentry;
+
+        const { initSentry } = await importWith();
+        await initSentry();
+
+        expect(sentry.init).not.toHaveBeenCalled();
     });
 });
