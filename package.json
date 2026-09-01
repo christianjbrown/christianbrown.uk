@@ -5,17 +5,19 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "test": "vitest run",
-    "test:watch": "vitest",
     "coverage": "vitest run --coverage",
     "cv:pdf": "node bin/generate-cv-pdf.mjs",
     "lint:css": "stylelint \"assets/css/**/*.scss\" \"_sass/*.scss\"",
     "lint:css:fix": "stylelint \"assets/css/**/*.scss\" \"_sass/*.scss\" --fix",
     "serve:local": "bundle exec jekyll serve",
     "serve:site": "http-server _site -p 8080 -s",
+    "test": "vitest run",
     "test:a11y": "pa11y-ci",
     "test:visual": "percy exec -- node percy/snapshot.mjs",
-    "test:visual:devices": "percy exec -- node percy/real-device.mjs"
+    "test:visual:devices": "percy exec -- node percy/real-device.mjs",
+    "test:watch": "vitest",
+    "vendor:check": "node bin/sync-vendor.mjs --check",
+    "vendor:sync": "node bin/sync-vendor.mjs"
   },
   "repository": {
     "type": "git",

@@ -30,6 +30,13 @@ jobs:
       - name: Lint stylesheets
         run: npm run lint:css
 
+      # The vendored bundles are served from 'self' so the strict script-src CSP
+      # holds, which means a drifted or hand-edited copy ships silently. This
+      # re-hashes them against config/vendor.json offline, so the gate is on what
+      # is committed rather than on what a CDN happens to return today.
+      - name: Check vendored assets
+        run: npm run vendor:check
+
   site:
     name: Jekyll build, HTML & accessibility checks
     runs-on: ubuntu-latest
