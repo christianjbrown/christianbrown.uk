@@ -1,5 +1,7 @@
 'use strict';
 
+const TIMEZONES_URL = '/assets/data/timezones.json';
+
 export default class Country {
     #timezones;
 
@@ -27,7 +29,13 @@ export default class Country {
      */
     async #getTimezones() {
         if (!this.#timezones) {
-            const { default: timezones } = await import('../data/timezones.json', { with: { type: 'json' } });
+            // Deliberately fetched rather than imported as a JSON module. An
+            // `import ... with { type: 'json' }` is a parse-time construct: on an
+            // engine that doesn't support import attributes the *whole* module
+            // graph fails to load, which would take the cookie banner and the
+            // analytics gate down with it. A fetch keeps every module parseable
+            // everywhere and costs the same one request.
+            const timezones = await (await fetch(TIMEZONES_URL)).json();
 
             this.#timezones = timezones;
         }
