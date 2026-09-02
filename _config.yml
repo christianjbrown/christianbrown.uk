@@ -25,6 +25,13 @@ header_name: "Christian Brown"
 header_job_title: "Engineering Manager"
 header_location: "London, UK"
 
+# The header's link to the smart-home page, as the build renders it. JavaScript
+# swaps it for the live indoor temperature once the climate feed answers, and
+# for the visitor's locale before that; this is what a crawler, a reader with no
+# JavaScript, and anyone whose feed is down actually sees. Keep it in step with
+# `cv.smartHomeLink` in the message catalogues.
+header_smart_home_link: "🏠 Smart home"
+
 # The second line of the view-source/console easter egg, sitting under the
 # ASCII art in _includes/console-art.txt. Rendered into both the HTML comment
 # in _layouts/global.html and DEV_CONSOLE_LINE_2 in config/global.const.js,

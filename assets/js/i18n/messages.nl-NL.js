@@ -250,6 +250,11 @@ export default {
         downloadIconAlt: 'Downloadpictogram',
         now: 'heden',
 
+        // The header's link to the smart-home page as the build renders it, and
+        // what it falls back to when there is no live reading to show. Same
+        // wording as page.smartHomeTitle, which is the heading it leads to.
+        smartHomeLink: '🏠 Smarthome',
+
         homeTempLink(temperature) {
             return `🏠 ${temperature} thuis`;
         },

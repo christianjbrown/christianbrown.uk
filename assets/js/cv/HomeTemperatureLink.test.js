@@ -17,9 +17,13 @@ vi.mock('../DataFetcher.js', () => ({
 
 import HomeTemperatureLink from './HomeTemperatureLink.js';
 
+// The link as the build ships it: visible, and already carrying the page's name
+// as its label.
+const SHIPPED_LABEL = '🏠 Smart home';
+
 function makeDom() {
     const dom = document.createElement('a');
-    dom.hidden = true;
+    dom.textContent = SHIPPED_LABEL;
     document.body.append(dom);
     return dom;
 }
@@ -30,7 +34,7 @@ beforeEach(() => {
 });
 
 describe('HomeTemperatureLink', () => {
-    it('averages the device temperatures, then fills in and reveals the link on success', async () => {
+    it('averages the device temperatures and relabels the link on success', async () => {
         const dom = makeDom();
         fetchMock.mockResolvedValue([
             { temperatureValue: 26.0, temperatureTimestamp: 100, temperatureStale: false },
@@ -43,17 +47,19 @@ describe('HomeTemperatureLink', () => {
         expect(dom.hidden).toBe(false);
     });
 
-    it('leaves the link hidden and empty on failure (no fallback)', async () => {
+    // The point of the fallback: a feed that is down must not take the only route
+    // from the homepage to the smart-home page with it.
+    it('keeps the shipped label, and the link, on failure', async () => {
         const dom = makeDom();
         fetchMock.mockRejectedValue(new Error('nope'));
 
         await new HomeTemperatureLink(dom, 'url').update();
 
-        expect(dom.textContent).toBe('');
-        expect(dom.hidden).toBe(true);
+        expect(dom.textContent).toBe(SHIPPED_LABEL);
+        expect(dom.hidden).toBe(false);
     });
 
-    it('leaves the link hidden when no device has a usable temperature', async () => {
+    it('keeps the shipped label when no device has a usable temperature', async () => {
         const dom = makeDom();
         fetchMock.mockResolvedValue([
             { temperatureValue: null, temperatureTimestamp: 100, temperatureStale: false },
@@ -61,7 +67,7 @@ describe('HomeTemperatureLink', () => {
 
         await new HomeTemperatureLink(dom, 'url').update();
 
-        expect(dom.textContent).toBe('');
-        expect(dom.hidden).toBe(true);
+        expect(dom.textContent).toBe(SHIPPED_LABEL);
+        expect(dom.hidden).toBe(false);
     });
 });

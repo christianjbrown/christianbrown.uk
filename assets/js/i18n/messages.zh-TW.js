@@ -246,6 +246,11 @@ export default {
         downloadIconAlt: '下載圖示',
         now: '至今',
 
+        // The header's link to the smart-home page as the build renders it, and
+        // what it falls back to when there is no live reading to show. Same
+        // wording as page.smartHomeTitle, which is the heading it leads to.
+        smartHomeLink: '🏠 智慧家庭',
+
         homeTempLink(temperature) {
             return `🏠 家中 ${temperature}`;
         },
