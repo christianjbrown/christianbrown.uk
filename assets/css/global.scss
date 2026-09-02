@@ -3,29 +3,9 @@
 
 @import 'vars';
 @import 'fonts';
+@import 'base';
+@import 'print';
 @import 'cookies';
-
-// Bootstrap does colour maths on these at compile time, so they must be real
-// values, not the themeable var() tokens. The accent green reads well on both
-// light and dark, so the avatar ring and other $primary uses stay fixed.
-$primary: $colour-accent-fixed;
-$danger: $colour-error-fixed;
-
-// Import only the Bootstrap partials this site actually uses, rather than the
-// whole framework, to avoid shipping dead CSS. Base partials first, then the
-// components in use: grid (.container), tables and utilities. Forms, buttons
-// and input-group went with the contact/recruiters pages; card and transitions
-// went with the smart-home "How it works" collapse, which is now always open.
-@import 'bootstrap/functions';
-@import 'bootstrap/variables';
-@import 'bootstrap/mixins';
-@import 'bootstrap/root';
-@import 'bootstrap/reboot';
-@import 'bootstrap/type';
-@import 'bootstrap/grid';
-@import 'bootstrap/tables';
-@import 'bootstrap/utilities';
-@import 'bootstrap/print';
 
 // Themeable colour tokens. Every $colour-* the site uses resolves to one of
 // these (see _sass/vars.scss), and the handful of dark-only tweaks (image
@@ -39,7 +19,8 @@ $danger: $colour-error-fixed;
     --c-muted: #aaa;
     --c-accent: #75923c;
     --c-error: orange;
-    // Translucent pill behind the floor-plan room labels.
+    // Translucent pill behind the floor-plan room labels, and behind the theme
+    // toggle where it floats over the page.
     --c-pill: rgba(255, 255, 255, 0.82);
     // Company logos: rendered to soft-white silhouettes on dark, untouched on
     // light. (The company name sits beside each, so brand colour isn't needed.)
@@ -104,177 +85,218 @@ $danger: $colour-error-fixed;
     }
 }
 
-// Colour-theme toggle, fixed in the top-right corner of the viewport: just the
-// icon and label, no border or background. Ships hidden and is revealed by JS,
-// and never prints.
-button.theme-toggle {
-    position: fixed;
-    top: 0.75rem;
-    right: 0.75rem;
-    z-index: 50;
-    padding: 0.3rem 0.5rem;
-    border: none;
-    background: none;
-    font-family: $font-sans-serif;
+// The root size the whole rem scale is derived from.
+html {
     font-size: 0.9rem;
-    font-weight: bold;
-    line-height: 1;
+}
+
+body {
+    background-color: var(--c-bg);
+    color: var(--c-fg);
+    font-family: $font-sans-serif;
+}
+
+// Selectors here are flat and single-class wherever the class is unique, which
+// on these two pages is nearly everywhere. They used to mirror the DOM —
+// `html body div.container header div.header-data nav a` for a nav link — which
+// meant any change to the markup's shape silently dropped the styling, and made
+// every rule's specificity an accident of how deep it happened to sit.
+
+// A blanket default so a themed foreground reaches text the rules below don't
+// name. Two type selectors, so any single class out-specifies it.
+body * {
     color: $colour-grayscale-3;
-    cursor: pointer;
-    &:hover {
-        color: $colour-accent;
+}
+
+body a {
+    color: $colour-accent;
+}
+
+body a:hover {
+    color: $colour-grayscale-3;
+    text-decoration: none;
+}
+
+// The name in the header is a link to the homepage; it takes the heading's
+// accent colour rather than the link colour.
+body h1 a,
+body h1 a:hover {
+    color: inherit;
+}
+
+body p {
+    font-size: 1rem;
+}
+
+body p a {
+    font-weight: bold;
+}
+
+body h2 {
+    color: $colour-grayscale-3;
+    font-size: 1.5rem;
+}
+
+body h3 {
+    color: $colour-grayscale-3;
+    font-size: 1.25rem;
+    padding-bottom: 0.125rem;
+    padding-top: 0.625rem;
+}
+
+// Shared by every page using the global layout (CV + smart-home); fluid below
+// the cap.
+.container {
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    max-width: 960px;
+    padding-bottom: 10rem;
+    padding-top: 3rem;
+    row-gap: 0.625rem;
+
+    @media print {
+        padding-bottom: 0;
+        padding-top: 0;
     }
-    // Drop the focus ring that lingered after a tap/click, but keep it for
-    // keyboard focus (:focus-visible) so it stays reachable without a mouse.
-    &:focus:not(:focus-visible) {
-        outline: none;
+}
+
+.container header {
+    align-items: center;
+    column-gap: 1.25rem;
+    display: flex;
+    flex-flow: row wrap;
+    place-content: flex-start center;
+
+    @media print {
+        break-inside: avoid;
     }
+}
+
+.header-avatar-border img {
+    border: 0.25rem solid $colour-accent-fixed;
+    border-radius: 50%;
+    width: 7.3rem;
+}
+
+.header-data {
+    flex-grow: 1;
+    min-height: 8.25rem;
+}
+
+.header-data h1 {
+    // Keep the name on one line. Below ~420px (where 3.5rem would be too wide
+    // to fit) scale it to the viewport so it fills the width without wrapping;
+    // 12vw meets 3.5rem exactly at 420px, so the change is seamless and wider
+    // screens (tablets, desktop) keep the full 3.5rem.
+    color: $colour-accent;
+    font-family: $font-serif;
+    font-size: 3.5rem;
+    // Was the .mt-2 utility class in the markup, the site's only use of one.
+    margin-bottom: 0;
+    margin-top: 0.5rem;
+    white-space: nowrap;
+
+    @media (max-width: 420px) {
+        font-size: 12vw;
+    }
+}
+
+.header-data p {
+    color: $colour-grayscale-4;
+    margin-bottom: 0.25rem;
+}
+
+.header-data p * {
+    color: $colour-grayscale-4;
+}
+
+.header-data p img.location-icon {
+    filter: var(--c-location-icon-filter);
+    height: 0.9rem;
+    margin-bottom: 0.2rem;
+    margin-right: 0.2rem;
+}
+
+.header-data nav {
+    text-align: right;
+    width: 100%;
+
+    // Right-aligned beside the details on wider screens; when the header stacks
+    // on small screens, centre it under the (centred) avatar and name.
+    @media (max-width: 600px) {
+        text-align: center;
+    }
+
     @media print {
         display: none;
     }
 }
 
-html {
-    body {
-        * {
-            color: $colour-grayscale-3;
-        }
-        h1 a, h1 a:hover {
-            color: inherit;
-        }
-        a {
-            color: $colour-accent;
-        }
-        p {
-            a {
-                font-weight: bold;
-            }
-            font-size: 1rem;
-        }
-        a:hover {
-            color: $colour-grayscale-3;
-            text-decoration: none;
-        }
-        h2 {
-            color: $colour-grayscale-3;
-            font-size: 1.5rem;
-        }
-        h3 {
-            padding-top: 0.625rem;
-            padding-bottom: 0.125rem;
-            color: $colour-grayscale-3;
-            font-size: 1.25rem;
-        }
-        div.container {
-            header {
-                @media print {
-                    break-inside: avoid;
-                }
-                div.header-avatar {
-                    div.header-avatar-border {
-                        img {
-                            width: 7.3rem;
-                            border-radius: 50%;
-                            border: 0.25rem solid $primary;
-                        }
-                    }
-                }
-                div.header-data {
-                    h1 {
-                        // Keep the name on one line. Below ~420px (where 3.5rem
-                        // would be too wide to fit) scale it to the viewport so
-                        // it fills the width without wrapping; 12vw meets 3.5rem
-                        // exactly at 420px, so the change is seamless and wider
-                        // screens (tablets, desktop) keep the full 3.5rem.
-                        white-space: nowrap;
-                        margin-bottom: 0;
-                        color: $colour-accent;
-                        font-family: $font-serif;
-                        font-size: 3.5rem;
-                        @media (max-width: 420px) {
-                            font-size: 12vw;
-                        }
-                    }
-                    p {
-                        * {
-                            color: $colour-grayscale-4;
-                        }
-                        img.location-icon {
-                            height: 0.9rem;
-                            filter: var(--c-location-icon-filter);
-                            margin-right: 0.2rem;
-                            margin-bottom: 0.2rem;
-                        }
-                        color: $colour-grayscale-4;
-                        margin-bottom: 0.25rem;
-                    }
-                    nav {
-                        @media print {
-                            display: none;
-                        }
-                        a {
-                            img.header-data-links-icon {
-                                vertical-align: middle;
-                                height: 1.125rem;
-                            }
-                            font-weight: bold;
-                            color: $colour-grayscale-3;
-                        }
-                        a:hover {
-                            color: $colour-accent;
-                        }
-                        // Right-aligned beside the details on wider screens; when
-                        // the header stacks on small screens, centre it under the
-                        // (centred) avatar and name.
-                        @media (max-width: 600px) {
-                            text-align: center;
-                        }
-                        width: 100%;
-                        text-align: right;
-                    }
-                    min-height: 8.25rem;
-                    flex-grow: 1;
-                }
-                place-content: flex-start center;
-                align-items: center;
-                column-gap: 1.25rem;
-                display: flex;
-                flex-flow: row wrap;
-            }
-            display: flex;
-            flex-direction: column;
-            margin: auto;
-            // Desktop content width (matches Bootstrap's lg container). Shared by
-            // every page using the global layout (CV + smart-home); fluid below
-            // the cap. Overrides Bootstrap's responsive `.container` steps via the
-            // higher `div.container` specificity.
-            max-width: 960px;
-            padding-bottom: 10rem;
-            padding-top: 3rem;
-            row-gap: 0.625rem;
-            @media print {
-                padding-top: 0;
-                padding-bottom: 0;
-            }
-        }
-        @media print {
-            div.container {
-                a {
-                    text-decoration: none !important;
-                }
-            }
-            #cv-menu-download {
-                display: none;
-            }
-            color: $colour-grayscale-2;
-        }
-        // Paint the page ground and default ink from the theme tokens so the
-        // whole viewport follows the colour scheme, not just the descendant text
-        // the `*` rule above colours. (color-scheme rides on the token mixins,
-        // so it tracks a forced theme too.)
-        background-color: var(--c-bg);
-        color: var(--c-fg);
-        font-family: $font-sans-serif;
-    }
+.header-data nav a {
+    color: $colour-grayscale-3;
+    font-weight: bold;
+}
+
+.header-data nav a:hover {
+    color: $colour-accent;
+}
+
+.header-data nav a img.header-data-links-icon {
+    height: 1.125rem;
+    vertical-align: middle;
+}
+
+// Colour-theme toggle, fixed in the top-right corner of the viewport. Ships
+// hidden and is revealed by JS, and never prints.
+// It used to be bare text on no background at 0.9rem with 0.3rem of padding,
+// which made it about 60x20px: under the 24x24 CSS px minimum in WCAG 2.5.8,
+// and invisible where it happened to float over dark content. It now carries
+// the same translucent pill the floor-plan labels use, and a target big enough
+// to hit.
+.theme-toggle {
+    background: var(--c-pill);
+    border: none;
+    border-radius: 0.4rem;
+    color: $colour-grayscale-3;
+    cursor: pointer;
+    font-family: $font-sans-serif;
     font-size: 0.9rem;
+    font-weight: bold;
+    line-height: 1;
+    min-height: 28px;
+    min-width: 44px;
+    padding: 0.45rem 0.6rem;
+    position: fixed;
+    right: 0.75rem;
+    top: 0.75rem;
+    z-index: 50;
+
+    &:hover {
+        color: $colour-accent;
+    }
+
+    // Drop the focus ring that lingered after a tap/click, but keep it for
+    // keyboard focus (:focus-visible) so it stays reachable without a mouse.
+    &:focus:not(:focus-visible) {
+        outline: none;
+    }
+
+    @media print {
+        display: none;
+    }
+}
+
+@media print {
+    body {
+        color: $colour-grayscale-2;
+    }
+
+    .container a {
+        text-decoration: none !important;
+    }
+
+    #cv-menu-download {
+        display: none;
+    }
 }
