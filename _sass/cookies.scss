@@ -11,9 +11,15 @@
 // Now: a bottom sheet on a phone, a centred card above that, sized by its
 // content, and never wider than the viewport.
 
-// The card is deliberately light in both themes — a white card on a dark
-// backdrop — so it uses the fixed brand colours rather than the themeable
-// tokens, which would repaint it dark-on-dark.
+// It also follows the colour theme rather than being a fixed white card. As a
+// white card it was unreadable in dark mode: `body *` in global.scss sets the
+// themed page foreground on every element it matches, including this dialog's
+// paragraph, and a colour declared directly on an element beats one inherited
+// from an ancestor however specific that ancestor's selector is. So the card
+// stayed white while its question took the near-white dark-mode foreground --
+// 1.23:1, effectively invisible. Theming the card fixes that at the root, and
+// every text colour below is declared on the element that carries the text
+// rather than left to inheritance.
 
 .cookies-backdrop {
     background: rgba(0, 0, 0, 0.45);
@@ -27,11 +33,11 @@
 }
 
 .cookies {
-    background: white;
-    border: 1px solid $colour-accent-fixed;
+    background: var(--c-bg);
+    border: 1px solid $colour-accent;
     border-radius: 0.75rem 0.75rem 0 0;
     bottom: 0;
-    color: $colour-ink-fixed;
+    color: $colour-grayscale-2;
     inset-inline: 0;
     padding: 1.25rem;
     position: fixed;
@@ -60,10 +66,12 @@
 }
 
 .cookies-text {
+    // Declared, not inherited: see the note above about `body *`.
+    color: $colour-grayscale-2;
     margin-bottom: 1.25rem;
 
     a {
-        color: $colour-accent-fixed;
+        color: $colour-accent;
         font-weight: normal;
         text-decoration: underline;
     }
@@ -76,10 +84,10 @@
     justify-content: stretch;
 
     button {
-        background: white;
-        border: 1px solid $colour-muted-fixed;
+        background: transparent;
+        border: 1px solid $colour-grayscale-1;
         border-radius: 0.5rem;
-        color: $colour-muted-fixed;
+        color: $colour-grayscale-2;
         cursor: pointer;
         flex: 1;
         font-family: $font-sans-serif;
@@ -89,12 +97,15 @@
 
     // The only difference between the two, so the pair still reads as a choice
     // with a default rather than as two identical buttons. Both are the same
-    // size and both clear AA against their own background. The old pairing put a
-    // grey "No" beside a solid green "Yes", which read as a disabled control
-    // next to a live one.
+    // size. The old pairing put a grey "No" beside a solid green "Yes", which
+    // read as a disabled control next to a live one.
+    // The ink on the accent is a token because the accent itself changes with
+    // the theme: white on the darker light-mode green, and the page's own dark
+    // ground on the lighter dark-mode green, which is 9.2:1 rather than the 1.9:1
+    // white would have managed there.
     button#cookies-accept {
-        background: $colour-accent-fixed;
-        border-color: $colour-accent-fixed;
-        color: white;
+        background: $colour-accent;
+        border-color: $colour-accent;
+        color: $colour-on-accent;
     }
 }
