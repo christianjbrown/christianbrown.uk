@@ -35,21 +35,20 @@
     margin-right: 1rem;
 }
 
-// Prose measure: about 75 characters a line, the top of the 60-75 that reads
-// comfortably. The container is 960px wide, which at the body's 14.4px was
-// putting 110-115 characters on a line. The cap is on the text blocks only, so
-// the CV's two-column rows (company against location, job title against dates)
-// still span the full width and stay aligned down the page.
-// In em, not ch: `ch` is the width of the "0" glyph, and WebProductSans draws a
-// much wider digit than its average lowercase letter, so 72ch measured out at
-// 105 characters rather than 72. em tracks the font size, so the same value
-// holds for the 1.15rem lead and the 1rem descriptions below it.
-$prose-measure: 33em;
-
+// The lead and the job descriptions run the full width of the container rather
+// than being held to a reading measure.
+// A 33em cap was tried, on the reasoning that the 960px container was putting
+// 110-115 characters on a line against the 60-75 that reads comfortably. It
+// measured correctly and looked wrong: the two-column rows either side of the
+// text (company against location, job title against dates) still spanned the
+// full width, so the text ended in a ragged column with an empty third of the
+// page beside it and the dates stranded out to the right.
+// A CV is read as a sheet of paper, not as an article -- the printed version is
+// the reference, and it is full-bleed. Matching the smart-home page's measure
+// was never a requirement; the two pages are different documents.
 #cv-lead {
     font-size: 1.15rem;
     margin-bottom: 0.8rem;
-    max-width: $prose-measure;
 }
 
 #cv-lead ul {
@@ -235,10 +234,6 @@ $prose-measure: 33em;
     text-align: right;
 }
 
-.cv-experience-job-description {
-    max-width: $prose-measure;
-}
-
 // A blanket default for the rendered markdown, which can contain anything the
 // collection's author writes. The three rules after it are the same specificity
 // and win on source order, so keep them below it.
@@ -302,14 +297,5 @@ $prose-measure: 33em;
 @media print {
     main {
         width: 64rem;
-    }
-
-    // Screen only. On paper the column is already bounded by the page, and
-    // holding the text to a 33em measure inside a 19cm A4 body would leave a
-    // third of every page empty and push the CV onto more sheets, which for a CV
-    // costs more than the line length saves.
-    #cv-lead,
-    .cv-experience-job-description {
-        max-width: none;
     }
 }
