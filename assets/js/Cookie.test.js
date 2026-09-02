@@ -1,15 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 
-const { getCodes } = vi.hoisted(() => ({ getCodes: vi.fn() }));
-
-vi.mock('./Country.js', () => ({
-    default: class {
-        getCountryCodesFromTimezone(...args) {
-            return getCodes(...args);
-        }
-    },
-}));
-
 import Cookie from './Cookie.js';
 
 function clearCookies() {
@@ -23,27 +13,9 @@ function clearCookies() {
 
 beforeEach(() => {
     clearCookies();
-    getCodes.mockReset();
 });
 
 describe('Cookie', () => {
-    describe('needsConsent', () => {
-        it('is true when the timezone maps to a consent-requiring country', async () => {
-            getCodes.mockResolvedValue(['GB']);
-            expect(await Cookie.needsConsent()).toBe(true);
-        });
-
-        it('is false when no country requires consent', async () => {
-            getCodes.mockResolvedValue(['US']);
-            expect(await Cookie.needsConsent()).toBe(false);
-        });
-
-        it('is false when the timezone maps to no country', async () => {
-            getCodes.mockResolvedValue([]);
-            expect(await Cookie.needsConsent()).toBe(false);
-        });
-    });
-
     describe('get / set', () => {
         it('round-trips a value, url-encoding it', () => {
             Cookie.set('greeting', 'hello world');

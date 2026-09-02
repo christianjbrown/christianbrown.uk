@@ -3,6 +3,10 @@
 'use strict';
 
 export const COOKIES_ACCEPT_BUTTON_ID = 'cookies-accept';
+export const COOKIES_BACKDROP_ID = 'cookies-backdrop';
+export const COOKIES_TEXT_ID = 'cookies-text';
+export const COOKIES_LINK_ANALYTICS_ID = 'cookies-link-analytics';
+export const COOKIES_LINK_SENTRY_ID = 'cookies-link-sentry';
 export const COOKIES_DECLINE_BUTTON_ID = 'cookies-decline';
 export const COOKIES_DIV_ID = 'cookies';
 export const THEME_TOGGLE_ID = 'theme-toggle';

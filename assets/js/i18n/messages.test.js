@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { catalogueFor, EN_GB } from './catalogue.js';
 import DE_DE from './messages.de-DE.js';
 import FR_FR from './messages.fr-FR.js';
@@ -14,21 +14,37 @@ import ZH_TW from './messages.zh-TW.js';
 const DATE = new Date(Date.UTC(2023, 10, 20, 9, 5));
 
 describe('catalogueFor', () => {
-    it('returns the catalogue for a supported locale', () => {
-        expect(catalogueFor('de-DE')).toBe(DE_DE);
-        expect(catalogueFor('fr-FR')).toBe(FR_FR);
-        expect(catalogueFor('nl-NL')).toBe(NL_NL);
-        expect(catalogueFor('da-DK')).toBe(DA_DK);
-        expect(catalogueFor('es-ES')).toBe(ES_ES);
-        expect(catalogueFor('pt-PT')).toBe(PT_PT);
-        expect(catalogueFor('zh-CN')).toBe(ZH_CN);
-        expect(catalogueFor('zh-TW')).toBe(ZH_TW);
-        expect(catalogueFor('en-GB')).toBe(EN_GB);
+    it('resolves the catalogue for a supported locale', async () => {
+        expect(await catalogueFor('de-DE')).toBe(DE_DE);
+        expect(await catalogueFor('fr-FR')).toBe(FR_FR);
+        expect(await catalogueFor('nl-NL')).toBe(NL_NL);
+        expect(await catalogueFor('da-DK')).toBe(DA_DK);
+        expect(await catalogueFor('es-ES')).toBe(ES_ES);
+        expect(await catalogueFor('pt-PT')).toBe(PT_PT);
+        expect(await catalogueFor('zh-CN')).toBe(ZH_CN);
+        expect(await catalogueFor('zh-TW')).toBe(ZH_TW);
+        expect(await catalogueFor('en-GB')).toBe(EN_GB);
     });
 
-    it('falls back to en-GB for anything unrecognised', () => {
-        expect(catalogueFor('xx-XX')).toBe(EN_GB);
-        expect(catalogueFor(undefined)).toBe(EN_GB);
+    it('falls back to en-GB for anything unrecognised', async () => {
+        expect(await catalogueFor('xx-XX')).toBe(EN_GB);
+        expect(await catalogueFor(undefined)).toBe(EN_GB);
+    });
+
+    // A locale chunk that will not load must not take the page down with it: the
+    // English the build rendered is already on the page behind every string this
+    // resolves.
+    it('falls back to en-GB when the catalogue fails to load', async () => {
+        vi.doMock('./messages.de-DE.js', () => {
+            throw new Error('network');
+        });
+        vi.resetModules();
+
+        const { catalogueFor: freshCatalogueFor, EN_GB: FRESH_EN_GB } = await import('./catalogue.js');
+        expect(await freshCatalogueFor('de-DE')).toBe(FRESH_EN_GB);
+
+        vi.doUnmock('./messages.de-DE.js');
+        vi.resetModules();
     });
 });
 

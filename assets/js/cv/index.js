@@ -20,9 +20,15 @@ const LOCATION_SELECTOR = '.cv-experience-company-metadata-location-text[data-lo
  * headings, the "Download CV" nav label, and the live indoor-temperature link.
  * These ship in en-GB (the build-time default), so a swap only shows for the
  * other locales.
+ *
+ * Async because a non-default catalogue is fetched on demand rather than bundled
+ * into every page load. Nothing here is time-critical, and the English the build
+ * rendered stands until it resolves.
+ *
+ * @returns {Promise}
  */
-export function localiseHomepage() {
-    const catalogue = catalogueFor(applyLocale());
+export async function localiseHomepage() {
+    const catalogue = await catalogueFor(applyLocale());
     localiseHeadings(catalogue);
     localiseDateRanges(catalogue);
     localiseLocations(catalogue);
@@ -85,4 +91,4 @@ export function initHomeTemperatureLink(catalogue = EN_GB) {
     }
 }
 
-window.addEventListener('load', localiseHomepage);
+window.addEventListener('load', () => void localiseHomepage());

@@ -137,11 +137,11 @@ describe('cv/index.js', () => {
     });
 
     describe('localiseHomepage', () => {
-        it('resolves the locale, swaps the headings and inits the temperature link', () => {
+        it('resolves the locale, swaps the headings and inits the temperature link', async () => {
             document.body.innerHTML = '<h2 id="cv-heading-experience">x</h2><h2 id="cv-heading-education">y</h2><a id="cv-home-temp" hidden></a>';
             injectApiConfig();
 
-            localiseHomepage();
+            await localiseHomepage();
 
             // jsdom resolves to en-GB, so the headings read their English values.
             expect(document.querySelector('#cv-heading-experience').textContent).toBe('Professional experience');

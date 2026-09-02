@@ -202,6 +202,18 @@ export default {
     // Appended to the status line when the climate favours opening a window.
     windowAdvice: '也許最好開窗通風。',
 
+    // The cookie consent dialog. `question` is a template with two holes, filled
+    // at runtime with the two links; the holes are placeholders rather than
+    // markup so no catalogue can inject HTML, and so a language that wants the
+    // links in the other order (or in another clause) can simply move them.
+    cookies: {
+        question: '您是否同意本網站使用 Cookie 來{traffic}和{errors}？',
+        measureTraffic: '統計流量',
+        catchErrors: '擷取錯誤',
+        accept: '🍪 同意',
+        decline: '🚫 不同意',
+    },
+
     theme: {
         auto: '自動',
         light: '淺色',

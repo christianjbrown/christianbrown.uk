@@ -1,76 +1,100 @@
-
 @import 'vars';
 
-html {
-    body {
-        div#cookies {
-            @media print {
-                display: none !important;
-            }
-            div.cookies-text {
-                a {
-                    text-decoration: underline;
-                    font-weight: normal;
-                }
+// The consent dialog.
 
-                background-color: white;
-                border-radius: 0.5rem;
-                border: 1px solid black;
-                color: black;
-                padding: 1rem;
-                width: 15rem;
-            }
-            div.cookies-options {
-                button {
-                    // The cookie card is a deliberately light modal (white card
-                    // on a dark overlay) in both themes, so its buttons use the
-                    // fixed brand colours rather than the themeable tokens.
-                    &#cookies-accept {
-                        background-color: $colour-accent-fixed;
-                        border: 1px solid white;
-                        color: white;
-                    }
+// It used to be a fixed 25rem box positioned with `left: calc(50% - 13rem)`,
+// which is 400px wide offset by 208px: half a rem off centre at every size, and
+// on a 375px phone it ran from x=-20.5 to x=379.5, clipping both buttons against
+// the screen edges. It also carried a fixed `height: 13rem`, so any wording
+// longer than the current sentence would have spilled out of it.
 
-                    // Muted grey (subordinate to the green "Yes") but with white
-                    // text for a readable ~4.6:1 contrast — the old #222 fill with
-                    // black text was effectively illegible.
-                    &#cookies-decline {
-                        background-color: $colour-muted-fixed;
-                        border: 1px solid white;
-                        color: white;
-                    }
+// Now: a bottom sheet on a phone, a centred card above that, sized by its
+// content, and never wider than the viewport.
 
-                    cursor: pointer;
-                    width: 9rem;
-                    padding: 0.5rem;
-                }
+// The card is deliberately light in both themes — a white card on a dark
+// backdrop — so it uses the fixed brand colours rather than the themeable
+// tokens, which would repaint it dark-on-dark.
 
-                align-items: center;
-                column-gap: 1rem;
-                display: flex;
-                flex-direction: row;
-                justify-content: center;
-            }
-            align-items: center;
-            background-color: rgba(0, 0, 0, 0.7);
-            border-radius: 0.5rem;
-            border: 1px solid white;
-            display: none;
-            flex-flow: column;
-            height: 13rem;
-            justify-content: center;
-            left: calc(50% - 13rem);
-            left: -moz-calc(50% - 13rem);
-            left: -webkit-calc(50% - 13rem);
-            margin: auto;
-            padding: 1rem;
-            position: fixed;
-            row-gap: 1rem;
-            top: calc(30% - 6rem);
-            top: -moz-calc(30% - 6rem);
-            top: -webkit-calc(30% - 6rem);
-            width: 25rem;
-            z-index: 100;
-        }
+.cookies-backdrop {
+    background: rgba(0, 0, 0, 0.45);
+    inset: 0;
+    position: fixed;
+    z-index: 99;
+
+    @media print {
+        display: none !important;
+    }
+}
+
+.cookies {
+    background: white;
+    border: 1px solid $colour-accent-fixed;
+    border-radius: 0.75rem 0.75rem 0 0;
+    bottom: 0;
+    color: $colour-ink-fixed;
+    inset-inline: 0;
+    padding: 1.25rem;
+    position: fixed;
+    z-index: 100;
+
+    // `hidden` is what opens and closes it, so the shown state has to beat the
+    // browser's `display: none` for [hidden] without fighting it while hidden.
+    &:not([hidden]) {
+        display: block;
+    }
+
+    @media (min-width: 30rem) {
+        border-radius: 0.75rem;
+        bottom: auto;
+        inset-inline: auto;
+        left: 50%;
+        max-width: calc(100vw - 2rem);
+        top: 20%;
+        transform: translateX(-50%);
+        width: 25rem;
+    }
+
+    @media print {
+        display: none !important;
+    }
+}
+
+.cookies-text {
+    margin-bottom: 1.25rem;
+
+    a {
+        color: $colour-accent-fixed;
+        font-weight: normal;
+        text-decoration: underline;
+    }
+}
+
+.cookies-options {
+    column-gap: 0.75rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: stretch;
+
+    button {
+        background: white;
+        border: 1px solid $colour-muted-fixed;
+        border-radius: 0.5rem;
+        color: $colour-muted-fixed;
+        cursor: pointer;
+        flex: 1;
+        font-family: $font-sans-serif;
+        font-size: 1rem;
+        padding: 0.65rem 0.5rem;
+    }
+
+    // The only difference between the two, so the pair still reads as a choice
+    // with a default rather than as two identical buttons. Both are the same
+    // size and both clear AA against their own background. The old pairing put a
+    // grey "No" beside a solid green "Yes", which read as a disabled control
+    // next to a live one.
+    button#cookies-accept {
+        background: $colour-accent-fixed;
+        border-color: $colour-accent-fixed;
+        color: white;
     }
 }

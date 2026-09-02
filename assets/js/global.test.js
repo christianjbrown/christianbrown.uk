@@ -1,8 +1,9 @@
 import { describe, it, expect, beforeAll, beforeEach, afterEach, afterAll, vi } from 'vitest';
 import { GOOGLE_ANALYTICS_ID, SENTRY_DSN, SENTRY_SDK_URL } from '/config/global.const.js';
+import EN_GB from './i18n/messages.en-GB.js';
+import DE_DE from './i18n/messages.de-DE.js';
 
-const { needsConsent, getConsent, setConsent, deleteAll } = vi.hoisted(() => ({
-    needsConsent: vi.fn(),
+const { getConsent, setConsent, deleteAll } = vi.hoisted(() => ({
     getConsent: vi.fn(),
     setConsent: vi.fn(),
     deleteAll: vi.fn(),
@@ -11,7 +12,7 @@ const { needsConsent, getConsent, setConsent, deleteAll } = vi.hoisted(() => ({
 vi.mock('./Cookie.js', () => ({
     // get/set are used by Locale.js (locale cookie); stubbed so global.js's
     // import-time locale resolution finds no cookie and writes none.
-    default: { needsConsent, getConsent, setConsent, deleteAll, get: () => null, set: () => {} },
+    default: { getConsent, setConsent, deleteAll, get: () => null, set: () => {} },
 }));
 
 const flush = () => new Promise((resolve) => setTimeout(resolve, 0));
@@ -29,6 +30,7 @@ function setHostname(hostname) {
 }
 
 let cookiesDiv;
+let cookiesBackdrop;
 let acceptButton;
 let declineButton;
 let globalModule;
@@ -36,9 +38,12 @@ let globalModule;
 describe('global.js', () => {
     beforeAll(async () => {
         document.body.innerHTML = `
-            <div id="cookies"></div>
-            <button id="cookies-accept"></button>
-            <button id="cookies-decline"></button>
+            <div id="cookies-backdrop" hidden></div>
+            <div id="cookies" role="dialog" aria-modal="true" hidden>
+                <p id="cookies-text">Are you okay if this site uses cookies to <a id="cookies-link-analytics" href="https://support.google.com/analytics/answer/11397207">measure traffic</a> and <a id="cookies-link-sentry" href="https://sentry.io/">catch errors</a>?</p>
+                <button id="cookies-decline">\u{1F6AB} No</button>
+                <button id="cookies-accept">\u{1F36A} Yes</button>
+            </div>
             <button id="theme-toggle" title="Switch colour theme" hidden></button>
             <a class="header-home-link" title="Christian Brown homepage"></a>
             <div class="header-avatar"><img src="/avatar.jpg" alt="Christian Brown's avatar"></div>
@@ -46,6 +51,7 @@ describe('global.js', () => {
             <strong id="header-job-title">Engineering Manager</strong>
             <span id="header-location" data-location="London, UK">London, UK</span>`;
         cookiesDiv = document.getElementById('cookies');
+        cookiesBackdrop = document.getElementById('cookies-backdrop');
         acceptButton = document.getElementById('cookies-accept');
         declineButton = document.getElementById('cookies-decline');
         vi.spyOn(console, 'log').mockImplementation(() => {});
@@ -59,11 +65,11 @@ describe('global.js', () => {
     });
 
     beforeEach(() => {
-        needsConsent.mockReset();
         getConsent.mockReset();
         setConsent.mockReset();
         deleteAll.mockReset();
-        cookiesDiv.style.display = '';
+        cookiesDiv.hidden = true;
+        cookiesBackdrop.hidden = true;
         document.getElementById(globalModule.GTAG_SCRIPT_ID)?.remove();
         document.querySelector(`script[src="${SENTRY_SDK_URL}"]`)?.remove();
         window.dataLayer = undefined;
@@ -93,67 +99,211 @@ describe('global.js', () => {
         });
     });
 
-    describe('cookie banner buttons', () => {
-        it('accepting hides the banner, stores consent and enables analytics', () => {
+    describe('cookie dialog buttons', () => {
+        it('accepting closes the dialog, stores consent and enables analytics', () => {
+            globalModule.openCookieDialog();
             acceptButton.dispatchEvent(new Event('click'));
 
-            expect(cookiesDiv.style.display).toBe('none');
+            expect(cookiesDiv.hidden).toBe(true);
+            expect(cookiesBackdrop.hidden).toBe(true);
             expect(setConsent).toHaveBeenCalledWith(true);
             expect(window.dataLayer).toHaveLength(2); // gtag('js', ...) + gtag('config', ...)
         });
 
-        it('declining hides the banner, deletes cookies and records the refusal', () => {
+        it('declining closes the dialog, deletes cookies and records the refusal', () => {
+            globalModule.openCookieDialog();
             declineButton.dispatchEvent(new Event('click'));
 
-            expect(cookiesDiv.style.display).toBe('none');
+            expect(cookiesDiv.hidden).toBe(true);
+            expect(cookiesBackdrop.hidden).toBe(true);
             expect(deleteAll).toHaveBeenCalledTimes(1);
             expect(setConsent).toHaveBeenCalledWith(false);
             expect(window.dataLayer).toBeUndefined(); // declining must not enable analytics
         });
     });
 
-    describe('on window load', () => {
-        it('shows the banner when consent is needed but undecided', async () => {
-            needsConsent.mockResolvedValue(true);
+    describe('cookie dialog focus and keyboard handling', () => {
+        it('opens onto decline and returns focus to the opener on close', () => {
+            const opener = document.getElementById('theme-toggle');
+            opener.hidden = false;
+            opener.focus();
+
+            globalModule.openCookieDialog();
+            expect(document.activeElement).toBe(declineButton);
+
+            globalModule.closeCookieDialog();
+            expect(document.activeElement).toBe(opener);
+        });
+
+        it('treats Escape as declining', () => {
+            globalModule.openCookieDialog();
+
+            cookiesDiv.dispatchEvent(new window.KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+
+            expect(cookiesDiv.hidden).toBe(true);
+            expect(setConsent).toHaveBeenCalledWith(false);
+        });
+
+        it('wraps Tab from the last control back to the first', () => {
+            globalModule.openCookieDialog();
+            acceptButton.focus(); // the last focusable in the dialog
+
+            cookiesDiv.dispatchEvent(new window.KeyboardEvent('keydown', { key: 'Tab', bubbles: true }));
+
+            expect(document.activeElement).toBe(cookiesDiv.querySelector('a[href]'));
+        });
+
+        it('wraps Shift+Tab from the first control back to the last', () => {
+            globalModule.openCookieDialog();
+            cookiesDiv.querySelector('a[href]').focus();
+
+            cookiesDiv.dispatchEvent(new window.KeyboardEvent('keydown', { key: 'Tab', shiftKey: true, bubbles: true }));
+
+            expect(document.activeElement).toBe(acceptButton);
+        });
+
+        // Only Escape and Tab mean anything here; typing anything else must not
+        // close the dialog or move focus out from under the visitor.
+        it('ignores any other key', () => {
+            globalModule.openCookieDialog();
+            acceptButton.focus();
+
+            cookiesDiv.dispatchEvent(new window.KeyboardEvent('keydown', { key: 'a', bubbles: true }));
+
+            expect(cookiesDiv.hidden).toBe(false);
+            expect(document.activeElement).toBe(acceptButton);
+            expect(setConsent).not.toHaveBeenCalled();
+        });
+
+        // Tab in the middle of the dialog is the browser's to handle; the trap
+        // only intervenes at the two ends.
+        it('leaves a Tab that is not at either end to the browser', () => {
+            globalModule.openCookieDialog();
+            declineButton.focus();
+
+            const event = new window.KeyboardEvent('keydown', { key: 'Tab', bubbles: true, cancelable: true });
+            cookiesDiv.dispatchEvent(event);
+
+            expect(event.defaultPrevented).toBe(false);
+            expect(document.activeElement).toBe(declineButton);
+        });
+    });
+
+    describe('cookie dialog localisation', () => {
+        const textDom = () => document.getElementById('cookies-text');
+        const analyticsLink = () => document.getElementById('cookies-link-analytics');
+        const sentryLink = () => document.getElementById('cookies-link-sentry');
+
+        it('rebuilds the question, the link labels and the buttons from the catalogue', () => {
+            globalModule.localiseCookieDialog(DE_DE);
+
+            expect(textDom().textContent).toBe(
+                'Ist es in Ordnung, wenn diese Website Cookies verwendet, um Zugriffe zu messen und Fehler zu erfassen?',
+            );
+            expect(analyticsLink().textContent).toBe('Zugriffe zu messen');
+            expect(sentryLink().textContent).toBe('Fehler zu erfassen');
+            expect(declineButton.textContent).toBe(DE_DE.cookies.decline);
+            expect(acceptButton.textContent).toBe(DE_DE.cookies.accept);
+        });
+
+        // The whole point of assembling from nodes rather than innerHTML: the
+        // anchors are moved, not recreated, so nothing a translation says can
+        // change where they point or strip their rel.
+        it('keeps the original anchors, with their hrefs intact', () => {
+            const before = [analyticsLink(), sentryLink()];
+
+            globalModule.localiseCookieDialog(DE_DE);
+
+            expect(analyticsLink()).toBe(before[0]);
+            expect(sentryLink()).toBe(before[1]);
+            expect(analyticsLink().getAttribute('href')).toBe('https://support.google.com/analytics/answer/11397207');
+            expect(sentryLink().getAttribute('href')).toBe('https://sentry.io/');
+        });
+
+        it('treats a catalogue string as text, never as markup', () => {
+            globalModule.localiseCookieDialog({
+                ...EN_GB,
+                cookies: { ...EN_GB.cookies, question: '<img src=x onerror=alert(1)> {traffic} {errors}' },
+            });
+
+            expect(textDom().querySelector('img')).toBeNull();
+            expect(textDom().textContent).toContain('<img src=x onerror=alert(1)>');
+        });
+
+        // A language that puts the clauses the other way round.
+        it('places the links wherever the template puts the holes', () => {
+            globalModule.localiseCookieDialog({
+                ...EN_GB,
+                cookies: { ...EN_GB.cookies, question: 'A {errors} B {traffic} C' },
+            });
+
+            expect(textDom().textContent).toBe('A catch errors B measure traffic C');
+            expect(textDom().firstChild.textContent).toBe('A ');
+        });
+
+        it('leaves the dialog alone when the catalogue has no cookie strings', () => {
+            const before = textDom().textContent;
+
+            globalModule.localiseCookieDialog({ ...EN_GB, cookies: undefined });
+
+            expect(textDom().textContent).toBe(before);
+        });
+
+        // A page that renders the dialog without one of its parts (or does not
+        // render it at all) must not throw on the way to showing it.
+        it('does nothing when the dialog markup is incomplete', () => {
+            const link = sentryLink();
+            link.remove();
+
+            expect(() => globalModule.localiseCookieDialog(DE_DE)).not.toThrow();
+
+            textDom().append(link);
+        });
+
+        it('localises the dialog before opening it on load', async () => {
             getConsent.mockReturnValue(null);
 
             window.dispatchEvent(new Event('load'));
             await flush();
 
-            expect(cookiesDiv.style.display).toBe('flex');
+            expect(cookiesDiv.hidden).toBe(false);
+            // jsdom resolves to en-GB, so the English stands.
+            expect(acceptButton.textContent).toBe(EN_GB.cookies.accept);
+        });
+    });
+
+    describe('on window load', () => {
+        // The dialog is shown to every undecided visitor now, rather than only
+        // to those whose browser timezone mapped to an EU/UK country.
+        it('opens the dialog when consent is undecided', async () => {
+            getConsent.mockReturnValue(null);
+
+            window.dispatchEvent(new Event('load'));
+            await flush();
+
+            expect(cookiesDiv.hidden).toBe(false);
+            expect(cookiesBackdrop.hidden).toBe(false);
             expect(window.dataLayer).toBeUndefined();
         });
 
-        it('enables analytics when consent is needed and already granted', async () => {
-            needsConsent.mockResolvedValue(true);
+        it('enables analytics when consent was already granted', async () => {
             getConsent.mockReturnValue(true);
 
             window.dispatchEvent(new Event('load'));
             await flush();
 
-            expect(cookiesDiv.style.display).not.toBe('flex');
+            expect(cookiesDiv.hidden).toBe(true);
             expect(window.dataLayer).toHaveLength(2);
         });
 
-        it('does nothing when consent is needed and previously declined', async () => {
-            needsConsent.mockResolvedValue(true);
+        it('does nothing when consent was previously declined', async () => {
             getConsent.mockReturnValue(false);
 
             window.dispatchEvent(new Event('load'));
             await flush();
 
-            expect(cookiesDiv.style.display).not.toBe('flex');
+            expect(cookiesDiv.hidden).toBe(true);
             expect(window.dataLayer).toBeUndefined();
-        });
-
-        it('enables analytics directly when consent is not required', async () => {
-            needsConsent.mockResolvedValue(false);
-
-            window.dispatchEvent(new Event('load'));
-            await flush();
-
-            expect(getConsent).not.toHaveBeenCalled();
-            expect(window.dataLayer).toHaveLength(2);
         });
     });
 
@@ -246,7 +396,6 @@ describe('Sentry error reporting', () => {
     });
 
     it('initialises Sentry on the consent-granted window load path', async () => {
-        needsConsent.mockResolvedValue(true);
         getConsent.mockReturnValue(true);
         window.Sentry = sentry;
 
@@ -379,8 +528,12 @@ describe('global.js with telemetry switched off in config', () => {
         vi.resetModules();
         vi.doMock('/config/global.const.js', () => ({
             COOKIES_ACCEPT_BUTTON_ID: 'cookies-accept',
+            COOKIES_BACKDROP_ID: 'cookies-backdrop',
             COOKIES_DECLINE_BUTTON_ID: 'cookies-decline',
             COOKIES_DIV_ID: 'cookies',
+            COOKIES_LINK_ANALYTICS_ID: 'cookies-link-analytics',
+            COOKIES_LINK_SENTRY_ID: 'cookies-link-sentry',
+            COOKIES_TEXT_ID: 'cookies-text',
             DEV_CONSOLE_LINE_1: '',
             DEV_CONSOLE_LINE_1_STYLE: '',
             DEV_CONSOLE_LINE_2: '',

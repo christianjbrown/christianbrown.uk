@@ -28,8 +28,8 @@ import {
 } from '../smart-home-historical/index.const.js';
 
 window.addEventListener('load',
-    () => {
-        const catalogue = catalogueFor(applyLocale());
+    async () => {
+        const catalogue = await catalogueFor(applyLocale());
 
         // Localise the build-time English section headings and image alt text.
         setText(SMART_HOME_TITLE_SELECTOR, catalogue.page.smartHomeTitle);

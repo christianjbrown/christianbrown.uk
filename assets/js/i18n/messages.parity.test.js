@@ -1,5 +1,28 @@
 import { describe, it, expect } from 'vitest';
-import { catalogueFor } from './catalogue.js';
+// Imported directly rather than through catalogueFor: the loader fetches the
+// non-default catalogues on demand and is async, and what this file is checking
+// is the content of the catalogue modules, not how they get loaded.
+import EN_GB from './messages.en-GB.js';
+import DE_DE from './messages.de-DE.js';
+import FR_FR from './messages.fr-FR.js';
+import NL_NL from './messages.nl-NL.js';
+import DA_DK from './messages.da-DK.js';
+import ES_ES from './messages.es-ES.js';
+import PT_PT from './messages.pt-PT.js';
+import ZH_CN from './messages.zh-CN.js';
+import ZH_TW from './messages.zh-TW.js';
+
+const CATALOGUES = {
+    'en-GB': EN_GB,
+    'de-DE': DE_DE,
+    'fr-FR': FR_FR,
+    'nl-NL': NL_NL,
+    'da-DK': DA_DK,
+    'es-ES': ES_ES,
+    'pt-PT': PT_PT,
+    'zh-CN': ZH_CN,
+    'zh-TW': ZH_TW,
+};
 
 // en-GB is the reference catalogue every other locale mirrors. This test guards
 // against a translated catalogue silently missing a key that en-GB has (e.g.
@@ -42,11 +65,11 @@ function valueAt(obj, path) {
     return path.split('.').reduce((acc, key) => (acc == null ? undefined : acc[key]), obj);
 }
 
-const referencePaths = collect(catalogueFor(REFERENCE));
+const referencePaths = collect(CATALOGUES[REFERENCE]);
 
 describe('message catalogue parity', () => {
     describe.each(LOCALES)('%s', (locale) => {
-        const catalogue = catalogueFor(locale);
+        const catalogue = CATALOGUES[locale];
 
         it.each(referencePaths)('has "%s" (%s) like en-GB', (path, kind) => {
             const value = valueAt(catalogue, path);

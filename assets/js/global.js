@@ -7,8 +7,12 @@ import { catalogueFor } from './i18n/catalogue.js';
 import { formatLocations } from './i18n/locations.js';
 import {
     COOKIES_ACCEPT_BUTTON_ID,
+    COOKIES_BACKDROP_ID,
     COOKIES_DECLINE_BUTTON_ID,
     COOKIES_DIV_ID,
+    COOKIES_LINK_ANALYTICS_ID,
+    COOKIES_LINK_SENTRY_ID,
+    COOKIES_TEXT_ID,
     DEV_CONSOLE_LINE_1,
     DEV_CONSOLE_LINE_1_STYLE,
     DEV_CONSOLE_LINE_2,
@@ -19,66 +23,203 @@ import {
     THEME_TOGGLE_ID
 } from '/config/global.const.js';
 
+// Everything in the dialog that can take focus. Both buttons are always
+// present, so there is no case where the trap has nothing to cycle between.
+const FOCUSABLE_SELECTOR = 'a[href], button';
+
 const cookiesDivDom = document.getElementById(COOKIES_DIV_ID);
+const cookiesBackdropDom = document.getElementById(COOKIES_BACKDROP_ID);
 const cookiesAcceptButtonDom = document.getElementById(COOKIES_ACCEPT_BUTTON_ID);
 const cookiesDeclineButtonDom = document.getElementById(COOKIES_DECLINE_BUTTON_ID);
 
-// Resolve the locale once for the whole page and localise the shared header
-// chrome — the job title, location, and the hover/accessibility text (title and
-// alt) the build renders in English. Runs at module eval (the
-// <script type="module"> is deferred, so the DOM is parsed) to keep the swap
-// ahead of paint; a no-op for en-GB and for elements a given page lacks.
-const catalogue = catalogueFor(applyLocale());
-const header = catalogue.header;
-setText('#header-job-title', header.jobTitle);
-const headerLocation = document.getElementById('header-location');
-if (headerLocation) {
-    headerLocation.textContent = formatLocations(catalogue, headerLocation.getAttribute('data-location'));
-}
-setAttrAll('.header-home-link', 'title', header.homeLinkTitle);
-setAttr('.header-avatar img', 'alt', header.avatarAlt);
-setAttr('.location-icon', 'alt', header.locationIconAlt);
-setAttr('#cv-home-temp', 'title', header.smartHomeLinkTitle);
-setAttr('#' + THEME_TOGGLE_ID, 'title', catalogue.theme.switchTitle);
+// Started here, at module evaluation, and awaited by the two consumers below.
+// Resolving the locale is synchronous; only fetching a non-default catalogue is
+// not, and en-GB needs no fetch at all. Kicking it off once and sharing the
+// promise means the dialog and the header chrome cannot disagree about the
+// locale, and neither has to re-resolve it.
+const cataloguePromise = catalogueFor(applyLocale());
 
-// Header colour-theme toggle (Auto → Light → Dark). Present on every page; the
-// saved choice was already applied pre-paint by theme-init.js in the <head>.
-// Pass the locale's toggle strings so its label and accessible name localise.
-Theme.bindToggle(document.getElementById(THEME_TOGGLE_ID), catalogue.theme);
+// Where focus was before the dialog took it, so it can be handed back rather
+// than dropped to the top of the document when the dialog closes.
+let focusedBeforeDialog = null;
 
-cookiesAcceptButtonDom.addEventListener('click',
-    () => {
-        cookiesDivDom.style.display = 'none';
-        Cookie.setConsent(true);
+cookiesAcceptButtonDom.addEventListener('click', () => acceptCookies());
+cookiesDeclineButtonDom.addEventListener('click', () => declineCookies());
+cookiesDivDom.addEventListener('keydown', (event) => handleDialogKey(event));
+
+// The dialog is shown to everyone who has not answered it, rather than only to
+// visitors whose browser timezone mapped to a country in an EU/UK list. That
+// guess was wrong for anyone travelling or on a VPN, and being wrong meant
+// measuring them without asking. It also cost a 47KB timezones.json fetch on
+// every single page view to make.
+window.addEventListener('load', async () => {
+    console.log('%c'+DEV_CONSOLE_LINE_1, DEV_CONSOLE_LINE_1_STYLE);
+    console.log('%c'+DEV_CONSOLE_LINE_2, DEV_CONSOLE_LINE_2_STYLE);
+
+    const consent = Cookie.getConsent();
+    if (consent === null) {
+        // Localise before showing it rather than after: a consent question that
+        // appears in English and then rewrites itself into the reader's language
+        // is worse than one that appears a moment later already in it.
+        localiseCookieDialog(await cataloguePromise);
+        openCookieDialog();
+
+        return;
+    }
+    if (consent === true) {
         setCookies();
     }
-);
-cookiesDeclineButtonDom.addEventListener('click',
-    () => {
-        cookiesDivDom.style.display = 'none';
-        Cookie.deleteAll();
-        Cookie.setConsent(false);
-    }
-);
+});
 
-window.addEventListener('load',
-    async() => {
-        console.log('%c'+DEV_CONSOLE_LINE_1, DEV_CONSOLE_LINE_1_STYLE);
-        console.log('%c'+DEV_CONSOLE_LINE_2, DEV_CONSOLE_LINE_2_STYLE);
+// A promise callback rather than a top-level await: an await here would suspend
+// the rest of the module, and everything above it — the dialog's listeners and
+// the load handler — has to be registered before the events it is waiting for
+// can fire.
+void cataloguePromise.then(localiseChrome);
 
-        const needsConsent = await Cookie.needsConsent();
-        if (needsConsent) {
-            const consent= Cookie.getConsent();
-            if (consent === null) {
-                cookiesDivDom.style.display = 'flex';
-            } else if (consent === true) {
-                setCookies();
-            }
-        } else {
-            setCookies();
-        }
+/**
+ * Localises the shared header chrome: the job title, location, and the
+ * hover/accessibility text (title and alt) the build renders in English. A no-op
+ * for en-GB and for elements a given page lacks.
+ *
+ * @param {Object} catalogue
+ */
+export function localiseChrome(catalogue) {
+    const header = catalogue.header;
+    setText('#header-job-title', header.jobTitle);
+    const headerLocation = document.getElementById('header-location');
+    if (headerLocation) {
+        headerLocation.textContent = formatLocations(catalogue, headerLocation.getAttribute('data-location'));
     }
-);
+    setAttrAll('.header-home-link', 'title', header.homeLinkTitle);
+    setAttr('.header-avatar img', 'alt', header.avatarAlt);
+    setAttr('.location-icon', 'alt', header.locationIconAlt);
+    setAttr('#cv-home-temp', 'title', header.smartHomeLinkTitle);
+    setAttr('#' + THEME_TOGGLE_ID, 'title', catalogue.theme.switchTitle);
+
+    // Header colour-theme toggle (Auto → Light → Dark). Present on every page;
+    // the saved choice was already applied pre-paint by theme-init.js in the
+    // <head>. Pass the locale's toggle strings so its label and accessible name
+    // localise.
+    Theme.bindToggle(document.getElementById(THEME_TOGGLE_ID), catalogue.theme);
+}
+
+/**
+ * Rewrites the consent dialog into the resolved locale.
+ *
+ * The question is a template with two holes, `{traffic}` and `{errors}`, which
+ * the two links go into. It is assembled out of text nodes and the dialog's own
+ * two anchors, moved into place — never innerHTML — so a catalogue string can
+ * only ever become text, and the anchors keep their hrefs, their rel and their
+ * event behaviour whatever a translation does to the sentence around them. A
+ * language that wants the links in the other order just moves the holes.
+ *
+ * @param {Object} catalogue
+ */
+export function localiseCookieDialog(catalogue) {
+    const strings = catalogue.cookies;
+    const textDom = document.getElementById(COOKIES_TEXT_ID);
+    const analyticsLinkDom = document.getElementById(COOKIES_LINK_ANALYTICS_ID);
+    const sentryLinkDom = document.getElementById(COOKIES_LINK_SENTRY_ID);
+    if (!strings || !textDom || !analyticsLinkDom || !sentryLinkDom) {
+        return;
+    }
+
+    analyticsLinkDom.textContent = strings.measureTraffic;
+    sentryLinkDom.textContent = strings.catchErrors;
+
+    const holes = { '{traffic}': analyticsLinkDom, '{errors}': sentryLinkDom };
+    const assembled = strings.question
+        .split(/(\{traffic\}|\{errors\})/)
+        .filter((part) => part !== '')
+        .map((part) => holes[part] ?? part);
+    textDom.replaceChildren(...assembled);
+
+    cookiesAcceptButtonDom.textContent = strings.accept;
+    cookiesDeclineButtonDom.textContent = strings.decline;
+}
+
+/**
+ * Show the dialog and move focus into it.
+ *
+ * Focus lands on decline rather than accept: it is the answer that does the
+ * least, so it is the safe thing to hit with a stray Return.
+ */
+export function openCookieDialog() {
+    focusedBeforeDialog = document.activeElement;
+    cookiesBackdropDom.hidden = false;
+    cookiesDivDom.hidden = false;
+    cookiesDeclineButtonDom.focus();
+}
+
+/**
+ * Hide the dialog and give focus back to whatever had it.
+ */
+export function closeCookieDialog() {
+    cookiesDivDom.hidden = true;
+    cookiesBackdropDom.hidden = true;
+    if (focusedBeforeDialog) {
+        focusedBeforeDialog.focus();
+        focusedBeforeDialog = null;
+    }
+}
+
+/**
+ * Keyboard handling for the open dialog.
+ *
+ * Escape closes it as a refusal. Treating it as "ask me again later" would mean
+ * the dialog reappeared on every page, which is worse for the visitor than
+ * taking their dismissal at face value, and refusing is the answer that leaves
+ * them un-measured.
+ *
+ * Tab is trapped, because a modal that lets you tab out into a page you cannot
+ * see or click is a modal in name only.
+ *
+ * @param {KeyboardEvent} event
+ */
+export function handleDialogKey(event) {
+    if (event.key === 'Escape') {
+        declineCookies();
+
+        return;
+    }
+    if (event.key !== 'Tab') {
+        return;
+    }
+
+    const focusable = [...cookiesDivDom.querySelectorAll(FOCUSABLE_SELECTOR)];
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+
+    if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+
+        return;
+    }
+    if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+    }
+}
+
+/**
+ * Record consent and turn the telemetry on.
+ */
+export function acceptCookies() {
+    closeCookieDialog();
+    Cookie.setConsent(true);
+    setCookies();
+}
+
+/**
+ * Record the refusal, after clearing anything already set.
+ */
+export function declineCookies() {
+    closeCookieDialog();
+    Cookie.deleteAll();
+    Cookie.setConsent(false);
+}
 
 // Turn on the consented telemetry: Google Analytics and Sentry. Skipped
 // entirely on local dev hosts so a `jekyll serve` session never pollutes the
