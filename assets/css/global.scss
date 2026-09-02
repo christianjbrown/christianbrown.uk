@@ -30,6 +30,10 @@
     // pulled the eye onto the furniture instead of the writing.
     --c-hairline: #aaa;
     --c-accent: #75923c;
+    // Ink for text sitting on the accent (the consent dialog's accept button).
+    // It is a token because the accent itself changes with the theme, and the
+    // colour that reads on it changes with it.
+    --c-on-accent: #fff;
     --c-error: orange;
     // Translucent pill behind the floor-plan room labels, and behind the theme
     // toggle where it floats over the page.
@@ -64,6 +68,9 @@
     --c-hairline: #8c8c8c;
     // The brand green lightened for enough contrast on the dark ground.
     --c-accent: #a3c76d;
+    // The lightened accent is too pale for white text (1.9:1); the page's own
+    // dark ground on it is 9.2:1.
+    --c-on-accent: #16181d;
     --c-error: #ffb454;
     --c-pill: rgba(22, 24, 29, 0.85);
     // brightness(0) flattens each logo to a silhouette, invert(0.9) lifts it to
