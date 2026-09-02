@@ -161,6 +161,32 @@ describe('global.js', () => {
 
             expect(document.activeElement).toBe(acceptButton);
         });
+
+        // Only Escape and Tab mean anything here; typing anything else must not
+        // close the dialog or move focus out from under the visitor.
+        it('ignores any other key', () => {
+            globalModule.openCookieDialog();
+            acceptButton.focus();
+
+            cookiesDiv.dispatchEvent(new window.KeyboardEvent('keydown', { key: 'a', bubbles: true }));
+
+            expect(cookiesDiv.hidden).toBe(false);
+            expect(document.activeElement).toBe(acceptButton);
+            expect(setConsent).not.toHaveBeenCalled();
+        });
+
+        // Tab in the middle of the dialog is the browser's to handle; the trap
+        // only intervenes at the two ends.
+        it('leaves a Tab that is not at either end to the browser', () => {
+            globalModule.openCookieDialog();
+            declineButton.focus();
+
+            const event = new window.KeyboardEvent('keydown', { key: 'Tab', bubbles: true, cancelable: true });
+            cookiesDiv.dispatchEvent(event);
+
+            expect(event.defaultPrevented).toBe(false);
+            expect(document.activeElement).toBe(declineButton);
+        });
     });
 
     describe('cookie dialog localisation', () => {
@@ -221,6 +247,17 @@ describe('global.js', () => {
             globalModule.localiseCookieDialog({ ...EN_GB, cookies: undefined });
 
             expect(textDom().textContent).toBe(before);
+        });
+
+        // A page that renders the dialog without one of its parts (or does not
+        // render it at all) must not throw on the way to showing it.
+        it('does nothing when the dialog markup is incomplete', () => {
+            const link = sentryLink();
+            link.remove();
+
+            expect(() => globalModule.localiseCookieDialog(DE_DE)).not.toThrow();
+
+            textDom().append(link);
         });
 
         it('localises the dialog before opening it on load', async () => {
