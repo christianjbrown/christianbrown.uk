@@ -1,7 +1,14 @@
+{%- comment -%}
+The logo and the company name below it are the same link to the same place. A
+screen reader used to announce both ("ITV logo", then "ITV"), and a keyboard
+user had to tab through both to get past each job. The logo is now decorative:
+empty alt, out of the tab order, and out of the accessibility tree, leaving the
+company name as the one announced link. It stays clickable with a mouse.
+{%- endcomment -%}
 <div class="cv-experience">
                             <div class="cv-experience-company-logo{% if previous.organisation == experience.organisation %} cv-experience-company-logo--empty{% endif %}">{% if previous.organisation != experience.organisation %}
                                 {%- if experience.organisation_logo contains "/" %}{% assign logo_src = experience.organisation_logo | prepend: "/assets/images" %}{% else %}{% assign logo_src = experience.organisation_logo | prepend: "/assets/images/cv/experience/" %}{% endif -%}
-                                {% if experience.organisation_link %}<a href="{{ experience.organisation_link }}" target="_blank" rel="noopener noreferrer" title="{{ experience.organisation }}">{% endif %}{% if experience.organisation_logo_dark %}{% if experience.organisation_logo_dark contains "/" %}{% assign logo_dark_src = experience.organisation_logo_dark | prepend: "/assets/images" %}{% else %}{% assign logo_dark_src = experience.organisation_logo_dark | prepend: "/assets/images/cv/experience/" %}{% endif %}<img class="cv-logo-day" src="{{ logo_src }}" alt="{{ experience.organisation }} logo"><img class="cv-logo-night" src="{{ logo_dark_src }}" alt="{{ experience.organisation }} logo">{% else %}<img src="{{ logo_src }}" alt="{{ experience.organisation }} logo">{% endif %}{% if experience.organisation_link %}</a>{% endif %}
+                                {% if experience.organisation_link %}<a href="{{ experience.organisation_link }}" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true">{% endif %}{% if experience.organisation_logo_dark %}{% if experience.organisation_logo_dark contains "/" %}{% assign logo_dark_src = experience.organisation_logo_dark | prepend: "/assets/images" %}{% else %}{% assign logo_dark_src = experience.organisation_logo_dark | prepend: "/assets/images/cv/experience/" %}{% endif %}<img class="cv-logo-day" src="{{ logo_src }}" alt=""><img class="cv-logo-night" src="{{ logo_dark_src }}" alt="">{% else %}<img src="{{ logo_src }}" alt="">{% endif %}{% if experience.organisation_link %}</a>{% endif %}
                             {% endif %}</div>
                             <div class="cv-experience-company-main">{% if previous.organisation != experience.organisation %}
                                 <div class="cv-experience-company-metadata">

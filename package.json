@@ -17,7 +17,8 @@
     "test:visual:devices": "percy exec -- node percy/real-device.mjs",
     "test:watch": "vitest",
     "vendor:check": "node bin/sync-vendor.mjs --check",
-    "vendor:sync": "node bin/sync-vendor.mjs"
+    "vendor:sync": "node bin/sync-vendor.mjs",
+    "og:image": "node bin/generate-og-image.mjs"
   },
   "repository": {
     "type": "git",

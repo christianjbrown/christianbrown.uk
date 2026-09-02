@@ -87,10 +87,19 @@ export function resolveLocale(
 }
 
 /**
- * Resolves the locale (query → session cookie → browser → default), records it
- * on `<html lang>` (the layout ships a hardcoded "en" it can't branch on a query
- * param for), persists an explicit `?locale=` choice to the session cookie so it
- * carries across pages, and returns it. Call once per page.
+ * Resolves the locale (query → session cookie → browser → default), persists an
+ * explicit `?locale=` choice to the session cookie so it carries across pages,
+ * and returns it. Call once per page.
+ *
+ * It deliberately does NOT write the locale to `<html lang>`. What a catalogue
+ * translates is the data around the prose: units, weather and humidity
+ * descriptors, month names, relative times, and a handful of headings. The prose
+ * itself is English on both pages — the whole CV, and the "How it works" section
+ * on the smart-home page. Stamping lang="de-DE" on a document that is 95% English
+ * tells a screen reader to read English with German pronunciation rules, and
+ * tells a search engine the page is German. An accurate lang="en-GB" with some
+ * localised labels inside it is the lesser of the two wrongs, so the layout's
+ * lang stands and this function leaves it alone.
  *
  * @returns {String}
  */
@@ -102,8 +111,6 @@ export function applyLocale() {
     if (chosen) {
         Cookie.set(LOCALE_COOKIE, chosen, null);
     }
-
-    document.documentElement.lang = locale;
 
     return locale;
 }

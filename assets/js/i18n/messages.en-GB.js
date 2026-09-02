@@ -24,11 +24,13 @@ export default {
     locale: 'en-GB',
 
     // Unit strings, incl. the (non-)spacing between a number and its unit. en-GB
-    // sets its degree/percent tight against the number and lower-cases the
-    // degree unit, matching the site's long-standing look.
+    // sets its degree/percent tight against the number, which is the usual
+    // British newspaper style. The degree unit is capitalised: C and F are the
+    // symbols for Celsius and Fahrenheit, and "°c" is simply wrong — every other
+    // catalogue here already had it right.
     units: {
-        tempC: '°c',
-        tempF: '°f',
+        tempC: '°C',
+        tempF: '°F',
         percent: '%',
         kmh: 'km/h',
         mph: 'mph',
@@ -308,9 +310,9 @@ export default {
         now: 'now',
 
         /**
-         * The header's live indoor-temperature link, e.g. "🏠 21°c at home".
+         * The header's live indoor-temperature link, e.g. "🏠 21°C at home".
          *
-         * @param {String} temperature  already-localised, e.g. "21°c"
+         * @param {String} temperature  already-localised, e.g. "21°C"
          * @returns {String}
          */
         homeTempLink(temperature) {

@@ -250,7 +250,7 @@ describe('MetWeatherTable', () => {
         expect(stripNbsp(table.textContent)).toContain('1013 hPa');
         expect(table.textContent).toContain('Dew point');
         // Dew point formats through Temperature (one decimal place).
-        expect(table.textContent).toContain('12.5°c');
+        expect(table.textContent).toContain('12.5°C');
     });
 
     it('omits the pressure and dew-point rows when their keys are absent', () => {

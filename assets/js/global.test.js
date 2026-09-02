@@ -80,7 +80,6 @@ describe('global.js', () => {
         it('localises the header chrome and theme toggle on import (en-GB in jsdom)', () => {
             expect(document.getElementById('header-job-title').textContent).toBe('Engineering Manager');
             expect(document.getElementById('header-location').textContent).toBe('London, UK');
-            expect(document.documentElement.lang).toBe('en-GB');
             // Hover/accessibility text.
             expect(document.querySelector('.header-home-link').getAttribute('title')).toBe('Christian Brown homepage');
             expect(document.querySelector('.header-avatar img').getAttribute('alt')).toBe("Christian Brown's avatar");

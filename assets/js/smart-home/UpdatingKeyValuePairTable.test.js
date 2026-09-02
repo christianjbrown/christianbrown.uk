@@ -189,10 +189,10 @@ describe('UpdatingKeyValuePairTable', () => {
         describe('_addTempTableRow', () => {
             it('renders celsius and fahrenheit without a timestamp, muting the fahrenheit', () => {
                 subject._addTempTableRow('Temperature', 21);
-                expect(table.textContent).toContain('21°c');
-                expect(table.textContent).toContain('69.8°f');
+                expect(table.textContent).toContain('21°C');
+                expect(table.textContent).toContain('69.8°F');
                 expect(table.textContent).not.toContain('ago');
-                expect(table.querySelector('span.smart-home-table__value--secondary.smart-home-table__value--muted').textContent).toBe('69.8°f');
+                expect(table.querySelector('span.smart-home-table__value--secondary.smart-home-table__value--muted').textContent).toBe('69.8°F');
             });
 
             it('renders a "time ago" and important styling when given a timestamp', () => {
@@ -292,11 +292,11 @@ describe('UpdatingKeyValuePairTable', () => {
             });
 
             it('adds secondary key/value with muted and important styling', () => {
-                subject._addTableRow('Temp', '21°c', '69.8°f', 'about', true, true);
+                subject._addTableRow('Temp', '21°C', '69.8°F', 'about', true, true);
                 expect(table.querySelector('span.smart-home-table__value--emphasis')).not.toBeNull();
                 expect(table.querySelectorAll('span.smart-home-table__value--secondary')).toHaveLength(2);
                 expect(table.textContent).toContain('about');
-                expect(table.textContent).toContain('69.8°f');
+                expect(table.textContent).toContain('69.8°F');
             });
 
             it('mutes the secondary independently when secondaryMuted is set', () => {

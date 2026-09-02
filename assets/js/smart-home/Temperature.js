@@ -18,9 +18,9 @@ export default class Temperature {
     }
 
     /**
-     * Returns a string like "21°c" (or "21 °C" in de-DE/fr-FR). Rounds to the
+     * Returns a string like "21°C" (or "21 °C" in de-DE/fr-FR). Rounds to the
      * given number of decimal places and drops a trailing ".0" (and any trailing
-     * zeros), so 26.0 reads as "26°c" while 25.9 keeps its decimal. The locale's
+     * zeros), so 26.0 reads as "26°C" while 25.9 keeps its decimal. The locale's
      * decimal separator is used (a comma in de-DE/fr-FR).
      *
      * @param {Number} decimalPlaces
@@ -32,8 +32,8 @@ export default class Temperature {
     };
 
     /**
-     * Returns a string like "69.8°f". Unlike formatC this keeps trailing zeros,
-     * so a whole number still shows its decimal (e.g. "32.0°f").
+     * Returns a string like "69.8°F". Unlike formatC this keeps trailing zeros,
+     * so a whole number still shows its decimal (e.g. "32.0°F").
      *
      * @param {Number} decimalPlaces
      *
