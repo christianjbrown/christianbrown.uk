@@ -17,6 +17,10 @@ $colour-error-fixed: orange;
 // so they share the one foreground token.
 $colour-accent: var(--c-accent);
 $colour-grayscale-1: var(--c-muted);
+// Decorative rules and gridlines. Separate from $colour-grayscale-1 because
+// that one now carries text and has to clear 4.5:1, while a hairline has no
+// contrast floor to meet and reads better light.
+$colour-hairline: var(--c-hairline);
 $colour-grayscale-2: var(--c-fg);
 $colour-grayscale-3: var(--c-fg);
 $colour-grayscale-4: var(--c-fg);
