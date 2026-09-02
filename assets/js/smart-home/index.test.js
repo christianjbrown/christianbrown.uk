@@ -54,7 +54,7 @@ describe('smart-home/index.js', () => {
         await import('./index.js');
     });
 
-    it('wires up the SmartHomePage on window load', () => {
+    it('wires up the SmartHomePage on window load', async () => {
         document.body.innerHTML = `
             <h2 id="smart-home-title">Smart home</h2>
             <h3 id="rooms-heading">📐 Floor plan</h3>
@@ -71,6 +71,9 @@ describe('smart-home/index.js', () => {
             <p id="chart-status"></p>`;
 
         window.dispatchEvent(new Event('load'));
+        // The handler resolves the catalogue with a dynamic import now, so let
+        // its microtasks drain before asserting on what it rendered.
+        await new Promise((resolve) => setTimeout(resolve, 0));
 
         // In jsdom (no ?locale, navigator.languages ≈ en-US) the locale resolves
         // to the en-GB default: the headings and image alts are localised (to

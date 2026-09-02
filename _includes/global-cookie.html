@@ -1,10 +1,28 @@
 <!--noindex-->
-            <div id="cookies" class="robots-nocontent" data-nosnippet="true">
-                <div class="cookies-text">
-                    Are you okay if this site uses cookies to <a href="https://support.google.com/analytics/answer/11397207" target="_blank" rel="noopener noreferrer" title="Google Analytics">measure traffic</a> and <a href="https://sentry.io/" target="_blank" rel="noopener noreferrer" title="Sentry">catch errors</a>?
-                </div>
+            <div id="cookies-backdrop" class="cookies-backdrop" hidden></div>
+            {%- comment -%}
+            A real dialog rather than a floating box: it takes focus when it
+            opens, keeps the tab key inside itself, hands focus back on close,
+            and closes on Escape. Escape counts as declining, so dismissing it
+            is a decision and it does not come back on the next page.
+
+            It also ships hidden and is shown by JavaScript, rather than shipping
+            visible and being hidden — so it is never a dead card on a page whose
+            scripts failed to load.
+
+            The English below is the build-time default. global.js rebuilds this
+            paragraph from the resolved locale's catalogue before the dialog
+            opens, reusing these two anchors, so the wording, the link labels and
+            the button labels all follow the visitor's language. The ids are how
+            it finds them.
+            {%- endcomment %}
+            <div id="cookies" class="cookies robots-nocontent" role="dialog" aria-modal="true" aria-labelledby="cookies-text" data-nosnippet="true" hidden>
+                <p class="cookies-text" id="cookies-text">
+                    Are you okay if this site uses cookies to <a id="cookies-link-analytics" href="https://support.google.com/analytics/answer/11397207" target="_blank" rel="noopener noreferrer" title="Google Analytics">measure traffic</a> and <a id="cookies-link-sentry" href="https://sentry.io/" target="_blank" rel="noopener noreferrer" title="Sentry">catch errors</a>?
+                </p>
                 <div class="cookies-options">
-                    <button id="cookies-decline">🚫 No</button><button id="cookies-accept" tabindex="0">🍪 Yes</button>
+                    <button id="cookies-decline" type="button">🚫 No</button>
+                    <button id="cookies-accept" type="button">🍪 Yes</button>
                 </div>
             </div>
             <!--/noindex-->

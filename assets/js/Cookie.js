@@ -1,22 +1,8 @@
 'use strict';
 
-import Country from './Country.js';
-import { CONSENT_KEY, CONSENT_OPT_KEY_MAX_AGE, CONSENT_VALUE_ACCEPT, CONSENT_VALUE_DECLINE, COUNTRIES_REQUIRING_CONSENT } from './Cookie.const.js';
+import { CONSENT_KEY, CONSENT_OPT_KEY_MAX_AGE, CONSENT_VALUE_ACCEPT, CONSENT_VALUE_DECLINE } from './Cookie.const.js';
 
 export default class Cookie {
-    /**
-     * Check if consent is needed.
-     *
-     * @returns {boolean}
-     */
-    static async needsConsent() {
-        const country = new Country();
-        const countryCodes = await country.getCountryCodesFromTimezone();
-        const value = countryCodes.some(code => COUNTRIES_REQUIRING_CONSENT.includes(code));
-
-        return value;
-    }
-
     /**
      * Get user consent.
      *
