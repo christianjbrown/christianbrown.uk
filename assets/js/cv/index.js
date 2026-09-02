@@ -73,6 +73,10 @@ export function localiseHeadings(catalogue = EN_GB) {
     setText(EXPERIENCE_HEADING_SELECTOR, catalogue.cv.experienceHeading);
     setText(EDUCATION_HEADING_SELECTOR, catalogue.cv.educationHeading);
     setText(DOWNLOAD_CV_SELECTOR, catalogue.cv.downloadCv);
+    // The smart-home link's build-time label. Set here, before
+    // initHomeTemperatureLink starts its fetch, so a live reading that arrives
+    // later always wins rather than racing this.
+    setText(HOME_TEMP_LINK_SELECTOR, catalogue.cv.smartHomeLink);
     setAttr('#cv-menu-download', 'title', catalogue.cv.downloadCv);
     setAttr('#cv-menu-download img', 'alt', catalogue.cv.downloadIconAlt);
     // The location-pin icon repeats down the experience list.
