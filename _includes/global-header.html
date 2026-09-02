@@ -4,7 +4,7 @@
                     </div>
                 </div>
                 <div class="header-data">
-                    <h1 class="mt-2"><a href="/" class="header-home-link" title="Christian Brown homepage">{{ site.header_name }}</a></h1>
+                    <h1><a href="/" class="header-home-link" title="Christian Brown homepage">{{ site.header_name }}</a></h1>
                     <p><strong id="header-job-title">{{ site.header_job_title }}</strong></p>
                     <p><img src="/assets/images/icons/icon-location.svg" alt="Location icon" class="location-icon"> <span id="header-location" data-location="{{ site.header_location }}">{{ site.header_location }}</span></p>{%- if page.menu %}
                     <nav>{% if page.home_temp_link %}<a href="/smart-home" id="cv-home-temp" class="cv-home-temp" title="Christian Brown's smart home" hidden></a>{% endif %}{% for nav in page.menu %}

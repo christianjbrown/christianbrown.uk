@@ -1,0 +1,52 @@
+// Print defaults, replacing Bootstrap's _print.scss.
+
+// Kept because the CV is printed for real: bin/generate-cv-pdf.mjs prints this
+// page to assets/docs/christian-brown-cv.pdf, so a change here changes the PDF
+// people download. The rules below are the ones from that partial that affect
+// the output; the rest of it styled components this site does not have
+// (.navbar, .badge, .table-bordered) or set `@page { size: a3 }`, which cv.scss
+// overrode with A4 anyway.
+
+@media print {
+    // Shadows cost ink and render as grey mud on paper.
+    *,
+    *::before,
+    *::after {
+        box-shadow: none !important;
+        text-shadow: none !important;
+    }
+
+    // Lay the page out at desktop width rather than paper width, so the printed
+    // CV matches the two-column header and metadata rows people see on screen.
+    // Without this the print layout collapses to the narrow-viewport rules and
+    // the PDF stops matching the site.
+    body,
+    .container {
+        min-width: 992px !important;
+    }
+
+    // Repeat a table's header row across a page break.
+    thead {
+        display: table-header-group;
+    }
+
+    // Never split a row or an image across two pages.
+    tr,
+    img {
+        page-break-inside: avoid;
+    }
+
+    // No single line of a paragraph left stranded at a page boundary, and no
+    // heading printed as the last thing on a page.
+    p,
+    h2,
+    h3 {
+        orphans: 3;
+        widows: 3;
+    }
+
+    h2,
+    h3 {
+        page-break-after: avoid;
+    }
+}

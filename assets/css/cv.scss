@@ -17,239 +17,297 @@
     }
 }
 
+// Selectors here are flat: one class each, because each class already appears
+// exactly once in the markup. They used to be nested to mirror the DOM, which
+// compiled to things like `div.container main div.cv-section div.cv-experiences
+// div.cv-experience div.cv-experience-company-main div.cv-experience-job
+// div.cv-experience-job-metadata div.cv-experience-job-metadata-title h4` — nine
+// levels describing a structure the class name already identified, so any change
+// to the markup's shape silently dropped the styling.
+
 // Live indoor-temperature link in the header (homepage only). Revealed by JS
 // only once the climate API responds — otherwise it stays hidden with no
 // fallback. It sits at the start of the right-aligned nav so growing it can't
 // nudge the Download / LinkedIn links, and it inherits the nav's print: none.
-a.cv-home-temp {
+.cv-home-temp {
     margin-right: 1rem;
 }
 
-div.container {
-    main {
-        div#cv-lead {
-            ul {
-                li {
-                    &::before{
-                        content: "•";
-                        color: $colour-accent;
-                        margin-right: 0.5rem;
-                    }
-                    white-space: nowrap;
-                    display: inline;
-                }
-                &:first-child {
-                    li {
-                        font-weight: bold;
-                    }
-                }
-                list-style-type: none;
-                padding: 0;
-                margin-bottom: 0;
-            }
-            font-size: 1.15rem;
-            margin-bottom: 0.8rem;
-        }
-        div.cv-section {
-            div.cv-experiences {
-                div.cv-experience {
-                    div.cv-experience-company-logo {
-                        img, a > img {
-                            max-height: 2.2rem;
-                            max-width: 4rem;
-                            // Company logos are brand marks drawn for a light
-                            // background (some are dark or low-contrast). In dark
-                            // mode render them as soft-white silhouettes so they
-                            // read cleanly and uniformly on the dark ground; in
-                            // light mode the token is a no-op.
-                            filter: var(--c-logo-filter);
-                        }
-                        // A logo too detailed to silhouette (e.g. the UWA crest)
-                        // can ship a bespoke dark variant via organisation_logo_dark;
-                        // the include then emits a day/night pair. Show the right
-                        // one per theme, and don't silhouette the night version —
-                        // it's already drawn for the dark ground.
-                        img.cv-logo-day {
-                            display: var(--c-logo-day-display);
-                        }
-                        img.cv-logo-night {
-                            display: var(--c-logo-night-display);
-                            filter: none;
-                        }
-                        min-height: 2.1rem;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                    }
-                    div.cv-experience-company-main {
-                        div.cv-experience-company-metadata {
-                            div.cv-experience-company-metadata-name {
-                                h3.cv-experience-company-metadata-name-current, h3.cv-experience-company-metadata-name-current a {
-                                    color: $colour-grayscale-4;
-                                    font-size: 1.05rem;
-                                    font-weight: bold;
-                                    margin: 0;
-                                    padding: 0;
-                                }
-                                span.cv-experience-company-metadata-name-extra {
-                                    color: $colour-grayscale-2;
-                                    font-size: 0.9rem;
-                                    font-style: italic;
-                                }
-                                display: flex;
-                                flex-direction: column;
-                                flex: 1 1 14rem;
-                                min-width: 0;
-                            }
-                            div.cv-experience-company-metadata-location {
-                                img.cv-experience-company-metadata-location-icon {
-                                    height: 0.9rem;
-                                    filter: var(--c-location-icon-filter);
-                                    margin-right: 0.2rem;
-                                    margin-bottom: 0.2rem;
-                                }
-                                color: $colour-grayscale-2;
-                                font-style: italic;
-                                text-align: right;
-                                display: flex;
-                                align-items: center;
-                                justify-content: flex-end;
-                                margin-left: auto;
-                                white-space: nowrap;
-                            }
-                            display: flex;
-                            justify-content: space-between;
-                            margin-bottom: 0.5rem;
-                            flex-flow: row wrap;
-                            width: 100%;
-                        }
-                        div.cv-experience-job {
-                            div.cv-experience-job-metadata {
-                                div.cv-experience-job-metadata-title, div.cv-experience-job-metadata-title h4 {
-                                    color: $colour-grayscale-4;
-                                    font-size: 1rem;
-                                    font-weight: bold;
-                                    margin: 0;
-                                    padding: 0;
-                                    // Prefers ~30rem so the dates sit out to the
-                                    // right on wide screens, but must be allowed
-                                    // to shrink: with flex-shrink 0 the rigid
-                                    // 30rem basis overflowed a phone's width and
-                                    // gave the page a horizontal scroll.
-                                    flex: 0 1 30rem;
-                                }
-                                div.cv-experience-job-metadata-dates {
-                                    color: $colour-grayscale-4;
-                                    font-style: italic;
-                                    text-align: right;
-                                    margin-left: auto;
-                                }
-                                align-items: center;
-                                display: flex;
-                                flex-flow: row wrap;
-                                justify-content: space-between;
-                                margin-bottom: 0.3rem;
-                                width: 100%;
-                            }
-                            div.cv-experience-job-description {
-                                * {
-                                    color: $colour-grayscale-2;
-                                }
-                                em {
-                                    a {
-                                        color: $colour-grayscale-1;
-                                        font-weight: normal;
-                                    }
-                                    color: $colour-grayscale-1;
-                                }
-                                strong {
-                                    a {
-                                        font-weight: bold;
-                                    }
-                                    font-weight: bold;
-                                }
-                                a {
-                                    font-weight: normal;
-                                }
-                                p:has(+ ul) {
-                                    margin-bottom: 0;
-                                }
-                                ul {
-                                    margin-left: 1rem;
-                                    padding-left: 1rem;
-                                }
-                            }
-                            display: flex;
-                            flex-wrap: wrap;
-                        }
-                        @media print {
-                            page-break-inside: avoid;
-                        }
-                        display: flex;
-                        flex-direction: column;
-                        flex: 1 1 auto;
-                        min-width: 0;
-                    }
-                    display: grid;
-                    grid-template-columns: 4rem minmax(0, 1fr);
-                    align-items: start;
-                    column-gap: 0.7rem;
-                    width: 100%;
-                    @media (max-width: 480px) {
-                        grid-template-columns: 1fr;
-                        div.cv-experience-company-logo {
-                            // Stacked on its own row here, so let the logo grow
-                            // beyond the narrow desktop column's cap.
-                            margin-bottom: 0.4rem;
-                            img, a > img {
-                                max-height: 4rem;
-                                max-width: 10rem;
-                            }
-                            &.cv-experience-company-logo--empty {
-                                display: none;
-                            }
-                        }
-                        div.cv-experience-company-main {
-                            div.cv-experience-company-metadata {
-                                div.cv-experience-company-metadata-location {
-                                    width: 100%;
-                                    margin-top: 0.2rem;
-                                }
-                            }
-                        }
-                    }
-                }
-                div.cv-experience:not(:last-child) div.cv-experience-company-main {
-                    border-bottom: 1px dashed $colour-grayscale-1;
-                }
-                display: flex;
-                flex-direction: column;
-                row-gap: 1rem;
-                width: 100%;
-            }
-            h2 {
-                border-bottom: 1px solid $colour-grayscale-1;
-                color: $colour-accent;
-                font-family: $font-serif;
-                // Matches div.cv-experiences' row-gap, so the first experience
-                // sits as far below the heading's rule as every later one does
-                // below the dashed rule that separates it from the one above.
-                margin-bottom: 1rem;
-                padding-bottom: 0.2rem;
-                width: 100%;
-            }
-            place-content: flex-start left;
-            align-items: flex-start;
-            display: flex;
-            flex-flow: column wrap;
-            margin-bottom: 1rem;
-        }
-        @media print {
-            width: 64rem;
-        }
-    }
-    // Container max-width is shared with every page via global.scss
-    // (div.container { max-width: 1140px }); the CV inherits it rather than
-    // capping narrower. Print width stays pinned by `main` above (64rem).
+// Prose measure: about 75 characters a line, the top of the 60-75 that reads
+// comfortably. The container is 960px wide, which at the body's 14.4px was
+// putting 110-115 characters on a line. The cap is on the text blocks only, so
+// the CV's two-column rows (company against location, job title against dates)
+// still span the full width and stay aligned down the page.
+// In em, not ch: `ch` is the width of the "0" glyph, and WebProductSans draws a
+// much wider digit than its average lowercase letter, so 72ch measured out at
+// 105 characters rather than 72. em tracks the font size, so the same value
+// holds for the 1.15rem lead and the 1rem descriptions below it.
+$prose-measure: 33em;
+
+#cv-lead {
+    font-size: 1.15rem;
+    margin-bottom: 0.8rem;
+    max-width: $prose-measure;
+}
+
+#cv-lead ul {
+    list-style-type: none;
+    margin-bottom: 0;
+    padding: 0;
+}
+
+#cv-lead ul li {
+    display: inline;
+    white-space: nowrap;
+}
+
+#cv-lead ul li::before {
+    color: $colour-accent;
+    content: "•";
+    margin-right: 0.5rem;
+}
+
+#cv-lead ul:first-child li {
+    font-weight: bold;
+}
+
+.cv-section {
+    align-items: flex-start;
+    display: flex;
+    flex-flow: column wrap;
+    margin-bottom: 1rem;
+    place-content: flex-start left;
+}
+
+.cv-section h2 {
+    border-bottom: 1px solid $colour-grayscale-1;
+    color: $colour-accent;
+    font-family: $font-serif;
+    // Matches .cv-experiences' row-gap, so the first experience sits as far
+    // below the heading's rule as every later one does below the dashed rule
+    // that separates it from the one above.
+    margin-bottom: 1rem;
+    padding-bottom: 0.2rem;
     width: 100%;
+}
+
+.cv-experiences {
+    display: flex;
+    flex-direction: column;
+    row-gap: 1rem;
+    width: 100%;
+}
+
+.cv-experience {
+    align-items: start;
+    column-gap: 0.7rem;
+    display: grid;
+    grid-template-columns: 4rem minmax(0, 1fr);
+    width: 100%;
+}
+
+.cv-experience:not(:last-child) .cv-experience-company-main {
+    border-bottom: 1px dashed $colour-grayscale-1;
+}
+
+.cv-experience-company-logo {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    min-height: 2.1rem;
+}
+
+.cv-experience-company-logo img {
+    max-height: 2.2rem;
+    max-width: 4rem;
+    // Company logos are brand marks drawn for a light background (some are dark
+    // or low-contrast). In dark mode render them as soft-white silhouettes so
+    // they read cleanly and uniformly on the dark ground; in light mode the
+    // token is a no-op.
+    filter: var(--c-logo-filter);
+}
+
+// A logo too detailed to silhouette (e.g. the UWA crest) can ship a bespoke dark
+// variant via organisation_logo_dark; the include then emits a day/night pair.
+// Show the right one per theme, and don't silhouette the night version — it's
+// already drawn for the dark ground.
+.cv-experience-company-logo img.cv-logo-day {
+    display: var(--c-logo-day-display);
+}
+
+.cv-experience-company-logo img.cv-logo-night {
+    display: var(--c-logo-night-display);
+    filter: none;
+}
+
+.cv-experience-company-main {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    min-width: 0;
+
+    @media print {
+        page-break-inside: avoid;
+    }
+}
+
+.cv-experience-company-metadata {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    width: 100%;
+}
+
+.cv-experience-company-metadata-name {
+    display: flex;
+    flex: 1 1 14rem;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.cv-experience-company-metadata-name-current,
+.cv-experience-company-metadata-name-current a {
+    color: $colour-grayscale-4;
+    font-size: 1.05rem;
+    font-weight: bold;
+    margin: 0;
+    padding: 0;
+}
+
+.cv-experience-company-metadata-name-extra {
+    color: $colour-grayscale-2;
+    font-size: 0.9rem;
+    font-style: italic;
+}
+
+.cv-experience-company-metadata-location {
+    align-items: center;
+    color: $colour-grayscale-2;
+    display: flex;
+    font-style: italic;
+    justify-content: flex-end;
+    margin-left: auto;
+    text-align: right;
+    white-space: nowrap;
+}
+
+.cv-experience-company-metadata-location-icon {
+    filter: var(--c-location-icon-filter);
+    height: 0.9rem;
+    margin-bottom: 0.2rem;
+    margin-right: 0.2rem;
+}
+
+.cv-experience-job {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.cv-experience-job-metadata {
+    align-items: center;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    margin-bottom: 0.3rem;
+    width: 100%;
+}
+
+.cv-experience-job-metadata-title,
+.cv-experience-job-metadata-title h4 {
+    color: $colour-grayscale-4;
+    // Prefers ~30rem so the dates sit out to the right on wide screens, but must
+    // be allowed to shrink: with flex-shrink 0 the rigid 30rem basis overflowed
+    // a phone's width and gave the page a horizontal scroll.
+    flex: 0 1 30rem;
+    font-size: 1rem;
+    font-weight: bold;
+    margin: 0;
+    padding: 0;
+}
+
+.cv-experience-job-metadata-dates {
+    color: $colour-grayscale-4;
+    font-style: italic;
+    margin-left: auto;
+    text-align: right;
+}
+
+.cv-experience-job-description {
+    max-width: $prose-measure;
+}
+
+// A blanket default for the rendered markdown, which can contain anything the
+// collection's author writes. The three rules after it are the same specificity
+// and win on source order, so keep them below it.
+.cv-experience-job-description * {
+    color: $colour-grayscale-2;
+}
+
+.cv-experience-job-description em,
+.cv-experience-job-description em a {
+    color: $colour-grayscale-1;
+}
+
+.cv-experience-job-description em a {
+    font-weight: normal;
+}
+
+.cv-experience-job-description strong,
+.cv-experience-job-description strong a {
+    font-weight: bold;
+}
+
+.cv-experience-job-description a {
+    font-weight: normal;
+}
+
+.cv-experience-job-description p:has(+ ul) {
+    margin-bottom: 0;
+}
+
+.cv-experience-job-description ul {
+    margin-left: 1rem;
+    padding-left: 1rem;
+}
+
+@media (max-width: 480px) {
+    .cv-experience {
+        grid-template-columns: 1fr;
+    }
+
+    // Stacked on its own row here, so let the logo grow beyond the narrow
+    // desktop column's cap.
+    .cv-experience-company-logo {
+        margin-bottom: 0.4rem;
+    }
+
+    .cv-experience-company-logo img {
+        max-height: 4rem;
+        max-width: 10rem;
+    }
+
+    .cv-experience-company-logo--empty {
+        display: none;
+    }
+
+    .cv-experience-company-metadata-location {
+        margin-top: 0.2rem;
+        width: 100%;
+    }
+}
+
+@media print {
+    main {
+        width: 64rem;
+    }
+
+    // Screen only. On paper the column is already bounded by the page, and
+    // holding the text to a 33em measure inside a 19cm A4 body would leave a
+    // third of every page empty and push the CV onto more sheets, which for a CV
+    // costs more than the line length saves.
+    #cv-lead,
+    .cv-experience-job-description {
+        max-width: none;
+    }
 }

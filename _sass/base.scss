@@ -1,0 +1,168 @@
+@import 'vars';
+
+// The element defaults the site's own stylesheets are written against.
+
+// This replaces Bootstrap 4. The site imported nine of its partials -- reboot,
+// type, grid, tables, utilities, root, print and their dependencies -- which
+// compiled to 68KB of CSS containing 1,115 style rules, of which 110 matched
+// anything on either page. The 12-column grid across five breakpoints, the
+// `--blue`/`--indigo` custom properties, `.badge`, `.bg-info`, `.text-warning`
+// and the rest were all dead weight downloaded on every page view.
+
+// Of the framework's classes the markup used exactly two: `.container`, whose
+// every property `div.container` in global.scss already overrode, and `.mt-2` on
+// one heading, now a margin on the heading's own rule. So what is left here is
+// the element normalisation, and only the parts of it these two pages actually
+// depend on. Each block below says what needs it, so a future reader can tell an
+// intentional rule from an inherited one.
+
+// 1. Border-box everywhere: the layout is written assuming padding and border
+//    sit inside a declared width.
+// 2. `html` carries the 0.9 root size the whole scale is derived from (see the
+//    end of global.scss); the text-size-adjust keeps iOS from inflating text in
+//    landscape, which would break the header's single-line name.
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    font-family: sans-serif;
+    line-height: 1.15;
+    // The prefix is the point: iOS Safari still only honours the prefixed
+    // property, and without it landscape rotation inflates the text, which
+    // breaks the header's single-line name.
+    // stylelint-disable-next-line property-no-vendor-prefix
+    -webkit-text-size-adjust: 100%;
+}
+
+// `text-align: left` is set explicitly so `th { text-align: inherit }` below has
+// something predictable to inherit. Colour, background and font-family are set
+// from the theme tokens in global.scss, not here.
+body {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    text-align: left;
+}
+
+// Headings carry a bottom margin only. Dropping the top margin avoids margin
+// collapsing between a heading and the block above it, which is what the CV's
+// tight vertical rhythm is built on.
+// The weight and line-height are not cosmetic defaults to be inherited from the
+// browser: 500 is what the site is drawn at, and because WebProductSans ships
+// only 400 and 700 faces it renders in the 400 face (see the note on the
+// smart-home table titles, which match it deliberately). Leaving these to the UA
+// gives every heading the 700 face and a 1.5 line-height instead.
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-weight: 500;
+    line-height: 1.2;
+    margin-bottom: 0.5rem;
+    margin-top: 0;
+}
+
+// The default scale. global.scss sets h2 and h3, and cv.scss and smart-home.scss
+// set the h1 and the h4s they use, so in practice only the sizes those do not
+// name are read from here.
+h1 {
+    font-size: 2.5rem;
+}
+
+h2 {
+    font-size: 2rem;
+}
+
+h3 {
+    font-size: 1.75rem;
+}
+
+h4 {
+    font-size: 1.5rem;
+}
+
+h5 {
+    font-size: 1.25rem;
+}
+
+h6 {
+    font-size: 1rem;
+}
+
+p {
+    margin-top: 0;
+    margin-bottom: 1rem;
+}
+
+ol,
+ul,
+dl {
+    margin-top: 0;
+    margin-bottom: 1rem;
+}
+
+// A nested list should not add a second gap under the outer one.
+ol ol,
+ul ul,
+ol ul,
+ul ol {
+    margin-bottom: 0;
+}
+
+// `bolder` rather than `bold`: it resolves against the inherited weight, so a
+// <strong> inside an already-bold run does not flatten to the same weight.
+b,
+strong {
+    font-weight: bolder;
+}
+
+a {
+    background-color: transparent;
+    text-decoration: none;
+}
+
+// `middle` stops the descender gap under every inline logo and icon in the CV.
+img {
+    border-style: none;
+    vertical-align: middle;
+}
+
+// The smart-home tables draw their own rules, so the default doubled borders
+// have to go.
+table {
+    border-collapse: collapse;
+}
+
+// Inherit from the body rather than centring, which is the UA default for th.
+th {
+    text-align: inherit;
+}
+
+// Form controls do not inherit type from their ancestors by default, and the
+// consent dialog's two buttons are the only ones on the site.
+button,
+input,
+select,
+textarea {
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    margin: 0;
+}
+
+// The horizontal padding the page gutter is made of. Everything else about the
+// container -- the flex column, the max-width, the vertical padding -- is set on
+// `div.container` in global.scss.
+.container {
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 15px;
+    padding-right: 15px;
+    width: 100%;
+}
