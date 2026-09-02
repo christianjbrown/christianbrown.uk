@@ -2,13 +2,13 @@
 $font-serif: 'WebGeorgia', serif;
 $font-sans-serif: 'WebProductSans', sans-serif;
 
-// Fixed brand palette — real colour values, used where a colour must exist at
-// compile time (Bootstrap's colour maths on $primary/$danger) or must stay put
-// regardless of the theme (e.g. the always-light cookie card).
+// The brand green as a real value, for the one place that must not follow the
+// theme: the ring around the header avatar, which sits over a photograph rather
+// than the page ground and reads the same on both. The rest of the palette is
+// themeable below.
+// The other fixed values here (ink, muted, error) went with the consent dialog's
+// always-light card: it follows the colour theme now, so nothing needed them.
 $colour-accent-fixed: #75923C;
-$colour-ink-fixed: #222;
-$colour-muted-fixed: #6c757d; // neutral grey for the cookie card's muted "No"
-$colour-error-fixed: orange;
 
 // Themeable tokens — resolve to CSS custom properties so a
 // prefers-color-scheme override can repaint the whole site at runtime. The
@@ -16,6 +16,7 @@ $colour-error-fixed: orange;
 // global.scss (loaded on every page). grayscale-2/3/4 were all the same ink,
 // so they share the one foreground token.
 $colour-accent: var(--c-accent);
+$colour-on-accent: var(--c-on-accent);
 $colour-grayscale-1: var(--c-muted);
 // Decorative rules and gridlines. Separate from $colour-grayscale-1 because
 // that one now carries text and has to clear 4.5:1, while a hairline has no
