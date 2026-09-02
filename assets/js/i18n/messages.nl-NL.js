@@ -206,6 +206,18 @@ export default {
     // Appended to the status line when the climate favours opening a window.
     windowAdvice: 'Waarschijnlijk het beste om een raam open te zetten.',
 
+    // The cookie consent dialog. `question` is a template with two holes, filled
+    // at runtime with the two links; the holes are placeholders rather than
+    // markup so no catalogue can inject HTML, and so a language that wants the
+    // links in the other order (or in another clause) can simply move them.
+    cookies: {
+        question: 'Vind je het goed dat deze site cookies gebruikt om {traffic} en {errors}?',
+        measureTraffic: 'bezoek te meten',
+        catchErrors: 'fouten op te sporen',
+        accept: '🍪 Ja',
+        decline: '🚫 Nee',
+    },
+
     theme: {
         auto: 'Auto',
         light: 'Licht',
