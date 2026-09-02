@@ -406,8 +406,8 @@ main {
 //   - the indoor band fill is a translucent green tuned per theme.
 :root {
     --cc-inside: #{$colour-accent};
-    --cc-grid: #{$colour-grayscale-1};
-    --cc-axis: #{$colour-grayscale-1};
+    --cc-grid: #{$colour-hairline};
+    --cc-axis: #{$colour-hairline};
     --cc-text: #{$colour-grayscale-2};
     --cc-outside: #555;
     --cc-inside-fill: rgba(117, 146, 60, 0.18);
@@ -418,7 +418,7 @@ main {
         --cc-outside: #9aa0a6;
         --cc-inside-fill: rgba(163, 199, 109, 0.22);
         // A shade darker than the muted grey the axis labels use, so the
-        // gridlines recede on the dark ground (light mode keeps --c-muted).
+        // gridlines recede on the dark ground (light mode keeps --c-hairline).
         --cc-grid: #383b42;
     }
 }

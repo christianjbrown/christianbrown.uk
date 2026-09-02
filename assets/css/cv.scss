@@ -80,7 +80,7 @@ $prose-measure: 33em;
 }
 
 .cv-section h2 {
-    border-bottom: 1px solid $colour-grayscale-1;
+    border-bottom: 1px solid $colour-hairline;
     color: $colour-accent;
     font-family: $font-serif;
     // Matches .cv-experiences' row-gap, so the first experience sits as far
@@ -107,7 +107,7 @@ $prose-measure: 33em;
 }
 
 .cv-experience:not(:last-child) .cv-experience-company-main {
-    border-bottom: 1px dashed $colour-grayscale-1;
+    border-bottom: 1px dashed $colour-hairline;
 }
 
 .cv-experience-company-logo {

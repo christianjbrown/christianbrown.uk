@@ -16,7 +16,19 @@
 
     --c-bg: #fff;
     --c-fg: #222;
-    --c-muted: #aaa;
+    // Muted text and the borders of the chart's controls. Was #aaa, which is
+    // 2.32:1 on white: a clear WCAG AA failure everywhere it carried real text
+    // (the CV's tech-stack lines, the smart-home tables' secondary values, the
+    // chart's status and resolution captions), and short of the 3:1 that 1.4.11
+    // asks of a control's boundary. #767676 is 4.54:1, about the lightest grey
+    // that clears AA on white.
+    --c-muted: #767676;
+    // The old value, kept for the things that are decoration rather than
+    // content: the rule under each section heading, the dashed line between
+    // jobs, the chart's gridlines and axis, the loading dots. Contrast minimums
+    // do not apply to those, and darkening them to match the text would have
+    // pulled the eye onto the furniture instead of the writing.
+    --c-hairline: #aaa;
     --c-accent: #75923c;
     --c-error: orange;
     // Translucent pill behind the floor-plan room labels, and behind the theme
@@ -44,8 +56,12 @@
 
     --c-bg: #16181d;
     --c-fg: #e8e8e6;
-    // Mid-grey that still reads as "muted" against the dark ground.
+    // Mid-grey that still reads as "muted" against the dark ground. Unchanged:
+    // it is already 5.2:1 against #16181d, so only the light theme was failing.
     --c-muted: #8c8c8c;
+    // Dark mode never had the light theme's hairline problem -- these were the
+    // same grey as the muted text there and stay so.
+    --c-hairline: #8c8c8c;
     // The brand green lightened for enough contrast on the dark ground.
     --c-accent: #a3c76d;
     --c-error: #ffb454;
