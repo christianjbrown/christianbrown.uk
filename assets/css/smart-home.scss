@@ -17,10 +17,13 @@
 // The avatar is vertically centred in the header (global.scss), so against this
 // page's shorter header it sits ~10px higher and appears to jump when navigating
 // between the two pages via the avatar home-link. Reserve the same header height
-// the homepage uses so the shared avatar sits identically on both. The selector
-// mirrors global.scss's own high-specificity `.header-data` rule so this wins by
-// loading after global.css; only min-height is overridden (flex-grow is kept).
-html body div.container header div.header-data {
+// the homepage uses so the shared avatar sits identically on both; only
+// min-height is overridden (flex-grow is kept).
+// This used to read `html body div.container header div.header-data`, matching
+// the specificity of global.scss's own DOM-shaped selector so it could win on
+// source order. Both are a single class now, so source order alone decides and
+// smart-home.css loads after global.css.
+.header-data {
     min-height: 9.75rem;
 }
 
