@@ -124,10 +124,8 @@ describe('Locale', () => {
     });
 
     describe('applyLocale', () => {
-        it('records the resolved locale on <html lang> and returns it', () => {
-            const locale = applyLocale();
-            expect(SUPPORTED_LOCALES).toContain(locale);
-            expect(document.documentElement.lang).toBe(locale);
+        it('returns a supported locale', () => {
+            expect(SUPPORTED_LOCALES).toContain(applyLocale());
         });
 
         it('persists an explicit ?locale choice to the locale cookie', () => {
@@ -141,7 +139,15 @@ describe('Locale', () => {
             Cookie.set(LOCALE_COOKIE, 'fr-FR', null);
 
             expect(applyLocale()).toBe('fr-FR');
-            expect(document.documentElement.lang).toBe('fr-FR');
+        });
+
+        // The document stays in the language its prose is actually written in.
+        it('leaves <html lang> alone', () => {
+            document.documentElement.lang = 'en-GB';
+            window.history.replaceState({}, '', '/?locale=de-DE');
+
+            expect(applyLocale()).toBe('de-DE');
+            expect(document.documentElement.lang).toBe('en-GB');
         });
 
         it('does not write a cookie when no ?locale is given', () => {

@@ -146,7 +146,6 @@ describe('cv/index.js', () => {
             // jsdom resolves to en-GB, so the headings read their English values.
             expect(document.querySelector('#cv-heading-experience').textContent).toBe('Professional experience');
             expect(document.querySelector('#cv-heading-education').textContent).toBe('Education');
-            expect(document.documentElement.lang).toBe('en-GB');
             expect(ctor).toHaveBeenCalledTimes(1);
         });
     });

@@ -6,6 +6,21 @@ site_name: "Christian Brown"
 site_author: "Christian Brown"
 site_image_name: "Christian Brown's avatar"
 
+# The <html lang>. The site's prose is English on every page; the locale layer in
+# assets/js/Locale.js translates units, labels and dates around it but does not
+# change this, because a page of English marked up as German is worse for a
+# screen reader and a search engine than English labels inside an English page.
+site_lang: "en-GB"
+
+# The card unfurled by Slack, LinkedIn, WhatsApp and the rest. Regenerate with
+# `npm run og:image` after a build; the dimensions here must match what
+# bin/generate-og-image.mjs renders, because the scrapers lay the card out from
+# these tags before the image itself has finished downloading.
+site_og_image: "/assets/images/og-card.png"
+site_og_image_alt: "Christian Brown, Engineering Manager, London, UK"
+site_og_image_width: 1200
+site_og_image_height: 630
+
 header_name: "Christian Brown"
 header_job_title: "Engineering Manager"
 header_location: "London, UK"
