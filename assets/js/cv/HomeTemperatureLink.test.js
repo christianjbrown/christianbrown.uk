@@ -39,7 +39,7 @@ describe('HomeTemperatureLink', () => {
 
         await new HomeTemperatureLink(dom, 'url').update();
 
-        expect(dom.textContent).toBe('🏠 26.6°c at home');
+        expect(dom.textContent).toBe('🏠 26.6°C at home');
         expect(dom.hidden).toBe(false);
     });
 

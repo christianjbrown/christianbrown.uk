@@ -59,13 +59,13 @@ describe('FloorPlan', () => {
         expect(labels()).toHaveLength(3);
 
         const livingRoom = labelFor('Living room');
-        expect(livingRoom.querySelector('.floor-plan__temp').textContent).toContain('26.8°c');
+        expect(livingRoom.querySelector('.floor-plan__temp').textContent).toContain('26.8°C');
         expect(livingRoom.querySelector('.floor-plan__humidity').textContent).toContain('52%');
         expect(livingRoom.style.left).toBe('25%');
         expect(livingRoom.style.top).toBe('70%');
 
         const study = labelFor('Study');
-        expect(study.querySelector('.floor-plan__temp').textContent).toContain('26.9°c');
+        expect(study.querySelector('.floor-plan__temp').textContent).toContain('26.9°C');
         // No humidity reported -> no humidity line.
         expect(study.querySelector('.floor-plan__humidity')).toBeNull();
 
@@ -144,7 +144,7 @@ describe('FloorPlan', () => {
 
         const outside = labels().filter((label) => label.textContent.startsWith('Outside'));
         expect(outside).toHaveLength(2);
-        expect(outside[0].querySelector('.floor-plan__temp').textContent).toContain('26.7°c');
+        expect(outside[0].querySelector('.floor-plan__temp').textContent).toContain('26.7°C');
         expect(outside[0].querySelector('.floor-plan__humidity').textContent).toContain('39%');
         expect(outside[0].style.top).toBe('3%');
         expect(outside[1].style.top).toBe('97%');
@@ -155,7 +155,7 @@ describe('FloorPlan', () => {
         subject.render([], {temp: 26.7});
 
         const outside = labelFor('Outside');
-        expect(outside.querySelector('.floor-plan__temp').textContent).toContain('26.7°c');
+        expect(outside.querySelector('.floor-plan__temp').textContent).toContain('26.7°C');
         expect(outside.querySelector('.floor-plan__humidity')).toBeNull();
     });
 

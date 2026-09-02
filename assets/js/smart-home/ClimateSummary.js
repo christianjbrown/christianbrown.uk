@@ -33,7 +33,7 @@ export default class ClimateSummary {
 
     /**
      * Returns a sentence comparing the inside and outside climate, e.g.
-     * "It's 1.6°c warmer inside (26.6°c inside, 25°c outside), and 10.2% more
+     * "It's 1.6°C warmer inside (26.6°C inside, 25°C outside), and 10.2% more
      * humid (52.8% inside, 42.6% outside)." All numbers are locale-formatted;
      * this method computes the semantic facts and hands the wording to the
      * catalogue.
@@ -134,7 +134,7 @@ export default class ClimateSummary {
      * Whether the temperature and humidity pull in opposite directions, so the
      * clauses read as a contrast ("but") rather than an accumulation ("and").
      *
-     * On a cold (below 18°c) or hot (above 25°c) day the temperature has a
+     * On a cold (below 18°C) or hot (above 25°C) day the temperature has a
      * stance: warmer inside is welcome in the cold, cooler inside is welcome in
      * the heat. The humidity is welcome when it's less humid inside. It's a
      * contrast when exactly one is welcome; otherwise (both or neither, or

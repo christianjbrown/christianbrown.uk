@@ -141,8 +141,8 @@ describe('SmartHomePage', () => {
 
             await newPage().runAll();
 
-            expect(statusText()).toMatch(/^It's currently .+ in my London home, where it's 1\.6°c warmer inside/);
-            expect(statusText()).toContain("where it's 1.6°c warmer inside (26.6°c inside, 25°c outside), and 10.2% more humid (52.8% inside, 42.6% outside).");
+            expect(statusText()).toMatch(/^It's currently .+ in my London home, where it's 1\.6°C warmer inside/);
+            expect(statusText()).toContain("where it's 1.6°C warmer inside (26.6°C inside, 25°C outside), and 10.2% more humid (52.8% inside, 42.6% outside).");
         });
 
         it('appends the open-a-window advice when the climate favours it', async () => {
@@ -190,8 +190,8 @@ describe('SmartHomePage', () => {
 
             await newPage().runAll();
 
-            expect(statusText()).toMatch(/^It's currently .+ in my London home, where it's 1\.6°c warmer inside/);
-            expect(statusText()).toContain("where it's 1.6°c warmer inside (26.6°c inside, 25°c outside).");
+            expect(statusText()).toMatch(/^It's currently .+ in my London home, where it's 1\.6°C warmer inside/);
+            expect(statusText()).toContain("where it's 1.6°C warmer inside (26.6°C inside, 25°C outside).");
             expect(statusText()).not.toContain('humid');
         });
 
