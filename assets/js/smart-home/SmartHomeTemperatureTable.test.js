@@ -93,6 +93,15 @@ describe('SmartHomeTemperatureTable', () => {
         expect(rows[2].textContent).not.toContain(' - ');
     });
 
+    it('leaves out the average row when no device has a temperature reading', () => {
+        const { table, subject } = make();
+        subject._renderHeader();
+        subject._renderUpdate([]);
+
+        expect(table.querySelectorAll('tr')).toHaveLength(1);
+        expect(table.textContent).not.toContain('Average');
+    });
+
     it('maps room and device names for the locale, falling back to the API value', () => {
         const { table, subject } = make(DE_DE);
         subject._renderHeader();

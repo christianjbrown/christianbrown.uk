@@ -335,13 +335,12 @@ export default class UpdatingKeyValuePairTable {
         const errorCell = this.#domTable.insertRow().insertCell();
         errorCell.setAttribute('class', 'smart-home-table__error-cell');
         // Span the header's columns (counting a colspanned title cell) so the
-        // error message sits under the full width of the table.
-        const headerRow = this.#domTable.rows[0];
-        if (headerRow) {
-            const columnCount = [...headerRow.cells].reduce((total, cell) => total + cell.colSpan, 0);
-            if (columnCount > 1) {
-                errorCell.colSpan = columnCount;
-            }
+        // error message sits under the full width of the table. rows[0] always
+        // exists, since the error row was just inserted; with no header it is
+        // the error row itself, whose single cell leaves the span alone.
+        const columnCount = [...this.#domTable.rows[0].cells].reduce((total, cell) => total + cell.colSpan, 0);
+        if (columnCount > 1) {
+            errorCell.colSpan = columnCount;
         }
         errorCell.append(errorSpan);
     }

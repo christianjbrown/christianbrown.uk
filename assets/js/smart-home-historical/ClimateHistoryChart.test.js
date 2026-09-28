@@ -219,6 +219,19 @@ describe('ClimateHistoryChart', () => {
         expect(uPlot.instances).toHaveLength(1);
     });
 
+    it('switches metric without drawing when no data has loaded', async () => {
+        const els = makeEls();
+        const uPlot = fakeUplot();
+        await new ClimateHistoryChart(els, uPlot, rejectingFetcher()).start();
+
+        els.metricHumidity.dispatchEvent(new Event('click'));
+        await flush();
+
+        // The toggle still follows the click, but there is nothing to re-draw.
+        expect(els.metricHumidity.getAttribute('aria-pressed')).toBe('true');
+        expect(uPlot.instances).toHaveLength(0);
+    });
+
     it('uses the provided catalogue for the series, resolution and status text', async () => {
         const els = makeEls();
         const uPlot = fakeUplot();

@@ -148,5 +148,15 @@ describe('cv/index.js', () => {
             expect(document.querySelector('#cv-heading-education').textContent).toBe('Education');
             expect(ctor).toHaveBeenCalledTimes(1);
         });
+
+        it('runs when the window finishes loading', async () => {
+            document.body.innerHTML = '<h2 id="cv-heading-experience">x</h2><a id="cv-home-temp" hidden></a>';
+            injectApiConfig();
+
+            window.dispatchEvent(new Event('load'));
+
+            await vi.waitFor(() => expect(ctor).toHaveBeenCalledTimes(1));
+            expect(document.querySelector('#cv-heading-experience').textContent).toBe('Professional experience');
+        });
     });
 });
