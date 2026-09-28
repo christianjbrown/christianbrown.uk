@@ -1,7 +1,7 @@
 
 # Overview
 
-[![CI](https://github.com/christianjbrown/christianbrown.uk/actions/workflows/ci.yml/badge.svg)](https://github.com/christianjbrown/christianbrown.uk/actions/workflows/ci.yml)
+[![CI](https://github.com/christianjbrown/christianbrown.uk/actions/workflows/ci.yml/badge.svg)](https://github.com/christianjbrown/christianbrown.uk/actions/workflows/ci.yml) [![License](https://img.shields.io/github/license/christianjbrown/christianbrown.uk)](https://github.com/christianjbrown/christianbrown.uk/blob/main/LICENSE)
 
 This is the personal website of Christian Brown, created with static website generator [Jekyll](https://jekyllrb.com/), which itself is based on Ruby.
 
