@@ -97,6 +97,21 @@ describe('global.js', () => {
             expect(toggle.getAttribute('title')).toBe('Switch colour theme');
             expect(toggle.getAttribute('aria-label')).toContain('Colour theme');
         });
+
+        it('localises the rest of the header on a page without a location', () => {
+            const location = document.getElementById('header-location');
+            const parent = location.parentNode;
+            location.remove();
+            try {
+                globalModule.localiseChrome(DE_DE);
+
+                expect(document.getElementById('header-job-title').textContent).toBe(DE_DE.header.jobTitle);
+                expect(document.getElementById('header-location')).toBeNull();
+            } finally {
+                parent.appendChild(location);
+                globalModule.localiseChrome(EN_GB);
+            }
+        });
     });
 
     describe('cookie dialog buttons', () => {

@@ -97,6 +97,17 @@ describe('FloorPlan', () => {
         expect(floorLabels()).toHaveLength(0);
     });
 
+    it('shows the plan without room labels when the indoor data is not a list of readings', () => {
+        const subject = make();
+        subject.render({}, {temp: 20});
+
+        expect(section.hidden).toBe(false);
+        expect(floorLabels()).toHaveLength(2);
+        // Only the two outside anchors: no room is labelled from a non-list.
+        expect(labels()).toHaveLength(OUTSIDE_ANCHORS.length);
+        expect(labelFor('Study')).toBeUndefined();
+    });
+
     it('keeps the section hidden until the indoor data has loaded', () => {
         const subject = make();
 
