@@ -90,15 +90,93 @@ jobs:
           for i in $(seq 1 30); do curl -sf http://localhost:8080/ >/dev/null && break; sleep 1; done
           npm run test:a11y || echo "::notice::pa11y reported accessibility findings — advisory, not failing the build"
 
+  site-unchanged:
+    name: Built site unchanged (Dependabot gate)
+    runs-on: ubuntu-latest
+    # Only a pull request has something to compare against. A job skipped by
+    # its `if` still satisfies a required check.
+    if: github.event_name == 'pull_request'
+
+    # Builds the site before and after the PR and diffs the output. On a
+    # Dependabot PR any difference fails the job, which is what lets those PRs
+    # auto-merge: an npm bump cannot touch the output at all (npm is test
+    # tooling only, and package*.json are excluded from the build), and a gem
+    # bump that changes a single byte of the published site waits for a person.
+    # On a human PR the output is meant to change, so the diff is only
+    # reported.
+
+    steps:
+      # The PR's merge commit, with its first parent (the tip of main it merges
+      # into) as the "before". Comparing against that parent rather than the
+      # PR's recorded base.sha keeps anything that landed on main since from
+      # showing up as part of this PR's diff.
+      - name: Check out repository
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 2
+
+      - name: Check out the target branch alongside
+        run: git worktree add --detach ../before HEAD^1
+
+      # Same non-frozen install rationale as the `site` job above.
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: false
+
+      # Each side installs its own Gemfile.lock, so a gem bump is compared
+      # against the gems it replaces.
+      - name: Build the site after the PR
+        env:
+          JEKYLL_ENV: production
+        run: |
+          bundle install --jobs 4
+          bundle exec jekyll build --strict_front_matter -d "$RUNNER_TEMP/after"
+
+      - name: Build the site before the PR
+        working-directory: ../before
+        env:
+          JEKYLL_ENV: production
+        run: |
+          bundle install --jobs 4
+          bundle exec jekyll build --strict_front_matter -d "$RUNNER_TEMP/before"
+
+      # The layout stamps every page with the build time, the one line that
+      # always differs between two builds of the same source.
+      - name: Compare the built sites
+        env:
+          DEPENDABOT_PR: ${{ github.event.pull_request.user.login == 'dependabot[bot]' }}
+        run: |
+          if diff -r -I '^<!-- last generated: .* -->$' "$RUNNER_TEMP/before" "$RUNNER_TEMP/after" > site.diff; then
+            echo "::notice::The built site is identical before and after this PR"
+            exit 0
+          fi
+
+          echo "Changed files:"
+          diff -rq -I '^<!-- last generated: .* -->$' "$RUNNER_TEMP/before" "$RUNNER_TEMP/after" || true
+          echo
+          head -c 20000 site.diff
+
+          if [ "$DEPENDABOT_PR" = "true" ]; then
+            echo "::error::This Dependabot PR changes the built site, so it cannot auto-merge. Review the diff above and merge by hand if it is right."
+            exit 1
+          fi
+          echo "::notice::This PR changes the built site (expected for a content or code change)"
+
   visual:
     name: Visual regression (Percy)
     runs-on: ubuntu-latest
 
-    # The visual-regression gate. Make this a required status check to have it
-    # block merges. It fails ONLY on a genuine, unreviewed visual change; every
-    # Percy-side problem — no token (fork PRs), network/API error, or an
-    # exhausted free-tier screenshot budget — exits 0 with a warning, so an
-    # unavailable Percy never blocks a merge. See the gate step for the logic.
+    # The visual-regression gate, and a required status check. On a human PR it
+    # fails ONLY on a genuine, unreviewed visual change; every Percy-side problem
+    # (no token on a fork PR, network/API error, an exhausted free-tier
+    # screenshot budget) exits 0 with a warning, so an unavailable Percy never
+    # blocks a merge somebody is watching.
+    #
+    # Dependabot PRs are the exception: they merge themselves (see
+    # dependabot-auto-merge.yml), so there "could not check" has to fail rather
+    # than pass. They only see Dependabot secrets, which is why PERCY_TOKEN is
+    # also stored there. See unavailable() in the gate step.
 
     steps:
       - name: Check out repository
@@ -140,26 +218,40 @@ jobs:
           # reports every snapshot as "new". Empty on push events (Percy then
           # auto-detects the current branch), set to e.g. "main" on pull_request.
           PERCY_TARGET_BRANCH: ${{ github.base_ref }}
+          # Keyed on who opened the PR rather than github.actor, which becomes
+          # whoever clicks re-run.
+          DEPENDABOT_PR: ${{ github.event.pull_request.user.login == 'dependabot[bot]' }}
         run: |
           set -o pipefail
 
-          # No token (e.g. a pull request from a fork): nothing to compare, don't block.
-          if [ -z "$PERCY_TOKEN" ]; then
-            echo "::notice::PERCY_TOKEN not set — skipping visual regression (not blocking)"
+          # Percy could not give an answer. A person merging a PR is watching,
+          # so warn and pass. A Dependabot PR merges itself, so fail instead:
+          # "not checked" must never read as "checked and fine" there.
+          unavailable() {
+            if [ "$DEPENDABOT_PR" = "true" ]; then
+              echo "::error::$1. This Dependabot PR would auto-merge unchecked, so the gate fails. Re-run once Percy is available."
+              exit 1
+            fi
+            echo "::warning::$1 - not blocking the merge"
             exit 0
+          }
+
+          # No token (e.g. a pull request from a fork): nothing to compare.
+          # Dependabot PRs read PERCY_TOKEN from the Dependabot secrets, not
+          # the Actions ones, so it has to be stored in both.
+          if [ -z "$PERCY_TOKEN" ]; then
+            unavailable "PERCY_TOKEN not set (a Dependabot PR needs it as a Dependabot secret), visual regression skipped"
           fi
 
           # Upload the snapshots. A non-zero here is a Percy/infra problem
-          # (network, config, quota) — warn but do not block the merge.
+          # (network, config, quota), not a regression.
           if ! npm run test:visual | tee percy-run.log; then
-            echo "::warning::Percy run failed (network/quota/config) — not blocking the merge"
-            exit 0
+            unavailable "Percy run failed (network/quota/config)"
           fi
 
           BUILD_ID=$(grep -aoE 'builds/[0-9]+' percy-run.log | head -1 | cut -d/ -f2)
           if [ -z "$BUILD_ID" ]; then
-            echo "::warning::No Percy build was created (skipped / over quota) — not blocking"
-            exit 0
+            unavailable "No Percy build was created (skipped or over quota)"
           fi
 
           # On push (e.g. to main) the build only refreshes the baseline — there's
@@ -181,10 +273,9 @@ jobs:
           set -e
 
           # Percy errors (403, timeout, network, quota) also exit non-zero, and
-          # those mean "unavailable", not "regression" — so never block on them.
+          # those mean "unavailable", not "regression".
           if [ "$WAIT_CODE" -ne 0 ]; then
-            echo "::warning::Percy could not confirm the result (exit $WAIT_CODE) — treating as unavailable, not blocking"
-            exit 0
+            unavailable "Percy could not confirm the result (exit $WAIT_CODE)"
           fi
 
           # Gate on the build's review state instead. It reads "approved" both
@@ -198,7 +289,7 @@ jobs:
 
           # Documented values: unreviewed, approved, changes_requested, merged,
           # rejected. Anything unrecognised means we could not read the state —
-          # log the payload so it is diagnosable, and fall through to not blocking.
+          # log the payload so it is diagnosable, and treat Percy as unavailable.
           case "$REVIEW_STATE" in
             approved|merged)
               echo "::notice::Percy build $BUILD_ID review state: $REVIEW_STATE"
@@ -208,8 +299,8 @@ jobs:
               exit 1
               ;;
             *)
-              echo "::warning::Could not read Percy review state (got '${REVIEW_STATE:-none}') — treating as unavailable, not blocking"
               head -c 500 percy-build.json || true
+              unavailable "Could not read Percy review state (got '${REVIEW_STATE:-none}')"
               ;;
           esac
           exit 0
