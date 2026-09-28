@@ -69,7 +69,11 @@ Cross-browser visual snapshots of the homepage and the smart-home page are captu
 
 Percy re-renders a captured DOM without running the page's JavaScript, so a small [Playwright](https://playwright.dev) driver (`percy/snapshot.mjs`) first makes each page deterministic — it stubs the live climate/weather feeds with fixtures, pins the clock and timezone, and hides the one-time cookie prompt and the time-series history canvas — then hands the finished DOM to Percy.
 
-The CI gate **blocks a merge on a genuine, unreviewed visual change** — you review and approve (or reject) the diff in Percy to unblock it. It deliberately does **not** block when Percy itself is the problem: a Percy/network error, an exhausted free-tier screenshot budget, or a missing `PERCY_TOKEN` (e.g. pull requests from forks) all pass with a warning, since our own CI job always runs and controls its own exit code. This project is tested with BrowserStack.
+The CI gate **blocks a merge on a genuine, unreviewed visual change**: you review and approve (or reject) the diff in Percy to unblock it. On a human PR it deliberately does **not** block when Percy itself is the problem: a Percy/network error, an exhausted free-tier screenshot budget, or a missing `PERCY_TOKEN` (e.g. pull requests from forks) all pass with a warning, since our own CI job always runs and controls its own exit code. Dependabot PRs are the exception, because they merge themselves: there every one of those cases fails the gate. Dependabot PRs only see Dependabot secrets, so `PERCY_TOKEN` is stored there as well as in the Actions secrets. This project is tested with BrowserStack.
+
+## Dependabot auto-merge
+
+Dependabot's patch and minor updates merge themselves once the required checks pass (`.github/workflows/dependabot-auto-merge.yml`). Major updates wait for a person. Besides the usual tests, build and Percy gate, a Dependabot PR has to pass **Built site unchanged**, which builds the site before and after the PR and fails if the published output differs by a single byte (the per-build timestamp comment aside). An npm update can never change the output, since npm is test tooling only; a gem update that does change it waits for review.
 
 Baselines are owned by CI, never seeded from a laptop: each `main` build (rendered on the CI runner) is auto-approved and becomes the baseline, so pull-request builds — rendered on the same runner — diff against a like-for-like reference and only a real change stands out.
 
