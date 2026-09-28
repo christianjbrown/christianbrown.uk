@@ -1,0 +1,53 @@
+name: Dependabot auto-merge
+
+# Turns on auto-merge for Dependabot's patch and minor updates. It does not
+# merge anything itself: GitHub merges once every required check on main is
+# green, so the checks in ci.yml are the actual gate. Two of them are there for
+# this: "Built site unchanged" fails a Dependabot PR that changes a byte of the
+# published site, and the Percy gate fails one it could not check.
+#
+# Major updates, and anything whose update type Dependabot could not state,
+# are left for a person.
+#
+# A merge made through GITHUB_TOKEN does not start other workflows, so these
+# merges do not run pages.yml. That is fine by construction: "Built site
+# unchanged" has already shown the published output would be identical, and
+# the next ordinary push to main redeploys with the new lockfile anyway.
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  enable-auto-merge:
+    name: Enable auto-merge for patch and minor updates
+    runs-on: ubuntu-latest
+    # Who opened the PR, not github.actor, which is whoever last pushed or
+    # re-ran it.
+    if: github.event.pull_request.user.login == 'dependabot[bot]'
+
+    steps:
+      - name: Read the update's metadata
+        id: metadata
+        uses: dependabot/fetch-metadata@v2
+
+      - name: Enable auto-merge
+        if: >-
+          steps.metadata.outputs.update-type == 'version-update:semver-patch' ||
+          steps.metadata.outputs.update-type == 'version-update:semver-minor'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+        run: gh pr merge --auto --squash "$PR_URL"
+
+      - name: Leave it for review
+        if: >-
+          steps.metadata.outputs.update-type != 'version-update:semver-patch' &&
+          steps.metadata.outputs.update-type != 'version-update:semver-minor'
+        env:
+          UPDATE_TYPE: ${{ steps.metadata.outputs.update-type }}
+        run: echo "::notice::Update type is '${UPDATE_TYPE:-unknown}', so this PR waits for a person"
