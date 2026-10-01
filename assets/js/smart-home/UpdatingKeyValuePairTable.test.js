@@ -1,27 +1,19 @@
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-
-const { fetchMock } = vi.hoisted(() => ({ fetchMock: vi.fn() }));
-
-vi.mock('../DataFetcher.js', () => ({
-    default: class {
-        constructor(url, contract) {
-            this.url = url;
-            this.contract = contract;
-        }
-
-        fetch() {
-            return fetchMock();
-        }
-
-        getGeneratedAtUnix() {
-            return null;
-        }
-    },
-}));
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 
 import UpdatingKeyValuePairTable from './UpdatingKeyValuePairTable.js';
+import TableRenderer from './TableRenderer.js';
+import TableErrorRenderer from './TableErrorRenderer.js';
+import ReadingFormatter from './ReadingFormatter.js';
+import EN_GB from '../i18n/messages.en-GB.js';
 
-/** A concrete subclass so update()'s _renderUpdate hook is observable. */
+// System time is fixed at 2023-11-20T12:00:00Z.
+const NOW = Date.parse('2023-11-20T12:00:00Z');
+const clock = { now: () => NOW };
+
+const fetchMock = vi.fn();
+const errorLog = vi.fn();
+
+/** A subclass that records what it was asked to render. */
 class TestTable extends UpdatingKeyValuePairTable {
     constructor(...args) {
         super(...args);
@@ -32,10 +24,6 @@ class TestTable extends UpdatingKeyValuePairTable {
         this.rendered = data;
         this._addTableRow('rendered', 'yes');
     }
-
-    _getContract() {
-        return { some: 'contract' };
-    }
 }
 
 /** A subclass that renders a multi-column title header, like the real tables. */
@@ -43,6 +31,17 @@ class HeaderedTestTable extends TestTable {
     _renderHeader() {
         this._addHeaderRow(['🏠 Title', '🌡️', '💧']);
     }
+}
+
+function build(TableClass, table, updateSpan) {
+    return new TableClass({
+        dataFetcher: { fetch: () => fetchMock(), getGeneratedAtUnix: () => null },
+        renderer: new TableRenderer(document, table, updateSpan),
+        errorRenderer: new TableErrorRenderer(document, table),
+        formatter: new ReadingFormatter(EN_GB, clock),
+        logger: { error: errorLog },
+        catalogue: EN_GB,
+    });
 }
 
 function makeDom() {
@@ -55,12 +54,7 @@ function makeDom() {
 beforeEach(() => {
     document.body.innerHTML = '';
     fetchMock.mockReset();
-    vi.useFakeTimers();
-    vi.setSystemTime(new Date('2023-11-20T12:00:00Z'));
-});
-
-afterEach(() => {
-    vi.useRealTimers();
+    errorLog.mockReset();
 });
 
 describe('UpdatingKeyValuePairTable', () => {
@@ -68,7 +62,7 @@ describe('UpdatingKeyValuePairTable', () => {
         it('clears existing rows and renders the fetched data on success', async () => {
             const { table, updateSpan } = makeDom();
             table.insertRow(); // stale row that must be cleared
-            const subject = new TestTable(table, updateSpan, 'url');
+            const subject = build(TestTable, table, updateSpan);
             fetchMock.mockResolvedValue({ hello: 'world' });
 
             await subject.update();
@@ -83,11 +77,12 @@ describe('UpdatingKeyValuePairTable', () => {
         it('renders an error message when the fetch rejects', async () => {
             const { table, updateSpan } = makeDom();
             table.insertRow();
-            const subject = new TestTable(table, updateSpan, 'url');
+            const subject = build(TestTable, table, updateSpan);
             fetchMock.mockRejectedValue(new Error('nope'));
 
             await subject.update();
 
+            expect(errorLog).toHaveBeenCalledWith(new Error('nope'));
             expect(subject.getLastData()).toBeNull();
             expect(table.textContent).toBe("⚠️ I'm having trouble loading this data right now.I'm aware - top men are working on it.Please try again later.");
             expect(table.querySelectorAll('span.smart-home-table__error br')).toHaveLength(2);
@@ -101,7 +96,7 @@ describe('UpdatingKeyValuePairTable', () => {
 
         it('keeps the title header and spans the error across its columns on failure', async () => {
             const { table, updateSpan } = makeDom();
-            const subject = new HeaderedTestTable(table, updateSpan, 'url');
+            const subject = build(HeaderedTestTable, table, updateSpan);
             fetchMock.mockRejectedValue(new Error('nope'));
 
             await subject.update();
@@ -121,29 +116,12 @@ describe('UpdatingKeyValuePairTable', () => {
 
         beforeEach(() => {
             ({ table, updateSpan } = makeDom());
-            subject = new UpdatingKeyValuePairTable(table, updateSpan, 'url');
+            subject = build(UpdatingKeyValuePairTable, table, updateSpan);
         });
 
         it('base _renderUpdate is a no-op', () => {
             expect(subject._renderUpdate({ anything: true })).toBeUndefined();
             expect(table.querySelectorAll('tr')).toHaveLength(0);
-        });
-
-        it('base _getContract returns an empty array', () => {
-            expect(subject._getContract()).toEqual([]);
-        });
-
-        describe('_updatedLabel', () => {
-            it('formats the envelope timestamp as an "Updated <time ago>" label', () => {
-                // System time is fixed at 2023-11-20T12:00:00Z; two minutes earlier.
-                const twoMinsAgo = Math.floor(Date.parse('2023-11-20T11:58:00Z') / 1000);
-                expect(subject._updatedLabel(twoMinsAgo)).toBe('Updated 2 mins ago');
-            });
-
-            it('returns null when there is no timestamp', () => {
-                expect(subject._updatedLabel(null)).toBeNull();
-                expect(subject._updatedLabel()).toBeNull();
-            });
         });
 
         describe('_updatedElement', () => {

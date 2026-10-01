@@ -1,12 +1,17 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import SmartHomeTemperatureTable from './SmartHomeTemperatureTable.js';
+import SmartHomeTemperatureTable, { CLIMATE_CONTRACT } from './SmartHomeTemperatureTable.js';
+import TableFactory from './TableFactory.js';
+import EN_GB from '../i18n/messages.en-GB.js';
+
+const NOW = Date.parse('2023-11-20T12:00:00Z');
+const tableFactory = new TableFactory(document, { now: () => NOW }, { error: () => {} });
 import DE_DE from '../i18n/messages.de-DE.js';
 
-function make(catalogue) {
+function make(catalogue = EN_GB) {
     const table = document.createElement('table');
     const updateSpan = document.createElement('span');
     document.body.append(table, updateSpan);
-    return { table, updateSpan, subject: new SmartHomeTemperatureTable(table, updateSpan, 'url', catalogue) };
+    return { table, updateSpan, subject: tableFactory.create(SmartHomeTemperatureTable, table, updateSpan, 'url', CLIMATE_CONTRACT, catalogue) };
 }
 
 beforeEach(() => {
@@ -133,12 +138,11 @@ describe('SmartHomeTemperatureTable', () => {
         expect(table.textContent).not.toContain('🛋️');
     });
 
-    describe('_getContract', () => {
+    describe('CLIMATE_CONTRACT', () => {
         it('is a per-device readings array and no longer carries any server-computed averages', () => {
-            const { subject } = make();
-            expect(subject._getContract()).toHaveProperty('type', 'array');
-            expect(subject._getContract().contract).toHaveProperty('name');
-            expect(subject._getContract().contract).not.toHaveProperty('averageTempDegrees');
+            expect(CLIMATE_CONTRACT).toHaveProperty('type', 'array');
+            expect(CLIMATE_CONTRACT.contract).toHaveProperty('name');
+            expect(CLIMATE_CONTRACT.contract).not.toHaveProperty('averageTempDegrees');
         });
     });
 });

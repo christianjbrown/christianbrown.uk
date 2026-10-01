@@ -1,7 +1,10 @@
 'use strict';
 
 import uPlot from '../vendor/uPlot.esm.js';
-import SmartHomePage from './SmartHomePage.js';
+import SmartHomePageFactory from './SmartHomePageFactory.js';
+import TableFactory from './TableFactory.js';
+import SystemClock from '../Clock.js';
+import { smartThingsClimateUrl, metOfficeWeatherUrl } from '../apiConfig.js';
 import ClimateHistoryChart from '../smart-home-historical/ClimateHistoryChart.js';
 import Cookie from '../Cookie.js';
 import { applyLocale, setText, setAttr } from '../Locale.js';
@@ -40,7 +43,9 @@ window.addEventListener('load',
         setAttr('.floor-plan__image', 'alt', catalogue.page.floorPlanAlt);
         setAttr('.how-it-works', 'alt', catalogue.page.howItWorksAlt);
 
-        const smartHomePage = new SmartHomePage(STATUS_LINE_SELECTOR, ROOMS_SECTION_SELECTOR, HOME_TEMP_TABLE_SELECTOR, HOME_TEMP_TABLE_UPDATE_TIME_SELECTOR, WEATHER_TABLE_SELECTOR, WEATHER_TABLE_UPDATE_TIME_SELECTOR, catalogue);
+        const clock = new SystemClock();
+        const smartHomePageFactory = new SmartHomePageFactory(document, clock, new TableFactory(document, clock, console), smartThingsClimateUrl(), metOfficeWeatherUrl());
+        const smartHomePage = smartHomePageFactory.create(STATUS_LINE_SELECTOR, ROOMS_SECTION_SELECTOR, HOME_TEMP_TABLE_SELECTOR, HOME_TEMP_TABLE_UPDATE_TIME_SELECTOR, WEATHER_TABLE_SELECTOR, WEATHER_TABLE_UPDATE_TIME_SELECTOR, catalogue);
 
         void smartHomePage.runAll();
         smartHomePage.setupSchedule();

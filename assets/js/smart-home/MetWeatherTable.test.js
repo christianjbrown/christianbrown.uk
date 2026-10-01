@@ -1,5 +1,10 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import MetWeatherTable from './MetWeatherTable.js';
+import MetWeatherTable, { MET_WEATHER_CONTRACT } from './MetWeatherTable.js';
+import TableFactory from './TableFactory.js';
+import EN_GB from '../i18n/messages.en-GB.js';
+
+const NOW = Date.parse('2023-11-20T12:00:00Z');
+const tableFactory = new TableFactory(document, { now: () => NOW }, { error: () => {} });
 
 // Wind figures use non-breaking spaces between coupled parts (number/unit,
 // direction/degrees); normalise them to ordinary spaces so the expectations
@@ -11,7 +16,7 @@ function make() {
     const table = document.createElement('table');
     const updateSpan = document.createElement('span');
     document.body.append(table, updateSpan);
-    return { table, updateSpan, subject: new MetWeatherTable(table, updateSpan, 'url') };
+    return { table, updateSpan, subject: tableFactory.create(MetWeatherTable, table, updateSpan, 'url', MET_WEATHER_CONTRACT, EN_GB) };
 }
 
 beforeEach(() => {
@@ -302,12 +307,11 @@ describe('MetWeatherTable', () => {
         });
     });
 
-    describe('_getContract', () => {
-        it('returns the weather contract as an object descriptor for data', () => {
-            const { subject } = make();
-            expect(subject._getContract()).toHaveProperty('type', 'object');
-            expect(subject._getContract().contract).toHaveProperty('humidity');
-            expect(subject._getContract().contract).toHaveProperty('wind_speed');
+    describe('MET_WEATHER_CONTRACT', () => {
+        it('is the weather contract as an object descriptor for data', () => {
+            expect(MET_WEATHER_CONTRACT).toHaveProperty('type', 'object');
+            expect(MET_WEATHER_CONTRACT.contract).toHaveProperty('humidity');
+            expect(MET_WEATHER_CONTRACT.contract).toHaveProperty('wind_speed');
         });
     });
 });
