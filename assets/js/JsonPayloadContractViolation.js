@@ -4,6 +4,15 @@ const FIELD_PROBLEM_TYPE = 'type';
 const FIELD_PROBLEM_EMPTY = 'empty';
 const FIELD_PROBLEM_REQUIRED = 'required';
 
+// How each kind of field problem reads. Describing a new kind of problem is one
+// more entry here; buildErrorMessage does not change.
+const PROBLEM_DESCRIBERS = new Map([
+    [FIELD_PROBLEM_TYPE, (fieldData, fieldCorrection) => `must be of type "${fieldCorrection}", not "${typeof fieldData}"`],
+    [FIELD_PROBLEM_EMPTY, () => 'must not be empty'],
+    [FIELD_PROBLEM_REQUIRED, () => 'is required'],
+]);
+const DESCRIBE_UNKNOWN_PROBLEM = () => 'broke the contract';
+
 /**
  * Custom error class for representing contract violations in JSON payloads.
  */
@@ -40,22 +49,9 @@ export default class JsonPayloadContractViolation extends Error {
      * @returns {string} - The error message describing the contract violation.
      */
     static buildErrorMessage(fieldPath, fieldProblem, fieldData, fieldCorrection) {
-        let message = `Data at path "${fieldPath}" `;
-        switch (fieldProblem) {
-            case FIELD_PROBLEM_TYPE:
-                message += `must be of type "${fieldCorrection}", not "${typeof fieldData}"`;
-                break;
-            case FIELD_PROBLEM_EMPTY:
-                message += 'must not be empty';
-                break;
-            case FIELD_PROBLEM_REQUIRED:
-                message += 'is required';
-                break;
-            default:
-                message += 'broke the contract';
-                break;
-        }
-        return message;
+        const describe = PROBLEM_DESCRIBERS.get(fieldProblem) ?? DESCRIBE_UNKNOWN_PROBLEM;
+
+        return `Data at path "${fieldPath}" ${describe(fieldData, fieldCorrection)}`;
     }
 
     /**

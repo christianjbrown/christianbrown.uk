@@ -8,8 +8,11 @@ import {
     WEATHER_TABLE_UPDATE_TIME_SELECTOR,
 } from './index.const.js';
 import EN_GB from '../i18n/messages.en-GB.js';
+import TableFactory from './TableFactory.js';
+import SystemClock from '../Clock.js';
 
-const { ctor, runAll, setupSchedule, chartCtor, chartStart } = vi.hoisted(() => ({
+const { factoryCtor, ctor, runAll, setupSchedule, chartCtor, chartStart } = vi.hoisted(() => ({
+    factoryCtor: vi.fn(),
     ctor: vi.fn(),
     runAll: vi.fn(() => Promise.resolve()),
     setupSchedule: vi.fn(),
@@ -17,18 +20,16 @@ const { ctor, runAll, setupSchedule, chartCtor, chartStart } = vi.hoisted(() => 
     chartStart: vi.fn(() => Promise.resolve()),
 }));
 
-vi.mock('./SmartHomePage.js', () => ({
+vi.mock('./SmartHomePageFactory.js', () => ({
     default: class {
         constructor(...args) {
+            factoryCtor(...args);
+        }
+
+        create(...args) {
             ctor(...args);
-        }
 
-        runAll() {
-            return runAll();
-        }
-
-        setupSchedule() {
-            return setupSchedule();
+            return { runAll: () => runAll(), setupSchedule: () => setupSchedule() };
         }
     },
 }));
@@ -68,7 +69,8 @@ describe('smart-home/index.js', () => {
             <button id="chart-zoom-in"></button>
             <button id="chart-zoom-out"></button>
             <div id="historical-chart"></div>
-            <p id="chart-status"></p>`;
+            <p id="chart-status"></p>
+            <script type="application/json" id="api-config">{"smartThingsClimate":{"urlProd":"https://cdn.example.com/climate","urlDev":"http://127.0.0.1:8080","useLocal":false},"metOfficeWeather":{"urlProd":"https://cdn.example.com/weather","urlDev":"http://127.0.0.1:8081","useLocal":false}}</script>`;
 
         window.dispatchEvent(new Event('load'));
         // The handler resolves the catalogue with a dynamic import now, so let
@@ -93,6 +95,14 @@ describe('smart-home/index.js', () => {
             WEATHER_TABLE_UPDATE_TIME_SELECTOR,
             EN_GB,
         );
+        // The factory is handed the page's document, a clock, the table factory
+        // and the two API URLs (the production CDN ones by default).
+        const [factoryDocument, clock, tableFactory, climateUrl, weatherUrl] = factoryCtor.mock.calls[0];
+        expect(factoryDocument).toBe(document);
+        expect(clock).toBeInstanceOf(SystemClock);
+        expect(tableFactory).toBeInstanceOf(TableFactory);
+        expect(climateUrl).toBe('https://cdn.example.com/climate');
+        expect(weatherUrl).toBe('https://cdn.example.com/weather');
         expect(runAll).toHaveBeenCalledTimes(1);
         expect(setupSchedule).toHaveBeenCalledTimes(1);
 

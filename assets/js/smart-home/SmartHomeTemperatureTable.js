@@ -3,7 +3,7 @@
 import UpdatingKeyValuePairTable from './UpdatingKeyValuePairTable.js';
 import { averageTemperature, averageHumidity } from './averageReadings.js';
 
-const JSON_CONTRACT = {
+export const CLIMATE_CONTRACT = {
     'type': 'array',
     'keyRequired': true,
     'cannotBeEmpty': true,
@@ -69,12 +69,5 @@ export default class SmartHomeTemperatureTable extends UpdatingKeyValuePairTable
                 );
             }
         );
-    }
-
-    /**
-     * @returns {Object}
-     */
-    _getContract() {
-        return JSON_CONTRACT;
     }
 }

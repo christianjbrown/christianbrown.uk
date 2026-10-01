@@ -10,19 +10,23 @@ const SECS_PER_DAY = SECS_PER_HOUR * 24;
 
 export default class Time {
     #timestamp;
+    #clock;
     #timezone;
     #catalogue;
 
     /**
      * @param {Number} timestamp
+     * @param {{now: function(): Number}} clock  the source of the current time
+     *                            (milliseconds), used for relative times.
      * @param {String} timezone
      * @param {Object} catalogue  a message catalogue (locale + date/time
      *                            wording); defaults to en-GB. The timezone stays
      *                            Europe/London whatever the locale — this is a
      *                            London home — only the language changes.
      */
-    constructor(timestamp = Date.now(), timezone = DEFAULT_TIMEZONE, catalogue = EN_GB) {
+    constructor(timestamp, clock, timezone = DEFAULT_TIMEZONE, catalogue = EN_GB) {
         this.#timestamp = timestamp;
+        this.#clock = clock;
         this.#timezone = timezone;
         this.#catalogue = catalogue;
     }
@@ -34,7 +38,7 @@ export default class Time {
      * @returns {String}
      */
     formatTimeAgo() {
-        const elapsed = (Date.now() - this.#timestamp) / MS_PER_SEC;
+        const elapsed = (this.#clock.now() - this.#timestamp) / MS_PER_SEC;
         let value;
         let unit;
         if (elapsed < SECS_PER_MINUTE) {

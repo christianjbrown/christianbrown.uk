@@ -1,31 +1,43 @@
 'use strict';
 
-import DataFetcher from '../DataFetcher.js';
-import Temperature from './Temperature.js';
-import Humidity from './Humidity.js';
-import Time from './Time.js';
-import EN_GB from '../i18n/messages.en-GB.js';
-
+/**
+ * The thin coordinator behind a smart-home table: it asks the data fetcher for
+ * the payload, then tells the renderer what to draw, with the formatter wording
+ * the readings. Subclasses override the `_render*` hooks to say what their table
+ * contains.
+ */
 export default class UpdatingKeyValuePairTable {
-    #domTable;
-    #domUpdateTime;
     #dataFetcher;
+    #renderer;
+    #errorRenderer;
+    #formatter;
+    #logger;
     #lastData = null;
     // Protected (not #private) so subclasses can read the catalogue when building
     // their own labels.
     _catalogue;
+    // Protected so subclasses can build their own elements and word their own times.
+    _renderer;
+    _formatter;
 
     /**
-     * @param {HTMLTableElement} domTable
-     * @param {HTMLTableElement} domUpdateTime
-     * @param {String}           url
-     * @param {Object}           catalogue  message catalogue; defaults to en-GB.
+     * @param {Object} collaborators
+     * @param {{fetch: function(): Promise<*>, getGeneratedAtUnix: function(): (Number|null)}} collaborators.dataFetcher
+     * @param {import('./TableRenderer.js').default}       collaborators.renderer
+     * @param {import('./TableErrorRenderer.js').default}  collaborators.errorRenderer
+     * @param {import('./ReadingFormatter.js').default}    collaborators.formatter
+     * @param {{error: function(*): void}}                 collaborators.logger  where fetch failures are reported
+     * @param {Object}                                     collaborators.catalogue  message catalogue
      */
-    constructor(domTable, domUpdateTime, url, catalogue = EN_GB) {
-        this.#domTable = domTable;
-        this.#domUpdateTime = domUpdateTime;
-        this.#dataFetcher = new DataFetcher(url, this._getContract());
+    constructor({ dataFetcher, renderer, errorRenderer, formatter, logger, catalogue }) {
+        this.#dataFetcher = dataFetcher;
+        this.#renderer = renderer;
+        this.#errorRenderer = errorRenderer;
+        this.#formatter = formatter;
+        this.#logger = logger;
         this._catalogue = catalogue;
+        this._renderer = renderer;
+        this._formatter = formatter;
     }
 
     /**
@@ -34,23 +46,22 @@ export default class UpdatingKeyValuePairTable {
      * @return {Promise}
      */
     async update() {
-        const that = this;
-
         return this.#dataFetcher.fetch()
             .then(
                 (data) => {
-                    that.#lastData = data;
-                    that.#clearContents();
-                    that._renderHeader();
-                    that._renderUpdate(data, that.#dataFetcher.getGeneratedAtUnix());
+                    this.#lastData = data;
+                    this.#renderer.clear();
+                    this._renderHeader();
+                    this._renderUpdate(data, this.#dataFetcher.getGeneratedAtUnix());
                 }
             )
             .catch(
                 (err) => {
-                    that.#lastData = null;
-                    that.#clearContents();
-                    that._renderHeader();
-                    that.#renderError(err);
+                    this.#lastData = null;
+                    this.#renderer.clear();
+                    this._renderHeader();
+                    this.#logger.error(err);
+                    this.#errorRenderer.render(this._catalogue.error);
                 }
             );
     }
@@ -66,17 +77,6 @@ export default class UpdatingKeyValuePairTable {
     }
 
     /**
-     * Clears the table rows.
-     */
-    #clearContents() {
-        this.#domTable.querySelectorAll('tr').forEach(
-            (node) => {
-                node.remove();
-            }
-        );
-    }
-
-    /**
      * Adds a row with temperatures formatted.
      *
      * @param {String}         name
@@ -86,19 +86,15 @@ export default class UpdatingKeyValuePairTable {
      * @param {Boolean}        important
      */
     _addTempTableRow(name, degreesC, timestamp = null, stale = false, important = false) {
-        const tempObj = new Temperature(degreesC, this._catalogue);
-        let timeDiff = null;
-        if (timestamp) {
-            const timeObj = new Time(timestamp * 1000, undefined, this._catalogue);
-            timeDiff = timeObj.formatTimeAgo();
-        }
-        this._addTableRow(name, tempObj.formatC(), tempObj.formatF(), timeDiff, stale, important, true);
+        const temperature = this.#formatter.temperature(degreesC);
+        const timeDiff = timestamp ? this.#formatter.timeAgo(timestamp) : null;
+        this._addTableRow(name, temperature.celsius, temperature.fahrenheit, timeDiff, stale, important, true);
     }
 
     /**
      * Renders the table's header row. The default is a no-op; subclasses
      * override it to add their title (and any column headings). It is called on
-     * every render — success or failure — so the table's title stays visible
+     * every render, success or failure, so the table's title stays visible
      * even when its API fails, telling the user which one is down.
      */
     _renderHeader() {
@@ -106,31 +102,13 @@ export default class UpdatingKeyValuePairTable {
     }
 
     /**
-     * Adds a header row. The first cell carries the table's title; the rest
-     * carry optional column headings (a null entry leaves that cell empty). The
-     * title sits in the first cell of both tables so their header rows are the
-     * same height and their first separator lines align. A table with no column
-     * headings can let its title span every column (titleColSpan) so it does not
-     * force the first column wider than its data needs.
+     * Adds a header row.
      *
      * @param {Array<String|null>} labels
      * @param {Number}             titleColSpan
      */
     _addHeaderRow(labels, titleColSpan = 1) {
-        const row = this.#domTable.insertRow();
-        labels.forEach(
-            (label, index) => {
-                const th = document.createElement('th');
-                th.scope = 'col';
-                if (index === 0 && titleColSpan > 1) {
-                    th.colSpan = titleColSpan;
-                }
-                if (label !== null) {
-                    th.append(UpdatingKeyValuePairTable.#getTableCellSpan(label, 'primary', false, false, index === 0));
-                }
-                row.appendChild(th);
-            }
-        );
+        this.#renderer.addHeaderRow(labels, titleColSpan);
     }
 
     /**
@@ -151,36 +129,27 @@ export default class UpdatingKeyValuePairTable {
      * @param {Boolean}        important
      */
     _addClimateTableRow(name, degreesC, tempTimestamp = null, tempStale = false, humidityPercent = null, humidityTimestamp = null, humidityStale = false, important = false) {
-        const tempObj = new Temperature(degreesC, this._catalogue);
+        const temperature = this.#formatter.temperature(degreesC);
 
         const hasHumidity = (humidityPercent !== null && humidityPercent !== undefined);
-        const humidityObj = hasHumidity ? new Humidity(humidityPercent, this._catalogue) : null;
-        const humidityValue = hasHumidity ? humidityObj.formatPercent() : '—';
-        const humidityMuted = hasHumidity ? humidityStale : true;
+        const humidity = hasHumidity ? this.#formatter.humidity(humidityPercent) : null;
 
         let oldestTimestamp = tempTimestamp;
         if (hasHumidity && humidityTimestamp && (!oldestTimestamp || humidityTimestamp < oldestTimestamp)) {
             oldestTimestamp = humidityTimestamp;
         }
-        const timeDiff = oldestTimestamp ? (new Time(oldestTimestamp * 1000, undefined, this._catalogue)).formatTimeAgo() : null;
 
-        const row = this.#domTable.insertRow();
-
-        const columnName = row.insertCell();
-        columnName.append(UpdatingKeyValuePairTable.#getTableCellSpan(name, 'primary', tempStale, important, false));
-        if (timeDiff) {
-            columnName.append(UpdatingKeyValuePairTable.#getTableCellSpan(timeDiff, 'secondary', true, false));
-        }
-
-        const columnTemp = row.insertCell();
-        columnTemp.append(UpdatingKeyValuePairTable.#getTableCellSpan(tempObj.formatC(), 'primary', tempStale, important));
-        columnTemp.append(UpdatingKeyValuePairTable.#getTableCellSpan(tempObj.formatF(), 'secondary', true, false));
-
-        const columnHumidity = row.insertCell();
-        columnHumidity.append(UpdatingKeyValuePairTable.#getTableCellSpan(humidityValue, 'primary', humidityMuted, important));
-        if (hasHumidity) {
-            columnHumidity.append(UpdatingKeyValuePairTable.#getTableCellSpan(humidityObj.describe(), 'secondary', true, false));
-        }
+        this.#renderer.addClimateRow({
+            name,
+            timeAgo: oldestTimestamp ? this.#formatter.timeAgo(oldestTimestamp) : null,
+            celsius: temperature.celsius,
+            fahrenheit: temperature.fahrenheit,
+            temperatureStale: tempStale,
+            humidityValue: hasHumidity ? humidity.value : '—',
+            humidityDescription: hasHumidity ? humidity.description : null,
+            humidityMuted: hasHumidity ? humidityStale : true,
+            important,
+        });
     }
 
     /**
@@ -195,19 +164,7 @@ export default class UpdatingKeyValuePairTable {
      * @param {Boolean} secondaryMuted
      */
     _addTableRow(primaryKey, primaryValue, secondaryValue = null, secondaryKey = null, muted = false, importantPrimary = false, secondaryMuted = muted) {
-        const row = this.#domTable.insertRow();
-
-        const columnLeft = row.insertCell();
-        columnLeft.append(UpdatingKeyValuePairTable.#getTableCellSpan(primaryKey, 'primary', muted, importantPrimary, false));
-        if (secondaryKey) {
-            columnLeft.append(UpdatingKeyValuePairTable.#getTableCellSpan(secondaryKey, 'secondary', secondaryMuted, false));
-        }
-
-        const columnRight = row.insertCell();
-        columnRight.append(UpdatingKeyValuePairTable.#getTableCellSpan(primaryValue, 'primary', muted, importantPrimary));
-        if (secondaryValue) {
-            columnRight.append(UpdatingKeyValuePairTable.#getTableCellSpan(secondaryValue, 'secondary', secondaryMuted, false));
-        }
+        this.#renderer.addRow(primaryKey, primaryValue, secondaryValue, secondaryKey, muted, importantPrimary, secondaryMuted);
     }
 
     /**
@@ -221,134 +178,32 @@ export default class UpdatingKeyValuePairTable {
     }
 
     /**
-     * A short "Updated <time ago>" label describing when the origin generated
-     * the payload (the envelope timestamp), or null when it is unknown.
-     * Surfacing this keeps freshness honest even when the edge serves a
-     * stale-while-revalidate copy of an older response.
-     *
-     * @param {Number|null} generatedAtUnix
-     *
-     * @returns {String|null}
-     */
-    _updatedLabel(generatedAtUnix = null) {
-        if (!generatedAtUnix) {
-            return null;
-        }
-
-        return `${this._catalogue.table.updatedPrefix}${(new Time(generatedAtUnix * 1000, undefined, this._catalogue)).formatTimeAgo()}`;
-    }
-
-    /**
      * The "Updated <time ago>" label wrapped in a small, muted `freshness`
      * span, or null when the time is unknown. Both tables render this so each
      * shows its own feed's freshness (they are fetched independently and can
-     * differ) — the climate table on its own line beneath the table, the
-     * weather table on its own line beneath its source line.
+     * differ): the climate table on its own line beneath the table, the weather
+     * table on its own line beneath its source line.
      *
      * @param {Number|null} generatedAtUnix
      *
      * @returns {HTMLSpanElement|null}
      */
     _updatedElement(generatedAtUnix = null) {
-        const label = this._updatedLabel(generatedAtUnix);
+        const label = this.#formatter.updatedLabel(generatedAtUnix);
         if (null === label) {
             return null;
         }
 
-        const span = document.createElement('span');
-        span.className = 'update-time__freshness';
-        span.append(label);
-
-        return span;
+        return this.#renderer.createFreshnessElement(label);
     }
 
     /**
      * Replaces the update-time element's contents with the given nodes and
-     * reveals it. Accepts DOM nodes and/or strings (strings become inert text
-     * nodes), so no markup is ever parsed from a string.
+     * reveals it.
      *
      * @param {...(Node|String)} nodes
      */
     _updateDateSpan(...nodes) {
-        this.#domUpdateTime.replaceChildren(...nodes);
-        this.#domUpdateTime.style.display = 'block';
-    }
-
-    /**
-     * Creates and returns a value span carrying its BEM modifier classes. The
-     * base is always `smart-home-table__value`; `variant` picks --primary or
-     * --secondary, and the flags layer on --title, --emphasis or --muted.
-     *
-     * @param {String}  text
-     * @param {String}  variant   'primary' or 'secondary'
-     * @param {Boolean} muted
-     * @param {Boolean} important
-     * @param {Boolean} title
-     *
-     * @returns {HTMLSpanElement}
-     */
-    static #getTableCellSpan(text, variant, muted, important, title = false) {
-        const base = 'smart-home-table__value';
-        const classes = [base, `${base}--${variant}`];
-        if (title) {
-            classes.push(`${base}--title`);
-        }
-        if (important) {
-            classes.push(`${base}--emphasis`);
-        } else if (muted) {
-            classes.push(`${base}--muted`);
-        }
-
-        const span = document.createElement('span');
-        span.setAttribute('class', classes.join(' '));
-        span.append(text);
-
-        return span;
-    }
-
-    /**
-     * Adds a single cell with an error message under the (already rendered)
-     * header. The header is left in place so the reader can still tell which
-     * table failed; the error cell spans the header's columns.
-     *
-     * @param {Error} error
-     */
-    #renderError(error) {
-        console.error(error);
-        const errorMessages = this._catalogue.error;
-        const errorSpan = document.createElement('span');
-        errorSpan.setAttribute('class', 'smart-home-table__error');
-        const link = document.createElement('a');
-        link.setAttribute('href', 'https://www.youtube.com/watch?v=Fdjf4lMmiiI');
-        link.setAttribute('target', '_blank');
-        link.setAttribute('rel', 'noopener noreferrer');
-        link.append(errorMessages.linkText);
-        errorSpan.append(
-            errorMessages.line1,
-            document.createElement('br'),
-            errorMessages.awarePrefix,
-            link,
-            errorMessages.awareSuffix,
-            document.createElement('br'),
-            errorMessages.line3
-        );
-        const errorCell = this.#domTable.insertRow().insertCell();
-        errorCell.setAttribute('class', 'smart-home-table__error-cell');
-        // Span the header's columns (counting a colspanned title cell) so the
-        // error message sits under the full width of the table. rows[0] always
-        // exists, since the error row was just inserted; with no header it is
-        // the error row itself, whose single cell leaves the span alone.
-        const columnCount = [...this.#domTable.rows[0].cells].reduce((total, cell) => total + cell.colSpan, 0);
-        if (columnCount > 1) {
-            errorCell.colSpan = columnCount;
-        }
-        errorCell.append(errorSpan);
-    }
-
-    /**
-     * @returns {Object}
-     */
-    _getContract() {
-        return [];
+        this.#renderer.setUpdateContents(...nodes);
     }
 }

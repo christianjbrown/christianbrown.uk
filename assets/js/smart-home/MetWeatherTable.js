@@ -3,7 +3,6 @@
 import UpdatingKeyValuePairTable from './UpdatingKeyValuePairTable.js';
 import Humidity from './Humidity.js';
 import Temperature from './Temperature.js';
-import Time from './Time.js';
 import UvIndex from './UvIndex.js';
 import Visibility from './Visibility.js';
 import { WEATHER_TYPES } from './weatherTypes.js';
@@ -13,7 +12,7 @@ const MPH_TO_KMH = 1.609344;
 // A non-breaking space keeps each wind figure and its unit together on one line.
 const NBSP = String.fromCharCode(0xA0);
 
-const JSON_CONTRACT = {
+export const MET_WEATHER_CONTRACT = {
     'type': 'object',
     'keyRequired': true,
     'cannotBeEmpty': true,
@@ -56,8 +55,8 @@ export default class MetWeatherTable extends UpdatingKeyValuePairTable {
         const weather = this._catalogue.weather;
 
         if ('valid_from' in data && 'valid_to' in data) {
-            const fromObj = new Time(data.valid_from * 1000, undefined, this._catalogue);
-            const toObj = new Time(data.valid_to * 1000, undefined, this._catalogue);
+            const fromObj = this._formatter.timeAt(data.valid_from);
+            const toObj = this._formatter.timeAt(data.valid_to);
             const timeFrom = fromObj.formatUserFriendlyHour();
             const timeTo = toObj.formatUserFriendlyHour();
 
@@ -77,10 +76,7 @@ export default class MetWeatherTable extends UpdatingKeyValuePairTable {
                 ? `${timeFrom}${and}${timeTo} ${suffixTo}`
                 : `${timeFrom} ${suffixFrom}${and}${timeTo} ${suffixTo}`).replace(/\.$/, '');
 
-            const metOfficeLink = document.createElement('a');
-            metOfficeLink.href = 'https://www.metoffice.gov.uk/';
-            metOfficeLink.target = '_blank';
-            metOfficeLink.textContent = 'Met Office';
+            const metOfficeLink = this._renderer.createExternalLink('https://www.metoffice.gov.uk/', 'Met Office');
 
             // The freshness sits on its own line beneath the source line (the
             // `freshness` span is display:block), e.g.
@@ -209,12 +205,5 @@ export default class MetWeatherTable extends UpdatingKeyValuePairTable {
     #formatPressure(value) {
         // No thousands separator — pressure reads as "1013 hPa", not "1,013 hPa".
         return new Intl.NumberFormat(this._catalogue.locale, { maximumFractionDigits: 0, useGrouping: false }).format(value) + NBSP + this._catalogue.units.hpa;
-    }
-
-    /**
-     * @returns {Object|Array}
-     */
-    _getContract() {
-        return JSON_CONTRACT;
     }
 }

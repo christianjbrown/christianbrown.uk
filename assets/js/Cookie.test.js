@@ -2,6 +2,8 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 
 import Cookie from './Cookie.js';
 
+const cookie = new Cookie(document);
+
 function clearCookies() {
     document.cookie.split(';').forEach((cookie) => {
         const key = cookie.split('=')[0].trim();
@@ -18,9 +20,9 @@ beforeEach(() => {
 describe('Cookie', () => {
     describe('get / set', () => {
         it('round-trips a value, url-encoding it', () => {
-            Cookie.set('greeting', 'hello world');
+            cookie.set('greeting', 'hello world');
             expect(document.cookie).toContain('greeting=hello%20world');
-            expect(Cookie.get('greeting')).toBe('hello world');
+            expect(cookie.get('greeting')).toBe('hello world');
         });
 
         it('writes the cookie with hardening flags', () => {
@@ -30,7 +32,7 @@ describe('Cookie', () => {
             });
 
             try {
-                Cookie.set('flagged', 'value');
+                cookie.set('flagged', 'value');
             } finally {
                 spy.mockRestore();
             }
@@ -42,8 +44,8 @@ describe('Cookie', () => {
         });
 
         it('accepts custom day and option arguments', () => {
-            Cookie.set('token', 'abc', 10, { path: '/' });
-            expect(Cookie.get('token')).toBe('abc');
+            cookie.set('token', 'abc', 10, { path: '/' });
+            expect(cookie.get('token')).toBe('abc');
         });
 
         it('writes a session cookie (no max-age) when days is null', () => {
@@ -53,7 +55,7 @@ describe('Cookie', () => {
             });
 
             try {
-                Cookie.set('sess', 'v', null);
+                cookie.set('sess', 'v', null);
             } finally {
                 spy.mockRestore();
             }
@@ -63,41 +65,50 @@ describe('Cookie', () => {
             expect(written[0]).toContain('Path=/');
         });
 
+        it('reads and writes through the document it was given, not the global one', () => {
+            const fakeDocument = { cookie: 'a=1; b=2' };
+            const injected = new Cookie(fakeDocument);
+
+            expect(injected.get('b')).toBe('2');
+            injected.set('c', '3');
+            expect(fakeDocument.cookie).toContain('c=3');
+        });
+
         it('returns null for a missing cookie', () => {
-            expect(Cookie.get('does-not-exist')).toBeNull();
+            expect(cookie.get('does-not-exist')).toBeNull();
         });
     });
 
     describe('consent', () => {
         it('reads an accepted consent cookie as true', () => {
-            Cookie.setConsent(true);
-            expect(Cookie.getConsent()).toBe(true);
+            cookie.setConsent(true);
+            expect(cookie.getConsent()).toBe(true);
         });
 
         it('reads a declined consent cookie as false', () => {
-            Cookie.setConsent(false);
-            expect(Cookie.getConsent()).toBe(false);
+            cookie.setConsent(false);
+            expect(cookie.getConsent()).toBe(false);
         });
 
         it('reads a missing consent cookie as null', () => {
-            expect(Cookie.getConsent()).toBeNull();
+            expect(cookie.getConsent()).toBeNull();
         });
     });
 
     describe('delete', () => {
         it('removes a single cookie', () => {
-            Cookie.set('temp', 'x');
-            expect(Cookie.get('temp')).toBe('x');
-            Cookie.delete('temp');
-            expect(Cookie.get('temp')).toBeNull();
+            cookie.set('temp', 'x');
+            expect(cookie.get('temp')).toBe('x');
+            cookie.delete('temp');
+            expect(cookie.get('temp')).toBeNull();
         });
 
         it('removes every cookie', () => {
-            Cookie.set('a', '1');
-            Cookie.set('b', '2');
-            Cookie.deleteAll();
-            expect(Cookie.get('a')).toBeNull();
-            expect(Cookie.get('b')).toBeNull();
+            cookie.set('a', '1');
+            cookie.set('b', '2');
+            cookie.deleteAll();
+            expect(cookie.get('a')).toBeNull();
+            expect(cookie.get('b')).toBeNull();
         });
     });
 });

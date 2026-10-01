@@ -2,22 +2,31 @@
 
 import { CONSENT_KEY, CONSENT_OPT_KEY_MAX_AGE, CONSENT_VALUE_ACCEPT, CONSENT_VALUE_DECLINE } from './Cookie.const.js';
 
+// What each stored consent value means. A new value is one more entry here.
+const CONSENT_BY_VALUE = new Map([
+    [CONSENT_VALUE_ACCEPT, true],
+    [CONSENT_VALUE_DECLINE, false],
+]);
+
 export default class Cookie {
+    #document;
+
+    /**
+     * @param {Document} document  the document whose cookie jar this reads and writes
+     */
+    constructor(document) {
+        this.#document = document;
+    }
+
     /**
      * Get user consent.
      *
      * @returns {boolean|null}
      */
-    static getConsent() {
-        const cookie = Cookie.get(CONSENT_KEY);
-        switch (cookie) {
-            case CONSENT_VALUE_ACCEPT:
-                return true;
-            case CONSENT_VALUE_DECLINE:
-                return false;
-            default:
-                return null;
-        }
+    getConsent() {
+        const cookie = this.get(CONSENT_KEY);
+
+        return CONSENT_BY_VALUE.has(cookie) ? CONSENT_BY_VALUE.get(cookie) : null;
     }
 
     /**
@@ -25,15 +34,15 @@ export default class Cookie {
      *
      * @param {boolean} accept
      */
-    static setConsent(accept) {
-        Cookie.set(CONSENT_KEY, accept ? CONSENT_VALUE_ACCEPT : CONSENT_VALUE_DECLINE);
+    setConsent(accept) {
+        this.set(CONSENT_KEY, accept ? CONSENT_VALUE_ACCEPT : CONSENT_VALUE_DECLINE);
     }
 
     /**
      * Delete all cookies.
      */
-    static deleteAll() {
-        const cookies = document.cookie.split(';');
+    deleteAll() {
+        const cookies = this.#document.cookie.split(';');
         cookies.map(cookie => {
             const key = cookie.split('=')[0].trim();
             this.delete(key);
@@ -47,8 +56,8 @@ export default class Cookie {
      *
      * @returns {string|null}
      */
-    static get(name) {
-        const match = document.cookie.match(new RegExp(`(?:^|;\\s*)${name}=([^;]+)`));
+    get(name) {
+        const match = this.#document.cookie.match(new RegExp(`(?:^|;\\s*)${name}=([^;]+)`));
         return match ? decodeURIComponent(match[1]) : null;
     }
 
@@ -61,14 +70,14 @@ export default class Cookie {
      * @param {number|null} days
      * @param {Object} opts
      */
-    static set(key, value, days = 365, opts = {}) {
+    set(key, value, days = 365, opts = {}) {
         const options = { ...opts };
         if (days !== null) {
             options[CONSENT_OPT_KEY_MAX_AGE] = days * 60 * 60 * 24;
         }
         const optionsStr = Object.entries(options).map(([k, v]) => `${k}=${v}`).join('; ');
         const prefix = optionsStr ? `${optionsStr}; ` : '';
-        document.cookie = `${key}=${encodeURIComponent(value)}; ${prefix}Path=/; SameSite=Lax; Secure`;
+        this.#document.cookie = `${key}=${encodeURIComponent(value)}; ${prefix}Path=/; SameSite=Lax; Secure`;
     }
 
     /**
@@ -77,7 +86,7 @@ export default class Cookie {
      * @param {string} key
      * @param {Object} opts
      */
-    static delete(key, opts = {}) {
+    delete(key, opts = {}) {
         this.set(key, '', -1, opts);
     }
 }

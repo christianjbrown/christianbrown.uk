@@ -2,6 +2,8 @@ import { describe, it, expect, beforeEach } from 'vitest';
 import { matchLocale, resolveLocale, applyLocale, setText, setAttr, setAttrAll, LOCALE_COOKIE, SUPPORTED_LOCALES, DEFAULT_LOCALE } from './Locale.js';
 import Cookie from './Cookie.js';
 
+const cookie = new Cookie(document);
+
 function clearCookies() {
     document.cookie.split(';').forEach((cookie) => {
         const key = cookie.split('=')[0].trim();
@@ -125,20 +127,20 @@ describe('Locale', () => {
 
     describe('applyLocale', () => {
         it('returns a supported locale', () => {
-            expect(SUPPORTED_LOCALES).toContain(applyLocale());
+            expect(SUPPORTED_LOCALES).toContain(applyLocale(cookie));
         });
 
         it('persists an explicit ?locale choice to the locale cookie', () => {
             window.history.replaceState({}, '', '/?locale=de-DE');
 
-            expect(applyLocale()).toBe('de-DE');
-            expect(Cookie.get(LOCALE_COOKIE)).toBe('de-DE');
+            expect(applyLocale(cookie)).toBe('de-DE');
+            expect(cookie.get(LOCALE_COOKIE)).toBe('de-DE');
         });
 
         it('honours the persisted cookie on a later page with no ?locale', () => {
-            Cookie.set(LOCALE_COOKIE, 'fr-FR', null);
+            cookie.set(LOCALE_COOKIE, 'fr-FR', null);
 
-            expect(applyLocale()).toBe('fr-FR');
+            expect(applyLocale(cookie)).toBe('fr-FR');
         });
 
         // The document stays in the language its prose is actually written in.
@@ -146,13 +148,13 @@ describe('Locale', () => {
             document.documentElement.lang = 'en-GB';
             window.history.replaceState({}, '', '/?locale=de-DE');
 
-            expect(applyLocale()).toBe('de-DE');
+            expect(applyLocale(cookie)).toBe('de-DE');
             expect(document.documentElement.lang).toBe('en-GB');
         });
 
         it('does not write a cookie when no ?locale is given', () => {
-            applyLocale();
-            expect(Cookie.get(LOCALE_COOKIE)).toBeNull();
+            applyLocale(cookie);
+            expect(cookie.get(LOCALE_COOKIE)).toBeNull();
         });
     });
 
