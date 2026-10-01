@@ -1,6 +1,8 @@
 'use strict';
 
 import HomeTemperatureLink from './HomeTemperatureLink.js';
+import { HOME_TEMPERATURE_CONTRACT } from './homeTemperatureContract.js';
+import DataFetcher from '../DataFetcher.js';
 import formatDateRange from './DateRange.js';
 import { smartThingsClimateUrl } from '../apiConfig.js';
 import Cookie from '../Cookie.js';
@@ -94,7 +96,7 @@ export function localiseHeadings(catalogue = EN_GB) {
 export function initHomeTemperatureLink(catalogue = EN_GB) {
     const dom = document.querySelector(HOME_TEMP_LINK_SELECTOR);
     if (dom) {
-        void (new HomeTemperatureLink(dom, smartThingsClimateUrl(), catalogue)).update();
+        void (new HomeTemperatureLink(dom, new DataFetcher(smartThingsClimateUrl(), HOME_TEMPERATURE_CONTRACT), catalogue)).update();
     }
 }
 

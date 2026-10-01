@@ -1,22 +1,8 @@
 'use strict';
 
-import DataFetcher from '../DataFetcher.js';
 import Temperature from '../smart-home/Temperature.js';
 import { averageTemperature } from '../smart-home/averageReadings.js';
 import EN_GB from '../i18n/messages.en-GB.js';
-
-// The endpoint returns a per-device readings array; the header link only needs
-// to average their temperatures, so it validates just those fields.
-const JSON_CONTRACT = {
-    'type': 'array',
-    'keyRequired': true,
-    'cannotBeEmpty': true,
-    'contract': {
-        'temperatureValue': {'type': 'number', 'keyRequired': true, 'cannotBeEmpty': true},
-        'temperatureTimestamp': {'type': 'number', 'keyRequired': true, 'cannotBeEmpty': true},
-        'temperatureStale': {'type': 'boolean', 'keyRequired': true, 'cannotBeEmpty': true},
-    },
-};
 
 export default class HomeTemperatureLink {
     #dom;
@@ -25,12 +11,12 @@ export default class HomeTemperatureLink {
 
     /**
      * @param {HTMLElement} dom
-     * @param {String}      url
-     * @param {Object}      catalogue  message catalogue; defaults to en-GB.
+     * @param {Object}      dataFetcher  an object with a `fetch()` promise for the indoor readings.
+     * @param {Object}      catalogue    message catalogue; defaults to en-GB.
      */
-    constructor(dom, url, catalogue = EN_GB) {
+    constructor(dom, dataFetcher, catalogue = EN_GB) {
         this.#dom = dom;
-        this.#dataFetcher = new DataFetcher(url, JSON_CONTRACT);
+        this.#dataFetcher = dataFetcher;
         this.#catalogue = catalogue;
     }
 
