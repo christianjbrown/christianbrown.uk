@@ -3,6 +3,7 @@
 import uPlot from '../vendor/uPlot.esm.js';
 import SmartHomePage from './SmartHomePage.js';
 import ClimateHistoryChart from '../smart-home-historical/ClimateHistoryChart.js';
+import Cookie from '../Cookie.js';
 import { applyLocale, setText, setAttr } from '../Locale.js';
 import { catalogueFor } from '../i18n/catalogue.js';
 import {
@@ -29,7 +30,7 @@ import {
 
 window.addEventListener('load',
     async () => {
-        const catalogue = await catalogueFor(applyLocale());
+        const catalogue = await catalogueFor(applyLocale(new Cookie(document)));
 
         // Localise the build-time English section headings and image alt text.
         setText(SMART_HOME_TITLE_SELECTOR, catalogue.page.smartHomeTitle);

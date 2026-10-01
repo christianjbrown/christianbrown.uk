@@ -3,6 +3,7 @@
 import HomeTemperatureLink from './HomeTemperatureLink.js';
 import formatDateRange from './DateRange.js';
 import { smartThingsClimateUrl } from '../apiConfig.js';
+import Cookie from '../Cookie.js';
 import { applyLocale, setText, setAttr, setAttrAll } from '../Locale.js';
 import { catalogueFor } from '../i18n/catalogue.js';
 import { formatLocations } from '../i18n/locations.js';
@@ -25,10 +26,12 @@ const LOCATION_SELECTOR = '.cv-experience-company-metadata-location-text[data-lo
  * into every page load. Nothing here is time-critical, and the English the build
  * rendered stands until it resolves.
  *
+ * @param {Cookie} cookie  the cookie jar the locale choice is remembered in
+ *
  * @returns {Promise}
  */
-export async function localiseHomepage() {
-    const catalogue = await catalogueFor(applyLocale());
+export async function localiseHomepage(cookie) {
+    const catalogue = await catalogueFor(applyLocale(cookie));
     localiseHeadings(catalogue);
     localiseDateRanges(catalogue);
     localiseLocations(catalogue);
@@ -95,4 +98,4 @@ export function initHomeTemperatureLink(catalogue = EN_GB) {
     }
 }
 
-window.addEventListener('load', () => void localiseHomepage());
+window.addEventListener('load', () => void localiseHomepage(new Cookie(document)));

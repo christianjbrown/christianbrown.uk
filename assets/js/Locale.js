@@ -1,7 +1,5 @@
 'use strict';
 
-import Cookie from './Cookie.js';
-
 // The locales the site can render. en-GB is the default and the reference the
 // others mirror. Order matters only in that the first supported match wins.
 export const SUPPORTED_LOCALES = ['en-GB', 'de-DE', 'fr-FR', 'nl-NL', 'da-DK', 'es-ES', 'pt-PT', 'zh-CN', 'zh-TW'];
@@ -101,15 +99,18 @@ export function resolveLocale(
  * localised labels inside it is the lesser of the two wrongs, so the layout's
  * lang stands and this function leaves it alone.
  *
+ * @param {{get: function(String): (String|null), set: function(String, String, (Number|null)): void}} cookie
+ *        the cookie jar the explicit choice is remembered in
+ *
  * @returns {String}
  */
-export function applyLocale() {
+export function applyLocale(cookie) {
     const search = window.location.search;
     const chosen = matchLocale(new URLSearchParams(search).get('locale'));
-    const locale = resolveLocale(search, navigator.languages, Cookie.get(LOCALE_COOKIE));
+    const locale = resolveLocale(search, navigator.languages, cookie.get(LOCALE_COOKIE));
 
     if (chosen) {
-        Cookie.set(LOCALE_COOKIE, chosen, null);
+        cookie.set(LOCALE_COOKIE, chosen, null);
     }
 
     return locale;

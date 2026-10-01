@@ -18,6 +18,7 @@ vi.mock('./HomeTemperatureLink.js', () => ({
 
 import { initHomeTemperatureLink, localiseHeadings, localiseHomepage, localiseDateRanges, localiseLocations } from './index.js';
 import DE_DE from '../i18n/messages.de-DE.js';
+import Cookie from '../Cookie.js';
 
 const SMART_THINGS_PROD_URL = 'https://cdn.christianbrown.uk/get-smartthings-climate';
 const SMART_THINGS_DEV_URL = 'http://127.0.0.1:8080';
@@ -141,7 +142,7 @@ describe('cv/index.js', () => {
             document.body.innerHTML = '<h2 id="cv-heading-experience">x</h2><h2 id="cv-heading-education">y</h2><a id="cv-home-temp" hidden></a>';
             injectApiConfig();
 
-            await localiseHomepage();
+            await localiseHomepage(new Cookie(document));
 
             // jsdom resolves to en-GB, so the headings read their English values.
             expect(document.querySelector('#cv-heading-experience').textContent).toBe('Professional experience');
