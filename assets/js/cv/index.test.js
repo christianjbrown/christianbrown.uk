@@ -1,7 +1,8 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 
-const { ctor, updateMock } = vi.hoisted(() => ({
+const { ctor, updateMock, fetcherCtor } = vi.hoisted(() => ({
     ctor: vi.fn(),
+    fetcherCtor: vi.fn(),
     updateMock: vi.fn(() => Promise.resolve()),
 }));
 
@@ -16,6 +17,15 @@ vi.mock('./HomeTemperatureLink.js', () => ({
     },
 }));
 
+vi.mock('../DataFetcher.js', () => ({
+    default: class {
+        constructor(...args) {
+            fetcherCtor(...args);
+        }
+    },
+}));
+
+import { HOME_TEMPERATURE_CONTRACT } from './homeTemperatureContract.js';
 import { initHomeTemperatureLink, localiseHeadings, localiseHomepage, localiseDateRanges, localiseLocations } from './index.js';
 import DE_DE from '../i18n/messages.de-DE.js';
 import Cookie from '../Cookie.js';
@@ -39,6 +49,7 @@ function injectApiConfig({ smartThingsUseLocal = false } = {}) {
 
 beforeEach(() => {
     ctor.mockClear();
+    fetcherCtor.mockClear();
     updateMock.mockClear();
     document.body.innerHTML = '';
 });
@@ -52,7 +63,7 @@ describe('cv/index.js', () => {
 
         expect(ctor).toHaveBeenCalledTimes(1);
         expect(ctor.mock.calls[0][0].id).toBe('cv-home-temp');
-        expect(ctor.mock.calls[0][1]).toBe(SMART_THINGS_PROD_URL);
+        expect(fetcherCtor).toHaveBeenCalledWith(SMART_THINGS_PROD_URL, HOME_TEMPERATURE_CONTRACT);
         expect(updateMock).toHaveBeenCalledTimes(1);
     });
 
@@ -62,7 +73,7 @@ describe('cv/index.js', () => {
 
         initHomeTemperatureLink();
 
-        expect(ctor.mock.calls[0][1]).toBe(SMART_THINGS_DEV_URL);
+        expect(fetcherCtor).toHaveBeenCalledWith(SMART_THINGS_DEV_URL, HOME_TEMPERATURE_CONTRACT);
     });
 
     it('does nothing when the element is absent', () => {

@@ -1,24 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 
-const { dataFetcherCtor, dataFetcherFetch } = vi.hoisted(() => ({
-    dataFetcherCtor: vi.fn(),
-    dataFetcherFetch: vi.fn(() => Promise.resolve([])),
-}));
-
 vi.mock('../apiConfig.js', () => ({
     historicalClimateUrl: () => 'https://api.test/get-historical-climate-data',
-}));
-
-vi.mock('../DataFetcher.js', () => ({
-    default: class {
-        constructor(...args) {
-            dataFetcherCtor(...args);
-        }
-
-        fetch() {
-            return dataFetcherFetch();
-        }
-    },
 }));
 
 import ClimateHistoryChart from './ClimateHistoryChart.js';
@@ -93,8 +76,6 @@ function makeEls() {
 const flush = () => new Promise((resolve) => setTimeout(resolve, 0));
 
 beforeEach(() => {
-    dataFetcherCtor.mockClear();
-    dataFetcherFetch.mockClear();
     document.body.innerHTML = '';
     Object.entries(COLOR_VARS).forEach(([prop, value]) => document.documentElement.style.setProperty(prop, value));
 
@@ -306,15 +287,6 @@ describe('ClimateHistoryChart', () => {
         expect(uPlot.instances).toHaveLength(0);
         expect(els.status.hidden).toBe(false);
         expect(els.status.textContent).toBe('Couldn\'t load the climate history right now.');
-    });
-
-    it('constructs a DataFetcher with the historical contract by default', async () => {
-        const els = makeEls();
-        dataFetcherFetch.mockResolvedValueOnce(BUCKETS);
-
-        await new ClimateHistoryChart(els, fakeUplot()).start();
-
-        expect(dataFetcherCtor).toHaveBeenCalledWith(`${BASE}/hourly-1-month`, HISTORICAL_CONTRACT);
     });
 
     it('zooms in and out along the ladder, disabling the buttons at the ends', async () => {

@@ -1,9 +1,7 @@
 'use strict';
 
-import DataFetcher from '../DataFetcher.js';
 import { historicalClimateUrl } from '../apiConfig.js';
 import EN_GB from '../i18n/messages.en-GB.js';
-import { HISTORICAL_CONTRACT } from './contract.js';
 import { DEFAULT_INDEX, clampIndex, routeAt, isHourly, canZoomIn, canZoomOut } from './resolutions.js';
 import { bucketsToSeries } from './chartData.js';
 import { readChartColors } from './chartColors.js';
@@ -44,7 +42,7 @@ export default class ClimateHistoryChart {
      *                                  `climateHistory` block supplies the labels and
      *                                  its `locale` drives the date formatting.
      */
-    constructor(els, uPlotCtor, createFetcher = (url) => new DataFetcher(url, HISTORICAL_CONTRACT), catalogue = EN_GB) {
+    constructor(els, uPlotCtor, createFetcher, catalogue = EN_GB) {
         this.#els = els;
         this.#uPlotCtor = uPlotCtor;
         this.#createFetcher = createFetcher;

@@ -2,19 +2,6 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 
 const { fetchMock } = vi.hoisted(() => ({ fetchMock: vi.fn() }));
 
-vi.mock('../DataFetcher.js', () => ({
-    default: class {
-        constructor(url, contract) {
-            this.url = url;
-            this.contract = contract;
-        }
-
-        fetch() {
-            return fetchMock();
-        }
-    },
-}));
-
 import HomeTemperatureLink from './HomeTemperatureLink.js';
 
 // The link as the build ships it: visible, and already carrying the page's name
@@ -41,7 +28,7 @@ describe('HomeTemperatureLink', () => {
             { temperatureValue: 27.2, temperatureTimestamp: 200, temperatureStale: false },
         ]);
 
-        await new HomeTemperatureLink(dom, 'url').update();
+        await new HomeTemperatureLink(dom, { fetch: fetchMock }).update();
 
         expect(dom.textContent).toBe('🏠 26.6°C at home');
         expect(dom.hidden).toBe(false);
@@ -53,7 +40,7 @@ describe('HomeTemperatureLink', () => {
         const dom = makeDom();
         fetchMock.mockRejectedValue(new Error('nope'));
 
-        await new HomeTemperatureLink(dom, 'url').update();
+        await new HomeTemperatureLink(dom, { fetch: fetchMock }).update();
 
         expect(dom.textContent).toBe(SHIPPED_LABEL);
         expect(dom.hidden).toBe(false);
@@ -65,7 +52,7 @@ describe('HomeTemperatureLink', () => {
             { temperatureValue: null, temperatureTimestamp: 100, temperatureStale: false },
         ]);
 
-        await new HomeTemperatureLink(dom, 'url').update();
+        await new HomeTemperatureLink(dom, { fetch: fetchMock }).update();
 
         expect(dom.textContent).toBe(SHIPPED_LABEL);
         expect(dom.hidden).toBe(false);

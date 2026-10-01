@@ -6,6 +6,7 @@ import TableFactory from './TableFactory.js';
 import SystemClock from '../Clock.js';
 import { smartThingsClimateUrl, metOfficeWeatherUrl } from '../apiConfig.js';
 import ClimateHistoryChart from '../smart-home-historical/ClimateHistoryChart.js';
+import createHistoricalFetcher from '../smart-home-historical/historicalFetcher.js';
 import Cookie from '../Cookie.js';
 import { applyLocale, setText, setAttr } from '../Locale.js';
 import { catalogueFor } from '../i18n/catalogue.js';
@@ -62,6 +63,6 @@ window.addEventListener('load',
             metricHumidity: document.querySelector(METRIC_HUMIDITY_SELECTOR),
         };
 
-        void new ClimateHistoryChart(chartEls, uPlot, undefined, catalogue).start();
+        void new ClimateHistoryChart(chartEls, uPlot, createHistoricalFetcher, catalogue).start();
     }
 );

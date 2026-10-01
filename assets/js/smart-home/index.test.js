@@ -50,6 +50,8 @@ vi.mock('../smart-home-historical/ClimateHistoryChart.js', () => ({
     },
 }));
 
+import createHistoricalFetcher from '../smart-home-historical/historicalFetcher.js';
+
 describe('smart-home/index.js', () => {
     beforeAll(async () => {
         await import('./index.js');
@@ -107,14 +109,14 @@ describe('smart-home/index.js', () => {
         expect(setupSchedule).toHaveBeenCalledTimes(1);
 
         // The historical chart is constructed with the queried chart elements,
-        // the (stubbed) uPlot ctor, the default fetcher and the same catalogue,
+        // the (stubbed) uPlot ctor, the historical fetcher factory and the same catalogue,
         // then started.
         expect(chartCtor).toHaveBeenCalledTimes(1);
         const [chartEls, , createFetcher, chartCatalogue] = chartCtor.mock.calls[0];
         expect(chartEls.chart).toBe(document.getElementById('historical-chart'));
         expect(chartEls.metricTemp).toBe(document.getElementById('chart-metric-temp'));
         expect(chartEls.metricHumidity).toBe(document.getElementById('chart-metric-humidity'));
-        expect(createFetcher).toBeUndefined();
+        expect(createFetcher).toBe(createHistoricalFetcher);
         expect(chartCatalogue).toBe(EN_GB);
         expect(chartStart).toHaveBeenCalledTimes(1);
     });
