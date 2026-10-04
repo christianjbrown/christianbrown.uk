@@ -6,6 +6,7 @@ location: ["London, UK"]
 start: "2016-04"
 end:   "2020-10"
 organisation_logo: "viacomcbs.svg"
+organisation_logo_dark: "viacomcbs-dark.svg"
 organisation_link: "https://www.viacomcbs.com/"
 ---
 * Led a team of four direct reports across the US and the UK, reporting to the VP of Engineering. Served as one of three engineering leaders responsible for the CMS, APIs, and core technology stack powering 10+ CBS web properties, including [CBS News](https://www.cbsnews.com/){:target="_blank" rel="noopener noreferrer"}{:title="CBS News"}, [CBS Sports](https://www.cbssports.com/){:target="_blank" rel="noopener noreferrer"}{:title="CBS Sports"}, and [CNET](https://www.cnet.com/){:target="_blank" rel="noopener noreferrer"}{:title="CNET"}, collectively [serving ~190 million unique visitors per month](https://ir.paramount.com/news-releases/news-release-details/cbs-announces-leadership-transition-cbs-interactive){:target="_blank" rel="noopener noreferrer"}{:title="Paramount press release"}.

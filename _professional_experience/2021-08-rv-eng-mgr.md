@@ -6,6 +6,7 @@ location: ["London, UK"]
 start: "2021-08"
 end:   "2022-07"
 organisation_logo: "rv.svg"
+organisation_logo_dark: "rv-dark.svg"
 organisation_link: "https://www.redventures.com/"
 ---
 * Managed the Video Engineering team, leading four back-end engineers across the US and UK alongside contractors from South America, and led delivery of a new SaaS video encoding and playback platform designed to support up to two billion play sessions per year.
