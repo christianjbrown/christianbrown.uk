@@ -25,7 +25,7 @@ company name as the one announced link. It stays clickable with a mouse.
                                     </div>{% endif %}
                                     <div class="cv-experience-job-description">
                                         {{ experience.content | replace: "
-", "" | replace: "  ", "" }}
+", "" | replace: "  ", "" | replace: '<a href=', '<a target="_blank" rel="noopener noreferrer" href=' }}
                                     </div>
                                 </div>
                             </div>

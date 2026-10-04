@@ -29,8 +29,8 @@
 // name as its label and is rewritten to the live indoor temperature once the
 // climate feed answers, so it is in the rendered HTML for a crawler and stays
 // there when the feed is down. It sits at the start of the right-aligned nav so
-// growing it can't nudge the Download / LinkedIn links, and it inherits the
-// nav's print: none.
+// growing it can't nudge the other links, and global.scss leaves it out of
+// print.
 .cv-home-temp {
     margin-right: 1rem;
 }
