@@ -65,7 +65,7 @@ Install dependencies first with `bundle install` and `npm ci`.
 
 ## Visual regression
 
-Cross-browser visual snapshots of the homepage and the smart-home page are captured with [Percy](https://percy.io) (BrowserStack) on every push and pull request, so CSS and layout changes are diffed against a baseline before they ship. Each page is rendered in **Chrome, Firefox, Edge and Safari** at **mobile, tablet and desktop widths** (390 / 768 / 1280px).
+Cross-browser visual snapshots of the homepage, the smart-home page and the 404 page are captured with [Percy](https://percy.io) (BrowserStack) on every push and pull request, so CSS and layout changes are diffed against a baseline before they ship. Each page is rendered in **Chrome, Firefox, Edge and Safari** at **mobile, tablet and desktop widths** (390 / 768 / 1280px).
 
 Percy re-renders a captured DOM without running the page's JavaScript, so a small [Playwright](https://playwright.dev) driver (`percy/snapshot.mjs`) first makes each page deterministic — it stubs the live climate/weather feeds with fixtures, pins the clock and timezone, and hides the one-time cookie prompt and the time-series history canvas — then hands the finished DOM to Percy.
 
