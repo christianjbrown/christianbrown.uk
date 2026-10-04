@@ -105,6 +105,13 @@ const PAGES = [
             return rows('#home-temperature-table') > 1 && rows('#weather-table') > 1 && !/Loading/.test(status);
         },
     },
+    {
+        // Static, but it shares the header with the other two pages, and a
+        // shorter header once moved its avatar out of line with theirs.
+        name: '404',
+        path: '/404.html',
+        ready: () => !!document.querySelector('main h2'),
+    },
 ];
 
 function fulfilJson(route, body) {
