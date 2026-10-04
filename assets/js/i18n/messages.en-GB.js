@@ -317,6 +317,7 @@ export default {
         // Danish/German render theirs).
         experienceHeading: 'Professional experience',
         educationHeading: 'Education',
+        sideProjectsHeading: 'Side projects',
         downloadCv: 'Download CV',
         downloadIconAlt: 'Download icon',
         now: 'now',

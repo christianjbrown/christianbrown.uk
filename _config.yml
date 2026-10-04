@@ -72,6 +72,7 @@ header_msapplication_tile_color: "#ffffff"
 collections:
   - "education"
   - "professional_experience"
+  - "side_projects"
 
 # Fail the build on Liquid syntax errors instead of rendering them silently, so
 # CI's `jekyll build --strict_front_matter` acts as a real rendering gate.

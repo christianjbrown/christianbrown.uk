@@ -299,3 +299,12 @@
         width: 64rem;
     }
 }
+
+// Side projects are on the site but left out of the printed CV. With them the
+// PDF runs to a third page, and getting it back to two would mean printing the
+// whole CV at around 7pt.
+@media print {
+    #cv-section-side-projects {
+        display: none;
+    }
+}

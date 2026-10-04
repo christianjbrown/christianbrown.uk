@@ -14,6 +14,7 @@ import EN_GB from '../i18n/messages.en-GB.js';
 const HOME_TEMP_LINK_SELECTOR = '#cv-home-temp';
 const EXPERIENCE_HEADING_SELECTOR = '#cv-heading-experience';
 const EDUCATION_HEADING_SELECTOR = '#cv-heading-education';
+const SIDE_PROJECTS_HEADING_SELECTOR = '#cv-heading-side-projects';
 const DOWNLOAD_CV_SELECTOR = '#nav-text-download';
 const DATE_RANGE_SELECTOR = '.cv-experience-job-metadata-dates[data-start]';
 const LOCATION_SELECTOR = '.cv-experience-company-metadata-location-text[data-locations]';
@@ -77,6 +78,7 @@ export function localiseDateRanges(catalogue = EN_GB) {
 export function localiseHeadings(catalogue = EN_GB) {
     setText(EXPERIENCE_HEADING_SELECTOR, catalogue.cv.experienceHeading);
     setText(EDUCATION_HEADING_SELECTOR, catalogue.cv.educationHeading);
+    setText(SIDE_PROJECTS_HEADING_SELECTOR, catalogue.cv.sideProjectsHeading);
     setText(DOWNLOAD_CV_SELECTOR, catalogue.cv.downloadCv);
     // The smart-home link's build-time label. Set here, before
     // initHomeTemperatureLink starts its fetch, so a live reading that arrives

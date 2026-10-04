@@ -18,11 +18,11 @@ company name as the one announced link. It stays clickable with a mouse.
                                     </div>
                                     {% if experience.location %}<div class="cv-experience-company-metadata-location"><img src="/assets/images/icons/icon-location.svg" alt="Location icon" class="cv-experience-company-metadata-location-icon"><span class="cv-experience-company-metadata-location-text" data-locations="{{ experience.location | join: '|' }}">{{ experience.location | array_to_sentence_string }}</span></div>{% endif %}
                                 </div>{% endif %}
-                                <div class="cv-experience-job">
+                                <div class="cv-experience-job">{% if experience.position %}
                                     <div class="cv-experience-job-metadata">
                                         <div class="cv-experience-job-metadata-title"><h4>{{ experience.position }}</h4></div>
                                         <div class="cv-experience-job-metadata-dates"{% if experience.start %} data-start="{{ experience.start }}" data-end="{{ experience.end }}"{% endif %}>{%- if experience.start -%}{%- include cv-date-range.html start=experience.start end=experience.end -%}{%- endif -%}</div>
-                                    </div>
+                                    </div>{% endif %}
                                     <div class="cv-experience-job-description">
                                         {{ experience.content | replace: "
 ", "" | replace: "  ", "" }}
