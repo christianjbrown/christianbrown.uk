@@ -246,6 +246,7 @@ export default {
     cv: {
         experienceHeading: 'Werkervaring',
         educationHeading: 'Opleiding',
+        sideProjectsHeading: 'Nevenprojecten',
         downloadCv: 'CV downloaden',
         downloadIconAlt: 'Downloadpictogram',
         now: 'heden',

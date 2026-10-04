@@ -241,6 +241,7 @@ export default {
     cv: {
         experienceHeading: '工作经历',
         educationHeading: '教育经历',
+        sideProjectsHeading: '个人项目',
         downloadCv: '下载简历',
         downloadIconAlt: '下载图标',
         now: '至今',

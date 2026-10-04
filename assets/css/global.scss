@@ -38,10 +38,7 @@
     // Translucent pill behind the floor-plan room labels, and behind the theme
     // toggle where it floats over the page.
     --c-pill: rgba(255, 255, 255, 0.82);
-    // Company logos: rendered to soft-white silhouettes on dark, untouched on
-    // light. (The company name sits beside each, so brand colour isn't needed.)
-    --c-logo-filter: none;
-    // A logo with a bespoke dark variant shows its day version on light and its
+    // Logos keep their brand colours on both themes. A logo with a bespoke dark variant shows its day version on light and its
     // night version on dark (see the cv-logo-day/-night pair in cv.scss).
     --c-logo-day-display: block;
     --c-logo-night-display: none;
@@ -73,9 +70,6 @@
     --c-on-accent: #16181d;
     --c-error: #ffb454;
     --c-pill: rgba(22, 24, 29, 0.85);
-    // brightness(0) flattens each logo to a silhouette, invert(0.9) lifts it to
-    // a soft (not harsh) white; transparent areas are untouched.
-    --c-logo-filter: brightness(0) invert(0.9);
     --c-logo-day-display: none;
     --c-logo-night-display: block;
     --c-location-icon-filter: grayscale(100%) brightness(1.9);
@@ -193,6 +187,7 @@ body h3 {
 
     @media print {
         break-inside: avoid;
+        position: relative;
     }
 }
 
@@ -251,14 +246,35 @@ body h3 {
         text-align: center;
     }
 
+    // On paper the links sit in the header's top-right corner, level with the
+    // name, rather than on a row of their own below it. That row was enough to
+    // push the CV onto a third page. The header runs wider than the 64rem
+    // printed text column (cv.scss), so the links are right-aligned to that
+    // column's edge rather than the header's.
     @media print {
-        display: none;
+        left: 64rem;
+        position: absolute;
+        top: 1rem;
+        transform: translateX(-100%);
+        white-space: nowrap;
+        width: auto;
     }
 }
 
+// Each link is a small flex row, so its icon is centred on the label's height
+// rather than on the font's x-height (which `vertical-align: middle` uses, and
+// which sits the icon visibly low against capitals). It also keeps the icon and
+// label together when the links wrap on a narrow screen. A flex row drops the
+// space between icon and label in the markup, so the gap stands in for it.
 .header-data nav a {
+    align-items: center;
     color: $colour-grayscale-3;
+    column-gap: 0.25em;
+    display: inline-flex;
     font-weight: bold;
+    // Lines the links up by their middles too, so the icon-less temperature
+    // link doesn't sit on a lower baseline than the links with icons.
+    vertical-align: middle;
 }
 
 .header-data nav a:hover {
@@ -267,7 +283,6 @@ body h3 {
 
 .header-data nav a img.header-data-links-icon {
     height: 1.125rem;
-    vertical-align: middle;
 }
 
 // Colour-theme toggle, fixed in the top-right corner of the viewport. Ships
@@ -319,7 +334,10 @@ body h3 {
         text-decoration: none !important;
     }
 
-    #cv-menu-download {
+    // The printed CV keeps its GitHub and LinkedIn links. Downloading the CV
+    // from the CV, and a live temperature reading, mean nothing on paper.
+    #cv-menu-download,
+    #cv-home-temp {
         display: none;
     }
 }

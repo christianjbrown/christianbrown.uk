@@ -242,6 +242,7 @@ export default {
     cv: {
         experienceHeading: 'Experiencia profesional',
         educationHeading: 'Formación',
+        sideProjectsHeading: 'Proyectos personales',
         downloadCv: 'Descargar CV',
         downloadIconAlt: 'Icono de descarga',
         now: 'actualidad',

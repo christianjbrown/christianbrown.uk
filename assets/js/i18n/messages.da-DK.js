@@ -246,6 +246,7 @@ export default {
     cv: {
         experienceHeading: 'Erhvervserfaring',
         educationHeading: 'Uddannelse',
+        sideProjectsHeading: 'Sideprojekter',
         downloadCv: 'Hent CV',
         downloadIconAlt: 'Downloadikon',
         now: 'nu',

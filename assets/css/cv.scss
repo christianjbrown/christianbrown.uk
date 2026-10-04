@@ -29,8 +29,8 @@
 // name as its label and is rewritten to the live indoor temperature once the
 // climate feed answers, so it is in the rendered HTML for a crawler and stays
 // there when the feed is down. It sits at the start of the right-aligned nav so
-// growing it can't nudge the Download / LinkedIn links, and it inherits the
-// nav's print: none.
+// growing it can't nudge the other links, and global.scss leaves it out of
+// print.
 .cv-home-temp {
     margin-right: 1rem;
 }
@@ -121,24 +121,18 @@
 .cv-experience-company-logo img {
     max-height: 2.2rem;
     max-width: 4rem;
-    // Company logos are brand marks drawn for a light background (some are dark
-    // or low-contrast). In dark mode render them as soft-white silhouettes so
-    // they read cleanly and uniformly on the dark ground; in light mode the
-    // token is a no-op.
-    filter: var(--c-logo-filter);
 }
 
-// A logo too detailed to silhouette (e.g. the UWA crest) can ship a bespoke dark
-// variant via organisation_logo_dark; the include then emits a day/night pair.
-// Show the right one per theme, and don't silhouette the night version — it's
-// already drawn for the dark ground.
+// Logos show in colour on both themes. One with dark ink that would vanish on
+// the dark ground (Red Ventures, ViacomCBS) ships a recoloured night variant via
+// organisation_logo_dark; the include then emits a day/night pair, and the
+// right one shows per theme.
 .cv-experience-company-logo img.cv-logo-day {
     display: var(--c-logo-day-display);
 }
 
 .cv-experience-company-logo img.cv-logo-night {
     display: var(--c-logo-night-display);
-    filter: none;
 }
 
 .cv-experience-company-main {
@@ -297,5 +291,14 @@
 @media print {
     main {
         width: 64rem;
+    }
+}
+
+// Side projects are on the site but left out of the printed CV. With them the
+// PDF runs to a third page, and getting it back to two would mean printing the
+// whole CV at around 7pt.
+@media print {
+    #cv-section-side-projects {
+        display: none;
     }
 }

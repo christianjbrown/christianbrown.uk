@@ -90,6 +90,7 @@ describe('cv/index.js', () => {
             document.body.innerHTML = `
                 <h2 id="cv-heading-experience">Professional experience</h2>
                 <h2 id="cv-heading-education">Education</h2>
+                <h2 id="cv-heading-side-projects">Side projects</h2>
                 <a id="cv-menu-download" title="Download CV"><img alt="Download icon"><span id="nav-text-download">Download CV</span></a>
                 <img class="cv-experience-company-metadata-location-icon" alt="Location icon">
                 <img class="cv-experience-company-metadata-location-icon" alt="Location icon">`;
@@ -98,6 +99,7 @@ describe('cv/index.js', () => {
 
             expect(document.querySelector('#cv-heading-experience').textContent).toBe('Berufserfahrung');
             expect(document.querySelector('#cv-heading-education').textContent).toBe('Ausbildung');
+            expect(document.querySelector('#cv-heading-side-projects').textContent).toBe('Nebenprojekte');
             expect(document.querySelector('#nav-text-download').textContent).toBe('Lebenslauf herunterladen');
             expect(document.querySelector('#cv-menu-download').getAttribute('title')).toBe('Lebenslauf herunterladen');
             expect(document.querySelector('#cv-menu-download img').getAttribute('alt')).toBe('Download-Symbol');

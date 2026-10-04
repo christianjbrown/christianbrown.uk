@@ -9,6 +9,11 @@ javascripts:
 home_temp_link: true
 menu:
     -
+        icon: 'github'
+        text: 'GitHub'
+        link: 'https://github.com/christianjbrown'
+        icon_alt: 'GitHub icon'
+    -
         icon: 'download'
         text: 'Download CV'
         link: '/assets/docs/christian-brown-cv.pdf'
@@ -45,6 +50,13 @@ schema:
                 <div class="cv-section" id="cv-section-education">
                     <h2 id="cv-heading-education">Education</h2>
                     <div class="cv-experiences">{% assign previous = nil %}{% for experience in site.education reversed %}
+                        {% include cv-experience.html %}{% assign previous = experience %}{% endfor %}
+                    </div>
+                </div>{% endif %}
+                {%- if site.side_projects %}
+                <div class="cv-section" id="cv-section-side-projects">
+                    <h2 id="cv-heading-side-projects">Side projects</h2>
+                    <div class="cv-experiences">{% assign previous = nil %}{% for experience in site.side_projects %}
                         {% include cv-experience.html %}{% assign previous = experience %}{% endfor %}
                     </div>
                 </div>{% endif %}
