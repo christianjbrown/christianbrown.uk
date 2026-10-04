@@ -197,9 +197,19 @@ body h3 {
     width: 7.3rem;
 }
 
+// Every page reserves the homepage's header height, which includes its row of
+// links. The avatar is centred against this block, so on a page without the
+// links (smart home, 404) a shorter header put the avatar about 10px higher,
+// and it jumped when moving between pages. On paper the links sit in the
+// corner instead, so print keeps the old, shorter minimum and the PDF does not
+// grow.
 .header-data {
     flex-grow: 1;
-    min-height: 8.25rem;
+    min-height: 9.75rem;
+
+    @media print {
+        min-height: 8.25rem;
+    }
 }
 
 .header-data h1 {
