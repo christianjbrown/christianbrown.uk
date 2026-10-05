@@ -35,5 +35,5 @@ group :test do
   # html-proofer 5.2.1 collects results from `async` fibers in a way that broke
   # with async 2.24+ (checks silently return zero links, so the build passes even
   # with broken links/images). Pin to the last known-good async release.
-  gem "async", "~> 2.23.0"
+  gem "async", "~> 2.46.0"
 end
