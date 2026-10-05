@@ -33,7 +33,7 @@ GEM
     fiber-storage (1.0.1)
     forwardable-extended (2.6.0)
     hashery (2.1.2)
-    html-proofer (5.2.1)
+    html-proofer (5.2.2)
       addressable (~> 2.3)
       async (~> 2.1)
       benchmark (~> 0.5)
@@ -78,7 +78,9 @@ GEM
     logger (1.7.0)
     mercenary (0.4.0)
     metrics (0.12.2)
-    nokogiri (1.18.10-arm64-darwin)
+    mini_portile2 (2.8.9)
+    nokogiri (1.18.10)
+      mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
     pathutil (0.16.2)
       forwardable-extended (~> 2.6)
@@ -114,6 +116,7 @@ GEM
 
 PLATFORMS
   arm64-darwin-21
+  x86_64-linux
 
 DEPENDENCIES
   async (~> 2.23.0)
