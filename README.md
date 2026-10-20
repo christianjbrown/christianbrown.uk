@@ -56,9 +56,10 @@ The header avatar, every favicon and `favicon.ico` are all cut from one photo, s
 npm run icons -- path/to/photo.png
 bundle exec jekyll build
 npm run og:image
+npm run cv:pdf
 ```
 
-`bin/generate-icons.mjs` writes `assets/images/avatar.jpg` and the circular PNGs under `assets/images/favicon/`, and packs `favicon.ico` from the same crops. The share card is regenerated afterwards because it draws the avatar from the built site.
+`bin/generate-icons.mjs` writes `assets/images/avatar.jpg` and the circular PNGs under `assets/images/favicon/`, and packs `favicon.ico` from the same crops. The share card and the downloadable CV are regenerated afterwards because both draw the avatar from the built site.
 
 # :test_tube: Testing
 
