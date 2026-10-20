@@ -48,6 +48,18 @@ npm run cv:pdf
 
 `bin/generate-cv-pdf.mjs` serves `_site`, waits for the JS layer to localise the date ranges (it is the only thing that knows a current role's live duration), rewrites every root-relative link to an absolute `christianbrown.uk` URL so links followed out of the PDF do not point at the localhost it was printed from, and prints with Chrome. Page size, margins and the "page N of M" footer all come from the `@page` rules in `assets/css/cv.scss`.
 
+# :camera: Portrait photo
+
+The header avatar, every favicon and `favicon.ico` are all cut from one photo, so a new portrait is one command. Give it a square image of at least 512px:
+
+```shell
+npm run icons -- path/to/photo.png
+bundle exec jekyll build
+npm run og:image
+```
+
+`bin/generate-icons.mjs` writes `assets/images/avatar.jpg` and the circular PNGs under `assets/images/favicon/`, and packs `favicon.ico` from the same crops. The share card is regenerated afterwards because it draws the avatar from the built site.
+
 # :test_tube: Testing
 
 CI runs on every push and pull request (see the badge above). To run the checks locally:

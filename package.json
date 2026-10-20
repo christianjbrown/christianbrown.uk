@@ -7,6 +7,7 @@
   "scripts": {
     "coverage": "vitest run --coverage",
     "cv:pdf": "node bin/generate-cv-pdf.mjs",
+    "icons": "node bin/generate-icons.mjs",
     "lint:css": "stylelint \"assets/css/**/*.scss\" \"_sass/*.scss\"",
     "lint:css:fix": "stylelint \"assets/css/**/*.scss\" \"_sass/*.scss\" --fix",
     "serve:local": "bundle exec jekyll serve",
