@@ -34,7 +34,7 @@ GEM
     fiber-storage (1.0.1)
     forwardable-extended (2.6.0)
     hashery (2.1.2)
-    html-proofer (5.2.2)
+    html-proofer (5.2.3)
       addressable (~> 2.3)
       async (~> 2.1)
       benchmark (~> 0.5)
@@ -47,7 +47,7 @@ GEM
     http_parser.rb (0.8.1)
     i18n (1.15.2)
       concurrent-ruby (~> 1.0)
-    io-event (1.22.1)
+    io-event (1.22.3)
     jekyll (4.4.1)
       addressable (~> 2.4)
       base64 (~> 0.2)
@@ -129,7 +129,7 @@ DEPENDENCIES
   jekyll (~> 4.4.0)
   tzinfo (~> 1.2)
   tzinfo-data
-  wdm (~> 0.1.1)
+  wdm (~> 0.2.0)
   webrick (~> 1.7)
 
 BUNDLED WITH
